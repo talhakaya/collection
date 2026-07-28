@@ -11,6 +11,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/games/chocolate/scene0.unity
     guid: 8f872d0d88cbd1748a0c6147230de4db
+  - enabled: 1
+    path: Assets/games/Golfinity/Scenes/logo.unity
+    guid: f9acc7167f93c184a9f509fccfb43340
+  - enabled: 1
+    path: Assets/games/Golfinity/Scenes/main.unity
+    guid: 14105f93900b63744a7545c1a5d435bb
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

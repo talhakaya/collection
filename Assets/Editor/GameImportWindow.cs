@@ -422,13 +422,20 @@ namespace Collection.EditorTools
 			var scenes = EditorBuildSettings.scenes.ToList();
 			var existingPaths = new HashSet<string>(scenes.Select(s => s.path));
 
-			foreach (string guid in sceneGuids)
+			// A game can have auxiliary scenes (e.g. an isolated editing scene for a popup
+			// prefab) alongside its real entry point. The main menu picks the first
+			// registered scene per game folder, so a scene literally named "main" is put
+			// first when present - otherwise whatever FindAssets happens to return first
+			// (alphabetical) could become the game's launch scene by accident.
+			List<string> newScenePaths = sceneGuids
+				.Select(AssetDatabase.GUIDToAssetPath)
+				.Where(existingPaths.Add)
+				.OrderByDescending(p => string.Equals(Path.GetFileNameWithoutExtension(p), "main", StringComparison.OrdinalIgnoreCase))
+				.ToList();
+
+			foreach (string scenePath in newScenePaths)
 			{
-				string scenePath = AssetDatabase.GUIDToAssetPath(guid);
-				if (existingPaths.Add(scenePath))
-				{
-					scenes.Add(new EditorBuildSettingsScene(scenePath, true));
-				}
+				scenes.Add(new EditorBuildSettingsScene(scenePath, true));
 			}
 
 			EditorBuildSettings.scenes = scenes.ToArray();
