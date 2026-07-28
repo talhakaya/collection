@@ -1,64 +1,67 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
-public class Girl : MonoBehaviour {
+namespace Games.Chocolate
+{
+	public class Girl : MonoBehaviour {
 
-	public Sprite idle;
-	public Sprite walk1;
-	public Sprite walk2;
+		public Sprite idle;
+		public Sprite walk1;
+		public Sprite walk2;
 
-	public bool walking;
-	public bool isRight;
-	private float animPeriod = 0.25f;
-	private float timeCounter;
-	private SpriteRenderer spriteRenderer;
+		public bool walking;
+		public bool isRight;
+		private float animPeriod = 0.25f;
+		private float timeCounter;
+		private SpriteRenderer spriteRenderer;
 
-	public static Transform instance;
-	public static Girl script;
-	public static float speed = 2f;
+		public static Transform instance;
+		public static Girl script;
+		public static float speed = 2f;
 
-	void Start ()
-	{
-		spriteRenderer = GetComponent<SpriteRenderer> ();
-		instance = transform;
-		script = this;
-	}
-
-	void Update ()
-	{
-		transform.rotation = Quaternion.identity;
-		if (!isRight)
+		void Start ()
 		{
-			transform.Rotate(Vector3.up * 180);
+			spriteRenderer = GetComponent<SpriteRenderer> ();
+			instance = transform;
+			script = this;
 		}
 
-		if (!walking)
+		void Update ()
 		{
-			spriteRenderer.sprite = idle;
-			timeCounter = 0f;
-		}
-		else
-		{
-			timeCounter += Time.deltaTime;
-			if (timeCounter < animPeriod)
+			transform.rotation = Quaternion.identity;
+			if (!isRight)
 			{
-				spriteRenderer.sprite = walk1;
+				transform.Rotate(Vector3.up * 180);
 			}
-			else if (timeCounter < 2 * animPeriod)
+
+			if (!walking)
 			{
 				spriteRenderer.sprite = idle;
-			}
-			else if (timeCounter < 3 * animPeriod)
-			{
-				spriteRenderer.sprite = walk2;
-			}
-			else if (timeCounter < 4 * animPeriod)
-			{
-				spriteRenderer.sprite = idle;
+				timeCounter = 0f;
 			}
 			else
 			{
-				timeCounter = 0f;
+				timeCounter += Time.deltaTime;
+				if (timeCounter < animPeriod)
+				{
+					spriteRenderer.sprite = walk1;
+				}
+				else if (timeCounter < 2 * animPeriod)
+				{
+					spriteRenderer.sprite = idle;
+				}
+				else if (timeCounter < 3 * animPeriod)
+				{
+					spriteRenderer.sprite = walk2;
+				}
+				else if (timeCounter < 4 * animPeriod)
+				{
+					spriteRenderer.sprite = idle;
+				}
+				else
+				{
+					timeCounter = 0f;
+				}
 			}
 		}
 	}

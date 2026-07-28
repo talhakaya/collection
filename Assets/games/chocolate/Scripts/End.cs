@@ -1,15 +1,18 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
-public class End : MonoBehaviour {
+namespace Games.Chocolate
+{
+	public class End : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		Application.Quit ();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+		// Use this for initialization
+		void Start () {
+			Application.Quit ();
+		}
+
+		// Update is called once per frame
+		void Update () {
+
+		}
 	}
 }

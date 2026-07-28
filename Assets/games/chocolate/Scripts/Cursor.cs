@@ -1,89 +1,92 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
-public class Cursor : MonoBehaviour {
+namespace Games.Chocolate
+{
+	public class Cursor : MonoBehaviour {
 
-	public Sprite right;
-	public Sprite left;
-	public Sprite up;
-	private bool onDoor;
-	private Door door;
-	private SpriteRenderer spriteRenderer;
+		public Sprite right;
+		public Sprite left;
+		public Sprite up;
+		private bool onDoor;
+		private Door door;
+		private SpriteRenderer spriteRenderer;
 
-	void Start ()
-	{
-		spriteRenderer = GetComponent<SpriteRenderer> ();
-	}
-
-	void Update ()
-	{
-		transform.position = MousePosition.get ();
-
-		if (Girl.instance != null)
+		void Start ()
 		{
-			if (onDoor)
+			spriteRenderer = GetComponent<SpriteRenderer> ();
+		}
+
+		void Update ()
+		{
+			transform.position = MousePosition.get ();
+
+			if (Girl.instance != null)
 			{
-				spriteRenderer.sprite = up;
-				if (Input.GetMouseButton(0) && door != null && door.ready)
+				if (onDoor)
 				{
-					Game.done = true;
+					spriteRenderer.sprite = up;
+					if (Input.GetMouseButton(0) && door != null && door.ready)
+					{
+						Game.done = true;
+					}
 				}
-			}
-			else
-			{
+				else
+				{
+					if (Girl.instance.position.x < transform.position.x)
+					{
+						spriteRenderer.sprite = right;
+					}
+					else
+					{
+						spriteRenderer.sprite = left;
+					}
+				}
+
 				if (Girl.instance.position.x < transform.position.x)
 				{
-					spriteRenderer.sprite = right;
+					if (Input.GetMouseButton(0))
+					{
+						Girl.instance.position += Vector3.right * Girl.speed * Time.deltaTime;
+						Girl.script.walking = true;
+						Girl.script.isRight = true;
+					}
+					else
+					{
+						Girl.script.walking = false;
+					}
 				}
 				else
 				{
-					spriteRenderer.sprite = left;
+					if (Input.GetMouseButton(0))
+					{
+						Girl.instance.position -= Vector3.right * Girl.speed * Time.deltaTime;
+						Girl.script.walking = true;
+						Girl.script.isRight = false;
+					}
+					else
+					{
+						Girl.script.walking = false;
+					}
 				}
 			}
+		}
 
-			if (Girl.instance.position.x < transform.position.x)
+		void OnTriggerEnter2D(Collider2D other)
+		{
+			if (other.name == "door")
 			{
-				if (Input.GetMouseButton(0))
-				{
-					Girl.instance.position += Vector3.right * Girl.speed * Time.deltaTime;
-					Girl.script.walking = true;
-					Girl.script.isRight = true;
-				}
-				else
-				{
-					Girl.script.walking = false;
-				}
-			}
-			else
-			{
-				if (Input.GetMouseButton(0))
-				{
-					Girl.instance.position -= Vector3.right * Girl.speed * Time.deltaTime;
-					Girl.script.walking = true;
-					Girl.script.isRight = false;
-				}
-				else
-				{
-					Girl.script.walking = false;
-				}
+				onDoor = true;
+				door = other.GetComponent<Door>();
 			}
 		}
-	}
-	
-	void OnTriggerEnter2D(Collider2D other)
-	{
-		if (other.name == "door")
+
+		void OnTriggerExit2D(Collider2D other)
 		{
-			onDoor = true;
-			door = other.GetComponent<Door>();
-		}
-	}
-	
-	void OnTriggerExit2D(Collider2D other)
-	{
-		if (other.name == "door")
-		{
-			onDoor = false;
+			if (other.name == "door")
+			{
+				onDoor = false;
+			}
 		}
 	}
 }
