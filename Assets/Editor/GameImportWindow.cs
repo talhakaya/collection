@@ -13,6 +13,11 @@ namespace Collection.EditorTools
 	{
 		private const string GamesRootFolder = "Assets/games";
 
+		// Packages that use TextMeshPro auto-pull "Assets/TextMesh Pro" (TMP Essential
+		// Resources) alongside the game's own content. That folder is shared, project-wide
+		// infrastructure - it must stay put, not get swept into the game's own folder.
+		private static readonly string[] SharedSupportFolders = { "Assets/TextMesh Pro" };
+
 		// Import is asynchronous and, when the package contains scripts, triggers a
 		// domain reload before it completes - which wipes any runtime "+=" subscription.
 		// Callbacks are instead registered once per domain load via [InitializeOnLoad],
@@ -182,8 +187,7 @@ namespace Collection.EditorTools
 			AssetDatabase.Refresh();
 
 			HashSet<string> after = SnapshotAssetPaths();
-			after.ExceptWith(before);
-			List<string> newPaths = after.ToList();
+			List<string> newPaths = after.Except(before).ToList();
 
 			if (newPaths.Count == 0)
 			{
@@ -197,43 +201,106 @@ namespace Collection.EditorTools
 			}
 
 			string destinationFolder = $"{GamesRootFolder}/{gameName}";
-			string commonRoot = FindCommonFolder(newPaths);
 
-			if (commonRoot != "Assets")
+			// Primary case: the package already scopes itself under Assets/games/<OriginalName>
+			// (how chocolate/golfinity/nykrig were all authored) - detected as the one new
+			// direct child of the games folder, regardless of whatever else the package
+			// pulled in elsewhere (e.g. TextMesh Pro essentials).
+			string sourceFolder = FindNewDirectChild(GamesRootFolder, before, after)
+				?? FindCommonFolder(newPaths.Where(p => !IsSharedSupportPath(p)).ToList());
+
+			if (sourceFolder != null && sourceFolder != "Assets")
 			{
-				string error = AssetDatabase.MoveAsset(commonRoot, destinationFolder);
-				if (!string.IsNullOrEmpty(error))
+				if (sourceFolder != destinationFolder)
 				{
-					throw new Exception($"Could not move '{commonRoot}' to '{destinationFolder}': {error}");
+					SafeMoveAsset(sourceFolder, destinationFolder);
 				}
 			}
 			else
 			{
-				AssetDatabase.CreateFolder(GamesRootFolder, gameName);
-				var topLevelItems = newPaths
-					.Select(p => p.Substring("Assets/".Length).Split('/')[0])
-					.Distinct();
-
-				foreach (string item in topLevelItems)
-				{
-					string source = $"Assets/{item}";
-					string destination = $"{destinationFolder}/{item}";
-					string error = AssetDatabase.MoveAsset(source, destination);
-					if (!string.IsNullOrEmpty(error))
-					{
-						throw new Exception($"Could not move '{source}' to '{destination}': {error}");
-					}
-				}
+				MoveScatteredTopLevelItems(before, newPaths, destinationFolder);
 			}
 
 			AssetDatabase.Refresh();
 
-			NamespaceScriptsUnder(destinationFolder, gameName);
+			// Build Settings must be updated before the namespace rewrite below: rewriting
+			// dozens of .cs files triggers a script recompile, which can synchronously tear
+			// down this call stack via a domain reload - anything after that point may never
+			// run. Nothing here after RegisterScenesUnder is safety-critical.
 			RegisterScenesUnder(destinationFolder);
+			NamespaceScriptsUnder(destinationFolder, gameName);
 
 			AssetDatabase.Refresh();
 
 			EditorUtility.DisplayDialog("Import Game", $"Imported '{gameName}' into {destinationFolder}.", "OK");
+		}
+
+		/// Finds the single new path that is a direct child of parentFolder (existed after
+		/// import but not before). Returns null if there isn't exactly one such child.
+		private static string FindNewDirectChild(string parentFolder, HashSet<string> before, HashSet<string> after)
+		{
+			string prefix = parentFolder + "/";
+			bool IsDirectChild(string p) => p.StartsWith(prefix) && !p.Substring(prefix.Length).Contains("/");
+
+			List<string> newDirectChildren = after
+				.Where(p => IsDirectChild(p) && !before.Contains(p))
+				.ToList();
+
+			return newDirectChildren.Count == 1 ? newDirectChildren[0] : null;
+		}
+
+		private static bool IsSharedSupportPath(string path)
+		{
+			foreach (string shared in SharedSupportFolders)
+			{
+				if (path == shared || path.StartsWith(shared + "/"))
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		/// Moves an asset, refusing outright if destination is nested inside source - moving a
+		/// folder into a subfolder of itself is undefined/destructive at the filesystem level
+		/// (this is exactly how a prior version of this tool corrupted Assets/games).
+		private static void SafeMoveAsset(string source, string destination)
+		{
+			if (destination == source || destination.StartsWith(source + "/"))
+			{
+				throw new Exception($"Refusing to move '{source}' into its own descendant '{destination}'.");
+			}
+
+			string error = AssetDatabase.MoveAsset(source, destination);
+			if (!string.IsNullOrEmpty(error))
+			{
+				throw new Exception($"Could not move '{source}' to '{destination}': {error}");
+			}
+		}
+
+		private static void MoveScatteredTopLevelItems(HashSet<string> before, List<string> newPaths, string destinationFolder)
+		{
+			if (!AssetDatabase.IsValidFolder(destinationFolder))
+			{
+				AssetDatabase.CreateFolder(GamesRootFolder, destinationFolder.Substring(GamesRootFolder.Length + 1));
+			}
+
+			// Only genuinely new top-level items are candidates - this is what keeps a
+			// pre-existing folder (like Assets/games itself) from being swept in just
+			// because some of its new children happen to start with that prefix.
+			var topLevelItems = newPaths
+				.Where(p => !IsSharedSupportPath(p))
+				.Select(p => p.Substring("Assets/".Length).Split('/')[0])
+				.Distinct()
+				.Where(item => !before.Contains($"Assets/{item}"));
+
+			foreach (string item in topLevelItems)
+			{
+				string source = $"Assets/{item}";
+				string destination = $"{destinationFolder}/{item}";
+				SafeMoveAsset(source, destination);
+			}
 		}
 
 		private static string FindCommonFolder(List<string> paths)
@@ -245,10 +312,9 @@ namespace Collection.EditorTools
 				// A folder is itself a candidate common root, so its own segments are used
 				// rather than its parent's - otherwise a single imported top-level folder
 				// looks like it "diverges" from its own children and the root collapses to Assets.
-				string[] segments = AssetDatabase.IsValidFolder(path)
+				string[] dirSegments = AssetDatabase.IsValidFolder(path)
 					? path.Split('/')
 					: path.Split('/').Take(path.Split('/').Length - 1).ToArray();
-				string[] dirSegments = segments;
 
 				if (commonSegments == null)
 				{
