@@ -1,37 +1,40 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
-public class Blur : MonoBehaviour {
+namespace Games.Chocolate
+{
+	public class Blur : MonoBehaviour {
 
-	private bool done;
-	private float timeCounter;
+		private bool done;
+		private float timeCounter;
 
-	void Start ()
-	{
-		SpriteEffect.make (Effect.Blur, gameObject);
-		Game.reference.transform.position = new Vector3(Random.Range(-5f, 5f), Random.Range (-4f, 4f));
-		while (Geometry.lengthOfVector2(new Vector2(Game.reference.transform.position.x - MousePosition.x (), Game.reference.transform.position.y - MousePosition.y ())) < 3f)
+		void Start ()
 		{
+			SpriteEffect.make (Effect.Blur, gameObject);
 			Game.reference.transform.position = new Vector3(Random.Range(-5f, 5f), Random.Range (-4f, 4f));
-		}
-	}
-
-	void Update ()
-	{
-		if (!done)
-		{
-			if (Geometry.lengthOfVector2(new Vector2(Game.reference.transform.position.x - MousePosition.x (), Game.reference.transform.position.y - MousePosition.y ())) < 1f)
+			while (Geometry.lengthOfVector2(new Vector2(Game.reference.transform.position.x - MousePosition.x (), Game.reference.transform.position.y - MousePosition.y ())) < 3f)
 			{
-				SpriteEffect.destroy(Effect.Blur, gameObject);
-				done = true;
+				Game.reference.transform.position = new Vector3(Random.Range(-5f, 5f), Random.Range (-4f, 4f));
 			}
 		}
-		else
+
+		void Update ()
 		{
-			timeCounter += Time.deltaTime;
-			if (timeCounter > 2f)
+			if (!done)
 			{
-				Game.done = true;
+				if (Geometry.lengthOfVector2(new Vector2(Game.reference.transform.position.x - MousePosition.x (), Game.reference.transform.position.y - MousePosition.y ())) < 1f)
+				{
+					SpriteEffect.destroy(Effect.Blur, gameObject);
+					done = true;
+				}
+			}
+			else
+			{
+				timeCounter += Time.deltaTime;
+				if (timeCounter > 2f)
+				{
+					Game.done = true;
+				}
 			}
 		}
 	}
