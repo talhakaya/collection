@@ -1,0 +1,25 @@
+fileFormatVersion: 2
+guid: fe2236ad7c1bd0d4a8796d56385b7a69
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Coverface SE
+  fontNames:
+  - Coverface SE
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 235a3cd689311d44bb6608f06cada2aa, type: 3}
+  - {fileID: 12800000, guid: 2d777e899066bb140a3c8c22ad8e4e05, type: 3}
+  - {fileID: 12800000, guid: 40d1387d9a37ac640a872fe25ebbb59e, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
