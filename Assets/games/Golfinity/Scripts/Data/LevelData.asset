@@ -1,0 +1,779 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 220393185f63c7348ab26f7db5fa06cc, type: 3}
+  m_Name: LevelData
+  m_EditorClassIdentifier: 
+  levels:
+  - holeNo: 0
+    seed: 35
+    numHits: 3
+  - holeNo: 1
+    seed: 96893605
+    numHits: 3
+  - holeNo: 2
+    seed: 1247582373
+    numHits: 3
+  - holeNo: 3
+    seed: 2079569622
+    numHits: 3
+  - holeNo: 4
+    seed: 4
+    numHits: 3
+  - holeNo: 5
+    seed: 1218994945
+    numHits: 3
+  - holeNo: 6
+    seed: 6
+    numHits: 4
+  - holeNo: 7
+    seed: 295709573
+    numHits: 2
+  - holeNo: 8
+    seed: 125223610
+    numHits: 3
+  - holeNo: 9
+    seed: 518395160
+    numHits: 4
+  - holeNo: 10
+    seed: 10
+    numHits: 4
+  - holeNo: 11
+    seed: 1122424037
+    numHits: 3
+  - holeNo: 12
+    seed: 1226937665
+    numHits: 3
+  - holeNo: 13
+    seed: 13
+    numHits: 3
+  - holeNo: 14
+    seed: 14
+    numHits: 2
+  - holeNo: 15
+    seed: 15
+    numHits: 3
+  - holeNo: 16
+    seed: 16
+    numHits: 1
+  - holeNo: 17
+    seed: 17
+    numHits: 6
+  - holeNo: 18
+    seed: 498129974
+    numHits: 4
+  - holeNo: 19
+    seed: 19
+    numHits: 6
+  - holeNo: 20
+    seed: 20
+    numHits: 3
+  - holeNo: 21
+    seed: 21
+    numHits: 2
+  - holeNo: 22
+    seed: 1675235758
+    numHits: 3
+  - holeNo: 23
+    seed: 23
+    numHits: 3
+  - holeNo: 24
+    seed: 355871035
+    numHits: 2
+  - holeNo: 25
+    seed: 25
+    numHits: 2
+  - holeNo: 26
+    seed: 26
+    numHits: 1
+  - holeNo: 27
+    seed: 27
+    numHits: 3
+  - holeNo: 28
+    seed: 1393701439
+    numHits: 2
+  - holeNo: 29
+    seed: 29
+    numHits: 2
+  - holeNo: 30
+    seed: 30
+    numHits: 1
+  - holeNo: 31
+    seed: 31
+    numHits: 4
+  - holeNo: 32
+    seed: 32
+    numHits: 2
+  - holeNo: 33
+    seed: 33
+    numHits: 6
+  - holeNo: 34
+    seed: 34
+    numHits: 2
+  - holeNo: 35
+    seed: 154973431
+    numHits: 1
+  - holeNo: 36
+    seed: 36
+    numHits: 4
+  - holeNo: 37
+    seed: 1479162711
+    numHits: 3
+  - holeNo: 38
+    seed: 38
+    numHits: 3
+  - holeNo: 39
+    seed: 39
+    numHits: 2
+  - holeNo: 40
+    seed: 40
+    numHits: 3
+  - holeNo: 41
+    seed: 2007768277
+    numHits: 3
+  - holeNo: 42
+    seed: 42
+    numHits: 3
+  - holeNo: 43
+    seed: 43
+    numHits: 1
+  - holeNo: 44
+    seed: 1100
+    numHits: 2
+  - holeNo: 45
+    seed: 45
+    numHits: 2
+  - holeNo: 46
+    seed: 46
+    numHits: 2
+  - holeNo: 47
+    seed: 47
+    numHits: 3
+  - holeNo: 48
+    seed: 48
+    numHits: 4
+  - holeNo: 49
+    seed: 49
+    numHits: 1
+  - holeNo: 50
+    seed: 50
+    numHits: 4
+  - holeNo: 51
+    seed: 51
+    numHits: 6
+  - holeNo: 52
+    seed: 52
+    numHits: 4
+  - holeNo: 53
+    seed: 53
+    numHits: 1
+  - holeNo: 54
+    seed: 54
+    numHits: 5
+  - holeNo: 55
+    seed: 55
+    numHits: 1
+  - holeNo: 56
+    seed: 56
+    numHits: 3
+  - holeNo: 57
+    seed: 57
+    numHits: 6
+  - holeNo: 58
+    seed: 58
+    numHits: 3
+  - holeNo: 59
+    seed: 477
+    numHits: 4
+  - holeNo: 60
+    seed: 60
+    numHits: 2
+  - holeNo: 61
+    seed: 61
+    numHits: 3
+  - holeNo: 62
+    seed: 62
+    numHits: 2
+  - holeNo: 63
+    seed: 63
+    numHits: 1
+  - holeNo: 64
+    seed: 64
+    numHits: 3
+  - holeNo: 65
+    seed: 65
+    numHits: 4
+  - holeNo: 66
+    seed: 66
+    numHits: 2
+  - holeNo: 67
+    seed: 67
+    numHits: 2
+  - holeNo: 68
+    seed: 68
+    numHits: 3
+  - holeNo: 69
+    seed: 69
+    numHits: 4
+  - holeNo: 70
+    seed: 70
+    numHits: 1
+  - holeNo: 71
+    seed: 71
+    numHits: 4
+  - holeNo: 72
+    seed: 72
+    numHits: 2
+  - holeNo: 73
+    seed: 73
+    numHits: 2
+  - holeNo: 74
+    seed: 74
+    numHits: 3
+  - holeNo: 75
+    seed: 75
+    numHits: 5
+  - holeNo: 76
+    seed: 76
+    numHits: 1
+  - holeNo: 77
+    seed: 77
+    numHits: 2
+  - holeNo: 78
+    seed: 78
+    numHits: 3
+  - holeNo: 79
+    seed: 79
+    numHits: 3
+  - holeNo: 80
+    seed: 80
+    numHits: 4
+  - holeNo: 81
+    seed: 81
+    numHits: 3
+  - holeNo: 82
+    seed: 82
+    numHits: 3
+  - holeNo: 83
+    seed: 83
+    numHits: 3
+  - holeNo: 84
+    seed: 84
+    numHits: 1
+  - holeNo: 85
+    seed: 85
+    numHits: 3
+  - holeNo: 86
+    seed: 86
+    numHits: 3
+  - holeNo: 87
+    seed: 87
+    numHits: 1
+  - holeNo: 88
+    seed: 88
+    numHits: 2
+  - holeNo: 89
+    seed: 89
+    numHits: 3
+  - holeNo: 90
+    seed: 90
+    numHits: 2
+  - holeNo: 91
+    seed: 91
+    numHits: 4
+  - holeNo: 92
+    seed: 92
+    numHits: 4
+  - holeNo: 93
+    seed: 93
+    numHits: 2
+  - holeNo: 94
+    seed: 94
+    numHits: 4
+  - holeNo: 95
+    seed: 95
+    numHits: 6
+  - holeNo: 96
+    seed: 96
+    numHits: 6
+  - holeNo: 97
+    seed: 97
+    numHits: 2
+  - holeNo: 98
+    seed: 98
+    numHits: 3
+  - holeNo: 99
+    seed: 99
+    numHits: 3
+  - holeNo: 100
+    seed: 100
+    numHits: 3
+  - holeNo: 101
+    seed: 101
+    numHits: 3
+  - holeNo: 102
+    seed: 102
+    numHits: 4
+  - holeNo: 103
+    seed: 103
+    numHits: 4
+  - holeNo: 104
+    seed: 104
+    numHits: 2
+  - holeNo: 105
+    seed: 105
+    numHits: 3
+  - holeNo: 106
+    seed: 106
+    numHits: 4
+  - holeNo: 107
+    seed: 107
+    numHits: 4
+  - holeNo: 108
+    seed: 108
+    numHits: 3
+  - holeNo: 109
+    seed: 109
+    numHits: 8
+  - holeNo: 110
+    seed: 110
+    numHits: 2
+  - holeNo: 111
+    seed: 111
+    numHits: 6
+  - holeNo: 112
+    seed: 112
+    numHits: 4
+  - holeNo: 113
+    seed: 113
+    numHits: 12
+  - holeNo: 114
+    seed: 114
+    numHits: 4
+  - holeNo: 115
+    seed: 115
+    numHits: 9
+  - holeNo: 116
+    seed: 116
+    numHits: 8
+  - holeNo: 117
+    seed: 117
+    numHits: 6
+  - holeNo: 118
+    seed: 118
+    numHits: 6
+  - holeNo: 119
+    seed: 119
+    numHits: 12
+  - holeNo: 120
+    seed: 120
+    numHits: 4
+  - holeNo: 121
+    seed: 121
+    numHits: 6
+  - holeNo: 122
+    seed: 122
+    numHits: 6
+  - holeNo: 123
+    seed: 123
+    numHits: 12
+  - holeNo: 124
+    seed: 124
+    numHits: 4
+  - holeNo: 125
+    seed: 125
+    numHits: 3
+  - holeNo: 126
+    seed: 126
+    numHits: 8
+  - holeNo: 127
+    seed: 127
+    numHits: 2
+  - holeNo: 128
+    seed: 128
+    numHits: 6
+  - holeNo: 129
+    seed: 129
+    numHits: 4
+  - holeNo: 130
+    seed: 130
+    numHits: 8
+  - holeNo: 131
+    seed: 131
+    numHits: 2
+  - holeNo: 132
+    seed: 132
+    numHits: 6
+  - holeNo: 133
+    seed: 133
+    numHits: 4
+  - holeNo: 134
+    seed: 134
+    numHits: 4
+  - holeNo: 135
+    seed: 135
+    numHits: 6
+  - holeNo: 136
+    seed: 136
+    numHits: 12
+  - holeNo: 137
+    seed: 137
+    numHits: 4
+  - holeNo: 138
+    seed: 138
+    numHits: 6
+  - holeNo: 139
+    seed: 139
+    numHits: 6
+  - holeNo: 140
+    seed: 140
+    numHits: 12
+  - holeNo: 141
+    seed: 141
+    numHits: 4
+  - holeNo: 142
+    seed: 142
+    numHits: 9
+  - holeNo: 143
+    seed: 143
+    numHits: 8
+  - holeNo: 144
+    seed: 144
+    numHits: 6
+  - holeNo: 145
+    seed: 145
+    numHits: 6
+  - holeNo: 146
+    seed: 146
+    numHits: 3
+  - holeNo: 147
+    seed: 147
+    numHits: 8
+  - holeNo: 148
+    seed: 148
+    numHits: 2
+  - holeNo: 149
+    seed: 149
+    numHits: 6
+  - holeNo: 150
+    seed: 150
+    numHits: 4
+  - holeNo: 151
+    seed: 151
+    numHits: 4
+  - holeNo: 152
+    seed: 152
+    numHits: 3
+  - holeNo: 153
+    seed: 153
+    numHits: 8
+  - holeNo: 154
+    seed: 154
+    numHits: 2
+  - holeNo: 155
+    seed: 155
+    numHits: 4
+  - holeNo: 156
+    seed: 156
+    numHits: 3
+  - holeNo: 157
+    seed: 157
+    numHits: 8
+  - holeNo: 158
+    seed: 158
+    numHits: 4
+  - holeNo: 159
+    seed: 159
+    numHits: 9
+  - holeNo: 160
+    seed: 160
+    numHits: 8
+  - holeNo: 161
+    seed: 161
+    numHits: 6
+  - holeNo: 162
+    seed: 162
+    numHits: 6
+  - holeNo: 163
+    seed: 163
+    numHits: 9
+  - holeNo: 164
+    seed: 164
+    numHits: 8
+  - holeNo: 165
+    seed: 165
+    numHits: 6
+  - holeNo: 166
+    seed: 166
+    numHits: 6
+  - holeNo: 167
+    seed: 167
+    numHits: 12
+  - holeNo: 168
+    seed: 168
+    numHits: 4
+  - holeNo: 169
+    seed: 169
+    numHits: 3
+  - holeNo: 170
+    seed: 170
+    numHits: 8
+  - holeNo: 171
+    seed: 171
+    numHits: 4
+  - holeNo: 172
+    seed: 172
+    numHits: 4
+  - holeNo: 173
+    seed: 173
+    numHits: 3
+  - holeNo: 174
+    seed: 174
+    numHits: 8
+  - holeNo: 175
+    seed: 175
+    numHits: 2
+  - holeNo: 176
+    seed: 176
+    numHits: 6
+  - holeNo: 177
+    seed: 177
+    numHits: 4
+  - holeNo: 178
+    seed: 178
+    numHits: 4
+  - holeNo: 179
+    seed: 179
+    numHits: 3
+  - holeNo: 180
+    seed: 180
+    numHits: 9
+  - holeNo: 181
+    seed: 181
+    numHits: 8
+  - holeNo: 182
+    seed: 182
+    numHits: 6
+  - holeNo: 183
+    seed: 183
+    numHits: 6
+  - holeNo: 184
+    seed: 184
+    numHits: 12
+  - holeNo: 185
+    seed: 185
+    numHits: 4
+  - holeNo: 186
+    seed: 186
+    numHits: 9
+  - holeNo: 187
+    seed: 187
+    numHits: 8
+  - holeNo: 188
+    seed: 188
+    numHits: 12
+  - holeNo: 189
+    seed: 189
+    numHits: 4
+  - holeNo: 190
+    seed: 190
+    numHits: 9
+  - holeNo: 191
+    seed: 191
+    numHits: 8
+  - holeNo: 192
+    seed: 192
+    numHits: 2
+  - holeNo: 193
+    seed: 193
+    numHits: 6
+  - holeNo: 194
+    seed: 194
+    numHits: 4
+  - holeNo: 195
+    seed: 195
+    numHits: 4
+  - holeNo: 196
+    seed: 196
+    numHits: 2
+  - holeNo: 197
+    seed: 197
+    numHits: 6
+  - holeNo: 198
+    seed: 198
+    numHits: 4
+  - holeNo: 199
+    seed: 199
+    numHits: 4
+  - holeNo: 200
+    seed: 200
+    numHits: 8
+  - holeNo: 201
+    seed: 201
+    numHits: 15
+  - holeNo: 202
+    seed: 202
+    numHits: 4
+  - holeNo: 203
+    seed: 203
+    numHits: 9
+  - holeNo: 204
+    seed: 204
+    numHits: 8
+  - holeNo: 205
+    seed: 205
+    numHits: 20
+  - holeNo: 206
+    seed: 206
+    numHits: 6
+  - holeNo: 207
+    seed: 207
+    numHits: 16
+  - holeNo: 208
+    seed: 208
+    numHits: 10
+  - holeNo: 209
+    seed: 209
+    numHits: 8
+  - holeNo: 210
+    seed: 210
+    numHits: 6
+  - holeNo: 211
+    seed: 211
+    numHits: 16
+  - holeNo: 212
+    seed: 212
+    numHits: 4
+  - holeNo: 213
+    seed: 213
+    numHits: 3
+  - holeNo: 214
+    seed: 214
+    numHits: 8
+  - holeNo: 215
+    seed: 215
+    numHits: 5
+  - holeNo: 216
+    seed: 216
+    numHits: 4
+  - holeNo: 217
+    seed: 217
+    numHits: 3
+  - holeNo: 218
+    seed: 218
+    numHits: 15
+  - holeNo: 219
+    seed: 219
+    numHits: 2
+  - holeNo: 220
+    seed: 220
+    numHits: 9
+  - holeNo: 221
+    seed: 221
+    numHits: 4
+  - holeNo: 222
+    seed: 222
+    numHits: 15
+  - holeNo: 223
+    seed: 223
+    numHits: 4
+  - holeNo: 224
+    seed: 224
+    numHits: 12
+  - holeNo: 225
+    seed: 225
+    numHits: 10
+  - holeNo: 226
+    seed: 226
+    numHits: 6
+  - holeNo: 227
+    seed: 227
+    numHits: 6
+  - holeNo: 228
+    seed: 228
+    numHits: 16
+  - holeNo: 229
+    seed: 229
+    numHits: 4
+  - holeNo: 230
+    seed: 230
+    numHits: 12
+  - holeNo: 231
+    seed: 231
+    numHits: 8
+  - holeNo: 232
+    seed: 232
+    numHits: 20
+  - holeNo: 233
+    seed: 233
+    numHits: 4
+  - holeNo: 234
+    seed: 234
+    numHits: 12
+  - holeNo: 235
+    seed: 235
+    numHits: 10
+  - holeNo: 236
+    seed: 236
+    numHits: 2
+  - holeNo: 237
+    seed: 237
+    numHits: 6
+  - holeNo: 238
+    seed: 238
+    numHits: 4
+  - holeNo: 239
+    seed: 239
+    numHits: 10
+  - holeNo: 240
+    seed: 240
+    numHits: 2
+  - holeNo: 241
+    seed: 241
+    numHits: 12
+  - holeNo: 242
+    seed: 242
+    numHits: 5
+  - holeNo: 243
+    seed: 243
+    numHits: 6
+  - holeNo: 244
+    seed: 244
+    numHits: 3
+  - holeNo: 245
+    seed: 245
+    numHits: 12
+  - holeNo: 246
+    seed: 246
+    numHits: 10
+  - holeNo: 247
+    seed: 247
+    numHits: 9
+  - holeNo: 248
+    seed: 248
+    numHits: 8
+  - holeNo: 249
+    seed: 249
+    numHits: 20
+  otherLevels:
+  - holeNo: 328
+    seed: 328
+    numHits: 4
+  - holeNo: 13174
+    seed: 0
+    numHits: 80
+  - holeNo: 14483
+    seed: 0
+    numHits: 80
+  - holeNo: 22965
+    seed: 21312
+    numHits: 80
+  lockGold: 96000000a0000000aa000000be000000d2000000dc000000f0000000fa000000040100000e01000018010000220100002c010000
