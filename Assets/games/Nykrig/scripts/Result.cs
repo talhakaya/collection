@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using Collection.Controls;
 
 namespace Games.Nykrig
 {
@@ -43,7 +44,7 @@ namespace Games.Nykrig
 		void Update () {
 	        timer += Game.dt;
 	        canvasGroup.alpha = Mathf.Min(1f, timer);
-	        bool fireButton = (Input.GetButton("Fire") || Input.GetAxisRaw("FireAxis") > 0.5f || Input.GetAxisRaw("FireAxisMac") > 0.5f);
+	        bool fireButton = (TaloketoInputManager.GetButton("Fire") || TaloketoInputManager.GetAxisRaw("FireAxis") > 0.5f);
 	        if (timer > 1f && fireButton && !fireButtonOld) {
 	            gameObject.SetActive(false);
 	            Game.instance.StartGame(Game.instance.endless, Game.instance.twoPlayers);

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Collection.Controls;
 
 namespace Games.Nykrig
 {
@@ -21,7 +22,7 @@ namespace Games.Nykrig
 	        if (Input.GetMouseButton(0))
 	        {
 	            //Vector3 deltaRotationVec = rotationMultiplier * (mousePos - mousePosOld);
-	            Vector3 deltaRotationVec = rotationMultiplier * new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"), 0f);
+	            Vector3 deltaRotationVec = rotationMultiplier * new Vector3(TaloketoInputManager.GetAxis("Mouse X"), TaloketoInputManager.GetAxis("Mouse Y"), 0f);
 	            //transform.eulerAngles += new Vector3(deltaRotationVec.y, 0f, deltaRotationVec.x);
 	            transform.Rotate(new Vector3(deltaRotationVec.y, -deltaRotationVec.x, 0f), Space.World);
 	            if (limitY)

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using Collection.Controls;
 
 namespace Games.Nykrig
 {
@@ -35,7 +36,7 @@ namespace Games.Nykrig
 	            TalhaAudioSource.PlayInstance(AudioResources.instance.nykrig);
 	        }
 
-	        bool fireButton = Input.GetButton("Fire") || Input.GetAxisRaw("FireAxis") > 0.5f || Input.GetAxisRaw("FireAxisMac") > 0.5f;
+	        bool fireButton = TaloketoInputManager.GetButton("Fire") || TaloketoInputManager.GetAxisRaw("FireAxis") > 0.5f;
 
 	        if (enableObjects[0].activeSelf) {
 	            for (int i = 0, len = texts.Length; i < len; i++) {

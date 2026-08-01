@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System;
+using Collection.Controls;
 
 namespace Games.Nykrig
 {
@@ -50,10 +51,10 @@ namespace Games.Nykrig
 		void FixedUpdate () {
 	        if (!isDead) {
 	            if (!Game.instance.twoPlayers) {
-	                if (Input.GetAxis("Horizontal1") != 0f || Input.GetAxis("Vertical1") != 0f) {
+	                if (TaloketoInputManager.GetAxis("Horizontal1") != 0f || TaloketoInputManager.GetAxis("Vertical1") != 0f) {
 	                    gamepad = true;
 	                }
-	                if (Input.GetAxisRaw("Horizontal") != 0f || Input.GetAxisRaw("Vertical") != 0f) {
+	                if (TaloketoInputManager.GetAxisRaw("Horizontal") != 0f || TaloketoInputManager.GetAxisRaw("Vertical") != 0f) {
 	                    gamepad = false;
 	                }
 	            }
@@ -62,18 +63,18 @@ namespace Games.Nykrig
 	            }
 
 	            if (gamepad) {
-	                Vector2 gamepadVector = new Vector2(Input.GetAxis("Horizontal1"), Input.GetAxis("Vertical1"));
+	                Vector2 gamepadVector = new Vector2(TaloketoInputManager.GetAxis("Horizontal1"), TaloketoInputManager.GetAxis("Vertical1"));
 	                float gamepadVectorLength = Geometry.lengthOfVector2(gamepadVector);
 	                if (gamepadVectorLength >= 0.2f) {
 	                    mouseAngle = Geometry.angleOfVector2(gamepadVector);
 	                    mouseDistance = gamepadVectorLength * 5f;
 	                }
-	                body.linearVelocity = new Vector2(Input.GetAxis("Horizontal0"), Input.GetAxis("Vertical0")) * speed;
+	                body.linearVelocity = new Vector2(TaloketoInputManager.GetAxis("Horizontal0"), TaloketoInputManager.GetAxis("Vertical0")) * speed;
 	            }
 	            else {
 	                mouseAngle = Geometry.angleOfVector3(MousePosition.get - transform.position);
 	                mouseDistance = Geometry.lengthOfVector3(MousePosition.get - transform.position);
-	                body.linearVelocity = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")) * speed;
+	                body.linearVelocity = new Vector2(TaloketoInputManager.GetAxis("Horizontal"), TaloketoInputManager.GetAxis("Vertical")) * speed;
 	            }
 	            if (Geometry.lengthOfVector2(body.linearVelocity) > 0f) {
 	                Wall.lightAlpha = Mathf.Max(0f, Wall.lightAlpha - 5f * Game.dt);
@@ -86,7 +87,7 @@ namespace Games.Nykrig
 	            //lightCircle.transform.localScale = lightCircleScale * (1.1f - mouseDistanceClamped * 0.1f);
 
 	            fireTimer += Game.dt;
-	            if ((!gamepad && Input.GetButton("Fire")) || (gamepad && (Input.GetAxisRaw("FireAxis") > 0.5f || Input.GetAxisRaw("FireAxisMac") > 0.5f))) {
+	            if ((!gamepad && TaloketoInputManager.GetButton("Fire")) || (gamepad && TaloketoInputManager.GetAxisRaw("FireAxis") > 0.5f)) {
 	                float fPeriod = firePeriod * (nightVisionTimer > 0f ? 1f : 2f);
 	                if (fireTimer >= fPeriod) {
 	                    float firePower = Mathf.Clamp(fireTimer / fPeriod, 1f, 3f);

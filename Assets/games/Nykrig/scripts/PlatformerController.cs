@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Collection.Controls;
 
 namespace Games.Nykrig
 {
@@ -41,7 +42,7 @@ namespace Games.Nykrig
 	               speedV += jumpForceCont * Game.dt;
 	            }
 	        }
-	        float horizontalAxis = Input.GetAxisRaw("Horizontal");
+	        float horizontalAxis = TaloketoInputManager.GetAxisRaw("Horizontal");
 	        // anim.enabled = (horizontalAxis != 0);
 	        rigidbody2D.linearVelocity = new Vector2(horizontalAxis * speedH, Mathf.Clamp(speedV, -maxSpeedV, maxSpeedV));
 

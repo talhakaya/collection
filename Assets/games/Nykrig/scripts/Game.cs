@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using Collection.Controls;
 
 namespace Games.Nykrig
 {
@@ -79,7 +80,7 @@ namespace Games.Nykrig
 		
 		void Update ()
 		{
-			if (Input.GetButtonDown("Escape"))
+			if (TaloketoInputManager.GetButtonDown("Escape"))
 	        {
 	            if (menu.gameObject.activeSelf) {
 	                Application.Quit();
@@ -119,15 +120,15 @@ namespace Games.Nykrig
 
 	        //shadowVector
 	        if (!player0.gameObject.activeSelf && !player1.gameObject.activeSelf) {
-	            if (Input.GetAxisRaw("Horizontal") != 0f || Input.GetAxisRaw("Vertical") != 0f || Input.GetButton("Fire")) {
+	            if (TaloketoInputManager.GetAxisRaw("Horizontal") != 0f || TaloketoInputManager.GetAxisRaw("Vertical") != 0f || TaloketoInputManager.GetButton("Fire")) {
 	                gamepad = false;
 	            }
-	            if (Input.GetAxisRaw("Horizontal0") != 0f || Input.GetAxisRaw("Vertical0") != 0f || Input.GetAxisRaw("Horizontal1") != 0f || Input.GetAxisRaw("Vertical1") != 0f || Input.GetAxisRaw("FireAxis") > 0.5f || Input.GetAxisRaw("FireAxisMac") > 0.5f) {
+	            if (TaloketoInputManager.GetAxisRaw("Horizontal0") != 0f || TaloketoInputManager.GetAxisRaw("Vertical0") != 0f || TaloketoInputManager.GetAxisRaw("Horizontal1") != 0f || TaloketoInputManager.GetAxisRaw("Vertical1") != 0f || TaloketoInputManager.GetAxisRaw("FireAxis") > 0.5f) {
 	                gamepad = true;
 	            }
 
 	            if (gamepad) {
-	                Vector2 gamepadVector = new Vector2(Input.GetAxis("Horizontal0"), Input.GetAxis("Vertical0")) + new Vector2(Input.GetAxis("Horizontal1"), Input.GetAxis("Vertical1"));
+	                Vector2 gamepadVector = new Vector2(TaloketoInputManager.GetAxis("Horizontal0"), TaloketoInputManager.GetAxis("Vertical0")) + new Vector2(TaloketoInputManager.GetAxis("Horizontal1"), TaloketoInputManager.GetAxis("Vertical1"));
 	                float gamepadVectorLength = Geometry.lengthOfVector2(gamepadVector);
 	                //if (gamepadVectorLength >= 0.2f) {
 	                //}
@@ -181,7 +182,7 @@ namespace Games.Nykrig
 	                    result.SetActive(true);
 	                }
 	                else {
-	                    bool fireButton = (Input.GetButton("Fire") || Input.GetAxisRaw("FireAxis") > 0.5f || Input.GetAxisRaw("FireAxisMac") > 0.5f);
+	                    bool fireButton = (TaloketoInputManager.GetButton("Fire") || TaloketoInputManager.GetAxisRaw("FireAxis") > 0.5f);
 	                    if (fireButton) {
 	                        StartGame(endless, twoPlayers, levelNo);
 	                    }
