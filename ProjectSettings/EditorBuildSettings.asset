@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/mainmenu.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
-    path: Assets/games/chocolate/scene0.unity
+    path: Assets/games/Chocolate/scene0.unity
     guid: 8f872d0d88cbd1748a0c6147230de4db
   - enabled: 1
     path: Assets/games/Golfinity/Scenes/main.unity
