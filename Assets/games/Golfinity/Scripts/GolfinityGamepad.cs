@@ -30,8 +30,12 @@ namespace Games.Golfinity
 		[Header("Map navigation")]
 		[Tooltip("World units/sec the right stick free-scrolls the map. Fixed speed, no inertia.")]
 		public float scrollSpeed = 40f;
-		[Tooltip("Seconds the scroll back to the selection takes. Fixed, so the speed varies with how far the player wandered.")]
+		[Tooltip("Seconds for a normal step to an adjacent level. Kept separate from scrollBackDuration so stepping stays snappy while a long return from a peek still takes a consistent, longer beat.")]
+		public float stepDuration = 0.14f;
+		[Tooltip("Seconds to scroll back after peeking away with the right stick. Fixed, so the speed varies with how far the player wandered.")]
 		public float scrollBackDuration = 0.35f;
+		[Tooltip("Travel beyond this many level-spacings counts as a return-from-peek and uses scrollBackDuration instead of stepDuration.")]
+		public float peekReturnSpacings = 1.5f;
 		[Tooltip("Limit how far back-scrolling can go past the first level.")]
 		public bool clampToFirstLevel = true;
 		[Tooltip("Where back-scrolling stops, as the first level's offset from centre in world units. 0 stops with it centred; negative stops earlier, showing less empty scenery to its left.")]
@@ -48,6 +52,7 @@ namespace Games.Golfinity
 		private float scrollBackElapsed;
 		private float scrollBackTotal;
 		private float scrollBackApplied;
+		private float scrollBackSeconds;
 
 		private RectTransform canvasRect;
 		private RectTransform cursorRect;
@@ -298,6 +303,14 @@ namespace Games.Golfinity
 			scrollBackElapsed = 0f;
 			scrollBackApplied = 0f;
 			scrollBackTotal = ScrollDeltaTo(map, destinationHole);
+
+			// A step to the neighbouring level travels about one spacing and should feel
+			// immediate; a return from a long peek is a different move and gets the slower,
+			// distance-independent beat. Charging every step the return's duration is what
+			// made plain stepping feel sluggish.
+			bool returningFromPeek = Mathf.Abs(scrollBackTotal) > Spline.distPerPoint * peekReturnSpacings;
+			scrollBackSeconds = returningFromPeek ? scrollBackDuration : stepDuration;
+
 			scrollingBack = true;
 		}
 
@@ -337,7 +350,7 @@ namespace Games.Golfinity
 			if (!scrollingBack) return false;
 
 			scrollBackElapsed += Time.deltaTime;
-			float t = scrollBackDuration > 0f ? Mathf.Clamp01(scrollBackElapsed / scrollBackDuration) : 1f;
+			float t = scrollBackSeconds > 0f ? Mathf.Clamp01(scrollBackElapsed / scrollBackSeconds) : 1f;
 
 			// Ease-out cubic against elapsed time rather than remaining distance, so the
 			// duration stays fixed instead of drifting with the distance travelled.

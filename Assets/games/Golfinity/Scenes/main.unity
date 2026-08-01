@@ -11917,7 +11917,9 @@ MonoBehaviour:
   cursorHeight: 16
   cursorOffset: {x: 6, y: -6}
   scrollSpeed: 40
+  stepDuration: 0.14
   scrollBackDuration: 0.35
+  peekReturnSpacings: 1.5
   clampToFirstLevel: 1
   leftStopOffset: 0
   stepThreshold: 0.5
