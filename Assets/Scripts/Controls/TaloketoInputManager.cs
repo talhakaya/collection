@@ -158,6 +158,14 @@ namespace Collection.Controls
 			}
 		}
 
+		/// The underlying action on the active game's map, for cases that need more than a
+		/// polled value - building shortcut prompts from the real binding, say, so they stay
+		/// correct when it's rebound. Null if the game has no such action.
+		public static InputAction GetAction(string name)
+		{
+			return currentMap?.FindAction(name);
+		}
+
 		private static InputAction FindAction(string name)
 		{
 			InputAction action = currentMap?.FindAction(name);

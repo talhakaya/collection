@@ -22,30 +22,32 @@ namespace Games.Golfinity
 		[Header("Cursor")]
 		[Tooltip("Sprite drawn over the current selection. Swap freely - nothing depends on which sprite it is.")]
 		public Sprite cursorSprite;
-		public Vector2 cursorSize = new Vector2(16f, 16f);
+		[Tooltip("Cursor height in canvas units. Width follows the sprite's own aspect ratio, so swapping in a differently-shaped sprite won't squash it.")]
+		public float cursorHeight = 16f;
 		[Tooltip("Offset from the selected item's centre, in canvas units.")]
 		public Vector2 cursorOffset = new Vector2(6f, -6f);
 
 		[Header("Map navigation")]
 		[Tooltip("World units/sec the right stick free-scrolls the map. Fixed speed, no inertia.")]
 		public float scrollSpeed = 40f;
-		[Tooltip("Top speed (world units/sec) when stepping between levels.")]
-		public float stepSpeed = 60f;
-		[Tooltip("How sharply the step eases out. Higher settles faster.")]
-		public float stepSharpness = 10f;
-		[Tooltip("Floor speed so the ease-out can't crawl to a halt just short of the target.")]
-		public float minStepSpeed = 3f;
-		[Tooltip("How far off-centre (world units) the selection can drift before a step pulls it back instead of moving on.")]
-		public float centredTolerance = 0.5f;
-		[Tooltip("Stop free-scrolling once the first level is centred. Map's own clamp allows a further dot-spacing of overscroll past it, which shows empty sky with nothing selected.")]
+		[Tooltip("Seconds the scroll back to the selection takes. Fixed, so the speed varies with how far the player wandered.")]
+		public float scrollBackDuration = 0.35f;
+		[Tooltip("Limit how far back-scrolling can go past the first level.")]
 		public bool clampToFirstLevel = true;
+		[Tooltip("Where back-scrolling stops, as the first level's offset from centre in world units. 0 stops with it centred; negative stops earlier, showing less empty scenery to its left.")]
+		public float leftStopOffset = 0f;
 		[Tooltip("Stick deflection needed to register a level step.")]
 		public float stepThreshold = 0.5f;
 		public float stepRepeatDelay = 0.4f;
 		public float stepRepeatRate = 0.18f;
 
 		private const int NoTarget = -1;
-		private int targetHole = NoTarget;
+		private int anchorHole = NoTarget;
+		private bool scrollingBack;
+		private int scrollBackTo;
+		private float scrollBackElapsed;
+		private float scrollBackTotal;
+		private float scrollBackApplied;
 
 		private RectTransform canvasRect;
 		private RectTransform cursorRect;
@@ -75,12 +77,26 @@ namespace Games.Golfinity
 			cursorRect = go.GetComponent<RectTransform>();
 			cursorRect.SetParent(canvas.transform, false);
 			cursorRect.anchorMin = cursorRect.anchorMax = cursorRect.pivot = new Vector2(0.5f, 0.5f);
-			cursorRect.sizeDelta = cursorSize;
 
 			cursorImage = go.GetComponent<Image>();
 			cursorImage.sprite = cursorSprite;
 			cursorImage.raycastTarget = false;
 			cursorImage.enabled = false;
+
+			ApplyCursorSize();
+		}
+
+		/// Sizes the cursor from its height, taking width from the sprite's own aspect so a
+		/// non-square sprite (hand0 is 70x93) isn't stretched.
+		private void ApplyCursorSize()
+		{
+			float aspect = 1f;
+			if (cursorSprite != null && cursorSprite.rect.height > 0f)
+			{
+				aspect = cursorSprite.rect.width / cursorSprite.rect.height;
+			}
+
+			cursorRect.sizeDelta = new Vector2(cursorHeight * aspect, cursorHeight);
 		}
 
 		private void Update()
@@ -185,25 +201,31 @@ namespace Games.Golfinity
 				return;
 			}
 
-			// Right stick: free scroll at a fixed speed, no inertia.
+			// A scroll-back owns the map until it finishes. Input stays locked for its whole
+			// duration so a press can't land on whichever level happens to be sliding past.
+			if (UpdateScrollBack(map)) return;
+
 			MapUi focused = map.GetFocusedUi();
 
-			// Right stick: free scroll at a fixed speed, no inertia. Scrolling further forward
-			// is blocked once nothing selectable is left in view - the map recycles only nine
-			// nodes, so past that point there's no selection to show, no cursor, and no way to
-			// tell where you are. Scrolling back toward the levels stays allowed.
+			// Right stick free-scrolls at fixed speed with no inertia. This is a "peek": it
+			// deliberately does NOT commit a new selection, it just moves the view (and the
+			// highlight follows whatever is nearest, as before). Forward is unbounded, like
+			// the mouse drag; only the left edge is limited.
 			float scroll = TaloketoInputManager.GetVector2("ScrollMap").x;
-			bool strandedForward = focused == null && scroll > 0f;
-			bool pastFirstLevel = clampToFirstLevel && scroll < 0f && IsFirstLevelCentred(map);
-			if (!Mathf.Approximately(scroll, 0f) && !strandedForward && !pastFirstLevel)
+			bool pastLeftLimit = clampToFirstLevel && scroll < 0f && IsAtLeftLimit(map);
+			if (!Mathf.Approximately(scroll, 0f) && !pastLeftLimit)
 			{
 				map.ScrollBy(-scroll * scrollSpeed * Time.deltaTime);
-				targetHole = NoTarget; // free scroll overrides an in-flight step
 				focused = map.GetFocusedUi();
 			}
 
-			// Left stick / dpad: discrete level-to-level steps, with menu-style key repeat so
-			// holding the stick walks the list instead of firing once or racing through it.
+			// The committed selection tracks the highlight while peeking, but survives being
+			// scrolled past the end of the unlocked run (where GetFocusedUi goes null), so
+			// there's always somewhere to come back to.
+			if (focused is MapLevelUi lit) anchorHole = lit.holeNo;
+
+			// Left stick / dpad: commit a selection change. Scrolls back to the new selection
+			// first, so the player always ends up looking at what they selected.
 			float nav = TaloketoInputManager.GetVector2("NavigateLevel").x;
 			if (Mathf.Abs(nav) < stepThreshold)
 			{
@@ -217,11 +239,9 @@ namespace Games.Golfinity
 				{
 					stepCooldown = stepLatched ? stepRepeatRate : stepRepeatDelay;
 					stepLatched = true;
-					RequestStep(map, focused, nav > 0f ? 1 : -1);
+					if (BeginStep(map, nav > 0f ? 1 : -1)) return;
 				}
 			}
-
-			bool stepping = AdvanceTowardTarget(map);
 
 			if (focused == null)
 			{
@@ -231,48 +251,33 @@ namespace Games.Golfinity
 
 			PositionCursorAtWorld(focused.transform.position);
 
-			// Don't let a press land mid-step, or it fires on whichever level happens to be
-			// passing under the centre of the screen at that instant.
-			if (!stepping && TaloketoInputManager.GetButtonDown("Throw")) focused.OnClick();
+			if (TaloketoInputManager.GetButtonDown("Throw")) focused.OnClick();
 		}
 
-		/// Targets a hole *number*, not a node: Refresh recycles the nine nodes and reassigns
-		/// which hole each one shows as the map scrolls, so a node reference would drift.
-		/// Refuses to target a level that isn't interactable, which is what keeps navigation
-		/// from walking off the end into locked holes.
-		private void RequestStep(Map map, MapUi focused, int dir)
+		/// Starts a scroll back to the selection one step away. Targets a hole *number*, not a
+		/// node: Refresh recycles the nine nodes and reassigns which hole each shows as the map
+		/// scrolls, so a node reference would drift. Returns true if a scroll-back started.
+		private bool BeginStep(Map map, int dir)
 		{
-			int from = targetHole != NoTarget
-				? targetHole
-				: (focused is MapLevelUi level ? level.holeNo : map.HoleNo);
+			if (anchorHole == NoTarget) return false;
 
-			// Free-scrolling with the right stick leaves the selection off-centre, possibly
-			// off-screen. The first press then pulls it back into view rather than stepping
-			// from something the player can't see - the way a scrolled list snaps to its
-			// selection before it starts moving.
-			if (targetHole == NoTarget && !IsCentred(focused))
-			{
-				targetHole = from;
-				return;
-			}
+			int candidate = anchorHole + dir;
+			MapLevelUi next = map.FindLevelUi(candidate);
 
-			MapLevelUi candidate = map.FindLevelUi(from + dir);
-			if (candidate == null || !candidate.interactable)
-			{
-				// At either end of the unlocked run. Re-centre instead of ignoring the press,
-				// so the map never sits somewhere the stick appears to do nothing.
-				targetHole = from;
-				return;
-			}
+			// Off the end of the unlocked run, or outside the recycled window. Fall back to
+			// re-centring the current selection, so a press always brings the player back to
+			// something rather than appearing to do nothing.
+			int destination = (next != null && next.interactable) ? candidate : anchorHole;
 
-			targetHole = from + dir;
+			BeginScrollBack(map, destination);
+			return true;
 		}
 
-		/// True once the first level has reached (or passed) centre. Map's own clamp stops a
-		/// dot-spacing later, leaving the first level off to the right with empty sky beside
-		/// it and nothing selected - fine as mouse-drag rubber-banding, wrong for stick
-		/// navigation where the centre is the selection.
-		private static bool IsFirstLevelCentred(Map map)
+		/// True once the first level has reached the left limit. Map's own clamp stops a full
+		/// dot-spacing further left, which reads as mouse-drag rubber-banding but leaves empty
+		/// scenery on screen with nothing selected. leftStopOffset shifts where that limit
+		/// sits: 0 stops with the first level centred, negative stops earlier still.
+		private bool IsAtLeftLimit(Map map)
 		{
 			MapLevelUi first = map.FindLevelUi(0);
 			if (first == null) return false;
@@ -280,51 +285,83 @@ namespace Games.Golfinity
 			Camera cam = Game.cam != null ? Game.cam : Camera.main;
 			if (cam == null) return false;
 
-			return first.transform.position.x - cam.transform.position.x >= -0.01f;
-		}
-
-		private bool IsCentred(MapUi ui)
-		{
-			if (ui == null) return true;
-			Camera cam = Game.cam != null ? Game.cam : Camera.main;
-			if (cam == null) return true;
-			return Mathf.Abs(ui.transform.position.x - cam.transform.position.x) <= centredTolerance;
+			return first.transform.position.x - cam.transform.position.x >= leftStopOffset;
 		}
 
 		/// Scrolls until the targeted hole sits under the camera. Driving to a world position
 		/// each frame rather than applying a fixed nudge means it self-corrects, and it needs
 		/// no knowledge of MoveMap's xDelta bookkeeping or its colour-band edge cases (where
 		/// one dot-spacing of drag doesn't advance at all).
-		private bool AdvanceTowardTarget(Map map)
+		private void BeginScrollBack(Map map, int destinationHole)
 		{
-			if (targetHole == NoTarget) return false;
+			scrollBackTo = destinationHole;
+			scrollBackElapsed = 0f;
+			scrollBackApplied = 0f;
+			scrollBackTotal = ScrollDeltaTo(map, destinationHole);
+			scrollingBack = true;
+		}
 
-			MapLevelUi target = map.FindLevelUi(targetHole);
-			if (target == null)
-			{
-				targetHole = NoTarget;
-				return false;
-			}
-
+		/// Signed ScrollBy amount that would centre a hole.
+		///
+		/// Uses the node's real position when it's inside the recycled window. When the player
+		/// has peeked far enough that it isn't, falls back to counting hole spacings - adding
+		/// one extra per colour-band edge crossed, because MoveMap needs a double spacing to
+		/// step across those. The estimate only has to get close; UpdateScrollBack does an
+		/// exact centring once the node is back in the window.
+		private static float ScrollDeltaTo(Map map, int holeNumber)
+		{
 			Camera cam = Game.cam != null ? Game.cam : Camera.main;
-			float offset = target.transform.position.x - (cam != null ? cam.transform.position.x : 0f);
-			if (Mathf.Abs(offset) < 0.05f)
+			float camX = cam != null ? cam.transform.position.x : 0f;
+
+			MapLevelUi node = map.FindLevelUi(holeNumber);
+			if (node != null) return -(node.transform.position.x - camX);
+
+			int from = map.HoleNo;
+			int lo = Mathf.Min(from, holeNumber);
+			int hi = Mathf.Max(from, holeNumber);
+			int bandEdges = 0;
+			for (int k = lo; k < hi; k++)
 			{
-				targetHole = NoTarget;
-				return false;
+				if (k % LevelGenerator.numLevelsPerColor == LevelGenerator.numLevelsPerColor - 1) bandEdges++;
 			}
 
-			// Frame-rate independent ease-out, capped so a long snap-back doesn't teleport and
-			// floored so the tail of the ease doesn't crawl.
-			float move = offset * (1f - Mathf.Exp(-stepSharpness * Time.deltaTime));
-			float maxMove = stepSpeed * Time.deltaTime;
-			move = Mathf.Clamp(move, -maxMove, maxMove);
+			float distance = (hi - lo + bandEdges) * Spline.distPerPoint;
+			return holeNumber > from ? -distance : distance;
+		}
 
-			float minMove = minStepSpeed * Time.deltaTime;
-			if (Mathf.Abs(move) < minMove) move = Mathf.Sign(offset) * Mathf.Min(minMove, Mathf.Abs(offset));
+		/// Drives the scroll-back on a fixed clock, so the trip always takes the same time and
+		/// the speed instead varies with how far the player wandered. Returns true while it
+		/// still owns the map.
+		private bool UpdateScrollBack(Map map)
+		{
+			if (!scrollingBack) return false;
 
-			map.ScrollBy(-move);
-			return true;
+			scrollBackElapsed += Time.deltaTime;
+			float t = scrollBackDuration > 0f ? Mathf.Clamp01(scrollBackElapsed / scrollBackDuration) : 1f;
+
+			// Ease-out cubic against elapsed time rather than remaining distance, so the
+			// duration stays fixed instead of drifting with the distance travelled.
+			float eased = 1f - Mathf.Pow(1f - t, 3f);
+			float desired = scrollBackTotal * eased;
+			map.ScrollBy(desired - scrollBackApplied);
+			scrollBackApplied = desired;
+
+			MapLevelUi destination = map.FindLevelUi(scrollBackTo);
+			if (destination != null) PositionCursorAtWorld(destination.transform.position);
+			else ShowCursor(false);
+
+			if (t < 1f) return true;
+
+			// Land exactly, in case the delta was estimated from outside the window.
+			if (destination != null)
+			{
+				Camera cam = Game.cam != null ? Game.cam : Camera.main;
+				if (cam != null) map.ScrollBy(-(destination.transform.position.x - cam.transform.position.x));
+			}
+
+			anchorHole = scrollBackTo;
+			scrollingBack = false;
+			return false;
 		}
 
 		private void PositionCursorAt(GameObject target)
@@ -368,7 +405,11 @@ namespace Games.Golfinity
 		private void ShowCursor(bool visible)
 		{
 			if (cursorImage == null) return;
-			if (visible && cursorImage.sprite != cursorSprite) cursorImage.sprite = cursorSprite;
+			if (visible && cursorImage.sprite != cursorSprite)
+			{
+				cursorImage.sprite = cursorSprite;
+				ApplyCursorSize();
+			}
 			if (cursorImage.enabled != visible) cursorImage.enabled = visible;
 		}
 	}

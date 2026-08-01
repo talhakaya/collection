@@ -11914,14 +11914,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursorSprite: {fileID: 21300000, guid: c76246d0a2b0ee642941c68e2c3c78a3, type: 3}
-  cursorSize: {x: 16, y: 16}
+  cursorHeight: 16
   cursorOffset: {x: 6, y: -6}
   scrollSpeed: 40
-  stepSpeed: 60
-  stepSharpness: 10
-  minStepSpeed: 3
-  centredTolerance: 0.5
+  scrollBackDuration: 0.35
   clampToFirstLevel: 1
+  leftStopOffset: 0
   stepThreshold: 0.5
   stepRepeatDelay: 0.4
   stepRepeatRate: 0.18
