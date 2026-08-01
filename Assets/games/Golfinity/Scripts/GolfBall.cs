@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Collection.Controls;
 
 namespace Games.Golfinity
 {
@@ -22,6 +23,7 @@ namespace Games.Golfinity
 	    public LayerMask groundLayerMask;
 	    public LayerMask mudLayerMask;
 	    private bool inMud;
+	    private bool gamepadAiming;
 
 	    void Awake ()
 	    {
@@ -50,7 +52,24 @@ namespace Games.Golfinity
 	        }
 	        if (canHit)
 	        {
-	            if (draggingMouse)
+	            // Gamepad aiming is analog and stateless - the stick's deflection IS the shot -
+	            // so while it's deflected it takes over rather than interleaving with the
+	            // press/drag/release state machine below.
+	            Vector2 aimStick = TaloketoInputManager.GetVector2("Aim");
+	            gamepadAiming = !Game.cameraMove && aimStick.sqrMagnitude > 0f;
+
+	            if (gamepadAiming)
+	            {
+	                draggingMouse = false;
+	                aimLength = Mathf.Min(1f, Geometry.lengthOfVector2(aimStick)) * AimMaxLength;
+	                float stickAngle = Geometry.angleOfVector2(aimStick);
+	                // Same convention as the mouse: with reverseShooting on, the stick is the
+	                // slingshot pull and the ball leaves in the opposite direction.
+	                aimAngle = Game.reverseShooting ? stickAngle + 180f : stickAngle;
+	                ApplyAimLine();
+	                if (TaloketoInputManager.GetButtonDown("Throw")) Throw();
+	            }
+	            else if (draggingMouse)
 	            {
 	                aimLength = Geometry.lengthOfVector3(MousePosition.get - mouseDragStartPos);
 	                if (aimLength < AimMinLength)
@@ -72,9 +91,7 @@ namespace Games.Golfinity
 	                    {
 	                        aimAngle = Geometry.angleOfVector3(MousePosition.get - mouseDragStartPos);
 	                    }
-	                    aimLine.localScale = new Vector3(aimLength, 1f, 1f);
-	                    aimLine.eulerAngles = aimAngle * Vector3.forward;
-	                    aimLine.position = transform.position + Geometry.createVector3(aimAngle, 1.2f) - Vector3.forward;
+	                    ApplyAimLine();
 	                }
 	            }
 	            else
@@ -83,7 +100,12 @@ namespace Games.Golfinity
 	                aimLine.localScale = Vector3.zero;
 	            }
 
-	            if (Game.cameraMove)
+	            if (gamepadAiming)
+	            {
+	                // Stick owns the shot this frame; skip the mouse state machine entirely so
+	                // a stale button state can't cancel the aim or fire a second throw.
+	            }
+	            else if (Game.cameraMove)
 	            {
 	                draggingMouse = false;
 	                aimLine.localScale = Vector3.zero;
@@ -98,22 +120,7 @@ namespace Games.Golfinity
 	                if (draggingMouse)
 	                {
 	                    draggingMouse = false;
-	                    if (aimLength >= AimMinLength)
-	                    {
-	                        Game.lastHitPos = transform.position;
-	                        body.AddForce(Geometry.createVector2(aimAngle, aimLength * 5000f));
-	                        if (!inMud) CreateTerrainParticle(false);
-	                        Game.noOfStrokes++;
-	                        Game.noOfStrokesSinceBeginningOfLevel++;
-	                        PlayerPrefs.SetInt("noOfStrokes", Game.noOfStrokes);
-	                        if (Game.soundOn)
-	                        {
-	                            audioSource.volume = 1.5f * aimLength / AimMaxLength;
-	                            audioSource.pitch = 0.8f + 0.3f * aimLength / AimMaxLength + Random.value * 0.1f;
-	                            audioSource.Play();
-	                        }
-	                        if (UIReferences.tutorial.gameObject.activeSelf && aimLength >= AimMinLength * 2f) UIReferences.tutorial.Hide();
-	                    }
+	                    Throw();
 	                }
 	            }
 	        }
@@ -135,6 +142,39 @@ namespace Games.Golfinity
 	    private void FixedUpdate()
 	    {
 	        if (inMud) body.linearVelocity *= 0.5f;
+	    }
+
+	    /// Draws the aim line for the current aimAngle/aimLength. Shared by the mouse drag and
+	    /// the gamepad stick so both render identically.
+	    private void ApplyAimLine()
+	    {
+	        aimLine.localScale = new Vector3(aimLength, 1f, 1f);
+	        aimLine.eulerAngles = aimAngle * Vector3.forward;
+	        aimLine.position = transform.position + Geometry.createVector3(aimAngle, 1.2f) - Vector3.forward;
+	    }
+
+	    /// Hits the ball along the current aim. Extracted from the mouse-release path so the
+	    /// gamepad Throw button fires exactly the same shot, sound and bookkeeping.
+	    private void Throw()
+	    {
+	        if (aimLength < AimMinLength) return;
+
+	        Game.lastHitPos = transform.position;
+	        body.AddForce(Geometry.createVector2(aimAngle, aimLength * 5000f));
+	        if (!inMud) CreateTerrainParticle(false);
+	        Game.noOfStrokes++;
+	        Game.noOfStrokesSinceBeginningOfLevel++;
+	        PlayerPrefs.SetInt("noOfStrokes", Game.noOfStrokes);
+	        if (Game.soundOn)
+	        {
+	            audioSource.volume = 1.5f * aimLength / AimMaxLength;
+	            audioSource.pitch = 0.8f + 0.3f * aimLength / AimMaxLength + Random.value * 0.1f;
+	            audioSource.Play();
+	        }
+	        if (UIReferences.tutorial.gameObject.activeSelf && aimLength >= AimMinLength * 2f) UIReferences.tutorial.Hide();
+
+	        aimLength = 0;
+	        aimLine.localScale = Vector3.zero;
 	    }
 
 	    public void ResetBall()
