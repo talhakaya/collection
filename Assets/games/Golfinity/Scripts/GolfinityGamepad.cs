@@ -72,6 +72,7 @@ namespace Games.Golfinity
 			public string actionName;
 			public string lastGlyph;
 			public RectTransform button;
+			public bool hideWhenPopupOpen;
 		}
 
 		private readonly List<ShortcutLabel> shortcutLabels = new List<ShortcutLabel>();
@@ -112,14 +113,20 @@ namespace Games.Golfinity
 			TextMeshProUGUI sample = canvas.GetComponentInChildren<TextMeshProUGUI>(true);
 			if (sample != null) font = sample.font;
 
-			CreateShortcutLabel(canvas, "buttonOptions", "Settings", font);
-			CreateShortcutLabel(canvas, "buttonUpgrade", "Upgrade", font);
-			CreateShortcutLabel(canvas, "buttonMap", "Back", font);
+			// Top bar: only usable when no popup is covering it, so these hide with one open.
+			CreateShortcutLabel(canvas, "buttonOptions", "Settings", font, true);
+			CreateShortcutLabel(canvas, "buttonUpgrade", "Upgrade", font, true);
+			CreateShortcutLabel(canvas, "buttonMap", "Back", font, true);
+
+			// Level score popup. Its buttons are only active while it's up, so they need no
+			// extra visibility rule. buttonRetry goes to the map despite the name.
+			CreateShortcutLabel(canvas, "LevelScorePopup/Buttons/buttonRetry", "Back", font, false);
+			CreateShortcutLabel(canvas, "LevelScorePopup/Buttons/buttonPlay", "Throw", font, false);
 		}
 
-		private void CreateShortcutLabel(Canvas canvas, string buttonName, string actionName, TMP_FontAsset font)
+		private void CreateShortcutLabel(Canvas canvas, string buttonPath, string actionName, TMP_FontAsset font, bool hideWhenPopupOpen)
 		{
-			var button = canvas.transform.Find(buttonName) as RectTransform;
+			var button = canvas.transform.Find(buttonPath) as RectTransform;
 			if (button == null) return;
 
 			// Parented to the canvas, not the button. The top-bar buttons are zero-size rects
@@ -139,7 +146,13 @@ namespace Games.Golfinity
 			text.raycastTarget = false;
 			text.textWrappingMode = TextWrappingModes.NoWrap;
 
-			shortcutLabels.Add(new ShortcutLabel { text = text, actionName = actionName, button = button });
+			shortcutLabels.Add(new ShortcutLabel
+			{
+				text = text,
+				actionName = actionName,
+				button = button,
+				hideWhenPopupOpen = hideWhenPopupOpen,
+			});
 		}
 
 		/// Refreshes the labels: hidden with no pad connected, and re-read from the binding so
@@ -156,8 +169,12 @@ namespace Games.Golfinity
 				if (label.text == null || label.button == null) continue;
 
 				// The label isn't a child of its button any more, so it has to mirror the
-				// button's visibility itself - buttonMap only exists during Play.
-				bool visible = hasPad && label.button.gameObject.activeInHierarchy;
+				// button's visibility itself - buttonMap only exists during Play. The top bar
+				// also stays active behind an open popup, but its shortcuts don't fire then,
+				// so advertising them would be a lie.
+				bool visible = hasPad
+					&& label.button.gameObject.activeInHierarchy
+					&& !(label.hideWhenPopupOpen && activePopup != null);
 				if (label.text.enabled != visible) label.text.enabled = visible;
 				if (!visible) continue;
 
@@ -237,11 +254,12 @@ namespace Games.Golfinity
 			if (popup != activePopup)
 			{
 				activePopup = popup;
-				if (popup != null) SelectFirstIn(popup);
+				if (popup != null) OnPopupOpened(popup);
 			}
 
 			if (popup != null)
 			{
+				HandlePopupShortcuts(popup);
 				PositionCursorAt(EventSystem.current != null ? EventSystem.current.currentSelectedGameObject : null);
 				return;
 			}
@@ -283,6 +301,34 @@ namespace Games.Golfinity
 		/// Links both axes to the same prev/next so either stick direction walks the list,
 		/// which keeps it correct whether the popup lays its buttons out in a column
 		/// (options) or a row (level score).
+		/// The level score popup drives its two real buttons from dedicated keys instead of a
+		/// moving selection, so it gets no initial selection - otherwise Submit and the direct
+		/// shortcut would both fire. Its layout also puts the map button leftmost, which would
+		/// make it the default and quietly turn "confirm" into "leave the level".
+		private static void OnPopupOpened(GameObject popup)
+		{
+			if (UsesDirectShortcuts(popup))
+			{
+				if (EventSystem.current != null) EventSystem.current.SetSelectedGameObject(null);
+				return;
+			}
+
+			SelectFirstIn(popup);
+		}
+
+		private static bool UsesDirectShortcuts(GameObject popup)
+		{
+			return UIReferences.instance != null && popup == UIReferences.levelScorePopup.gameObject;
+		}
+
+		private static void HandlePopupShortcuts(GameObject popup)
+		{
+			if (!UsesDirectShortcuts(popup)) return;
+
+			// Back is left to Game.Update, which owns the whole popup priority chain.
+			if (TaloketoInputManager.GetButtonDown("Throw")) UIReferences.levelScorePopup.OnClickNext();
+		}
+
 		private static void SelectFirstIn(GameObject popup)
 		{
 			if (EventSystem.current == null) return;

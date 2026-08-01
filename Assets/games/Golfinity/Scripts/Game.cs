@@ -169,7 +169,9 @@ namespace Games.Golfinity
 	            }
 	            else if (UIReferences.levelScorePopup.gameObject.activeSelf)
 	            {
-	                UIReferences.levelScorePopup.Hide();
+	                // Goes to the map rather than just closing - dismissing the score screen
+	                // used to leave the player sitting in the level they'd already finished.
+	                UIReferences.levelScorePopup.OnClickRetry();
 	            }
 	            else if (UIReferences.cheatPopup.gameObject.activeSelf)
 	            {
