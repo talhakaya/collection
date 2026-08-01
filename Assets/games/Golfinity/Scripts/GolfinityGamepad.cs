@@ -29,6 +29,8 @@ namespace Games.Golfinity
 		public float cursorHeight = 16f;
 		[Tooltip("Offset from the selected item's centre, in canvas units.")]
 		public Vector2 cursorOffset = new Vector2(6f, -6f);
+		[Tooltip("Flip the cursor horizontally. hand0 points right, so mirror it if you move the cursor to the left of the selection (set a negative X offset too).")]
+		public bool mirrorCursor;
 
 		[Header("Map navigation")]
 		[Tooltip("World units/sec the right stick free-scrolls the map. Fixed speed, no inertia.")]
@@ -69,6 +71,7 @@ namespace Games.Golfinity
 			public TextMeshProUGUI text;
 			public string actionName;
 			public string lastGlyph;
+			public RectTransform button;
 		}
 
 		private readonly List<ShortcutLabel> shortcutLabels = new List<ShortcutLabel>();
@@ -115,15 +118,17 @@ namespace Games.Golfinity
 
 		private void CreateShortcutLabel(Canvas canvas, string buttonName, string actionName, TMP_FontAsset font)
 		{
-			Transform button = canvas.transform.Find(buttonName);
+			var button = canvas.transform.Find(buttonName) as RectTransform;
 			if (button == null) return;
 
+			// Parented to the canvas, not the button. The top-bar buttons are zero-size rects
+			// at localScale 0.15 with their artwork in a 96x96 child, so a label parented to
+			// one inherits that 0.15 and renders about four pixels tall.
 			var go = new GameObject("ShortcutLabel", typeof(RectTransform), typeof(TextMeshProUGUI));
 			var rect = go.GetComponent<RectTransform>();
-			rect.SetParent(button, false);
-			rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0f);
+			rect.SetParent(canvas.transform, false);
+			rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0.5f);
 			rect.pivot = new Vector2(0.5f, 1f);
-			rect.anchoredPosition = new Vector2(0f, -shortcutLabelGap);
 			rect.sizeDelta = new Vector2(40f, shortcutLabelFontSize * 1.6f);
 
 			var text = go.GetComponent<TextMeshProUGUI>();
@@ -133,7 +138,7 @@ namespace Games.Golfinity
 			text.raycastTarget = false;
 			text.textWrappingMode = TextWrappingModes.NoWrap;
 
-			shortcutLabels.Add(new ShortcutLabel { text = text, actionName = actionName });
+			shortcutLabels.Add(new ShortcutLabel { text = text, actionName = actionName, button = button });
 		}
 
 		/// Refreshes the labels: hidden with no pad connected, and re-read from the binding so
@@ -147,10 +152,19 @@ namespace Games.Golfinity
 			for (int i = 0; i < shortcutLabels.Count; i++)
 			{
 				ShortcutLabel label = shortcutLabels[i];
-				if (label.text == null) continue;
+				if (label.text == null || label.button == null) continue;
 
-				if (label.text.enabled != hasPad) label.text.enabled = hasPad;
-				if (!hasPad) continue;
+				// The label isn't a child of its button any more, so it has to mirror the
+				// button's visibility itself - buttonMap only exists during Play.
+				bool visible = hasPad && label.button.gameObject.activeInHierarchy;
+				if (label.text.enabled != visible) label.text.enabled = visible;
+				if (!visible) continue;
+
+				// Measured from the artwork rather than the button's own rect, which is
+				// zero-size on these buttons.
+				Bounds bounds = RectTransformUtility.CalculateRelativeRectTransformBounds(canvasRect, label.button);
+				label.text.rectTransform.anchoredPosition =
+					new Vector2(bounds.center.x, bounds.min.y - shortcutLabelGap);
 
 				string glyph = GamepadGlyph(label.actionName);
 				if (glyph != label.lastGlyph)
@@ -206,6 +220,7 @@ namespace Games.Golfinity
 			}
 
 			cursorRect.sizeDelta = new Vector2(cursorHeight * aspect, cursorHeight);
+			cursorRect.localScale = new Vector3(mirrorCursor ? -1f : 1f, 1f, 1f);
 		}
 
 		private void Update()

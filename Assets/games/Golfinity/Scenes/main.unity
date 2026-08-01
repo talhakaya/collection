@@ -11916,6 +11916,7 @@ MonoBehaviour:
   cursorSprite: {fileID: 21300000, guid: c76246d0a2b0ee642941c68e2c3c78a3, type: 3}
   cursorHeight: 16
   cursorOffset: {x: 6, y: -6}
+  mirrorCursor: 0
   scrollSpeed: 40
   stepDuration: 0.14
   scrollBackDuration: 0.35
