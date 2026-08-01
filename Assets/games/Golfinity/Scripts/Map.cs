@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Collection.Controls;
 
 namespace Games.Golfinity
 {
@@ -110,13 +111,13 @@ namespace Games.Golfinity
 	            }
 	        }
 	#else
-	        if (Input.GetMouseButtonDown(0))
+	        if (TaloketoInputManager.GetMouseButtonDown(0))
 	        {
 	            inputTime = 0f;
 	        }
-	        if (Input.GetMouseButton(0))
+	        if (TaloketoInputManager.GetMouseButton(0))
 	        {
-	            var level = GetMapUiWithPointer(Input.mousePosition);
+	            var level = GetMapUiWithPointer(TaloketoInputManager.mousePosition);
 	            if (level != null)
 	            {
 	                level.OnOver(true);
@@ -124,23 +125,23 @@ namespace Games.Golfinity
 	            }
 	            else
 	            {
-	                if (mousePosOld != default) MoveMap(Input.mousePosition - mousePosOld);
+	                if (mousePosOld != default) MoveMap(TaloketoInputManager.mousePosition - mousePosOld);
 	            }
 	            inertia = 0f;
-	            mousePosOld = Input.mousePosition;
+	            mousePosOld = TaloketoInputManager.mousePosition;
 	        }
-	        if (Input.GetMouseButtonUp(0))
+	        if (TaloketoInputManager.GetMouseButtonUp(0))
 	        {
 	            if (inputTime <= 0.3f)
 	            {
-	                var level = GetMapUiWithPointer(Input.mousePosition);
+	                var level = GetMapUiWithPointer(TaloketoInputManager.mousePosition);
 	                if (level != null)
 	                {
 	                    level.OnClick();
 	                    level.uiUpdate = true;
 	                }
 	            }
-	            inertia = GetDragAmount(Input.mousePosition - mousePosOld);
+	            inertia = GetDragAmount(TaloketoInputManager.mousePosition - mousePosOld);
 	            mousePosOld = default;
 	        }
 	#endif

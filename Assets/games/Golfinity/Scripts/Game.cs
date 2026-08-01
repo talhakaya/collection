@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using Collection.Controls;
 
 namespace Games.Golfinity
 {
@@ -160,7 +161,7 @@ namespace Games.Golfinity
 
 	    void Update ()
 		{
-			if (Input.GetKeyUp(KeyCode.Escape))
+			if (TaloketoInputManager.GetButtonDown("Back"))
 	        {
 	            if (UIReferences.optionsPopup.gameObject.activeSelf)
 	            {
@@ -239,11 +240,11 @@ namespace Games.Golfinity
 	            inputUp = false;
 	        }
 	#else
-	        MousePosition.get = cam.ScreenToWorldPoint(Input.mousePosition) + Vector3.forward;
+	        MousePosition.get = cam.ScreenToWorldPoint(TaloketoInputManager.mousePosition) + Vector3.forward;
 	        MousePosition.x = MousePosition.get.x;
 	        MousePosition.y = MousePosition.get.y;
 
-	        input = Input.GetMouseButton(0);
+	        input = TaloketoInputManager.GetMouseButton(0);
 	        inputDown = input && !inputOld;
 	        inputUp = !input && inputOld;
 
@@ -256,13 +257,13 @@ namespace Games.Golfinity
 
 	        if (state == GameState.Play)
 	        {
-	            if (!GolfBall.instance.draggingMouse && Input.GetAxisRaw("Horizontal") == 0 && Input.GetAxisRaw("Vertical") == 0)
+	            if (!GolfBall.instance.draggingMouse && TaloketoInputManager.GetAxisRaw("Horizontal") == 0 && TaloketoInputManager.GetAxisRaw("Vertical") == 0)
 	            {
 	                Vector3 ballPos = new Vector3(GolfBall.instance.transform.position.x, GolfBall.instance.transform.position.y, transform.position.z);
 	                ballPos += new Vector3(cameraMoveDeltaPos.x, cameraMoveDeltaPos.y, 0f);
 	                transform.position += 2f * dt * (ballPos - transform.position);
 	            }
-	            transform.position += new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"), 0f) * 20f * Time.deltaTime;
+	            transform.position += new Vector3(TaloketoInputManager.GetAxisRaw("Horizontal"), TaloketoInputManager.GetAxisRaw("Vertical"), 0f) * 20f * Time.deltaTime;
 	            transform.position = new Vector3(Mathf.Clamp(transform.position.x, -LevelGenerator.tileWidth, level.noOfColumns * LevelGenerator.tileWidth), Mathf.Clamp(transform.position.y, -LevelGenerator.tileWidth, level.noOfRows * LevelGenerator.tileWidth), transform.position.z);
 	        }
 
