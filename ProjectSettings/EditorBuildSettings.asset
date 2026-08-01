@@ -17,6 +17,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/games/Golfinity/Scenes/logo.unity
     guid: f9acc7167f93c184a9f509fccfb43340
+  - enabled: 1
+    path: Assets/games/Nykrig/main.unity
+    guid: 6fe503a84be7b664381fff86a1524a2c
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
