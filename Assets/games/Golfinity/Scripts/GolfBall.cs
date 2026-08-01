@@ -25,6 +25,18 @@ namespace Games.Golfinity
 	    private bool inMud;
 	    private bool gamepadAiming;
 
+	    /// How stick deflection maps to shot power. Only affects the gamepad - the mouse's
+	    /// power comes from drag distance, which is already the player's own curve.
+	    /// The "In" curves start slow and accelerate, so small stick movements are gentle
+	    /// taps and the top of the range is where the big shots live; Expo is the extreme of
+	    /// that. Out is the opposite, and Custom takes the AnimationCurve below.
+	    public enum AimPowerCurve { Linear, SineIn, QuadIn, CubicIn, QuintIn, ExpoIn, QuadOut, ExpoOut, Custom }
+
+	    [Header("Gamepad aim")]
+	    public AimPowerCurve aimPowerCurve = AimPowerCurve.Linear;
+	    [Tooltip("Used when the curve is set to Custom. X is stick deflection 0-1, Y is power 0-1.")]
+	    public AnimationCurve aimPowerCustomCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
+
 	    void Awake ()
 	    {
 	        instance = this;
@@ -61,7 +73,8 @@ namespace Games.Golfinity
 	            if (gamepadAiming)
 	            {
 	                draggingMouse = false;
-	                aimLength = Mathf.Min(1f, Geometry.lengthOfVector2(aimStick)) * AimMaxLength;
+	                float deflection = Mathf.Min(1f, Geometry.lengthOfVector2(aimStick));
+	                aimLength = ApplyAimPowerCurve(deflection) * AimMaxLength;
 	                float stickAngle = Geometry.angleOfVector2(aimStick);
 	                // Same convention as the mouse: with reverseShooting on, the stick is the
 	                // slingshot pull and the ball leaves in the opposite direction.
@@ -142,6 +155,25 @@ namespace Games.Golfinity
 	    private void FixedUpdate()
 	    {
 	        if (inMud) body.linearVelocity *= 0.5f;
+	    }
+
+	    /// Reshapes stick deflection (0-1) into shot power (0-1). Reuses the game's existing
+	    /// Penner easing set, normalised via (t, from 0, to 1, over 1).
+	    private float ApplyAimPowerCurve(float deflection)
+	    {
+	        float t = Mathf.Clamp01(deflection);
+	        switch (aimPowerCurve)
+	        {
+	            case AimPowerCurve.SineIn: return Easing.SineEaseIn(t, 0f, 1f, 1f);
+	            case AimPowerCurve.QuadIn: return Easing.QuadEaseIn(t, 0f, 1f, 1f);
+	            case AimPowerCurve.CubicIn: return Easing.CubicEaseIn(t, 0f, 1f, 1f);
+	            case AimPowerCurve.QuintIn: return Easing.QuintEaseIn(t, 0f, 1f, 1f);
+	            case AimPowerCurve.ExpoIn: return Easing.ExpoEaseIn(t, 0f, 1f, 1f);
+	            case AimPowerCurve.QuadOut: return Easing.QuadEaseOut(t, 0f, 1f, 1f);
+	            case AimPowerCurve.ExpoOut: return Easing.ExpoEaseOut(t, 0f, 1f, 1f);
+	            case AimPowerCurve.Custom: return aimPowerCustomCurve != null ? aimPowerCustomCurve.Evaluate(t) : t;
+	            default: return t;
+	        }
 	    }
 
 	    /// Draws the aim line for the current aimAngle/aimLength. Shared by the mouse drag and
