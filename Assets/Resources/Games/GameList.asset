@@ -16,18 +16,18 @@ MonoBehaviour:
   - gameName: Chocolate
     description: 
     gravity: {x: 0, y: -9.81}
-    entryScene: {fileID: 0}
-    entryScenePath: 
+    entryScene: {fileID: 102900000, guid: 8f872d0d88cbd1748a0c6147230de4db, type: 3}
+    entryScenePath: Assets/games/Chocolate/scene0.unity
   - gameName: Golfinity
     description: 
     gravity: {x: 0, y: -9.81}
-    entryScene: {fileID: 0}
-    entryScenePath: 
+    entryScene: {fileID: 102900000, guid: 14105f93900b63744a7545c1a5d435bb, type: 3}
+    entryScenePath: Assets/games/Golfinity/Scenes/main.unity
   - gameName: Nykrig
     description: 
     gravity: {x: 0, y: 0}
-    entryScene: {fileID: 0}
-    entryScenePath: 
+    entryScene: {fileID: 102900000, guid: 6fe503a84be7b664381fff86a1524a2c, type: 3}
+    entryScenePath: Assets/games/Nykrig/main.unity
   - gameName: Space Artist
     description: 
     gravity: {x: 0, y: -9.81}
