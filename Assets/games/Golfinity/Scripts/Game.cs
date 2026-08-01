@@ -183,10 +183,10 @@ namespace Games.Golfinity
 	            {
 	                SetState(GameState.Map);
 	            }
-	            else
-	            {
-	                Application.Quit();
-	            }
+	            // Nothing to do at the map screen. This used to Application.Quit(), which made
+	            // sense when Golfinity was a standalone build, but here it would tear down the
+	            // whole collection. Leaving a game is the collection's own shortcut
+	            // (see GlobalInputManager: gamepad Select+Start, or Shift+Escape).
 	        }
 			
 			dt = Time.deltaTime;
