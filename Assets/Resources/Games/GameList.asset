@@ -16,9 +16,16 @@ MonoBehaviour:
   - gameName: Chocolate
     description: 
     gravity: {x: 0, y: -9.81}
+    entryScenePath: 
   - gameName: Golfinity
     description: 
     gravity: {x: 0, y: -9.81}
+    entryScenePath: 
   - gameName: Nykrig
     description: 
     gravity: {x: 0, y: 0}
+    entryScenePath: 
+  - gameName: Space Artist
+    description: 
+    gravity: {x: 0, y: -9.81}
+    entryScenePath: 
