@@ -76,6 +76,15 @@ namespace Collection.Controls
 			return action?.ReadValue<float>() ?? 0f;
 		}
 
+		/// Reads a Vector2-valued action (stick, dpad, 2D composite). Legacy Input had no
+		/// equivalent - games polled two named axes - but sticks are natively Vector2 in the
+		/// new system, and reading them as one action keeps deadzone/normalisation intact.
+		public static Vector2 GetVector2(string name)
+		{
+			InputAction action = FindAction(name);
+			return action?.ReadValue<Vector2>() ?? Vector2.zero;
+		}
+
 		public static bool GetButton(string name)
 		{
 			InputAction action = FindAction(name);
