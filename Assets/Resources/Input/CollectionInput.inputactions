@@ -1,0 +1,89 @@
+{
+    "name": "CollectionInput",
+    "maps": [
+        {
+            "name": "Global",
+            "id": "a1a5f001-71e3-4d7b-9c2a-0a0000000001",
+            "actions": [
+                {
+                    "name": "ExitToMainMenu",
+                    "type": "Button",
+                    "id": "a1a5f001-71e3-4d7b-9c2a-0a0000000002",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "Gamepad Select+Start",
+                    "id": "a1a5f001-71e3-4d7b-9c2a-0a0000000003",
+                    "path": "OneModifier(modifiersOrder=2)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ExitToMainMenu",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "a1a5f001-71e3-4d7b-9c2a-0a0000000004",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ExitToMainMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "binding",
+                    "id": "a1a5f001-71e3-4d7b-9c2a-0a0000000005",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ExitToMainMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Keyboard Shift+Escape",
+                    "id": "a1a5f001-71e3-4d7b-9c2a-0a0000000006",
+                    "path": "OneModifier(modifiersOrder=2)",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ExitToMainMenu",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "modifier",
+                    "id": "a1a5f001-71e3-4d7b-9c2a-0a0000000007",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ExitToMainMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "binding",
+                    "id": "a1a5f001-71e3-4d7b-9c2a-0a0000000008",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ExitToMainMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
