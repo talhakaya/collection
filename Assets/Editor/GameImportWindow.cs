@@ -261,7 +261,7 @@ namespace Collection.EditorTools
 			AssetDatabase.Refresh();
 
 			RegisterScenesUnder(destinationFolder);
-			EnsureGameListEntry(gameName);
+			EnsureGameListEntry(gameName, destinationFolder);
 
 			// Optional pass 2/3: an explicit JSON path from the window, or (if left blank) a
 			// legacy Input Manager export sitting next to the package (same filename, .json
@@ -505,10 +505,11 @@ namespace Collection.EditorTools
 			var existingPaths = new HashSet<string>(scenes.Select(s => s.path));
 
 			// A game can have auxiliary scenes (e.g. an isolated editing scene for a popup
-			// prefab) alongside its real entry point. The main menu picks the first
-			// registered scene per game folder, so a scene literally named "main" is put
-			// first when present - otherwise whatever FindAssets happens to return first
-			// (alphabetical) could become the game's launch scene by accident.
+			// prefab) alongside its real entry point. The main menu now prefers GameList's
+			// explicit entryScenePath (see EnsureGameListEntry), but this ordering is still
+			// the fallback for games without one, so a scene literally named "main" is put
+			// first when present rather than left to whatever alphabetical order FindAssets
+			// happens to return.
 			List<string> newScenePaths = sceneGuids
 				.Select(AssetDatabase.GUIDToAssetPath)
 				.Where(existingPaths.Add)
@@ -529,9 +530,11 @@ namespace Collection.EditorTools
 		/// Adds a blank entry for gameName to the shared GameList asset if one doesn't
 		/// already exist (creating the asset itself on first use). Fields beyond gameName
 		/// are left for manual editing afterward - description empty, gravity snapshotting
-		/// whatever Physics2D.gravity currently is, so an untouched entry behaves the same
-		/// as no override until someone edits it.
-		private static void EnsureGameListEntry(string gameName)
+		/// whatever Physics2D.gravity currently is (so an untouched entry behaves the same
+		/// as no override), entryScenePath guessed from folder's scenes (a scene named
+		/// "main" preferred, otherwise whatever's found first) as a starting point to
+		/// correct by hand if it's wrong, rather than re-guessed at runtime every time.
+		private static void EnsureGameListEntry(string gameName, string destinationFolder)
 		{
 			GameList gameList = AssetDatabase.LoadAssetAtPath<GameList>(GameListAssetPath);
 			if (gameList == null)
@@ -560,11 +563,26 @@ namespace Collection.EditorTools
 				gameName = gameName,
 				description = "",
 				gravity = Physics2D.gravity,
+				entryScenePath = GuessEntryScene(destinationFolder),
 			};
 
 			gameList.entries = gameList.entries.Append(entry).ToArray();
 			EditorUtility.SetDirty(gameList);
 			AssetDatabase.SaveAssets();
+		}
+
+		private static string GuessEntryScene(string folder)
+		{
+			string[] sceneGuids = AssetDatabase.FindAssets("t:Scene", new[] { folder });
+			if (sceneGuids.Length == 0)
+			{
+				return "";
+			}
+
+			return sceneGuids
+				.Select(AssetDatabase.GUIDToAssetPath)
+				.OrderByDescending(p => string.Equals(Path.GetFileNameWithoutExtension(p), "main", StringComparison.OrdinalIgnoreCase))
+				.First();
 		}
 	}
 }

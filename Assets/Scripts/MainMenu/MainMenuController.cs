@@ -30,6 +30,7 @@ namespace Collection.MainMenu
 		private static IEnumerable<GameEntry> FindGameEntries()
 		{
 			var seenFolders = new HashSet<string>();
+			GameList gameList = Resources.Load<GameList>("Games/GameList");
 
 			for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
 			{
@@ -45,7 +46,18 @@ namespace Collection.MainMenu
 					continue;
 				}
 
-				yield return new GameEntry { displayName = Capitalize(folderName), scenePath = path };
+				// GameList's explicit entryScenePath (set by hand, guessed at import time)
+				// takes priority over whichever scene happened to be first in Build
+				// Settings - auto-deducing the entry point from scene order/naming is
+				// exactly what broke for Golfinity's logo/main scenes.
+				string scenePath = path;
+				if (gameList != null && gameList.TryGetEntry(folderName, out GameList.Entry entry) &&
+				    !string.IsNullOrEmpty(entry.entryScenePath))
+				{
+					scenePath = entry.entryScenePath;
+				}
+
+				yield return new GameEntry { displayName = Capitalize(folderName), scenePath = scenePath };
 			}
 		}
 

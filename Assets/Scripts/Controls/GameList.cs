@@ -19,6 +19,13 @@ namespace Collection.Controls
 			public string gameName;
 			[TextArea] public string description;
 			public Vector2 gravity;
+
+			// Which scene the main menu launches for this game. GameImportWindow guesses a
+			// starting value (a scene named "main" if there is one) - explicit and editable
+			// here rather than re-guessed by MainMenuController every time, since a wrong
+			// guess (e.g. an auxiliary editing scene mistaken for the real entry point) has
+			// no way to be corrected other than renaming scene files.
+			public string entryScenePath;
 		}
 
 		public Entry[] entries = Array.Empty<Entry>();
