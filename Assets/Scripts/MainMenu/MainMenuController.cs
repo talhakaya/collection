@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Collection.Controls;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -9,8 +10,6 @@ namespace Collection.MainMenu
 	{
 		[SerializeField] private RectTransform contentParent;
 		[SerializeField] private GameObject buttonTemplate;
-
-		private const string GamesRootFolder = "Assets/games/";
 
 		private struct GameEntry
 		{
@@ -35,13 +34,11 @@ namespace Collection.MainMenu
 			for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
 			{
 				string path = SceneUtility.GetScenePathByBuildIndex(i);
-				if (string.IsNullOrEmpty(path) || !path.StartsWith(GamesRootFolder))
+				string folderName = GameContext.FromScenePath(path);
+				if (folderName == null)
 				{
 					continue;
 				}
-
-				string remainder = path.Substring(GamesRootFolder.Length);
-				string folderName = remainder.Split('/')[0];
 
 				if (!seenFolders.Add(folderName))
 				{

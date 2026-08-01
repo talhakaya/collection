@@ -18,7 +18,6 @@ namespace Collection.Controls
 	public static class TaloketoInputManager
 	{
 		private const string AssetResourcePath = "Input/CollectionInput";
-		private const string GamesRootFolder = "Assets/games/";
 
 		private static InputActionAsset asset;
 		private static InputActionMap currentMap;
@@ -35,19 +34,8 @@ namespace Collection.Controls
 				return;
 			}
 
-			SceneManager.sceneLoaded += (scene, mode) => SetActiveGame(ExtractGameName(scene.path));
-			SetActiveGame(ExtractGameName(SceneManager.GetActiveScene().path));
-		}
-
-		private static string ExtractGameName(string scenePath)
-		{
-			if (string.IsNullOrEmpty(scenePath) || !scenePath.StartsWith(GamesRootFolder))
-			{
-				return null;
-			}
-
-			string remainder = scenePath.Substring(GamesRootFolder.Length);
-			return remainder.Split('/')[0];
+			SceneManager.sceneLoaded += (scene, mode) => SetActiveGame(GameContext.FromScenePath(scene.path));
+			SetActiveGame(GameContext.FromScenePath(SceneManager.GetActiveScene().path));
 		}
 
 		private static void SetActiveGame(string gameName)
