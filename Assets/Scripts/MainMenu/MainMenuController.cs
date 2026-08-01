@@ -44,33 +44,59 @@ namespace Collection.MainMenu
 			var seenFolders = new HashSet<string>();
 			GameList gameList = Resources.Load<GameList>("Games/GameList");
 
+			// GameList's entry order is authoritative for menu order - reorder entries in
+			// the Inspector to reorder the menu, rather than depending on Build Settings/
+			// import order.
+			if (gameList != null)
+			{
+				foreach (GameList.Entry entry in gameList.entries)
+				{
+					if (string.IsNullOrEmpty(entry.gameName) || !seenFolders.Add(entry.gameName))
+					{
+						continue;
+					}
+
+					string scenePath = !string.IsNullOrEmpty(entry.entryScenePath)
+						? entry.entryScenePath
+						: FindFirstRegisteredScene(entry.gameName);
+
+					if (scenePath == null)
+					{
+						continue;
+					}
+
+					yield return new GameEntry { displayName = Capitalize(entry.gameName), scenePath = scenePath };
+				}
+			}
+
+			// Safety net: a game with a registered scene but no GameList entry yet (or an
+			// entry with no scene resolvable) still shows up, just appended after the
+			// explicitly-ordered ones rather than silently missing from the menu.
 			for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
 			{
 				string path = SceneUtility.GetScenePathByBuildIndex(i);
 				string folderName = GameContext.FromScenePath(path);
-				if (folderName == null)
+				if (folderName == null || !seenFolders.Add(folderName))
 				{
 					continue;
 				}
 
-				if (!seenFolders.Add(folderName))
-				{
-					continue;
-				}
-
-				// GameList's explicit entryScenePath (set by hand, guessed at import time)
-				// takes priority over whichever scene happened to be first in Build
-				// Settings - auto-deducing the entry point from scene order/naming is
-				// exactly what broke for Golfinity's logo/main scenes.
-				string scenePath = path;
-				if (gameList != null && gameList.TryGetEntry(folderName, out GameList.Entry entry) &&
-				    !string.IsNullOrEmpty(entry.entryScenePath))
-				{
-					scenePath = entry.entryScenePath;
-				}
-
-				yield return new GameEntry { displayName = Capitalize(folderName), scenePath = scenePath };
+				yield return new GameEntry { displayName = Capitalize(folderName), scenePath = path };
 			}
+		}
+
+		private static string FindFirstRegisteredScene(string gameName)
+		{
+			for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
+			{
+				string path = SceneUtility.GetScenePathByBuildIndex(i);
+				if (string.Equals(GameContext.FromScenePath(path), gameName, System.StringComparison.OrdinalIgnoreCase))
+				{
+					return path;
+				}
+			}
+
+			return null;
 		}
 
 		private static string Capitalize(string value)
