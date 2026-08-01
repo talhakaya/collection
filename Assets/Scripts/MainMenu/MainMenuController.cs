@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Collection.Controls;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -21,9 +22,20 @@ namespace Collection.MainMenu
 		{
 			buttonTemplate.SetActive(false);
 
+			GameObject firstButton = null;
 			foreach (GameEntry entry in FindGameEntries())
 			{
-				CreateButton(entry.displayName, entry.scenePath);
+				GameObject button = CreateButton(entry.displayName, entry.scenePath);
+				firstButton ??= button;
+			}
+
+			// Button navigation (Automatic, set on the template) and Submit/Cancel/Navigate
+			// input (EventSystem's InputSystemUIInputModule) are already wired - the only
+			// thing missing for gamepad/keyboard navigation to work at all is an initial
+			// selection, since nothing is selected by default when a scene loads.
+			if (firstButton != null && EventSystem.current != null)
+			{
+				EventSystem.current.SetSelectedGameObject(firstButton);
 			}
 		}
 
@@ -71,7 +83,7 @@ namespace Collection.MainMenu
 			return char.ToUpperInvariant(value[0]) + value.Substring(1);
 		}
 
-		private void CreateButton(string displayName, string scenePath)
+		private GameObject CreateButton(string displayName, string scenePath)
 		{
 			GameObject buttonObject = Instantiate(buttonTemplate, contentParent);
 			buttonObject.name = displayName;
@@ -85,6 +97,8 @@ namespace Collection.MainMenu
 
 			Button button = buttonObject.GetComponent<Button>();
 			button.onClick.AddListener(() => SceneManager.LoadScene(scenePath));
+
+			return buttonObject;
 		}
 	}
 }
