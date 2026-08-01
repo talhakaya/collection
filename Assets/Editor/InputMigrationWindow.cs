@@ -28,11 +28,14 @@ namespace Collection.EditorTools
 		// platform the project was last authored for. These defaults were reverse-engineered
 		// from this project's own asset-pack lineage (see nykrig.json / MIGRATION.md) and are
 		// meant to be reviewed/edited per import, not trusted blindly.
+		// <Gamepad>/leftStick/y and rightStick/y already read "up = positive" in the New
+		// Input System, so no ":invert" is needed here (unlike the legacy axes they came
+		// from - see the note in AddAxisMember).
 		private const string DefaultJoystickAxisMap =
 			"X axis=<Gamepad>/leftStick/x\n" +
-			"Y axis=<Gamepad>/leftStick/y:invert\n" +
+			"Y axis=<Gamepad>/leftStick/y\n" +
 			"4th axis (Joysticks)=<Gamepad>/rightStick/x\n" +
-			"5th axis (Joysticks)=<Gamepad>/rightStick/y:invert\n" +
+			"5th axis (Joysticks)=<Gamepad>/rightStick/y\n" +
 			"6th axis (Joysticks)=<Gamepad>/rightTrigger\n" +
 			"10th axis (Joysticks)=<Gamepad>/rightTrigger\n";
 
@@ -404,8 +407,13 @@ namespace Collection.EditorTools
 			{
 				if (axisMap.TryGetValue(member.axis, out (string path, bool invert) mapped))
 				{
+					// Note: the legacy JSON's own "invert" field is deliberately NOT honored
+					// here. It compensated for old Input Manager's raw joystick polarity
+					// (where "up" read negative without it) - <Gamepad>/leftStick/y and
+					// rightStick/y already normalize to "up = positive" in the New Input
+					// System, so re-applying it would invert an axis that's already correct.
 					InputActionSetupExtensions.BindingSyntax binding = action.AddBinding(mapped.path);
-					if (mapped.invert || member.invert)
+					if (mapped.invert)
 					{
 						binding.WithProcessor("invert");
 					}
