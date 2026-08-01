@@ -20,12 +20,21 @@ namespace Collection.Controls
 			[TextArea] public string description;
 			public Vector2 gravity;
 
+#if UNITY_EDITOR
+			// Editor-only scene picker, synced into entryScenePath (below) by OnValidate.
+			// SceneAsset lives in UnityEditor and can't be referenced from runtime code -
+			// this field is stripped from player builds entirely, leaving entryScenePath
+			// (a plain string, safe in both Editor and builds) as what actually ships.
+			public UnityEditor.SceneAsset entryScene;
+#endif
+
 			// Which scene the main menu launches for this game. GameImportWindow guesses a
 			// starting value (a scene named "main" if there is one) - explicit and editable
-			// here rather than re-guessed by MainMenuController every time, since a wrong
-			// guess (e.g. an auxiliary editing scene mistaken for the real entry point) has
-			// no way to be corrected other than renaming scene files.
-			public string entryScenePath;
+			// here (via the entryScene picker above) rather than re-guessed by
+			// MainMenuController every time, since a wrong guess (e.g. an auxiliary editing
+			// scene mistaken for the real entry point) has no way to be corrected other than
+			// renaming scene files.
+			[HideInInspector] public string entryScenePath;
 		}
 
 		public Entry[] entries = Array.Empty<Entry>();
@@ -58,6 +67,20 @@ namespace Collection.Controls
 				{
 					entry.gravity = new Vector2(0f, -9.81f);
 				}
+
+#if UNITY_EDITOR
+				// Scene picker is the source of truth once set; entries created before this
+				// field existed (a plain string path already set, no picked object yet) get
+				// the object reference filled in for display instead of losing their value.
+				if (entry.entryScene != null)
+				{
+					entry.entryScenePath = UnityEditor.AssetDatabase.GetAssetPath(entry.entryScene);
+				}
+				else if (!string.IsNullOrEmpty(entry.entryScenePath))
+				{
+					entry.entryScene = UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEditor.SceneAsset>(entry.entryScenePath);
+				}
+#endif
 			}
 		}
 	}

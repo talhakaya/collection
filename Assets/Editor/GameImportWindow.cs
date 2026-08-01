@@ -558,12 +558,17 @@ namespace Collection.EditorTools
 				return;
 			}
 
+			string guessedScenePath = GuessEntryScene(destinationFolder);
 			var entry = new GameList.Entry
 			{
 				gameName = gameName,
 				description = "",
 				gravity = Physics2D.gravity,
-				entryScenePath = GuessEntryScene(destinationFolder),
+				entryScenePath = guessedScenePath,
+				// Set directly rather than relying on GameList.OnValidate's path->object
+				// sync, since that's an Inspector-driven callback and this entry is being
+				// created via code, not the Inspector.
+				entryScene = string.IsNullOrEmpty(guessedScenePath) ? null : AssetDatabase.LoadAssetAtPath<SceneAsset>(guessedScenePath),
 			};
 
 			gameList.entries = gameList.entries.Append(entry).ToArray();

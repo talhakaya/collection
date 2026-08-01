@@ -16,16 +16,20 @@ MonoBehaviour:
   - gameName: Chocolate
     description: 
     gravity: {x: 0, y: -9.81}
+    entryScene: {fileID: 0}
     entryScenePath: 
   - gameName: Golfinity
     description: 
     gravity: {x: 0, y: -9.81}
+    entryScene: {fileID: 0}
     entryScenePath: 
   - gameName: Nykrig
     description: 
     gravity: {x: 0, y: 0}
+    entryScene: {fileID: 0}
     entryScenePath: 
   - gameName: Space Artist
     description: 
     gravity: {x: 0, y: -9.81}
+    entryScene: {fileID: 102900000, guid: a39fe25f1e4fb424f8625ed9bbc73f93, type: 3}
     entryScenePath: Assets/games/Space Artist/menu.unity
