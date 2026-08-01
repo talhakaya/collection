@@ -29,8 +29,16 @@ namespace Games.Golfinity
 		[Header("Map navigation")]
 		[Tooltip("World units/sec the right stick free-scrolls the map. Fixed speed, no inertia.")]
 		public float scrollSpeed = 40f;
-		[Tooltip("World units/sec the map travels when stepping between levels.")]
+		[Tooltip("Top speed (world units/sec) when stepping between levels.")]
 		public float stepSpeed = 60f;
+		[Tooltip("How sharply the step eases out. Higher settles faster.")]
+		public float stepSharpness = 10f;
+		[Tooltip("Floor speed so the ease-out can't crawl to a halt just short of the target.")]
+		public float minStepSpeed = 3f;
+		[Tooltip("How far off-centre (world units) the selection can drift before a step pulls it back instead of moving on.")]
+		public float centredTolerance = 0.5f;
+		[Tooltip("Stop free-scrolling once the first level is centred. Map's own clamp allows a further dot-spacing of overscroll past it, which shows empty sky with nothing selected.")]
+		public bool clampToFirstLevel = true;
 		[Tooltip("Stick deflection needed to register a level step.")]
 		public float stepThreshold = 0.5f;
 		public float stepRepeatDelay = 0.4f;
@@ -178,14 +186,21 @@ namespace Games.Golfinity
 			}
 
 			// Right stick: free scroll at a fixed speed, no inertia.
+			MapUi focused = map.GetFocusedUi();
+
+			// Right stick: free scroll at a fixed speed, no inertia. Scrolling further forward
+			// is blocked once nothing selectable is left in view - the map recycles only nine
+			// nodes, so past that point there's no selection to show, no cursor, and no way to
+			// tell where you are. Scrolling back toward the levels stays allowed.
 			float scroll = TaloketoInputManager.GetVector2("ScrollMap").x;
-			if (!Mathf.Approximately(scroll, 0f))
+			bool strandedForward = focused == null && scroll > 0f;
+			bool pastFirstLevel = clampToFirstLevel && scroll < 0f && IsFirstLevelCentred(map);
+			if (!Mathf.Approximately(scroll, 0f) && !strandedForward && !pastFirstLevel)
 			{
 				map.ScrollBy(-scroll * scrollSpeed * Time.deltaTime);
 				targetHole = NoTarget; // free scroll overrides an in-flight step
+				focused = map.GetFocusedUi();
 			}
-
-			MapUi focused = map.GetFocusedUi();
 
 			// Left stick / dpad: discrete level-to-level steps, with menu-style key repeat so
 			// holding the stick walks the list instead of firing once or racing through it.
@@ -231,10 +246,49 @@ namespace Games.Golfinity
 				? targetHole
 				: (focused is MapLevelUi level ? level.holeNo : map.HoleNo);
 
+			// Free-scrolling with the right stick leaves the selection off-centre, possibly
+			// off-screen. The first press then pulls it back into view rather than stepping
+			// from something the player can't see - the way a scrolled list snaps to its
+			// selection before it starts moving.
+			if (targetHole == NoTarget && !IsCentred(focused))
+			{
+				targetHole = from;
+				return;
+			}
+
 			MapLevelUi candidate = map.FindLevelUi(from + dir);
-			if (candidate == null || !candidate.interactable) return;
+			if (candidate == null || !candidate.interactable)
+			{
+				// At either end of the unlocked run. Re-centre instead of ignoring the press,
+				// so the map never sits somewhere the stick appears to do nothing.
+				targetHole = from;
+				return;
+			}
 
 			targetHole = from + dir;
+		}
+
+		/// True once the first level has reached (or passed) centre. Map's own clamp stops a
+		/// dot-spacing later, leaving the first level off to the right with empty sky beside
+		/// it and nothing selected - fine as mouse-drag rubber-banding, wrong for stick
+		/// navigation where the centre is the selection.
+		private static bool IsFirstLevelCentred(Map map)
+		{
+			MapLevelUi first = map.FindLevelUi(0);
+			if (first == null) return false;
+
+			Camera cam = Game.cam != null ? Game.cam : Camera.main;
+			if (cam == null) return false;
+
+			return first.transform.position.x - cam.transform.position.x >= -0.01f;
+		}
+
+		private bool IsCentred(MapUi ui)
+		{
+			if (ui == null) return true;
+			Camera cam = Game.cam != null ? Game.cam : Camera.main;
+			if (cam == null) return true;
+			return Mathf.Abs(ui.transform.position.x - cam.transform.position.x) <= centredTolerance;
 		}
 
 		/// Scrolls until the targeted hole sits under the camera. Driving to a world position
@@ -260,7 +314,15 @@ namespace Games.Golfinity
 				return false;
 			}
 
-			float move = Mathf.Sign(offset) * Mathf.Min(Mathf.Abs(offset), stepSpeed * Time.deltaTime);
+			// Frame-rate independent ease-out, capped so a long snap-back doesn't teleport and
+			// floored so the tail of the ease doesn't crawl.
+			float move = offset * (1f - Mathf.Exp(-stepSharpness * Time.deltaTime));
+			float maxMove = stepSpeed * Time.deltaTime;
+			move = Mathf.Clamp(move, -maxMove, maxMove);
+
+			float minMove = minStepSpeed * Time.deltaTime;
+			if (Mathf.Abs(move) < minMove) move = Mathf.Sign(offset) * Mathf.Min(minMove, Mathf.Abs(offset));
+
 			map.ScrollBy(-move);
 			return true;
 		}

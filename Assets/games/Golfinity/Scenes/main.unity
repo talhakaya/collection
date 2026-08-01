@@ -11918,6 +11918,10 @@ MonoBehaviour:
   cursorOffset: {x: 6, y: -6}
   scrollSpeed: 40
   stepSpeed: 60
+  stepSharpness: 10
+  minStepSpeed: 3
+  centredTolerance: 0.5
+  clampToFirstLevel: 1
   stepThreshold: 0.5
   stepRepeatDelay: 0.4
   stepRepeatRate: 0.18
