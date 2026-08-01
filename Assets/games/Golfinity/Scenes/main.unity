@@ -5341,11 +5341,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3009164188007483060, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.2
+      value: 0.25000003
       objectReference: {fileID: 0}
     - target: {fileID: 3009164188007483060, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.2
+      value: 0.25000003
       objectReference: {fileID: 0}
     - target: {fileID: 3009164188007483060, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5377,7 +5377,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3009164188007483060, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 95.96193
+      value: 91.96193
       objectReference: {fileID: 0}
     - target: {fileID: 3009164188007483060, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -11916,7 +11916,7 @@ MonoBehaviour:
   cursorSprite: {fileID: 21300000, guid: c76246d0a2b0ee642941c68e2c3c78a3, type: 3}
   cursorHeight: 16
   cursorOffset: {x: 6, y: -6}
-  mirrorCursor: 0
+  mirrorCursor: 1
   scrollSpeed: 40
   stepDuration: 0.14
   scrollBackDuration: 0.35
