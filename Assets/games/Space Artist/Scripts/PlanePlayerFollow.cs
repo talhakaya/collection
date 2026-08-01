@@ -38,7 +38,7 @@ namespace Games.SpaceArtist
 	                lastTimer += Game.dt;
 	                if (lastTimer > 1f)
 	                {
-	                    SceneManager.LoadScene(0);
+	                    SceneManager.LoadScene("Assets/games/Space Artist/menu.unity");
 	                }
 	            }
 	            float a = rendererr.material.GetColor("_TintColor").a;

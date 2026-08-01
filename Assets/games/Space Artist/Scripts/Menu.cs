@@ -17,7 +17,7 @@ namespace Games.SpaceArtist
 	        Game.dt = Time.deltaTime;
 	        if (Input.GetMouseButtonDown(0))
 	        {
-	            SceneManager.LoadScene(1);
+	            SceneManager.LoadScene("Assets/games/Space Artist/main.unity");
 	        }
 		}
 	}

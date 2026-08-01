@@ -28,4 +28,4 @@ MonoBehaviour:
   - gameName: Space Artist
     description: 
     gravity: {x: 0, y: -9.81}
-    entryScenePath: 
+    entryScenePath: Assets/games/Space Artist/menu.unity
