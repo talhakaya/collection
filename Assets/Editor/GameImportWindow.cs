@@ -24,6 +24,7 @@ namespace Collection.EditorTools
 		// and pending state survives the reload in SessionState rather than static fields.
 		private const string SessionKeyPendingGameName = "Collection.GameImportWindow.PendingGameName";
 		private const string SessionKeyBeforeSnapshot = "Collection.GameImportWindow.BeforeSnapshot";
+		private const string SessionKeyPendingPackagePath = "Collection.GameImportWindow.PendingPackagePath";
 
 		private string packagePath = "";
 		private string gameName = "";
@@ -119,6 +120,7 @@ namespace Collection.EditorTools
 		{
 			SessionState.SetString(SessionKeyPendingGameName, name);
 			SessionState.SetString(SessionKeyBeforeSnapshot, string.Join("\n", SnapshotAssetPaths()));
+			SessionState.SetString(SessionKeyPendingPackagePath, path);
 
 			AssetDatabase.ImportPackage(path, false);
 			Close();
@@ -132,11 +134,11 @@ namespace Collection.EditorTools
 				return;
 			}
 
-			HashSet<string> before = LoadAndClearPendingState();
+			(HashSet<string> before, string packagePath) = LoadAndClearPendingState();
 
 			try
 			{
-				FinishImport(pendingGameName, before);
+				FinishImport(pendingGameName, before, packagePath);
 			}
 			catch (Exception e)
 			{
@@ -167,13 +169,16 @@ namespace Collection.EditorTools
 			LoadAndClearPendingState();
 		}
 
-		private static HashSet<string> LoadAndClearPendingState()
+		private static (HashSet<string> before, string packagePath) LoadAndClearPendingState()
 		{
 			string beforeRaw = SessionState.GetString(SessionKeyBeforeSnapshot, "");
+			string packagePath = SessionState.GetString(SessionKeyPendingPackagePath, "");
 			SessionState.EraseString(SessionKeyPendingGameName);
 			SessionState.EraseString(SessionKeyBeforeSnapshot);
+			SessionState.EraseString(SessionKeyPendingPackagePath);
 
-			return new HashSet<string>(beforeRaw.Split('\n').Where(s => s.Length > 0));
+			var before = new HashSet<string>(beforeRaw.Split('\n').Where(s => s.Length > 0));
+			return (before, packagePath);
 		}
 
 		private static HashSet<string> SnapshotAssetPaths()
@@ -182,7 +187,7 @@ namespace Collection.EditorTools
 				.Where(p => p.StartsWith("Assets/") && !p.EndsWith(".meta")));
 		}
 
-		private static void FinishImport(string gameName, HashSet<string> before)
+		private static void FinishImport(string gameName, HashSet<string> before, string packagePath)
 		{
 			AssetDatabase.Refresh();
 
@@ -223,16 +228,54 @@ namespace Collection.EditorTools
 
 			AssetDatabase.Refresh();
 
+			RegisterScenesUnder(destinationFolder);
+
+			// Optional pass 2/3: if a legacy Input Manager export sits next to the package
+			// (same filename, .json instead of .unitypackage - see InputMigrationWindow),
+			// generate its action map and rewrite the game's own Input.* call sites to use
+			// it, before the namespace rewrite below. Both operate purely on file contents/
+			// the shared .inputactions asset, not on the game's namespace, so ordering
+			// relative to NamespaceScriptsUnder doesn't matter functionally - they run first
+			// so NamespaceScriptsUnder (which can trigger a script recompile / domain reload
+			// that tears down this call stack) stays the single last script-touching step,
+			// same risk as before this feature existed.
+			var extraLog = new List<string>();
+			string siblingJsonPath = Path.ChangeExtension(packagePath, ".json");
+			if (File.Exists(siblingJsonPath))
+			{
+				try
+				{
+					int actionCount = InputMigrationWindow.GenerateActionMap(siblingJsonPath, gameName,
+						InputMigrationWindow.DefaultTargetAssetPath, InputMigrationWindow.DefaultSkipNamePatterns,
+						InputMigrationWindow.DefaultAxisMapText, extraLog);
+					extraLog.Add($"Generated action map '{gameName}' with {actionCount} action(s) from {Path.GetFileName(siblingJsonPath)}.");
+
+					int callSites = InputCodeMigrator.MigrateFolder(destinationFolder, gameName,
+						InputMigrationWindow.DefaultTargetAssetPath, extraLog);
+					extraLog.Add($"Migrated {callSites} input call site(s) in {destinationFolder}.");
+				}
+				catch (Exception e)
+				{
+					extraLog.Add($"Input migration failed: {e.Message}");
+					Debug.LogError($"[GameImportWindow] Input migration failed: {e}");
+				}
+			}
+
 			// Build Settings must be updated before the namespace rewrite below: rewriting
 			// dozens of .cs files triggers a script recompile, which can synchronously tear
 			// down this call stack via a domain reload - anything after that point may never
-			// run. Nothing here after RegisterScenesUnder is safety-critical.
-			RegisterScenesUnder(destinationFolder);
+			// run. Nothing here after this point is safety-critical.
 			NamespaceScriptsUnder(destinationFolder, gameName);
 
 			AssetDatabase.Refresh();
 
-			EditorUtility.DisplayDialog("Import Game", $"Imported '{gameName}' into {destinationFolder}.", "OK");
+			string message = $"Imported '{gameName}' into {destinationFolder}.";
+			if (extraLog.Count > 0)
+			{
+				message += "\n\n" + string.Join("\n", extraLog);
+			}
+
+			EditorUtility.DisplayDialog("Import Game", message, "OK");
 		}
 
 		/// Finds the single new path that is a direct child of parentFolder (existed after

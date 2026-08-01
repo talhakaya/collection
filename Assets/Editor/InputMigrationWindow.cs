@@ -150,28 +150,9 @@ namespace Collection.EditorTools
 			var log = new List<string>();
 			try
 			{
-				string jsonText = File.ReadAllText(jsonPath);
-				int pos = 0;
-				object root = ParseJsonValue(jsonText, ref pos);
-				List<AxisEntry> entries = ExtractAxisEntries(root as Dictionary<string, object>);
+				int actionCount = GenerateActionMap(jsonPath, gameName, targetAssetPath, skipNamePatterns, joystickAxisMapText, log);
 
-				string[] skipPatterns = skipNamePatterns.Split(',')
-					.Select(s => s.Trim())
-					.Where(s => s.Length > 0)
-					.ToArray();
-
-				List<ParsedAction> groups = GroupEntries(entries, skipPatterns, log);
-				Dictionary<string, (string path, bool invert)> axisMap = ParseAxisMap(joystickAxisMapText);
-
-				string assetFullPath = Path.Combine(Directory.GetCurrentDirectory(), targetAssetPath);
-				var asset = InputActionAsset.FromJson(File.ReadAllText(assetFullPath));
-
-				BuildActionMap(asset, gameName, groups, axisMap, log);
-
-				File.WriteAllText(assetFullPath, asset.ToJson());
-				AssetDatabase.ImportAsset(targetAssetPath, ImportAssetOptions.ForceUpdate);
-
-				string summary = $"Generated action map '{gameName}' with {groups.Count} action(s) in {targetAssetPath}.";
+				string summary = $"Generated action map '{gameName}' with {actionCount} action(s) in {targetAssetPath}.";
 				statusMessage = log.Count > 0 ? summary + "\n\n" + string.Join("\n", log) : summary;
 				statusType = log.Count > 0 ? MessageType.Warning : MessageType.Info;
 				Debug.Log($"[InputMigrationWindow] {statusMessage}");
@@ -183,6 +164,44 @@ namespace Collection.EditorTools
 				Debug.LogError($"[InputMigrationWindow] {e}");
 			}
 		}
+
+		/// <summary>
+		/// Core entry point, reusable outside the window (e.g. chained after a package
+		/// import). Parses the legacy m_Axes JSON at jsonPath and writes/replaces an action
+		/// map named gameName in the .inputactions asset at targetAssetPath. Returns the
+		/// number of actions generated; appends human-readable notes (skips, unresolved
+		/// bindings) to log.
+		/// </summary>
+		public static int GenerateActionMap(string jsonPath, string gameName, string targetAssetPath,
+			string skipNamePatternsCsv, string joystickAxisMapText, List<string> log)
+		{
+			string jsonText = File.ReadAllText(jsonPath);
+			int pos = 0;
+			object root = ParseJsonValue(jsonText, ref pos);
+			List<AxisEntry> entries = ExtractAxisEntries(root as Dictionary<string, object>);
+
+			string[] skipPatterns = skipNamePatternsCsv.Split(',')
+				.Select(s => s.Trim())
+				.Where(s => s.Length > 0)
+				.ToArray();
+
+			List<ParsedAction> groups = GroupEntries(entries, skipPatterns, log);
+			Dictionary<string, (string path, bool invert)> axisMap = ParseAxisMap(joystickAxisMapText);
+
+			string assetFullPath = Path.Combine(Directory.GetCurrentDirectory(), targetAssetPath);
+			var asset = InputActionAsset.FromJson(File.ReadAllText(assetFullPath));
+
+			BuildActionMap(asset, gameName, groups, axisMap, log);
+
+			File.WriteAllText(assetFullPath, asset.ToJson());
+			AssetDatabase.ImportAsset(targetAssetPath, ImportAssetOptions.ForceUpdate);
+
+			return groups.Count;
+		}
+
+		public static string DefaultTargetAssetPath => DefaultAssetPath;
+		public static string DefaultSkipNamePatterns => "Mac";
+		public static string DefaultAxisMapText => DefaultJoystickAxisMap;
 
 		// ---- Legacy axis entry model -------------------------------------------------
 
