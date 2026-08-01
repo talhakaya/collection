@@ -131,9 +131,9 @@ namespace Collection.EditorTools
 				return $"'{GlobalMapName}' is reserved for the always-on cross-game map.";
 			}
 
-			if (!Regex.IsMatch(gameName, "^[A-Za-z][A-Za-z0-9]*$"))
+			if (!Regex.IsMatch(gameName, "^[A-Za-z][A-Za-z0-9]*( [A-Za-z0-9]+)*$"))
 			{
-				return "Game name must start with a letter and contain only letters and digits.";
+				return "Game name must start with a letter, contain only letters/digits, and use single spaces between words.";
 			}
 
 			if (string.IsNullOrEmpty(targetAssetPath) ||

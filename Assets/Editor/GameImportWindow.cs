@@ -26,9 +26,11 @@ namespace Collection.EditorTools
 		private const string SessionKeyPendingGameName = "Collection.GameImportWindow.PendingGameName";
 		private const string SessionKeyBeforeSnapshot = "Collection.GameImportWindow.BeforeSnapshot";
 		private const string SessionKeyPendingPackagePath = "Collection.GameImportWindow.PendingPackagePath";
+		private const string SessionKeyPendingInputJsonPath = "Collection.GameImportWindow.PendingInputJsonPath";
 
 		private string packagePath = "";
 		private string gameName = "";
+		private string inputJsonPathOverride = "";
 		private string statusMessage = "";
 		private MessageType statusType = MessageType.None;
 
@@ -68,6 +70,26 @@ namespace Collection.EditorTools
 
 			EditorGUILayout.Space();
 
+			EditorGUILayout.LabelField("Input Manager JSON (optional)", EditorStyles.boldLabel);
+			EditorGUILayout.BeginHorizontal();
+			inputJsonPathOverride = EditorGUILayout.TextField(inputJsonPathOverride);
+			if (GUILayout.Button("Browse...", GUILayout.Width(80)))
+			{
+				string selected = EditorUtility.OpenFilePanel("Select Input Manager JSON", "", "json");
+				if (!string.IsNullOrEmpty(selected))
+				{
+					inputJsonPathOverride = selected;
+				}
+			}
+			EditorGUILayout.EndHorizontal();
+			EditorGUILayout.HelpBox(
+				"If set (or if a same-named .json sits next to the package), the action map is " +
+				"generated and the game's own Input.* call sites are migrated to TaloketoInputManager " +
+				"automatically, right after the package import.",
+				MessageType.Info);
+
+			EditorGUILayout.Space();
+
 			string validationError = Validate();
 			if (!string.IsNullOrEmpty(validationError))
 			{
@@ -77,7 +99,7 @@ namespace Collection.EditorTools
 			GUI.enabled = string.IsNullOrEmpty(validationError);
 			if (GUILayout.Button("Import", GUILayout.Height(30)))
 			{
-				BeginImport(packagePath, gameName);
+				BeginImport(packagePath, gameName.Trim(), inputJsonPathOverride);
 			}
 			GUI.enabled = true;
 
@@ -99,29 +121,36 @@ namespace Collection.EditorTools
 				return "Package file not found.";
 			}
 
-			if (string.IsNullOrEmpty(gameName))
+			string trimmedName = gameName.Trim();
+			if (string.IsNullOrEmpty(trimmedName))
 			{
 				return "Enter a game name.";
 			}
 
-			if (!Regex.IsMatch(gameName, "^[A-Za-z][A-Za-z0-9]*$"))
+			if (!Regex.IsMatch(trimmedName, "^[A-Za-z][A-Za-z0-9]*( [A-Za-z0-9]+)*$"))
 			{
-				return "Game name must start with a letter and contain only letters and digits.";
+				return "Game name must start with a letter, contain only letters/digits, and use single spaces between words.";
 			}
 
-			if (AssetDatabase.IsValidFolder($"{GamesRootFolder}/{gameName}"))
+			if (AssetDatabase.IsValidFolder($"{GamesRootFolder}/{trimmedName}"))
 			{
-				return $"'{GamesRootFolder}/{gameName}' already exists.";
+				return $"'{GamesRootFolder}/{trimmedName}' already exists.";
+			}
+
+			if (!string.IsNullOrEmpty(inputJsonPathOverride) && !File.Exists(inputJsonPathOverride))
+			{
+				return "Input Manager JSON path doesn't exist.";
 			}
 
 			return null;
 		}
 
-		private void BeginImport(string path, string name)
+		private void BeginImport(string path, string name, string jsonPathOverride)
 		{
 			SessionState.SetString(SessionKeyPendingGameName, name);
 			SessionState.SetString(SessionKeyBeforeSnapshot, string.Join("\n", SnapshotAssetPaths()));
 			SessionState.SetString(SessionKeyPendingPackagePath, path);
+			SessionState.SetString(SessionKeyPendingInputJsonPath, jsonPathOverride ?? "");
 
 			AssetDatabase.ImportPackage(path, false);
 			Close();
@@ -135,11 +164,11 @@ namespace Collection.EditorTools
 				return;
 			}
 
-			(HashSet<string> before, string packagePath) = LoadAndClearPendingState();
+			(HashSet<string> before, string packagePath, string jsonPathOverride) = LoadAndClearPendingState();
 
 			try
 			{
-				FinishImport(pendingGameName, before, packagePath);
+				FinishImport(pendingGameName, before, packagePath, jsonPathOverride);
 			}
 			catch (Exception e)
 			{
@@ -170,16 +199,18 @@ namespace Collection.EditorTools
 			LoadAndClearPendingState();
 		}
 
-		private static (HashSet<string> before, string packagePath) LoadAndClearPendingState()
+		private static (HashSet<string> before, string packagePath, string jsonPathOverride) LoadAndClearPendingState()
 		{
 			string beforeRaw = SessionState.GetString(SessionKeyBeforeSnapshot, "");
 			string packagePath = SessionState.GetString(SessionKeyPendingPackagePath, "");
+			string jsonPathOverride = SessionState.GetString(SessionKeyPendingInputJsonPath, "");
 			SessionState.EraseString(SessionKeyPendingGameName);
 			SessionState.EraseString(SessionKeyBeforeSnapshot);
 			SessionState.EraseString(SessionKeyPendingPackagePath);
+			SessionState.EraseString(SessionKeyPendingInputJsonPath);
 
 			var before = new HashSet<string>(beforeRaw.Split('\n').Where(s => s.Length > 0));
-			return (before, packagePath);
+			return (before, packagePath, jsonPathOverride);
 		}
 
 		private static HashSet<string> SnapshotAssetPaths()
@@ -188,7 +219,7 @@ namespace Collection.EditorTools
 				.Where(p => p.StartsWith("Assets/") && !p.EndsWith(".meta")));
 		}
 
-		private static void FinishImport(string gameName, HashSet<string> before, string packagePath)
+		private static void FinishImport(string gameName, HashSet<string> before, string packagePath, string jsonPathOverride)
 		{
 			AssetDatabase.Refresh();
 
@@ -232,25 +263,26 @@ namespace Collection.EditorTools
 			RegisterScenesUnder(destinationFolder);
 			EnsureGameListEntry(gameName);
 
-			// Optional pass 2/3: if a legacy Input Manager export sits next to the package
-			// (same filename, .json instead of .unitypackage - see InputMigrationWindow),
-			// generate its action map and rewrite the game's own Input.* call sites to use
-			// it, before the namespace rewrite below. Both operate purely on file contents/
-			// the shared .inputactions asset, not on the game's namespace, so ordering
-			// relative to NamespaceScriptsUnder doesn't matter functionally - they run first
-			// so NamespaceScriptsUnder (which can trigger a script recompile / domain reload
+			// Optional pass 2/3: an explicit JSON path from the window, or (if left blank) a
+			// legacy Input Manager export sitting next to the package (same filename, .json
+			// instead of .unitypackage - see InputMigrationWindow). If found, generate its
+			// action map and rewrite the game's own Input.* call sites to use it, before the
+			// namespace rewrite below. Both operate purely on file contents/the shared
+			// .inputactions asset, not on the game's namespace, so ordering relative to
+			// NamespaceScriptsUnder doesn't matter functionally - they run first so
+			// NamespaceScriptsUnder (which can trigger a script recompile / domain reload
 			// that tears down this call stack) stays the single last script-touching step,
 			// same risk as before this feature existed.
 			var extraLog = new List<string>();
-			string siblingJsonPath = Path.ChangeExtension(packagePath, ".json");
-			if (File.Exists(siblingJsonPath))
+			string jsonPath = !string.IsNullOrEmpty(jsonPathOverride) ? jsonPathOverride : Path.ChangeExtension(packagePath, ".json");
+			if (File.Exists(jsonPath))
 			{
 				try
 				{
-					int actionCount = InputMigrationWindow.GenerateActionMap(siblingJsonPath, gameName,
+					int actionCount = InputMigrationWindow.GenerateActionMap(jsonPath, gameName,
 						InputMigrationWindow.DefaultTargetAssetPath, InputMigrationWindow.DefaultSkipNamePatterns,
 						InputMigrationWindow.DefaultAxisMapText, extraLog);
-					extraLog.Add($"Generated action map '{gameName}' with {actionCount} action(s) from {Path.GetFileName(siblingJsonPath)}.");
+					extraLog.Add($"Generated action map '{gameName}' with {actionCount} action(s) from {Path.GetFileName(jsonPath)}.");
 
 					int callSites = InputCodeMigrator.MigrateFolder(destinationFolder, gameName,
 						InputMigrationWindow.DefaultTargetAssetPath, extraLog);
@@ -393,11 +425,16 @@ namespace Collection.EditorTools
 				return;
 			}
 
+			// C# namespaces can't contain spaces - "Space Artist" becomes Games.SpaceArtist.
+			// Everything else (folder path, action map name, GameList entry, menu display)
+			// keeps the game name as typed, spaces included.
+			string namespaceSegment = gameName.Replace(" ", "");
+
 			string[] scriptFiles = Directory.GetFiles(absoluteFolder, "*.cs", SearchOption.AllDirectories);
 			foreach (string scriptFile in scriptFiles)
 			{
 				string contents = File.ReadAllText(scriptFile);
-				string wrapped = WrapInNamespace(contents, $"Games.{gameName}");
+				string wrapped = WrapInNamespace(contents, $"Games.{namespaceSegment}");
 				if (wrapped != null)
 				{
 					File.WriteAllText(scriptFile, wrapped);
