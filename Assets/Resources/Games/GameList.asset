@@ -9,9 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee19addfe98a71442b9bc1747bc6f3df, type: 3}
-  m_Name: GamePhysicsSettings
+  m_Script: {fileID: 11500000, guid: c1b3bc256478f7c49b7917807716bbc0, type: 3}
+  m_Name: GameList
   m_EditorClassIdentifier: 
-  overrides:
+  entries:
+  - gameName: Chocolate
+    description: 
+    gravity: {x: 0, y: -9.81}
+  - gameName: Golfinity
+    description: 
+    gravity: {x: 0, y: -9.81}
   - gameName: Nykrig
+    description: 
     gravity: {x: 0, y: 0}

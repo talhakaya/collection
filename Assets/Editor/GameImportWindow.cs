@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Collection.Controls;
 using UnityEditor;
 using UnityEngine;
 
@@ -229,6 +230,7 @@ namespace Collection.EditorTools
 			AssetDatabase.Refresh();
 
 			RegisterScenesUnder(destinationFolder);
+			EnsureGameListEntry(gameName);
 
 			// Optional pass 2/3: if a legacy Input Manager export sits next to the package
 			// (same filename, .json instead of .unitypackage - see InputMigrationWindow),
@@ -482,6 +484,50 @@ namespace Collection.EditorTools
 			}
 
 			EditorBuildSettings.scenes = scenes.ToArray();
+		}
+
+		private const string GameListFolder = "Assets/Resources/Games";
+		private const string GameListAssetPath = GameListFolder + "/GameList.asset";
+
+		/// Adds a blank entry for gameName to the shared GameList asset if one doesn't
+		/// already exist (creating the asset itself on first use). Fields beyond gameName
+		/// are left for manual editing afterward - description empty, gravity snapshotting
+		/// whatever Physics2D.gravity currently is, so an untouched entry behaves the same
+		/// as no override until someone edits it.
+		private static void EnsureGameListEntry(string gameName)
+		{
+			GameList gameList = AssetDatabase.LoadAssetAtPath<GameList>(GameListAssetPath);
+			if (gameList == null)
+			{
+				if (!AssetDatabase.IsValidFolder(GameListFolder))
+				{
+					if (!AssetDatabase.IsValidFolder("Assets/Resources"))
+					{
+						AssetDatabase.CreateFolder("Assets", "Resources");
+					}
+
+					AssetDatabase.CreateFolder("Assets/Resources", "Games");
+				}
+
+				gameList = ScriptableObject.CreateInstance<GameList>();
+				AssetDatabase.CreateAsset(gameList, GameListAssetPath);
+			}
+
+			if (gameList.TryGetEntry(gameName, out _))
+			{
+				return;
+			}
+
+			var entry = new GameList.Entry
+			{
+				gameName = gameName,
+				description = "",
+				gravity = Physics2D.gravity,
+			};
+
+			gameList.entries = gameList.entries.Append(entry).ToArray();
+			EditorUtility.SetDirty(gameList);
+			AssetDatabase.SaveAssets();
 		}
 	}
 }
