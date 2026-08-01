@@ -29,7 +29,7 @@ namespace Games.Golfinity
 		public float cursorHeight = 16f;
 		[Tooltip("Offset from the selected item's centre, in canvas units.")]
 		public Vector2 cursorOffset = new Vector2(6f, -6f);
-		[Tooltip("Flip the cursor horizontally. hand0 points right, so mirror it if you move the cursor to the left of the selection (set a negative X offset too).")]
+		[Tooltip("Put the cursor on the other side of the selection: mirrors the sprite and flips the offset's X, so one tick moves it across and turns it to face the item.")]
 		public bool mirrorCursor;
 
 		[Header("Map navigation")]
@@ -82,6 +82,7 @@ namespace Games.Golfinity
 		private GameObject activePopup;
 		private float stepCooldown;
 		private bool stepLatched;
+		private bool mapWasActive;
 
 		private void Start()
 		{
@@ -247,8 +248,17 @@ namespace Games.Golfinity
 
 			HandleTopButtonShortcuts();
 
-			if (Game.state == GameState.Map) UpdateMap();
-			else ShowCursor(false);
+			if (Game.state == GameState.Map)
+			{
+				UpdateMap();
+			}
+			else
+			{
+				// Reset here, not in UpdateMap - it doesn't run at all during Play, so the
+				// map would never re-sync its selection on the way back from a level.
+				mapWasActive = false;
+				ShowCursor(false);
+			}
 		}
 
 		/// Mirrors Game.Update's Escape priority chain so "which screen owns input" is
@@ -323,8 +333,15 @@ namespace Games.Golfinity
 			Map map = Game.instance != null ? Game.instance.map : null;
 			if (map == null || !map.gameObject.activeInHierarchy)
 			{
+				mapWasActive = false;
 				ShowCursor(false);
 				return;
+			}
+
+			if (!mapWasActive)
+			{
+				mapWasActive = true;
+				SelectUnbeatenLevel(map);
 			}
 
 			// A scroll-back owns the map until it finishes. Input stays locked for its whole
@@ -378,6 +395,38 @@ namespace Games.Golfinity
 			PositionCursorAtWorld(focused.transform.position);
 
 			if (TaloketoInputManager.GetButtonDown("Throw")) focused.OnClick();
+		}
+
+		/// Puts the selection on the furthest unlocked level whenever the map appears - the one
+		/// carrying the bobbing hand, i.e. the level you'd actually play next.
+		///
+		/// Map.Init centres the hole *before* the one it's given, so opening the map left the
+		/// selection on the last completed level with the hand sitting one place further on.
+		/// Centres immediately rather than animating, since this is the opening view.
+		private void SelectUnbeatenLevel(Map map)
+		{
+			scrollingBack = false;
+
+			int target = Game.GetUnbeatenLastHole();
+			MapLevelUi node = map.FindLevelUi(target);
+
+			// Paywalled or otherwise not yet reachable - fall back to whatever is selectable.
+			if (node == null || !node.interactable)
+			{
+				node = map.GetFocusedUi() as MapLevelUi;
+				if (node == null)
+				{
+					anchorHole = NoTarget;
+					return;
+				}
+
+				target = node.holeNo;
+			}
+
+			anchorHole = target;
+
+			Camera cam = Game.cam != null ? Game.cam : Camera.main;
+			if (cam != null) map.ScrollBy(-(node.transform.position.x - cam.transform.position.x));
 		}
 
 		/// Starts a scroll back to the selection one step away. Targets a hole *number*, not a
@@ -532,7 +581,10 @@ namespace Games.Golfinity
 				return;
 			}
 
-			cursorRect.anchoredPosition = local + cursorOffset;
+			// Mirroring flips the offset too, so the cursor actually moves to the other side
+			// rather than just facing the wrong way from the same spot.
+			Vector2 offset = mirrorCursor ? new Vector2(-cursorOffset.x, cursorOffset.y) : cursorOffset;
+			cursorRect.anchoredPosition = local + offset;
 			ShowCursor(true);
 		}
 
