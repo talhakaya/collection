@@ -1,6 +1,9 @@
+using System.Collections.Generic;
 using Collection.Controls;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Games.Golfinity
@@ -45,6 +48,13 @@ namespace Games.Golfinity
 		public float stepRepeatDelay = 0.4f;
 		public float stepRepeatRate = 0.18f;
 
+		[Header("Shortcut labels (temporary)")]
+		[Tooltip("Show which button triggers each top-bar action. Debug aid - turn off to hide them all.")]
+		public bool showShortcutLabels = true;
+		[Tooltip("Gap below the button, in canvas units.")]
+		public float shortcutLabelGap = 1f;
+		public float shortcutLabelFontSize = 8f;
+
 		private const int NoTarget = -1;
 		private int anchorHole = NoTarget;
 		private bool scrollingBack;
@@ -53,6 +63,15 @@ namespace Games.Golfinity
 		private float scrollBackTotal;
 		private float scrollBackApplied;
 		private float scrollBackSeconds;
+
+		private struct ShortcutLabel
+		{
+			public TextMeshProUGUI text;
+			public string actionName;
+			public string lastGlyph;
+		}
+
+		private readonly List<ShortcutLabel> shortcutLabels = new List<ShortcutLabel>();
 
 		private RectTransform canvasRect;
 		private RectTransform cursorRect;
@@ -74,6 +93,91 @@ namespace Games.Golfinity
 
 			canvasRect = canvas.GetComponent<RectTransform>();
 			CreateCursor(canvas);
+			CreateShortcutLabels(canvas);
+		}
+
+		/// Labels the top-bar buttons with the pad button that triggers them. Text comes from
+		/// the binding itself rather than hardcoded letters, so it stays honest if the action
+		/// is rebound. Parented to each button, so buttonMap's label inherits its show/hide
+		/// (it only exists during Play).
+		private void CreateShortcutLabels(Canvas canvas)
+		{
+			if (!showShortcutLabels) return;
+
+			TMP_FontAsset font = null;
+			TextMeshProUGUI sample = canvas.GetComponentInChildren<TextMeshProUGUI>(true);
+			if (sample != null) font = sample.font;
+
+			CreateShortcutLabel(canvas, "buttonOptions", "Settings", font);
+			CreateShortcutLabel(canvas, "buttonUpgrade", "Upgrade", font);
+			CreateShortcutLabel(canvas, "buttonMap", "Back", font);
+		}
+
+		private void CreateShortcutLabel(Canvas canvas, string buttonName, string actionName, TMP_FontAsset font)
+		{
+			Transform button = canvas.transform.Find(buttonName);
+			if (button == null) return;
+
+			var go = new GameObject("ShortcutLabel", typeof(RectTransform), typeof(TextMeshProUGUI));
+			var rect = go.GetComponent<RectTransform>();
+			rect.SetParent(button, false);
+			rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0f);
+			rect.pivot = new Vector2(0.5f, 1f);
+			rect.anchoredPosition = new Vector2(0f, -shortcutLabelGap);
+			rect.sizeDelta = new Vector2(40f, shortcutLabelFontSize * 1.6f);
+
+			var text = go.GetComponent<TextMeshProUGUI>();
+			if (font != null) text.font = font;
+			text.fontSize = shortcutLabelFontSize;
+			text.alignment = TextAlignmentOptions.Top;
+			text.raycastTarget = false;
+			text.textWrappingMode = TextWrappingModes.NoWrap;
+
+			shortcutLabels.Add(new ShortcutLabel { text = text, actionName = actionName });
+		}
+
+		/// Refreshes the labels: hidden with no pad connected, and re-read from the binding so
+		/// a rebind shows up. Only writes when the string actually changes - assigning
+		/// TMP.text every frame forces a mesh rebuild.
+		private void UpdateShortcutLabels()
+		{
+			if (shortcutLabels.Count == 0) return;
+
+			bool hasPad = Gamepad.current != null;
+			for (int i = 0; i < shortcutLabels.Count; i++)
+			{
+				ShortcutLabel label = shortcutLabels[i];
+				if (label.text == null) continue;
+
+				if (label.text.enabled != hasPad) label.text.enabled = hasPad;
+				if (!hasPad) continue;
+
+				string glyph = GamepadGlyph(label.actionName);
+				if (glyph != label.lastGlyph)
+				{
+					label.text.text = glyph;
+					label.lastGlyph = glyph;
+					shortcutLabels[i] = label;
+				}
+			}
+		}
+
+		/// The pad button bound to an action, as a short display string ("X", "Y", "B").
+		private static string GamepadGlyph(string actionName)
+		{
+			InputAction action = TaloketoInputManager.GetAction(actionName);
+			if (action == null) return "";
+
+			for (int i = 0; i < action.bindings.Count; i++)
+			{
+				InputBinding binding = action.bindings[i];
+				if (binding.path != null && binding.path.StartsWith("<Gamepad>"))
+				{
+					return action.GetBindingDisplayString(i);
+				}
+			}
+
+			return "";
 		}
 
 		private void CreateCursor(Canvas canvas)
@@ -110,6 +214,8 @@ namespace Games.Golfinity
 
 			// Keep the cursor on top - popups shown later would otherwise draw over it.
 			cursorRect.SetAsLastSibling();
+
+			UpdateShortcutLabels();
 
 			GameObject popup = GetActivePopup();
 			if (popup != activePopup)

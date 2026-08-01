@@ -11925,6 +11925,9 @@ MonoBehaviour:
   stepThreshold: 0.5
   stepRepeatDelay: 0.4
   stepRepeatRate: 0.18
+  showShortcutLabels: 1
+  shortcutLabelGap: 1
+  shortcutLabelFontSize: 8
 --- !u!1 &1525533635
 GameObject:
   m_ObjectHideFlags: 0
