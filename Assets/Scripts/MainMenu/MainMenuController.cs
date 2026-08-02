@@ -12,6 +12,8 @@ namespace Collection.MainMenu
 		[SerializeField] private RectTransform contentParent;
 		[SerializeField] private GameObject buttonTemplate;
 
+		private GameObject lastSelected;
+
 		private struct GameEntry
 		{
 			public string displayName;
@@ -36,6 +38,33 @@ namespace Collection.MainMenu
 			if (firstButton != null && EventSystem.current != null)
 			{
 				EventSystem.current.SetSelectedGameObject(firstButton);
+			}
+
+			lastSelected = firstButton;
+		}
+
+		/// Keeps a game button selected so the pad can always drive the list.
+		///
+		/// Clicking away used to clear the selection outright and leave navigation with
+		/// nothing to move from; the module's deselectOnBackgroundClick is off now, but
+		/// selection can still be lost other ways (a click landing on a non-button, the
+		/// selected object being disabled), and the result is the same dead list. Restoring
+		/// the last game button covers all of them.
+		private void Update()
+		{
+			EventSystem events = EventSystem.current;
+			if (events == null) return;
+
+			GameObject selected = events.currentSelectedGameObject;
+			if (selected != null && selected.transform.parent == contentParent)
+			{
+				lastSelected = selected;
+				return;
+			}
+
+			if (lastSelected != null && lastSelected.activeInHierarchy)
+			{
+				events.SetSelectedGameObject(lastSelected);
 			}
 		}
 
