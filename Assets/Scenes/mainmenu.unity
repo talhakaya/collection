@@ -181,7 +181,7 @@ MonoBehaviour:
   m_DecelerationRate: 0.135
   m_ScrollSensitivity: 1
   m_Viewport: {fileID: 1492990335}
-  m_HorizontalScrollbar: {fileID: 1743751322}
+  m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 1387680989}
   m_HorizontalScrollbarVisibility: 2
   m_VerticalScrollbarVisibility: 2
