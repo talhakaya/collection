@@ -73,7 +73,10 @@ namespace Games.Golfinity
 			public string lastGlyph;
 			public RectTransform button;
 			public bool hideWhenPopupOpen;
+			public bool positioned;
 		}
+
+		private int lastPadId;
 
 		private readonly List<ShortcutLabel> shortcutLabels = new List<ShortcutLabel>();
 
@@ -162,7 +165,15 @@ namespace Games.Golfinity
 		{
 			if (shortcutLabels.Count == 0) return;
 
-			bool hasPad = Gamepad.current != null;
+			Gamepad pad = Gamepad.current;
+			bool hasPad = pad != null;
+
+			// Resolving a binding to its display string allocates, so it's done only when the
+			// pad actually changes rather than every frame for every label.
+			int padId = hasPad ? pad.deviceId : 0;
+			bool bindingsMayHaveChanged = padId != lastPadId;
+			lastPadId = padId;
+
 			for (int i = 0; i < shortcutLabels.Count; i++)
 			{
 				ShortcutLabel label = shortcutLabels[i];
@@ -178,18 +189,26 @@ namespace Games.Golfinity
 				if (label.text.enabled != visible) label.text.enabled = visible;
 				if (!visible) continue;
 
-				// Measured from the artwork rather than the button's own rect, which is
-				// zero-size on these buttons.
-				Bounds bounds = RectTransformUtility.CalculateRelativeRectTransformBounds(canvasRect, label.button);
-				label.text.rectTransform.anchoredPosition =
-					new Vector2(bounds.center.x, bounds.min.y - shortcutLabelGap);
-
-				string glyph = GamepadGlyph(label.actionName);
-				if (glyph != label.lastGlyph)
+				// These buttons don't move, so their position is measured once - the bounds
+				// call walks the whole child hierarchy and isn't worth repeating every frame.
+				if (!label.positioned)
 				{
-					label.text.text = glyph;
-					label.lastGlyph = glyph;
+					Bounds bounds = RectTransformUtility.CalculateRelativeRectTransformBounds(canvasRect, label.button);
+					label.text.rectTransform.anchoredPosition =
+						new Vector2(bounds.center.x, bounds.min.y - shortcutLabelGap);
+					label.positioned = true;
 					shortcutLabels[i] = label;
+				}
+
+				if (bindingsMayHaveChanged || label.lastGlyph == null)
+				{
+					string glyph = GamepadGlyph(label.actionName);
+					if (glyph != label.lastGlyph)
+					{
+						label.text.text = glyph;
+						label.lastGlyph = glyph;
+						shortcutLabels[i] = label;
+					}
 				}
 			}
 		}
@@ -245,8 +264,9 @@ namespace Games.Golfinity
 		{
 			if (cursorRect == null) return;
 
-			// Keep the cursor on top - popups shown later would otherwise draw over it.
-			cursorRect.SetAsLastSibling();
+			// The cursor has to stay on top of popups shown after it was created, but
+			// reordering siblings dirties the canvas and forces a full UGUI rebuild, so this
+			// must not run every frame - only when the layering could actually have changed.
 
 			UpdateShortcutLabels();
 
@@ -254,6 +274,7 @@ namespace Games.Golfinity
 			if (popup != activePopup)
 			{
 				activePopup = popup;
+				cursorRect.SetAsLastSibling();
 				if (popup != null) OnPopupOpened(popup);
 			}
 
