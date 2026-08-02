@@ -10217,6 +10217,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  aimDirectionSmoothing: 14
+  aimPowerSmoothing: 10
 --- !u!50 &1310581577
 Rigidbody2D:
   serializedVersion: 5

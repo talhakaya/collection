@@ -37,6 +37,11 @@ namespace Games.Golfinity
 	    [Tooltip("Used when the curve is set to Custom. X is stick deflection 0-1, Y is power 0-1.")]
 	    public AnimationCurve aimPowerCustomCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
 
+	    [Tooltip("How quickly the aim direction chases the stick. Higher is snappier, lower drifts round more slowly. 0 turns smoothing off.")]
+	    public float aimDirectionSmoothing = 14f;
+	    [Tooltip("How quickly the shot power chases the stick. Lower makes the power wind up rather than jumping. 0 turns smoothing off.")]
+	    public float aimPowerSmoothing = 10f;
+
 	    void Awake ()
 	    {
 	        instance = this;
@@ -68,17 +73,32 @@ namespace Games.Golfinity
 	            // so while it's deflected it takes over rather than interleaving with the
 	            // press/drag/release state machine below.
 	            Vector2 aimStick = TaloketoInputManager.GetVector2("Aim");
+	            bool wasGamepadAiming = gamepadAiming;
 	            gamepadAiming = !Game.cameraMove && aimStick.sqrMagnitude > 0f;
 
 	            if (gamepadAiming)
 	            {
 	                draggingMouse = false;
 	                float deflection = Mathf.Min(1f, Geometry.lengthOfVector2(aimStick));
-	                aimLength = ApplyAimPowerCurve(deflection) * AimMaxLength;
+	                float targetLength = ApplyAimPowerCurve(deflection) * AimMaxLength;
 	                float stickAngle = Geometry.angleOfVector2(aimStick);
 	                // Same convention as the mouse: with reverseShooting on, the stick is the
 	                // slingshot pull and the ball leaves in the opposite direction.
-	                aimAngle = Game.reverseShooting ? stickAngle + 180f : stickAngle;
+	                float targetAngle = Game.reverseShooting ? stickAngle + 180f : stickAngle;
+
+	                if (!wasGamepadAiming)
+	                {
+	                    // First frame of a new aim: snap, so it doesn't swing in from wherever
+	                    // the previous shot happened to leave the aim pointing.
+	                    aimAngle = targetAngle;
+	                    aimLength = targetLength;
+	                }
+	                else
+	                {
+	                    aimAngle = SmoothAngle(aimAngle, targetAngle, aimDirectionSmoothing);
+	                    aimLength = SmoothValue(aimLength, targetLength, aimPowerSmoothing);
+	                }
+
 	                ApplyAimLine();
 	                if (TaloketoInputManager.GetButtonDown("Throw")) Throw();
 	            }
@@ -155,6 +175,22 @@ namespace Games.Golfinity
 	    private void FixedUpdate()
 	    {
 	        if (inMud) body.linearVelocity *= 0.5f;
+	    }
+
+	    /// Frame-rate independent exponential smoothing, so the feel doesn't change with
+	    /// framerate the way a plain per-frame Lerp would. Sharpness <= 0 means no smoothing.
+	    private static float SmoothValue(float current, float target, float sharpness)
+	    {
+	        if (sharpness <= 0f) return target;
+	        return Mathf.Lerp(current, target, 1f - Mathf.Exp(-sharpness * Time.deltaTime));
+	    }
+
+	    /// As SmoothValue, but takes the short way round the circle - otherwise aiming across
+	    /// 0/360 would spin the aim line all the way back the long way.
+	    private static float SmoothAngle(float current, float target, float sharpness)
+	    {
+	        if (sharpness <= 0f) return target;
+	        return Mathf.LerpAngle(current, target, 1f - Mathf.Exp(-sharpness * Time.deltaTime));
 	    }
 
 	    /// Reshapes stick deflection (0-1) into shot power (0-1). Reuses the game's existing
