@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Collection.Controls;
 
 namespace Games.Golfinity
 {
@@ -22,6 +23,24 @@ namespace Games.Golfinity
 	    public LayerMask groundLayerMask;
 	    public LayerMask mudLayerMask;
 	    private bool inMud;
+	    private bool gamepadAiming;
+
+	    /// How stick deflection maps to shot power. Only affects the gamepad - the mouse's
+	    /// power comes from drag distance, which is already the player's own curve.
+	    /// The "In" curves start slow and accelerate, so small stick movements are gentle
+	    /// taps and the top of the range is where the big shots live; Expo is the extreme of
+	    /// that. Out is the opposite, and Custom takes the AnimationCurve below.
+	    public enum AimPowerCurve { Linear, SineIn, QuadIn, CubicIn, QuintIn, ExpoIn, QuadOut, ExpoOut, Custom }
+
+	    [Header("Gamepad aim")]
+	    public AimPowerCurve aimPowerCurve = AimPowerCurve.Linear;
+	    [Tooltip("Used when the curve is set to Custom. X is stick deflection 0-1, Y is power 0-1.")]
+	    public AnimationCurve aimPowerCustomCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
+
+	    [Tooltip("How quickly the aim direction chases the stick. Higher is snappier, lower drifts round more slowly. 0 turns smoothing off.")]
+	    public float aimDirectionSmoothing = 14f;
+	    [Tooltip("How quickly the shot power chases the stick. Lower makes the power wind up rather than jumping. 0 turns smoothing off.")]
+	    public float aimPowerSmoothing = 10f;
 
 	    void Awake ()
 	    {
@@ -50,7 +69,40 @@ namespace Games.Golfinity
 	        }
 	        if (canHit)
 	        {
-	            if (draggingMouse)
+	            // Gamepad aiming is analog and stateless - the stick's deflection IS the shot -
+	            // so while it's deflected it takes over rather than interleaving with the
+	            // press/drag/release state machine below.
+	            Vector2 aimStick = TaloketoInputManager.GetVector2("Aim");
+	            bool wasGamepadAiming = gamepadAiming;
+	            gamepadAiming = !Game.cameraMove && aimStick.sqrMagnitude > 0f;
+
+	            if (gamepadAiming)
+	            {
+	                draggingMouse = false;
+	                float deflection = Mathf.Min(1f, Geometry.lengthOfVector2(aimStick));
+	                float targetLength = ApplyAimPowerCurve(deflection) * AimMaxLength;
+	                float stickAngle = Geometry.angleOfVector2(aimStick);
+	                // Same convention as the mouse: with reverseShooting on, the stick is the
+	                // slingshot pull and the ball leaves in the opposite direction.
+	                float targetAngle = Game.reverseShooting ? stickAngle + 180f : stickAngle;
+
+	                if (!wasGamepadAiming)
+	                {
+	                    // First frame of a new aim: snap, so it doesn't swing in from wherever
+	                    // the previous shot happened to leave the aim pointing.
+	                    aimAngle = targetAngle;
+	                    aimLength = targetLength;
+	                }
+	                else
+	                {
+	                    aimAngle = SmoothAngle(aimAngle, targetAngle, aimDirectionSmoothing);
+	                    aimLength = SmoothValue(aimLength, targetLength, aimPowerSmoothing);
+	                }
+
+	                ApplyAimLine();
+	                if (TaloketoInputManager.GetButtonDown("Throw")) Throw();
+	            }
+	            else if (draggingMouse)
 	            {
 	                aimLength = Geometry.lengthOfVector3(MousePosition.get - mouseDragStartPos);
 	                if (aimLength < AimMinLength)
@@ -72,9 +124,7 @@ namespace Games.Golfinity
 	                    {
 	                        aimAngle = Geometry.angleOfVector3(MousePosition.get - mouseDragStartPos);
 	                    }
-	                    aimLine.localScale = new Vector3(aimLength, 1f, 1f);
-	                    aimLine.eulerAngles = aimAngle * Vector3.forward;
-	                    aimLine.position = transform.position + Geometry.createVector3(aimAngle, 1.2f) - Vector3.forward;
+	                    ApplyAimLine();
 	                }
 	            }
 	            else
@@ -83,7 +133,12 @@ namespace Games.Golfinity
 	                aimLine.localScale = Vector3.zero;
 	            }
 
-	            if (Game.cameraMove)
+	            if (gamepadAiming)
+	            {
+	                // Stick owns the shot this frame; skip the mouse state machine entirely so
+	                // a stale button state can't cancel the aim or fire a second throw.
+	            }
+	            else if (Game.cameraMove)
 	            {
 	                draggingMouse = false;
 	                aimLine.localScale = Vector3.zero;
@@ -98,22 +153,7 @@ namespace Games.Golfinity
 	                if (draggingMouse)
 	                {
 	                    draggingMouse = false;
-	                    if (aimLength >= AimMinLength)
-	                    {
-	                        Game.lastHitPos = transform.position;
-	                        body.AddForce(Geometry.createVector2(aimAngle, aimLength * 5000f));
-	                        if (!inMud) CreateTerrainParticle(false);
-	                        Game.noOfStrokes++;
-	                        Game.noOfStrokesSinceBeginningOfLevel++;
-	                        PlayerPrefs.SetInt("noOfStrokes", Game.noOfStrokes);
-	                        if (Game.soundOn)
-	                        {
-	                            audioSource.volume = 1.5f * aimLength / AimMaxLength;
-	                            audioSource.pitch = 0.8f + 0.3f * aimLength / AimMaxLength + Random.value * 0.1f;
-	                            audioSource.Play();
-	                        }
-	                        if (UIReferences.tutorial.gameObject.activeSelf && aimLength >= AimMinLength * 2f) UIReferences.tutorial.Hide();
-	                    }
+	                    Throw();
 	                }
 	            }
 	        }
@@ -135,6 +175,74 @@ namespace Games.Golfinity
 	    private void FixedUpdate()
 	    {
 	        if (inMud) body.linearVelocity *= 0.5f;
+	    }
+
+	    /// Frame-rate independent exponential smoothing, so the feel doesn't change with
+	    /// framerate the way a plain per-frame Lerp would. Sharpness <= 0 means no smoothing.
+	    private static float SmoothValue(float current, float target, float sharpness)
+	    {
+	        if (sharpness <= 0f) return target;
+	        return Mathf.Lerp(current, target, 1f - Mathf.Exp(-sharpness * Time.deltaTime));
+	    }
+
+	    /// As SmoothValue, but takes the short way round the circle - otherwise aiming across
+	    /// 0/360 would spin the aim line all the way back the long way.
+	    private static float SmoothAngle(float current, float target, float sharpness)
+	    {
+	        if (sharpness <= 0f) return target;
+	        return Mathf.LerpAngle(current, target, 1f - Mathf.Exp(-sharpness * Time.deltaTime));
+	    }
+
+	    /// Reshapes stick deflection (0-1) into shot power (0-1). Reuses the game's existing
+	    /// Penner easing set, normalised via (t, from 0, to 1, over 1).
+	    private float ApplyAimPowerCurve(float deflection)
+	    {
+	        float t = Mathf.Clamp01(deflection);
+	        switch (aimPowerCurve)
+	        {
+	            case AimPowerCurve.SineIn: return Easing.SineEaseIn(t, 0f, 1f, 1f);
+	            case AimPowerCurve.QuadIn: return Easing.QuadEaseIn(t, 0f, 1f, 1f);
+	            case AimPowerCurve.CubicIn: return Easing.CubicEaseIn(t, 0f, 1f, 1f);
+	            case AimPowerCurve.QuintIn: return Easing.QuintEaseIn(t, 0f, 1f, 1f);
+	            case AimPowerCurve.ExpoIn: return Easing.ExpoEaseIn(t, 0f, 1f, 1f);
+	            case AimPowerCurve.QuadOut: return Easing.QuadEaseOut(t, 0f, 1f, 1f);
+	            case AimPowerCurve.ExpoOut: return Easing.ExpoEaseOut(t, 0f, 1f, 1f);
+	            case AimPowerCurve.Custom: return aimPowerCustomCurve != null ? aimPowerCustomCurve.Evaluate(t) : t;
+	            default: return t;
+	        }
+	    }
+
+	    /// Draws the aim line for the current aimAngle/aimLength. Shared by the mouse drag and
+	    /// the gamepad stick so both render identically.
+	    private void ApplyAimLine()
+	    {
+	        aimLine.localScale = new Vector3(aimLength, 1f, 1f);
+	        aimLine.eulerAngles = aimAngle * Vector3.forward;
+	        aimLine.position = transform.position + Geometry.createVector3(aimAngle, 1.2f) - Vector3.forward;
+	    }
+
+	    /// Hits the ball along the current aim. Extracted from the mouse-release path so the
+	    /// gamepad Throw button fires exactly the same shot, sound and bookkeeping.
+	    private void Throw()
+	    {
+	        if (aimLength < AimMinLength) return;
+
+	        Game.lastHitPos = transform.position;
+	        body.AddForce(Geometry.createVector2(aimAngle, aimLength * 5000f));
+	        if (!inMud) CreateTerrainParticle(false);
+	        Game.noOfStrokes++;
+	        Game.noOfStrokesSinceBeginningOfLevel++;
+	        PlayerPrefs.SetInt("noOfStrokes", Game.noOfStrokes);
+	        if (Game.soundOn)
+	        {
+	            audioSource.volume = 1.5f * aimLength / AimMaxLength;
+	            audioSource.pitch = 0.8f + 0.3f * aimLength / AimMaxLength + Random.value * 0.1f;
+	            audioSource.Play();
+	        }
+	        if (UIReferences.tutorial.gameObject.activeSelf && aimLength >= AimMinLength * 2f) UIReferences.tutorial.Hide();
+
+	        aimLength = 0;
+	        aimLine.localScale = Vector3.zero;
 	    }
 
 	    public void ResetBall()

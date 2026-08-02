@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using Collection.Controls;
 
 namespace Games.Golfinity
 {
@@ -72,7 +73,7 @@ namespace Games.Golfinity
 
 	    void Update()
 	    {
-	        if (Input.GetKeyDown(KeyCode.R))
+	        if (TaloketoInputManager.GetButtonDown("Debug Reset"))
 	        {
 	            ResetLevel();
 	        }

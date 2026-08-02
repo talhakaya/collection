@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Collection.Controls;
 
 namespace Games.Golfinity
 {
@@ -110,13 +111,13 @@ namespace Games.Golfinity
 	            }
 	        }
 	#else
-	        if (Input.GetMouseButtonDown(0))
+	        if (TaloketoInputManager.GetMouseButtonDown(0))
 	        {
 	            inputTime = 0f;
 	        }
-	        if (Input.GetMouseButton(0))
+	        if (TaloketoInputManager.GetMouseButton(0))
 	        {
-	            var level = GetMapUiWithPointer(Input.mousePosition);
+	            var level = GetMapUiWithPointer(TaloketoInputManager.mousePosition);
 	            if (level != null)
 	            {
 	                level.OnOver(true);
@@ -124,23 +125,23 @@ namespace Games.Golfinity
 	            }
 	            else
 	            {
-	                if (mousePosOld != default) MoveMap(Input.mousePosition - mousePosOld);
+	                if (mousePosOld != default) MoveMap(TaloketoInputManager.mousePosition - mousePosOld);
 	            }
 	            inertia = 0f;
-	            mousePosOld = Input.mousePosition;
+	            mousePosOld = TaloketoInputManager.mousePosition;
 	        }
-	        if (Input.GetMouseButtonUp(0))
+	        if (TaloketoInputManager.GetMouseButtonUp(0))
 	        {
 	            if (inputTime <= 0.3f)
 	            {
-	                var level = GetMapUiWithPointer(Input.mousePosition);
+	                var level = GetMapUiWithPointer(TaloketoInputManager.mousePosition);
 	                if (level != null)
 	                {
 	                    level.OnClick();
 	                    level.uiUpdate = true;
 	                }
 	            }
-	            inertia = GetDragAmount(Input.mousePosition - mousePosOld);
+	            inertia = GetDragAmount(TaloketoInputManager.mousePosition - mousePosOld);
 	            mousePosOld = default;
 	        }
 	#endif
@@ -156,7 +157,65 @@ namespace Games.Golfinity
 	        }
 	    }
 
-	    private MapUi GetMapUiWithPointer(Vector2 pointerPosition)
+	    /// Which hole is currently centred. Lets gamepad navigation tell when a requested
+	    /// step has actually landed, without duplicating MoveMap's band-edge bookkeeping.
+	    public int HoleNo => holeNo;
+
+	    /// Scrolls the map by a world-space x delta, cancelling any inertia. Gamepad scrolling
+	    /// is fixed-speed by design, so it must not leave inertia behind for Update to apply.
+	    public void ScrollBy(float worldDelta)
+	    {
+	        inertia = 0f;
+	        MoveMap(worldDelta);
+	    }
+
+	    /// The level the map is currently centred on, for gamepad navigation.
+	    ///
+	    /// Deliberately compares x only. The pointer hit-test can't be reused here: the nodes
+	    /// follow a spline that swings roughly +-7 units vertically, so the centred node is
+	    /// usually well outside that test's +-4 y tolerance even when it's dead centre
+	    /// horizontally. Horizontal distance is what "centred" actually means on this map.
+	    public MapUi GetFocusedUi()
+	    {
+	        float centreX = Game.cam != null ? Game.cam.transform.position.x : 0f;
+	        MapUi best = null;
+	        float bestDist = float.MaxValue;
+
+	        foreach (var level in levelUis)
+	        {
+	            if (!level.interactable || !level.gameObject.activeInHierarchy) continue;
+	            float d = Mathf.Abs(level.transform.position.x - centreX);
+	            if (d < bestDist)
+	            {
+	                bestDist = d;
+	                best = level;
+	            }
+	        }
+
+	        if (lockUi.gameObject.activeInHierarchy && lockUi.interactable)
+	        {
+	            float d = Mathf.Abs(lockUi.transform.position.x - centreX);
+	            if (d < bestDist) best = lockUi;
+	        }
+
+	        return best;
+	    }
+
+	    /// The currently-instantiated node showing a given hole, or null if that hole is
+	    /// outside the recycled window of nodes. Gamepad navigation targets a hole *number*
+	    /// rather than a node, because Refresh reassigns which node shows which hole as the
+	    /// map scrolls.
+	    public MapLevelUi FindLevelUi(int holeNumber)
+	    {
+	        foreach (var level in levelUis)
+	        {
+	            if (level.gameObject.activeInHierarchy && level.holeNo == holeNumber) return level;
+	        }
+
+	        return null;
+	    }
+
+    private MapUi GetMapUiWithPointer(Vector2 pointerPosition)
 	    {
 	        Vector3 position = Game.cam.ScreenToWorldPoint(pointerPosition);
 	        List<MapUi> eligibles = new List<MapUi>();
