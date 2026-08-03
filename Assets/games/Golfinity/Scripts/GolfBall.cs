@@ -8,7 +8,8 @@ namespace Games.Golfinity
 	{
 	    public static GolfBall instance;
 	    private Rigidbody2D body;
-	    private const float MinSpeed = 30f;
+	    [Tooltip("The ball can only be re-aimed below this speed (world units/sec).")]
+	    public float minSpeedToHit = 30f;
 	    public bool draggingMouse;
 	    private Vector3 mouseDragStartPos;
 	    public Transform aimLine;
@@ -17,7 +18,6 @@ namespace Games.Golfinity
 	    public Vector3 startPos;
 	    private float aimLength;
 	    private float aimAngle;
-	    private Vector3 lastPos;
 	    private AudioSource audioSource;
 	    private Vector3 collisionPlace;
 	    public LayerMask groundLayerMask;
@@ -47,7 +47,6 @@ namespace Games.Golfinity
 	        instance = this;
 	        body = GetComponent<Rigidbody2D>();
 	        aimLine.localScale = Vector3.zero;
-	        lastPos = transform.position;
 	        audioSource = GetComponent<AudioSource>();
 	        collisionPlace = transform.position;
 		}
@@ -57,10 +56,14 @@ namespace Games.Golfinity
 	        if (UIReferences.cheatPopup.gameObject.activeSelf || UIReferences.levelScorePopup.gameObject.activeSelf || UIReferences.optionsPopup.gameObject.activeSelf || UIReferences.upgradePopup.gameObject.activeSelf)
 	        {
 	            draggingMouse = false;
-	            lastPos = transform.position;
 	            return;
 	        }
-	        bool canHit = Geometry.lengthOfVector3(lastPos - transform.position) < MinSpeed * Game.dt;
+	        // Was lastPos-vs-transform.position over the frame, i.e. an average velocity derived
+	        // from render-frame movement. Physics runs on its own fixed timestep, so on any Update
+	        // that lands between two physics steps the ball hadn't moved yet - reading 0 speed and
+	        // letting the ball be re-aimed mid-flight. body.linearVelocity is the true physics
+	        // velocity and isn't subject to that mismatch.
+	        bool canHit = body.linearVelocity.magnitude < minSpeedToHit;
 	        if (canHit)
 	        {
 	            var raycastHitGroundRight = Physics2D.Raycast(transform.position + new Vector3(-0.5f, -0.75f, 0f), Vector3.right, 1f, groundLayerMask);
@@ -169,7 +172,6 @@ namespace Games.Golfinity
 	            CreateTerrainParticle(true);
 	            inMud = inMudNew;
 	        }
-	        lastPos = transform.position;
 		}
 
 	    private void FixedUpdate()
