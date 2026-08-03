@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Collection.Controls;
 using TMPro;
 using UnityEngine;
 
@@ -42,9 +43,15 @@ namespace Games.Golfinity
 
 	    private void Update()
 	    {
-	        if (Game.input) inputTimer = 1f;
+	        // Held, not just pressed - Throw needs to keep speeding the reveal up for as long as
+	        // it's held, the same way the mouse does by staying down.
+	        if (Game.input || TaloketoInputManager.GetButton("Throw")) inputTimer = 1f;
 	        inputTimer = Mathf.Max(0f, inputTimer - Game.dt);
 	    }
+
+	    /// True once the buttons are actually up - i.e. the point where Throw stops speeding
+	    /// the reveal up and starts meaning "go to the next level".
+	    public bool ButtonsShown => buttonNext.gameObject.activeSelf;
 
 	    private float DtWithInput()
 	    {

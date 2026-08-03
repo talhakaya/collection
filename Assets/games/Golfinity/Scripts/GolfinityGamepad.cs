@@ -347,7 +347,14 @@ namespace Games.Golfinity
 			if (!UsesDirectShortcuts(popup)) return;
 
 			// Back is left to Game.Update, which owns the whole popup priority chain.
-			if (TaloketoInputManager.GetButtonDown("Throw")) UIReferences.levelScorePopup.OnClickNext();
+			//
+			// While the reveal is still animating, Throw only speeds it up (LevelScorePopup.Update
+			// reads it as held, same as Game.input) - it must not also advance to the next level,
+			// or holding it through the animation would skip straight past the score reveal.
+			if (TaloketoInputManager.GetButtonDown("Throw") && UIReferences.levelScorePopup.ButtonsShown)
+			{
+				UIReferences.levelScorePopup.OnClickNext();
+			}
 		}
 
 		private static void SelectFirstIn(GameObject popup)
