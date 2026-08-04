@@ -41,7 +41,7 @@ namespace Games.SpaceArtist
 	                    SceneManager.LoadScene("Assets/games/Space Artist/menu.unity");
 	                }
 	            }
-	            float a = rendererr.material.GetColor("_TintColor").a;
+	            float a = rendererr.material.GetColor("_BaseColor").a;
 	            if (a < minA)
 	            {
 	                a += Game.dt * 0.1f;
@@ -59,11 +59,11 @@ namespace Games.SpaceArtist
 	                    a = minA + aTimer;
 	                }
 	            }
-	            rendererr.material.SetColor("_TintColor", new Color(0.5f - lastTimer * 0.5f, 0.5f - lastTimer * 0.5f, 0.5f - lastTimer * 0.5f, a + lastTimer * 0.2f));
+	            rendererr.material.SetColor("_BaseColor", new Color(0.5f - lastTimer * 0.5f, 0.5f - lastTimer * 0.5f, 0.5f - lastTimer * 0.5f, a + lastTimer * 0.2f));
 	        }
 	        else
 	        {
-	            rendererr.material.SetColor("_TintColor", new Color(0.5f, 0.5f, 0.5f, 0f));
+	            rendererr.material.SetColor("_BaseColor", new Color(0.5f, 0.5f, 0.5f, 0f));
 	        }
 		}
 	}
