@@ -100,7 +100,7 @@ namespace Games.Golfinity
 	        Game.musicOn = (PlayerPrefs.GetInt("Game.musicOn", 1) == 1);
 	        Game.terrainEffectOn = (PlayerPrefs.GetInt("Game.terrainEffectOn", 1) == 1);
 	        Game.circleHoleEffectOn = (PlayerPrefs.GetInt("Game.circleHoleEffectOn", 1) == 1);
-	        Game.removedAds = (PlayerPrefs.GetInt("Game.removedAds", 0) == 1);
+	        Game.removedAds = true;
 	        switch (Application.systemLanguage)
 	        {
 	            case SystemLanguage.Turkish:

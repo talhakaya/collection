@@ -1802,7 +1802,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3009164188007483059, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3009164188007483060, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
       propertyPath: m_Pivot.x
@@ -1870,7 +1870,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3009164188007483060, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 171.96193
+      value: 175.90527
       objectReference: {fileID: 0}
     - target: {fileID: 3009164188007483060, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -3169,6 +3169,10 @@ PrefabInstance:
     - target: {fileID: 3009164188007483059, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
       propertyPath: m_Name
       value: buttonUpgrade
+      objectReference: {fileID: 0}
+    - target: {fileID: 3009164188007483059, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3009164188007483060, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
       propertyPath: m_Pivot.x
@@ -4854,7 +4858,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3009164188007483060, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 131.96193
+      value: 179.90527
       objectReference: {fileID: 0}
     - target: {fileID: 3009164188007483060, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -5377,7 +5381,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3009164188007483060, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 91.96193
+      value: 139.90527
       objectReference: {fileID: 0}
     - target: {fileID: 3009164188007483060, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -8931,7 +8935,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3009164188007483060, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -59.5
+      value: -37.5
       objectReference: {fileID: 0}
     - target: {fileID: 3009164188007483060, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -10183,6 +10187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0511c02f9079d5747bf6cfc3ecd85a6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minSpeedToHit: 30
   draggingMouse: 0
   aimLine: {fileID: 1059570509}
   startPos: {x: 0, y: 0, z: 0}
@@ -17836,6 +17841,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: buttonUpgrade
       objectReference: {fileID: 0}
+    - target: {fileID: 3009164188007483059, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3009164188007483060, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -17902,7 +17911,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3009164188007483060, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 215.96193
+      value: 219.90527
       objectReference: {fileID: 0}
     - target: {fileID: 3009164188007483060, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
       propertyPath: m_AnchoredPosition.y

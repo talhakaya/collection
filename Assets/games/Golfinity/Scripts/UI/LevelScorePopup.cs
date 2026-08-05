@@ -67,7 +67,7 @@ namespace Games.Golfinity
 	        buttonNext.gameObject.SetActive(false);
 	        buttonAd.gameObject.SetActive(false);
 	        buttonUpgrade.gameObject.SetActive(false);
-	        buttonAd.button.interactable = true;
+	        //buttonAd.button.interactable = true;
 	        StartCoroutine(Appear());
 	    }
 
@@ -216,7 +216,7 @@ namespace Games.Golfinity
 	    {
 	        if (Game.removedAds)
 	        {
-	            CoinIcon.Create(totalReward, buttonAd.rectTransform.position);
+	            CoinIcon.Create(totalReward, buttonNext.rectTransform.position);
 	        }
 	        Hide();
 
