@@ -23,7 +23,8 @@ namespace Collection.Controls
 			[Tooltip("For mouse-only games with no gamepad support of their own: left stick moves a virtual cursor and GlobalInputManager's MouseEmulate(Left/Right)Click actions stand in for mouse buttons.")]
 			public bool enableMouseEmulation;
 			[Tooltip("Screen pixels/sec the emulated cursor moves at full stick deflection.")]
-			public float mouseEmulationSpeed;
+			[ConditionalField(nameof(enableMouseEmulation))]
+			public float mouseEmulationSpeed = 1000f;
 
 #if UNITY_EDITOR
 			// Editor-only scene picker, synced into entryScenePath (below) by OnValidate.
