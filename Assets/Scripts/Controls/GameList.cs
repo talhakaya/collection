@@ -20,6 +20,11 @@ namespace Collection.Controls
 			[TextArea] public string description;
 			public Vector2 gravity;
 
+			[Tooltip("For mouse-only games with no gamepad support of their own: left stick moves a virtual cursor and GlobalInputManager's MouseEmulate(Left/Right)Click actions stand in for mouse buttons.")]
+			public bool enableMouseEmulation;
+			[Tooltip("Screen pixels/sec the emulated cursor moves at full stick deflection.")]
+			public float mouseEmulationSpeed;
+
 #if UNITY_EDITOR
 			// Editor-only scene picker, synced into entryScenePath (below) by OnValidate.
 			// SceneAsset lives in UnityEditor and can't be referenced from runtime code -
@@ -66,6 +71,11 @@ namespace Collection.Controls
 				if (string.IsNullOrEmpty(entry.gameName) && entry.gravity == Vector2.zero)
 				{
 					entry.gravity = new Vector2(0f, -9.81f);
+				}
+
+				if (string.IsNullOrEmpty(entry.gameName) && entry.mouseEmulationSpeed == 0f)
+				{
+					entry.mouseEmulationSpeed = 1000f;
 				}
 
 #if UNITY_EDITOR

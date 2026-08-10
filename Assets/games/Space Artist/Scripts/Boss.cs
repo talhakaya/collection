@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using Collection.Controls;
 
 namespace Games.SpaceArtist
 {
@@ -64,7 +65,7 @@ namespace Games.SpaceArtist
 	        }
 	        else if (state == State.Waiting)
 	        {
-	            if (Input.GetMouseButtonDown(0))
+	            if (TaloketoInputManager.GetMouseButtonDown(0))
 	            {
 	                state = State.Disabled;
 	                Game.level++;

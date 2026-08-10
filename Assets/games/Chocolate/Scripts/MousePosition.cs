@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Collection.Controls;
 
 namespace Games.Chocolate
 {
@@ -17,7 +18,7 @@ namespace Games.Chocolate
 
 		public static Vector3 get()
 		{
-			return Camera.main.ScreenToWorldPoint (Input.mousePosition) + Vector3.forward;
+			return Camera.main.ScreenToWorldPoint (TaloketoInputManager.mousePosition) + Vector3.forward;
 		}
 	}
 }

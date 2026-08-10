@@ -14,6 +14,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "MouseEmulateMove",
+                    "type": "Value",
+                    "id": "a1a5f001-71e3-4d7b-9c2a-0a0000000009",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "MouseEmulateLeftClick",
+                    "type": "Button",
+                    "id": "a1a5f001-71e3-4d7b-9c2a-0a000000000a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "MouseEmulateRightClick",
+                    "type": "Button",
+                    "id": "a1a5f001-71e3-4d7b-9c2a-0a000000000b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -82,6 +109,39 @@
                     "action": "ExitToMainMenu",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "a1a5f001-71e3-4d7b-9c2a-0a000000000c",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MouseEmulateMove",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a1a5f001-71e3-4d7b-9c2a-0a000000000d",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MouseEmulateLeftClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a1a5f001-71e3-4d7b-9c2a-0a000000000e",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MouseEmulateRightClick",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },

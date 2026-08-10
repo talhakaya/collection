@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Collection.Controls;
 
 namespace Games.Chocolate
 {
@@ -18,7 +19,7 @@ namespace Games.Chocolate
 		void Update ()
 		{
 			timeCounter += Time.deltaTime;
-			if (Input.GetMouseButtonDown(0))
+			if (TaloketoInputManager.GetMouseButtonDown(0))
 			{
 				timeCounter = 0f;
 				for (int i = 0; i < musicians.Length; i++)

@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using Collection.Controls;
 
 namespace Games.SpaceArtist
 {
@@ -15,7 +16,7 @@ namespace Games.SpaceArtist
 		void Update ()
 	    {
 	        Game.dt = Time.deltaTime;
-	        if (Input.GetMouseButtonDown(0))
+	        if (TaloketoInputManager.GetMouseButtonDown(0))
 	        {
 	            SceneManager.LoadScene("Assets/games/Space Artist/main.unity");
 	        }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Collection.Controls;
 
 namespace Games.SpaceArtist
 {
@@ -41,12 +42,12 @@ namespace Games.SpaceArtist
 			dt = Time.deltaTime;
 			time += dt;
 
-	        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-	        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+	        Vector3 mousePos = Camera.main.ScreenToWorldPoint(TaloketoInputManager.mousePosition);
+	        var ray = Camera.main.ScreenPointToRay(TaloketoInputManager.mousePosition);
 	        RaycastHit hit;
 	        if (PlaneManager.instance.open && Physics.Raycast(ray, out hit) && hit.transform.tag == "Plane")
 	        {
-	            input = Input.GetMouseButton(0);
+	            input = TaloketoInputManager.GetMouseButton(0);
 	            MousePosition.get = (Game.level == 26 ? PlayerScript.instance.transform.position : transform.position) + (Game.level == 26 ? 1.4f : 1f) * hit.transform.parent.InverseTransformPoint(mousePos) - hit.transform.localPosition;
 	            MousePosition.get.z = 0f;
 	            MousePosition.x = MousePosition.get.x;
@@ -68,7 +69,7 @@ namespace Games.SpaceArtist
 	        }
 	        else
 	        {
-	            MousePosition.get = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+	            MousePosition.get = Camera.main.ScreenToWorldPoint(TaloketoInputManager.mousePosition);
 	            MousePosition.get.z = 0f;
 	            MousePosition.x = MousePosition.get.x;
 	            MousePosition.y = MousePosition.get.y;
