@@ -7,13 +7,15 @@ namespace Collection.Controls
 {
 	/// <summary>
 	/// Always-on input that lives outside any single game's context: the gamepad
-	/// Start+Select / keyboard Shift+Escape shortcut back to the main menu, and mouse
-	/// emulation for mouse-only games with no gamepad support of their own. Bootstraps
-	/// itself before the first scene loads, so no manual placement is needed.
+	/// Start+Select / keyboard Shift+Escape shortcut back to the main menu, hiding the real
+	/// mouse cursor while a gamepad is the active input device (everywhere - menus included,
+	/// not just games), and mouse emulation for mouse-only games with no gamepad support of
+	/// their own. Bootstraps itself before the first scene loads, so no manual placement is
+	/// needed.
 	///
-	/// Mouse emulation lives here rather than in TaloketoInputManager because it needs an
-	/// Update loop and a persistent on-screen cursor - the same always-on, scene-independent
-	/// shape as the exit shortcut, and it reads from this same Global map. TaloketoInputManager
+	/// This lives here rather than in TaloketoInputManager because it needs an Update loop and
+	/// a persistent on-screen cursor - the same always-on, scene-independent shape as the exit
+	/// shortcut, and mouse emulation reads from this same Global map. TaloketoInputManager
 	/// stays the single per-game Input-API surface: its mouse methods read the emulated state
 	/// from here when active, so migrated call sites don't need to know which kind of pointer
 	/// they're getting.
@@ -38,6 +40,7 @@ namespace Collection.Controls
 		private string currentGameName;
 		private bool mouseEmulationEnabled;
 		private float mouseEmulationSpeed;
+		private bool hideCursorWhenUsingGamepad = true;
 
 		// The game may show/hide the real cursor itself (a cutscene, a crosshair-driven
 		// screen, ...) and we want to respect that rather than always forcing ours over it.
@@ -47,10 +50,9 @@ namespace Collection.Controls
 		private bool gameWantsCursorVisible = true;
 		private bool lastAppliedCursorVisible = true;
 
-		// A game opting into emulation doesn't mean a gamepad is what's driving the pointer
-		// right now - the player might just be using the real mouse. Tracked separately so
-		// picking the mouse back up hands control back immediately instead of the emulated
-		// cursor fighting it.
+		// A gamepad being connected doesn't mean it's what's driving the pointer right now -
+		// the player might just be using the real mouse. Tracked so picking the mouse back up
+		// hands control back immediately instead of the emulated cursor fighting it.
 		private bool usingGamepadForMouse;
 		private bool emulationActiveLastFrame;
 
@@ -93,6 +95,7 @@ namespace Collection.Controls
 			mouseRightClickAction?.Enable();
 
 			gameList = Resources.Load<GameList>(GameListResourcePath);
+			hideCursorWhenUsingGamepad = gameList == null || gameList.hideCursorWhenUsingGamepad;
 			CreateCursor();
 
 			SceneManager.sceneLoaded += (scene, mode) => ApplyMouseEmulation(GameContext.FromScenePath(scene.path));
@@ -138,21 +141,21 @@ namespace Collection.Controls
 
 			// New scene: nothing's told us yet whether the player's holding a pad or the mouse
 			// for it, so default to the real mouse until the pad actually moves - Update()'s
-			// UpdateActiveMouseDevice takes over every frame from here.
+			// UpdateActiveDevice takes over every frame from here.
 			usingGamepadForMouse = false;
 			emulationActiveLastFrame = false;
 			MouseEmulationActive = false;
+			// Fresh scene, fresh assumption: start as if it wants a visible cursor (Unity's own
+			// default) until its own Cursor.visible writes say otherwise.
+			gameWantsCursorVisible = true;
 
 			if (mouseEmulationEnabled)
 			{
 				EmulatedMousePosition = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
-				// Fresh game, fresh assumption: start as if it wants a visible cursor (Unity's
-				// own default) until its own Cursor.visible writes say otherwise.
-				gameWantsCursorVisible = true;
 			}
 
-			// Whatever the previous game left it as, a fresh scene starts with a normal real
-			// cursor; Update() hides it again the moment gamepad emulation actually kicks in.
+			// Whatever the previous scene left it as, a fresh scene starts with a normal real
+			// cursor; Update() hides it again the moment a gamepad actually takes over.
 			UnityEngine.Cursor.visible = true;
 			lastAppliedCursorVisible = true;
 
@@ -164,58 +167,58 @@ namespace Collection.Controls
 
 		private void Update()
 		{
-			if (!mouseEmulationEnabled)
-			{
-				return;
-			}
+			// Runs in every scene, not just ones with mouse emulation opted in - hiding the
+			// real cursor while a gamepad drives is a global behaviour (menus included); the
+			// stick-moves-a-virtual-cursor part below is the only bit still per-game.
+			UpdateActiveDevice();
 
-			UpdateActiveMouseDevice();
+			bool suppressRealCursor = hideCursorWhenUsingGamepad && usingGamepadForMouse;
 
-			if (!usingGamepadForMouse)
-			{
-				if (emulationActiveLastFrame)
-				{
-					// Player picked the real mouse back up - hand control back immediately
-					// rather than leaving the cursor hidden at its last emulated position. Warp
-					// the real cursor to where the emulated one was so it doesn't jump: this only
-					// fires on the single frame the switch happens, so it doesn't fight whatever
-					// mouse movement triggered the switch in the first place.
-					if (Mouse.current != null)
-					{
-						Mouse.current.WarpCursorPosition(EmulatedMousePosition);
-					}
-
-					UnityEngine.Cursor.visible = true;
-					lastAppliedCursorVisible = true;
-					if (cursorImage != null) cursorImage.enabled = false;
-				}
-
-				// Keep tracking the real mouse even while it isn't the active device, so that
-				// whenever the pad takes back over it picks up from wherever the mouse actually
-				// left the pointer instead of jumping back to a stale emulated position.
-				if (Mouse.current != null)
-				{
-					EmulatedMousePosition = Mouse.current.position.ReadValue();
-				}
-
-				MouseEmulationActive = false;
-				emulationActiveLastFrame = false;
-				return;
-			}
-
-			MouseEmulationActive = true;
-			emulationActiveLastFrame = true;
-
+			// The game/scene may show or hide the real cursor itself (a cutscene, a
+			// crosshair-driven screen, ...) and that should be respected rather than always
+			// forcing our own idea of visibility over it. We also write to Cursor.visible
+			// ourselves though, so a bare read can't tell "it changed its mind" apart from
+			// "that's just what we set last frame" - comparing against what we last wrote
+			// resolves that.
 			if (UnityEngine.Cursor.visible != lastAppliedCursorVisible)
 			{
 				gameWantsCursorVisible = UnityEngine.Cursor.visible;
 			}
 
-			// The real cursor stays hidden the whole time emulation is driving input - whether
-			// or not we're showing ours in its place is the only thing that varies, based on
-			// whether the game currently wants a cursor visible at all.
-			UnityEngine.Cursor.visible = false;
-			lastAppliedCursorVisible = false;
+			UnityEngine.Cursor.visible = gameWantsCursorVisible && !suppressRealCursor;
+			lastAppliedCursorVisible = UnityEngine.Cursor.visible;
+
+			// Moving a virtual cursor with the stick only makes sense for games that opted in,
+			// and only while we're actually suppressing the real one for a gamepad - if the
+			// debug toggle is forcing the real cursor to stay on, emulation stands down too.
+			bool emulating = mouseEmulationEnabled && suppressRealCursor;
+			MouseEmulationActive = emulating;
+
+			if (!emulating)
+			{
+				if (cursorImage != null) cursorImage.enabled = false;
+
+				if (emulationActiveLastFrame && Mouse.current != null)
+				{
+					// Player picked the real mouse back up - warp it to where the emulated
+					// cursor was so it doesn't jump. Only fires on the single frame the switch
+					// happens, so it doesn't fight whatever mouse movement triggered the switch.
+					Mouse.current.WarpCursorPosition(EmulatedMousePosition);
+				}
+				emulationActiveLastFrame = false;
+
+				// Keep tracking the real mouse even while it isn't the active device, so
+				// whenever the pad takes emulation back over it picks up from wherever the
+				// mouse actually left the pointer instead of jumping to a stale position.
+				if (mouseEmulationEnabled && Mouse.current != null)
+				{
+					EmulatedMousePosition = Mouse.current.position.ReadValue();
+				}
+
+				return;
+			}
+
+			emulationActiveLastFrame = true;
 
 			if (cursorImage != null)
 			{
@@ -238,7 +241,7 @@ namespace Collection.Controls
 		/// whether one happens to be connected. Compares each device's own InputSystem
 		/// timestamp for its last actual input event, so whichever was touched most recently
 		/// wins - same idea as GolfinityGamepad's shortcut-prompt visibility.
-		private void UpdateActiveMouseDevice()
+		private void UpdateActiveDevice()
 		{
 			Gamepad pad = Gamepad.current;
 			if (pad == null)

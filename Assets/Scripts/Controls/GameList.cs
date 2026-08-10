@@ -43,6 +43,10 @@ namespace Collection.Controls
 			[HideInInspector] public string entryScenePath;
 		}
 
+		[Header("Global cursor behavior")]
+		[Tooltip("Hide the real mouse cursor whenever a gamepad is the active input device, across every game/menu - not just ones with mouse emulation enabled. Turn off to always show the real cursor, e.g. for debugging.")]
+		public bool hideCursorWhenUsingGamepad = true;
+
 		public Entry[] entries = Array.Empty<Entry>();
 
 		public bool TryGetEntry(string gameName, out Entry entry)
