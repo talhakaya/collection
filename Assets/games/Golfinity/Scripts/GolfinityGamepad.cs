@@ -77,6 +77,7 @@ namespace Games.Golfinity
 		}
 
 		private int lastPadId;
+		private bool usingGamepad;
 
 		private readonly List<ShortcutLabel> shortcutLabels = new List<ShortcutLabel>();
 
@@ -158,19 +159,40 @@ namespace Games.Golfinity
 			});
 		}
 
-		/// Refreshes the labels: hidden with no pad connected, and re-read from the binding so
-		/// a rebind shows up. Only writes when the string actually changes - assigning
-		/// TMP.text every frame forces a mesh rebuild.
+		/// A gamepad being connected doesn't mean it's the thing driving the game right now - it
+		/// might just be sitting there while the player uses mouse/keyboard, and the prompts
+		/// would be lying. Compares each device's own InputSystem timestamp for its last actual
+		/// input event, so whichever was touched most recently wins.
+		private void UpdateActiveDevice()
+		{
+			Gamepad pad = Gamepad.current;
+			if (pad == null)
+			{
+				usingGamepad = false;
+				return;
+			}
+
+			double pointerTime = 0.0;
+			if (Mouse.current != null) pointerTime = System.Math.Max(pointerTime, Mouse.current.lastUpdateTime);
+			if (Keyboard.current != null) pointerTime = System.Math.Max(pointerTime, Keyboard.current.lastUpdateTime);
+
+			if (pad.lastUpdateTime > pointerTime) usingGamepad = true;
+			else if (pointerTime > pad.lastUpdateTime) usingGamepad = false;
+			// Equal (neither touched yet this session) - keep whatever it already was.
+		}
+
+		/// Refreshes the labels: hidden unless the player is actively driving with a pad right
+		/// now, and re-read from the binding so a rebind shows up. Only writes when the string
+		/// actually changes - assigning TMP.text every frame forces a mesh rebuild.
 		private void UpdateShortcutLabels()
 		{
 			if (shortcutLabels.Count == 0) return;
 
 			Gamepad pad = Gamepad.current;
-			bool hasPad = pad != null;
 
 			// Resolving a binding to its display string allocates, so it's done only when the
 			// pad actually changes rather than every frame for every label.
-			int padId = hasPad ? pad.deviceId : 0;
+			int padId = pad != null ? pad.deviceId : 0;
 			bool bindingsMayHaveChanged = padId != lastPadId;
 			lastPadId = padId;
 
@@ -183,7 +205,7 @@ namespace Games.Golfinity
 				// button's visibility itself - buttonMap only exists during Play. The top bar
 				// also stays active behind an open popup, but its shortcuts don't fire then,
 				// so advertising them would be a lie.
-				bool visible = hasPad
+				bool visible = usingGamepad
 					&& label.button.gameObject.activeInHierarchy
 					&& !(label.hideWhenPopupOpen && activePopup != null);
 				if (label.text.enabled != visible) label.text.enabled = visible;
@@ -268,6 +290,7 @@ namespace Games.Golfinity
 			// reordering siblings dirties the canvas and forces a full UGUI rebuild, so this
 			// must not run every frame - only when the layering could actually have changed.
 
+			UpdateActiveDevice();
 			UpdateShortcutLabels();
 
 			GameObject popup = GetActivePopup();
@@ -399,7 +422,13 @@ namespace Games.Golfinity
 		{
 			if (Game.instance == null) return;
 			if (TaloketoInputManager.GetButtonDown("Settings")) Game.instance.OnClickOptions();
-			else if (TaloketoInputManager.GetButtonDown("Upgrade")) Game.instance.OnClickUpgrade();
+			// buttonUpgrade is hidden now that ads/upgrades are gone - mirror that here too,
+			// same as the shortcut label already does, so Y doesn't open a popup for a button
+			// that's no longer on screen.
+			else if (TaloketoInputManager.GetButtonDown("Upgrade") && Game.instance.buttonUpgrade.gameObject.activeInHierarchy)
+			{
+				Game.instance.OnClickUpgrade();
+			}
 		}
 
 		private void UpdateMap()
