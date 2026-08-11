@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Collection.Controls;
 
 namespace Games.Chocolate
 {
@@ -26,7 +27,7 @@ namespace Games.Chocolate
 				if (onDoor)
 				{
 					spriteRenderer.sprite = up;
-					if (Input.GetMouseButton(0) && door != null && door.ready)
+					if (TaloketoInputManager.GetMouseButton(0) && door != null && door.ready)
 					{
 						Game.done = true;
 					}
@@ -45,7 +46,7 @@ namespace Games.Chocolate
 
 				if (Girl.instance.position.x < transform.position.x)
 				{
-					if (Input.GetMouseButton(0))
+					if (TaloketoInputManager.GetMouseButton(0))
 					{
 						Girl.instance.position += Vector3.right * Girl.speed * Time.deltaTime;
 						Girl.script.walking = true;
@@ -58,7 +59,7 @@ namespace Games.Chocolate
 				}
 				else
 				{
-					if (Input.GetMouseButton(0))
+					if (TaloketoInputManager.GetMouseButton(0))
 					{
 						Girl.instance.position -= Vector3.right * Girl.speed * Time.deltaTime;
 						Girl.script.walking = true;

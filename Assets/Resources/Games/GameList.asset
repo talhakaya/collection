@@ -12,29 +12,40 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1b3bc256478f7c49b7917807716bbc0, type: 3}
   m_Name: GameList
   m_EditorClassIdentifier: 
+  hideCursorWhenUsingGamepad: 1
   entries:
   - gameName: Golfinity
     description: 
     gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 1000
     entryScene: {fileID: 102900000, guid: 14105f93900b63744a7545c1a5d435bb, type: 3}
     entryScenePath: Assets/games/Golfinity/Scenes/main.unity
   - gameName: Chocolate
     description: 
     gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 1
+    mouseEmulationSpeed: 1000
     entryScene: {fileID: 102900000, guid: 8f872d0d88cbd1748a0c6147230de4db, type: 3}
     entryScenePath: Assets/games/Chocolate/scene0.unity
   - gameName: Nykrig
     description: 
     gravity: {x: 0, y: 0}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 0
     entryScene: {fileID: 102900000, guid: 6fe503a84be7b664381fff86a1524a2c, type: 3}
     entryScenePath: Assets/games/Nykrig/main.unity
   - gameName: Space Artist
     description: 
     gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 1
+    mouseEmulationSpeed: 1000
     entryScene: {fileID: 102900000, guid: a39fe25f1e4fb424f8625ed9bbc73f93, type: 3}
     entryScenePath: Assets/games/Space Artist/menu.unity
   - gameName: Abused
     description: 
     gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 0
     entryScene: {fileID: 102900000, guid: e0eefedd350e54ec5997f21ac87db47a, type: 3}
     entryScenePath: Assets/games/Abused/main.unity

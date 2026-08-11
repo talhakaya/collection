@@ -113,11 +113,21 @@ namespace Collection.Controls
 		// view focus (legacy Input polls the OS regardless). So in the Editor these read
 		// zero while the Game view is unfocused - that's the New Input System working as
 		// intended, and matches how a built player behaves when it loses focus.
+		//
+		// GlobalInputManager can emulate the mouse with a gamepad for games opted in via
+		// GameList (see its "Mouse emulation" section) - when it's active for the current
+		// game, these read from it instead of the real device, so call sites don't need to
+		// know or care whether the pointer is real or emulated.
 
 		public static Vector3 mousePosition
 		{
 			get
 			{
+				if (GlobalInputManager.MouseEmulationActive)
+				{
+					return GlobalInputManager.EmulatedMousePosition;
+				}
+
 				Mouse mouse = Mouse.current;
 				return mouse == null ? Vector3.zero : (Vector3)mouse.position.ReadValue();
 			}
@@ -125,18 +135,33 @@ namespace Collection.Controls
 
 		public static bool GetMouseButton(int button)
 		{
+			if (GlobalInputManager.MouseEmulationActive)
+			{
+				return GlobalInputManager.GetMouseButton(button);
+			}
+
 			ButtonControl control = MouseButton(button);
 			return control != null && control.isPressed;
 		}
 
 		public static bool GetMouseButtonDown(int button)
 		{
+			if (GlobalInputManager.MouseEmulationActive)
+			{
+				return GlobalInputManager.GetMouseButtonDown(button);
+			}
+
 			ButtonControl control = MouseButton(button);
 			return control != null && control.wasPressedThisFrame;
 		}
 
 		public static bool GetMouseButtonUp(int button)
 		{
+			if (GlobalInputManager.MouseEmulationActive)
+			{
+				return GlobalInputManager.GetMouseButtonUp(button);
+			}
+
 			ButtonControl control = MouseButton(button);
 			return control != null && control.wasReleasedThisFrame;
 		}
