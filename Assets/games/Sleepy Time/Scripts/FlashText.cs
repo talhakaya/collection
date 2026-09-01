@@ -16,8 +16,12 @@ namespace Games.SleepyTime
 	/// </summary>
 	public class FlashText : FlashObject
 	{
-		/// The font asset TextTalha's TextFormat asked for, converted from fonts/.
-		public const string FontResourcePath = "SleepyTime/Fonts/Victor's Pixel Font SDF";
+		/// <summary>
+		/// The font TextTalha's TextFormat asks for, converted from fonts/. Raster rather
+		/// than SDF - it is a pixel font drawn at 30 px on an 800x450 stage, and an SDF atlas
+		/// would round its corners off. Sampled at 30 so one texel is one stage pixel.
+		/// </summary>
+		public const string FontResourcePath = "SleepyTime/Fonts/Victor's Pixel Font";
 
 		private const float TextScale = 0.1f;
 		private const float UnitsPerPixel = 1f / (TextScale * PixelsPerUnit);
@@ -45,6 +49,10 @@ namespace Games.SleepyTime
 			text.tmp = field.AddComponent<TextMeshPro>();
 			text.tmp.alignment = TextAlignmentOptions.TopLeft;
 			text.tmp.fontSize = 16f;
+			// Flash TextFields default to multiline false / wordWrap false, and every one in
+			// this game is left at that: a wide box holding a single centred line.
+			text.tmp.textWrappingMode = TextWrappingModes.NoWrap;
+			text.tmp.overflowMode = TextOverflowModes.Overflow;
 
 			TMP_FontAsset fontAsset = ResolveFont();
 			if (fontAsset != null)
