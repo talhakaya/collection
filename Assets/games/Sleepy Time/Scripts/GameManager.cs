@@ -120,6 +120,7 @@ namespace Games.SleepyTime
 			SceneManager.ResetStatics();
 			Button.reset();
 			Actuate.reset();
+			SleepyGamepad.reset();
 
 			GameManager gameManager = NewNode("GameManager").AddComponent<GameManager>();
 
@@ -293,6 +294,10 @@ namespace Games.SleepyTime
 			{
 				buttonPressHandler(pauseButton);
 			}
+
+			// After buttonHandler, so the mouse keeps first claim on a button they both point
+			// at, and before the screens, so a confirm this frame is acted on immediately.
+			SleepyGamepad.update(this);
 
 			if (sceneManager != null)
 			{
