@@ -65,6 +65,11 @@ namespace Games.SleepyTime
 		private AudioSource[] sfxVoices;
 		private int nextSfxVoice;
 
+		// Set while the channel is paused in place rather than stopped, so _playMusic knows it
+		// can UnPause instead of seeking. Cleared by anything that asks for a specific
+		// position, since that has to be a real seek.
+		private bool pausedInPlace;
+
 		// Only the six songs drive GameManager.time. The menu tracks must not: they don't loop,
 		// so a finished menu track would freeze the clock and with it every animation on screen.
 		private bool syncsGameTime;
@@ -191,6 +196,7 @@ namespace Games.SleepyTime
 		{
 			_pauseMusic();
 			this.position = position;
+			pausedInPlace = false;
 		}
 
 		public void _playSound(string rate, bool main, float panning = 0f)
@@ -217,21 +223,47 @@ namespace Games.SleepyTime
 			}
 
 			playing = true;
-			channelMusic.clip = currentMusic;
-			// position is milliseconds (_pauseMusic stores GameManager.time in it);
-			// AudioSource.time is seconds, and seeking past the end throws.
-			channelMusic.time = Mathf.Clamp((float)(position / 1000.0), 0f, Mathf.Max(0f, currentMusic.length - 0.01f));
-			channelMusic.Play();
+
+			if (pausedInPlace && channelMusic.clip == currentMusic)
+			{
+				// Resume exactly where it stopped. See _pauseMusic.
+				pausedInPlace = false;
+				channelMusic.UnPause();
+			}
+			else
+			{
+				pausedInPlace = false;
+				channelMusic.clip = currentMusic;
+				// position is milliseconds (_pauseMusic stores GameManager.time in it);
+				// AudioSource.time is seconds, and seeking past the end throws.
+				channelMusic.time = Mathf.Clamp((float)(position / 1000.0), 0f, Mathf.Max(0f, currentMusic.length - 0.01f));
+				channelMusic.Play();
+			}
+
 			syncPrimed = false;
 		}
 
+		/// <summary>
+		/// Pauses in place rather than stopping.
+		///
+		/// The original stopped the channel and had _playMusic seek back to `position`, which
+		/// is GameManager.time - a value computed at the top of the frame, and so up to a
+		/// frame behind where the audio actually is. On top of that the sound card has
+		/// already played whatever was in the DSP buffer. Together those mean every
+		/// pause/resume rewinds the song by a few tens of milliseconds and replays a sliver
+		/// of it; do it repeatedly and the song walks backwards against the chart.
+		///
+		/// UnPause resumes at the exact sample, so the cycle costs nothing. position is still
+		/// written, because skipToMusic and changeMusic seek with it.
+		/// </summary>
 		public void _pauseMusic()
 		{
 			if (playing && channelMusic != null)
 			{
 				playing = false;
 				position = GameManager.time;
-				channelMusic.Stop();
+				channelMusic.Pause();
+				pausedInPlace = true;
 			}
 		}
 
@@ -306,6 +338,7 @@ namespace Games.SleepyTime
 			}
 
 			position = 0.0;
+			pausedInPlace = false;
 			GameManager.time = 0;
 			syncPrimed = false;
 		}
