@@ -30,6 +30,9 @@ namespace Games.SleepyTime
 		[Tooltip("Framed to the 800x450 stage on Awake. Leave empty to use Camera.main.")]
 		public Camera stageCamera;
 
+		private int letterboxedWidth;
+		private int letterboxedHeight;
+
 		private void Awake()
 		{
 			Instance = this;
@@ -58,7 +61,36 @@ namespace Games.SleepyTime
 			{
 				stageCamera.orthographic = true;
 				stageCamera.orthographicSize = Main.stageHeight / 2f / FlashObject.PixelsPerUnit;
+				ApplyLetterbox();
 			}
+		}
+
+		/// <summary>
+		/// Fits the 800x450 stage to the window without distorting it, adding bars on
+		/// whichever pair of edges has the slack.
+		///
+		/// An orthographic camera fixes only the vertical extent and lets the horizontal
+		/// follow the window, so without this a narrow window silently crops the sides of
+		/// the stage and a wide one reveals empty space beside it. Squeezing the viewport to
+		/// the stage's own aspect is what makes 800x450 mean 800x450 at any window size.
+		///
+		/// The original had no answer here - Flash was NO_SCALE, TOP_LEFT, and
+		/// enterFrameHandler computed a scale factor from the live stage size and then threw
+		/// it away by setting both axes back to 1. It only ever looked right because the web
+		/// embed was exactly 800x450.
+		/// </summary>
+		private void ApplyLetterbox()
+		{
+			float stageAspect = (float)Main.stageWidth / Main.stageHeight;
+			float windowAspect = (float)Screen.width / Screen.height;
+			float scale = windowAspect / stageAspect;
+
+			stageCamera.rect = scale < 1f
+				? new Rect(0f, (1f - scale) / 2f, 1f, scale)
+				: new Rect((1f - 1f / scale) / 2f, 0f, 1f / scale, 1f);
+
+			letterboxedWidth = Screen.width;
+			letterboxedHeight = Screen.height;
 		}
 
 		/// Main.init(): the stage exists, so make the game and add it. Deferred to Start so
@@ -78,6 +110,11 @@ namespace Games.SleepyTime
 
 		private void LateUpdate()
 		{
+			if (stageCamera != null && (Screen.width != letterboxedWidth || Screen.height != letterboxedHeight))
+			{
+				ApplyLetterbox();
+			}
+
 			int sortingOrder = 0;
 			Composite(Root.transform, 1f, ref sortingOrder);
 		}
