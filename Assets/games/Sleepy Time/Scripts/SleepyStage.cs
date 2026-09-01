@@ -30,6 +30,11 @@ namespace Games.SleepyTime
 		[Tooltip("Framed to the 800x450 stage on Awake. Leave empty to use Camera.main.")]
 		public Camera stageCamera;
 
+		[Tooltip("Milliseconds the song clock is pulled back so it tracks what you HEAR rather " +
+			"than what has been handed to the mixer. Raise it if notes still arrive before their " +
+			"beat and you find yourself pressing late. Negative means auto: the mixer's own buffer.")]
+		public float audioOffsetMs = -1f;
+
 		private int letterboxedWidth;
 		private int letterboxedHeight;
 
@@ -38,6 +43,11 @@ namespace Games.SleepyTime
 			Instance = this;
 
 			SleepyAssets.Preload();
+
+			// Applied before GameManager builds SoundManager, which is what reads it.
+			SoundManager.audioOffsetMs = audioOffsetMs < 0f
+				? SoundManager.AutoOutputLatencyMs()
+				: audioOffsetMs;
 
 			// The corner offset lives here rather than on the root, because the root is a
 			// FlashObject and a FlashObject owns its transform: its Awake applies its own
@@ -108,8 +118,15 @@ namespace Games.SleepyTime
 			}
 		}
 
+		/// Live-tunable while playing: drag the offset in the Inspector and it takes effect on
+		/// the next frame, so it can be dialled in by ear against the music.
 		private void LateUpdate()
 		{
+			if (audioOffsetMs >= 0f && !Mathf.Approximately(audioOffsetMs, SoundManager.audioOffsetMs))
+			{
+				SoundManager.audioOffsetMs = audioOffsetMs;
+			}
+
 			if (stageCamera != null && (Screen.width != letterboxedWidth || Screen.height != letterboxedHeight))
 			{
 				ApplyLetterbox();

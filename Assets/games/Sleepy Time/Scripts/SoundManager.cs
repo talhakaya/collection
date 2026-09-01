@@ -39,6 +39,20 @@ namespace Games.SleepyTime
 		public static SoundTransform soundTransformMain;
 		public static SoundTransform soundTransformReplay;
 
+		/// <summary>
+		/// How far the song clock is pulled back from the reported audio position, in
+		/// milliseconds, so that it tracks what the player actually *hears*.
+		///
+		/// AudioSource.timeSamples reports the position handed to the mixer, not the position
+		/// coming out of the speakers - those differ by the output latency. Without this the
+		/// whole game runs that far ahead of the music: notes reach the crosshair before their
+		/// beat is audible, and the player compensates by pressing late.
+		///
+		/// Defaults to the mixer's own buffer, which is the part Unity will tell us about. A
+		/// driver or headset can add more, so SleepyStage exposes it for tuning by ear.
+		/// </summary>
+		public static float audioOffsetMs = float.NaN;
+
 		public static float MinSoundRhythmRatio = 0.25f;
 		public static string currentRate = "";
 		public static bool currentExplosion = false;
@@ -101,6 +115,11 @@ namespace Games.SleepyTime
 			rate_sad = SleepyAssets.GetSound("snd/rate sad.wav");
 			explosion = SleepyAssets.GetSound("snd/explosion.wav");
 
+			if (float.IsNaN(audioOffsetMs))
+			{
+				audioOffsetMs = AutoOutputLatencyMs();
+			}
+
 			soundTransformMain = new SoundTransform(0.05f, 0f);
 			soundTransformReplay = new SoundTransform(0.02f, 0f);
 
@@ -157,9 +176,17 @@ namespace Games.SleepyTime
 			return instance._tryGetSyncedTime(out ms);
 		}
 
+		/// <summary>
+		/// The quarter-beat grid deliberately runs on the *submission* clock, not the audible
+		/// one: a sound flushed here is only heard audioOffsetMs later, so scheduling it against
+		/// GameManager.time - which is now the audible position - would land every hit sound a
+		/// full output latency behind the beat it belongs to. Adding the offset back puts them
+		/// on the beat as heard.
+		/// </summary>
 		public void _update()
 		{
-			soundRhythmCount = GameManager.time % (GameManager.rhythm * 0.25f);
+			float submittedTime = GameManager.time + audioOffsetMs;
+			soundRhythmCount = submittedTime % (GameManager.rhythm * 0.25f);
 			if (soundRhythmCount < GameManager.rhythm * 0.25f / 2f && soundRhythmCountOld > GameManager.rhythm * 0.25f / 2f)
 			{
 				if (soundQueue.Count > 0)
@@ -352,7 +379,7 @@ namespace Games.SleepyTime
 				return false;
 			}
 
-			double raw = channelMusic.timeSamples / (double)channelMusic.clip.frequency * 1000.0;
+			double raw = channelMusic.timeSamples / (double)channelMusic.clip.frequency * 1000.0 - audioOffsetMs;
 			if (!syncPrimed)
 			{
 				syncPrimed = true;
@@ -373,6 +400,13 @@ namespace Games.SleepyTime
 
 			ms = (int)syncedMs;
 			return true;
+		}
+
+		/// The mixer's buffer, in milliseconds - the part of the output latency Unity reports.
+		public static float AutoOutputLatencyMs()
+		{
+			AudioConfiguration config = AudioSettings.GetConfiguration();
+			return config.sampleRate > 0 ? 1000f * config.dspBufferSize / config.sampleRate : 0f;
 		}
 
 		private void CreateChannels()
