@@ -295,6 +295,15 @@ namespace Games.SleepyTime
 				buttonPressHandler(pauseButton);
 			}
 
+			// The Menu button is never gamepad-selectable - putting it in reach of the stick
+			// would give gameplay screens a selectable button again, and with it the South
+			// ambiguity the whole selection rule exists to avoid. East reaches it directly
+			// instead, so a pad can get back to the song select without a mouse.
+			if (menuButton != null && TaloketoInputManager.GetButtonDown("Menu"))
+			{
+				buttonPressHandler(menuButton);
+			}
+
 			// After buttonHandler, so the mouse keeps first claim on a button they both point
 			// at, and before the screens, so a confirm this frame is acted on immediately.
 			SleepyGamepad.update(this);
@@ -422,6 +431,37 @@ namespace Games.SleepyTime
 					SoundManager.pauseMusic();
 				}
 			}
+			else if (button.text == "Menu")
+			{
+				// Deliberately outside the !paused gate, unlike the original. Pause and Menu are
+				// the two buttons present on every screen, and leaving Menu inside meant pausing
+				// a song trapped you there - the only way out was to unpause first.
+				if (menu == null)
+				{
+					// Dropped on the way out, or the song select would arrive still paused and
+					// every button on it would be inert for exactly the same reason.
+					bool wasPaused = paused;
+					paused = false;
+
+					// Leaving a song mid-play swaps back to menu music; leaving any other
+					// screen keeps whatever is already playing - but if the pause had stopped
+					// the channel, it still has to be started again, or the music would stay
+					// silent for the rest of the session.
+					if (sceneManager != null)
+					{
+						SoundManager.pauseMusic();
+						SoundManager.changeMusic("menu1");
+						SoundManager.playMusic();
+					}
+					else if (wasPaused)
+					{
+						SoundManager.playMusic();
+					}
+
+					menu = Menu.New();
+					newScreen(menu);
+				}
+			}
 			else if (!paused)
 			{
 				if (button.text == "Retry")
@@ -443,23 +483,6 @@ namespace Games.SleepyTime
 						++id;
 						dialogueScreen = DialogueScreen.New();
 						newScreen(dialogueScreen);
-					}
-				}
-				else if (button.text == "Menu")
-				{
-					if (menu == null)
-					{
-						// Leaving a song mid-play swaps back to menu music; leaving any other
-						// screen keeps whatever is already playing.
-						if (sceneManager != null)
-						{
-							SoundManager.pauseMusic();
-							SoundManager.changeMusic("menu1");
-							SoundManager.playMusic();
-						}
-
-						menu = Menu.New();
-						newScreen(menu);
 					}
 				}
 				else if (button.text == "Twitter")
