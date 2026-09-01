@@ -11,8 +11,10 @@ namespace Games.SleepyTime
 	/// milliseconds per beat and changes per song, and Beat.timingMax is a 200 ms window.
 	/// Nothing here is ever converted to seconds.
 	///
-	/// The screen/button half of GameManager.as lands with Button and the screen classes;
-	/// this is the clock and the raw input state it needs.
+	/// It also owns the screens. They overlap: newScreen slides the incoming one in over a
+	/// second while the outgoing one leaves over two, and garbageCollector only destroys a
+	/// screen once it has actually reached its off-stage coordinate. GameManager outlives
+	/// all of them, which is why the Pause and Menu buttons it creates persist everywhere.
 	/// </summary>
 	public class GameManager : FlashObject
 	{
@@ -37,7 +39,10 @@ namespace Games.SleepyTime
 		/// Longest single step the lead-in accumulator will take, in ms - about six frames.
 		private const int MaxAccumulatedDt = 100;
 
+		public ScoreTable scoreTable;
 		public SceneManager sceneManager;
+		public Menu menu;
+		public DialogueScreen dialogueScreen;
 		public Button pauseButton;
 		public Button menuButton;
 
@@ -100,9 +105,9 @@ namespace Games.SleepyTime
 		}
 
 		/// <summary>
-		/// GameManager.as's constructor, as far as it goes without the screens and buttons.
-		/// The stage listener registrations become polling in pollInput; fullscreen is the
-		/// collection's job now, so the Esc/F handling is gone.
+		/// GameManager.as's constructor. The stage listener registrations become polling in
+		/// pollInput, and checkOtherKeys is gone with them: its Esc branch was empty and its
+		/// F branch toggled fullscreen, which the Fullscreen button still does.
 		/// </summary>
 		public static GameManager New()
 		{
@@ -135,10 +140,18 @@ namespace Games.SleepyTime
 			SoundManager.changeMusic("menu1");
 			SoundManager.playMusic();
 
-			// The Menu / DialogueScreen chosen from SaveManager.playedBefore lands with the
-			// screen classes. Until then there is no way into a song, so one starts directly.
-			gameManager.sceneManager = SceneManager.New();
-			gameManager.newScreen(gameManager.sceneManager);
+			// A first-time player is dropped straight into the opening dialogue; everyone else
+			// gets the song select.
+			if (SaveManager.playedBefore)
+			{
+				gameManager.menu = Menu.New();
+				gameManager.newScreen(gameManager.menu);
+			}
+			else
+			{
+				gameManager.dialogueScreen = DialogueScreen.New();
+				gameManager.newScreen(gameManager.dialogueScreen);
+			}
 
 			time = -2000;
 			gameManager.lastTime = getTimer();
@@ -162,7 +175,8 @@ namespace Games.SleepyTime
 		/// one second in, two seconds out, so the two overlap. garbageCollector only destroys
 		/// the outgoing screen once it has actually reached its off-stage coordinate.
 		///
-		/// The branches for the other screens land with them.
+		/// Screens leave in different directions: the menu and score table slide left, while
+		/// gameplay flies up and the dialogue drops down.
 		/// </summary>
 		public void newScreen(FlashObject screen)
 		{
@@ -173,11 +187,87 @@ namespace Games.SleepyTime
 			// No "is this the screen we just added" guard, and none is needed: the incoming
 			// screen's x was set to stageWidth two lines up and the tween has not run yet, so
 			// a screen never slides itself out. That is how the original does it.
+			if (scoreTable != null && scoreTable.x != Main.stageWidth)
+			{
+				Actuate.stop(scoreTable);
+				Actuate.tween(scoreTable, 2f, x: -Main.stageWidth);
+			}
+
+			if (menu != null && menu.x != Main.stageWidth)
+			{
+				Actuate.stop(menu);
+				Actuate.tween(menu, 2f, x: -Main.stageWidth);
+			}
+
 			if (sceneManager != null && sceneManager.x != Main.stageWidth)
 			{
 				Actuate.stop(sceneManager);
 				Actuate.tween(sceneManager, 2f, y: -Main.stageHeight * 2f);
 			}
+
+			if (dialogueScreen != null && dialogueScreen.x != Main.stageWidth)
+			{
+				Actuate.stop(dialogueScreen);
+				Actuate.tween(dialogueScreen, 2f, y: Main.stageHeight * 2f);
+			}
+		}
+
+		/// <summary>
+		/// Destroys a screen only once its outgoing tween has actually put it off stage,
+		/// which is what lets transitions overlap - the incoming screen is already running
+		/// while the old one is still sliding.
+		///
+		/// Each screen also has to take its buttons out of the static list with it. Unity
+		/// needs one thing Flash did not: the GameObject destroyed, since removeChild only
+		/// takes it off the display list.
+		/// </summary>
+		public void garbageCollector()
+		{
+			if (scoreTable != null && scoreTable.x == -Main.stageWidth)
+			{
+				Retire(scoreTable);
+				scoreTable = null;
+			}
+
+			if (sceneManager != null && sceneManager.y == -Main.stageHeight * 2f)
+			{
+				Retire(sceneManager);
+				sceneManager = null;
+			}
+
+			if (dialogueScreen != null && dialogueScreen.y == Main.stageHeight * 2f)
+			{
+				Retire(dialogueScreen);
+				dialogueScreen = null;
+			}
+
+			if (menu != null && menu.x == -Main.stageWidth)
+			{
+				Retire(menu);
+				menu = null;
+			}
+		}
+
+		private void Retire(FlashObject screen)
+		{
+			removeChild(screen);
+
+			for (int i = 0; i < Button.buttons.Count; i++)
+			{
+				if (Button.buttons[i] != null && Button.buttons[i].Parent == screen)
+				{
+					Button.buttons[i] = null;
+				}
+			}
+
+			Button.cleanButtonsArray();
+			Destroy(screen.gameObject);
+		}
+
+		/// The Fullscreen button, and what the original's F key did.
+		public void switchFullScreen()
+		{
+			Screen.fullScreen = !Screen.fullScreen;
 		}
 
 		/// <summary>
@@ -207,8 +297,65 @@ namespace Games.SleepyTime
 			if (sceneManager != null)
 			{
 				sceneManager.Tick();
-				// The hand-off to ScoreTable when activeScene.destroyMePlease goes up lands
-				// with the screens.
+				if (sceneManager.activeScene.destroyMePlease && !sceneManager.activeScene.destroyMePleaseMessageTaken)
+				{
+					// Each song hands over to a specific menu track. Song 6 (id 5) is the
+					// exception and deliberately keeps playing into the score screen.
+					if (id == 0 || id == 3)
+					{
+						SoundManager.changeMusic("menu2");
+					}
+					else if (id == 1 || id == 4)
+					{
+						SoundManager.changeMusic("menu3");
+					}
+					else if (id == 2)
+					{
+						SoundManager.changeMusic("menu1");
+					}
+
+					if (id != 5)
+					{
+						SoundManager.pauseMusic();
+						SoundManager.playMusic();
+					}
+
+					sceneManager.activeScene.destroyMePleaseMessageTaken = true;
+					scoreTable = ScoreTable.New(sceneManager.activeScene.score);
+					newScreen(scoreTable);
+				}
+			}
+
+			if (scoreTable != null)
+			{
+				scoreTable.Tick();
+			}
+
+			if (dialogueScreen != null)
+			{
+				dialogueScreen.Tick();
+				if (dialogueScreen.destroyMePlease && !dialogueScreen.destroyMePleaseMessageTaken)
+				{
+					dialogueScreen.destroyMePleaseMessageTaken = true;
+					time = -2000;
+					// id 6 is the ending and anything negative is the tutorial or the
+					// fullscreen note - none of them start a song, so they go back to the menu.
+					if (id == 6 || id < 0)
+					{
+						menu = Menu.New();
+						newScreen(menu);
+					}
+					else
+					{
+						sceneManager = SceneManager.New();
+						newScreen(sceneManager);
+					}
+				}
+			}
+
+			if (menu != null)
+			{
+				menu.Tick();
 			}
 
 			SoundManager.update();
@@ -216,6 +363,8 @@ namespace Games.SleepyTime
 			// Actuate ran on its own ENTER_FRAME in Flash, so it is driven here rather than
 			// from a screen - and it keeps running while paused, as it did there.
 			Actuate.update();
+
+			garbageCollector();
 		}
 
 		/// <summary>
@@ -245,11 +394,13 @@ namespace Games.SleepyTime
 		}
 
 		/// <summary>
-		/// Note the ordering: "Pause" is handled *before* the !paused check, which is the
-		/// only reason you can unpause. Preserve that.
+		/// Every button in the game arrives here, identified by its label.
 		///
-		/// The remaining labels - Retry, Next Level, Menu, the song buttons - land with the
-		/// screens they belong to.
+		/// Note the ordering: "Pause" is handled *before* the !paused check, which is the only
+		/// reason you can unpause - every other button is dead while the game is paused.
+		/// Preserve that.
+		///
+		/// The destroyMePlease guards are what stop a double click queueing two screens.
 		/// </summary>
 		public void buttonPressHandler(Button button)
 		{
@@ -268,6 +419,143 @@ namespace Games.SleepyTime
 			}
 			else if (!paused)
 			{
+				if (button.text == "Retry")
+				{
+					if (!scoreTable.destroyMePlease)
+					{
+						scoreTable.destroyMePlease = true;
+						scoreTable.destroyMePleaseMessageTaken = true;
+						sceneManager = SceneManager.New();
+						newScreen(sceneManager);
+					}
+				}
+				else if (button.text == "Next Level" || button.text == "Finish")
+				{
+					if (!scoreTable.destroyMePlease)
+					{
+						scoreTable.destroyMePlease = true;
+						scoreTable.destroyMePleaseMessageTaken = true;
+						++id;
+						dialogueScreen = DialogueScreen.New();
+						newScreen(dialogueScreen);
+					}
+				}
+				else if (button.text == "Menu")
+				{
+					if (menu == null)
+					{
+						// Leaving a song mid-play swaps back to menu music; leaving any other
+						// screen keeps whatever is already playing.
+						if (sceneManager != null)
+						{
+							SoundManager.pauseMusic();
+							SoundManager.changeMusic("menu1");
+							SoundManager.playMusic();
+						}
+
+						menu = Menu.New();
+						newScreen(menu);
+					}
+				}
+				else if (button.text == "Twitter")
+				{
+					if (Screen.fullScreen)
+					{
+						switchFullScreen();
+					}
+
+					Application.OpenURL("https://twitter.com/kayabros");
+				}
+				else if (button.text == "Soundtrack")
+				{
+					if (Screen.fullScreen)
+					{
+						switchFullScreen();
+					}
+
+					Application.OpenURL("http://talhakaya.bandcamp.com/album/sleepy-time-soundtrack");
+				}
+				else if (button.text == "Song 1")
+				{
+					if (!menu.destroyMePlease)
+					{
+						menu.destroyMePlease = true;
+						id = 0;
+						dialogueScreen = DialogueScreen.New();
+						newScreen(dialogueScreen);
+					}
+				}
+				else if (button.text == "Song 2")
+				{
+					if (!menu.destroyMePlease)
+					{
+						menu.destroyMePlease = true;
+						id = 1;
+						dialogueScreen = DialogueScreen.New();
+						newScreen(dialogueScreen);
+					}
+				}
+				else if (button.text == "Song 3")
+				{
+					if (!menu.destroyMePlease)
+					{
+						menu.destroyMePlease = true;
+						id = 2;
+						dialogueScreen = DialogueScreen.New();
+						newScreen(dialogueScreen);
+					}
+				}
+				else if (button.text == "Song 4")
+				{
+					if (!menu.destroyMePlease)
+					{
+						menu.destroyMePlease = true;
+						id = 3;
+						dialogueScreen = DialogueScreen.New();
+						newScreen(dialogueScreen);
+					}
+				}
+				else if (button.text == "Song 5")
+				{
+					if (!menu.destroyMePlease)
+					{
+						menu.destroyMePlease = true;
+						id = 4;
+						dialogueScreen = DialogueScreen.New();
+						newScreen(dialogueScreen);
+					}
+				}
+				else if (button.text == "Song 6")
+				{
+					if (!menu.destroyMePlease)
+					{
+						menu.destroyMePlease = true;
+						id = 5;
+						dialogueScreen = DialogueScreen.New();
+						newScreen(dialogueScreen);
+					}
+				}
+				else if (button.text == "Tutorial")
+				{
+					if (!menu.destroyMePlease)
+					{
+						menu.destroyMePlease = true;
+						id = -1;
+						dialogueScreen = DialogueScreen.New();
+						newScreen(dialogueScreen);
+					}
+				}
+				else if (button.text == "Fullscreen")
+				{
+					switchFullScreen();
+					if (!menu.destroyMePlease)
+					{
+						menu.destroyMePlease = true;
+						id = -2;
+						dialogueScreen = DialogueScreen.New();
+						newScreen(dialogueScreen);
+					}
+				}
 			}
 		}
 
