@@ -34,6 +34,13 @@ namespace Games.SleepyTime
 
 		public static int TimeBeginningTheSong = -2000;
 
+		/// Longest single step the lead-in accumulator will take, in ms - about six frames.
+		private const int MaxAccumulatedDt = 100;
+
+		public SceneManager sceneManager;
+		public Button pauseButton;
+		public Button menuButton;
+
 		private int lastTime;
 		private int currentTime;
 
@@ -57,6 +64,22 @@ namespace Games.SleepyTime
 			ScaleY = 1f;
 		}
 
+		/// <summary>
+		/// Transcribed exactly, because the shape of it decides the whole input plan: the
+		/// hover check guards the *mouse* branch only. The mouse either clicks a button or
+		/// plays the game, never both, while the keyboard always plays regardless of where
+		/// the pointer is.
+		///
+		/// That is why gamepad South is bound into keyboardDown rather than emulating a
+		/// cursor - with no emulated pointer to park over a button, this function needs no
+		/// changes at all.
+		/// </summary>
+		public static bool getKeyDown()
+		{
+			keyDown = !paused && (!Button.isCollidingWithAny() && mouseDown || keyboardDown);
+			return keyDown;
+		}
+
 		public static int getTimer()
 		{
 			return (int)(Time.unscaledTime * 1000f);
@@ -69,6 +92,16 @@ namespace Games.SleepyTime
 		/// </summary>
 		public static GameManager New()
 		{
+			// Cleared here rather than from Awake. A node starts inactive - nothing draws
+			// until addChild puts it on the display list - so Awake does not run until this
+			// GameManager is added to the stage, which is after everything below has already
+			// registered buttons and the screen's slide-in tween. Resetting from Awake wiped
+			// both: the game stayed parked 800 px to the right and no button responded.
+			ResetStatics();
+			SceneManager.ResetStatics();
+			Button.reset();
+			Actuate.reset();
+
 			GameManager gameManager = NewNode("GameManager").AddComponent<GameManager>();
 
 			// SleepyTime.swf's header declares 800x450 at 60 fps, and several effects are
@@ -83,17 +116,54 @@ namespace Games.SleepyTime
 			bg.scaleY = Main.stageHeight / 600f;
 			gameManager.addChild(bg);
 
+			new SaveManager();
 			new SoundManager();
 			SoundManager.changeMusic("menu1");
 			SoundManager.playMusic();
 
-			// SaveManager, and the Menu / DialogueScreen chosen from playedBefore, land with
-			// the screen classes. So do the Pause and Menu buttons, which the constructor
-			// creates once and every screen then keeps.
+			// The Menu / DialogueScreen chosen from SaveManager.playedBefore lands with the
+			// screen classes. Until then there is no way into a song, so one starts directly.
+			gameManager.sceneManager = SceneManager.New();
+			gameManager.newScreen(gameManager.sceneManager);
 
 			time = -2000;
 			gameManager.lastTime = getTimer();
+
+			// Created once here and kept by every screen for the rest of the session.
+			gameManager.pauseButton = Button.New("Pause");
+			gameManager.pauseButton.x = 60f;
+			gameManager.pauseButton.y = 20f;
+			gameManager.addChild(gameManager.pauseButton);
+
+			gameManager.menuButton = Button.New("Menu");
+			gameManager.menuButton.x = Main.stageWidth - 60f;
+			gameManager.menuButton.y = 20f;
+			gameManager.addChild(gameManager.menuButton);
+
 			return gameManager;
+		}
+
+		/// <summary>
+		/// Slides a screen in from the right while whatever is already showing slides out -
+		/// one second in, two seconds out, so the two overlap. garbageCollector only destroys
+		/// the outgoing screen once it has actually reached its off-stage coordinate.
+		///
+		/// The branches for the other screens land with them.
+		/// </summary>
+		public void newScreen(FlashObject screen)
+		{
+			screen.x = Main.stageWidth;
+			addChild(screen);
+			Actuate.tween(screen, 1f, x: 0f);
+
+			// No "is this the screen we just added" guard, and none is needed: the incoming
+			// screen's x was set to stageWidth two lines up and the tween has not run yet, so
+			// a screen never slides itself out. That is how the original does it.
+			if (sceneManager != null && sceneManager.x != Main.stageWidth)
+			{
+				Actuate.stop(sceneManager);
+				Actuate.tween(sceneManager, 2f, y: -Main.stageHeight * 2f);
+			}
 		}
 
 		/// <summary>
@@ -105,10 +175,73 @@ namespace Games.SleepyTime
 		{
 			pollInput();
 			calculateTime();
+			buttonHandler();
 
-			// buttonHandler() and the screen updates land with Button and the screens.
+			if (sceneManager != null)
+			{
+				sceneManager.Tick();
+				// The hand-off to ScoreTable when activeScene.destroyMePlease goes up lands
+				// with the screens.
+			}
 
 			SoundManager.update();
+
+			// Actuate ran on its own ENTER_FRAME in Flash, so it is driven here rather than
+			// from a screen - and it keeps running while paused, as it did there.
+			Actuate.update();
+		}
+
+		/// <summary>
+		/// Walks every registered button once per frame. A button under the pointer either
+		/// fires - but only on the frame the mouse goes down, which is what mouseDownOld
+		/// tracks - or just gets its hover feedback.
+		/// </summary>
+		public void buttonHandler()
+		{
+			for (int i = 0; i < Button.buttons.Count; i++)
+			{
+				Button.buttons[i].Tick();
+				if (Button.buttons[i].isColliding())
+				{
+					if (mouseDown && !mouseDownOld)
+					{
+						buttonPressHandler(Button.buttons[i]);
+					}
+					else
+					{
+						Button.buttons[i].mouseOverHandler();
+					}
+				}
+			}
+
+			mouseDownOld = mouseDown;
+		}
+
+		/// <summary>
+		/// Note the ordering: "Pause" is handled *before* the !paused check, which is the
+		/// only reason you can unpause. Preserve that.
+		///
+		/// The remaining labels - Retry, Next Level, Menu, the song buttons - land with the
+		/// screens they belong to.
+		/// </summary>
+		public void buttonPressHandler(Button button)
+		{
+			if (button.text == "Pause")
+			{
+				if (paused)
+				{
+					paused = false;
+					SoundManager.playMusic();
+				}
+				else
+				{
+					paused = true;
+					SoundManager.pauseMusic();
+				}
+			}
+			else if (!paused)
+			{
+			}
 		}
 
 		/// <summary>
@@ -139,7 +272,13 @@ namespace Games.SleepyTime
 				}
 				else
 				{
-					dt = currentTime - lastTime;
+					// Clamped, because this path only covers the -2000 lead-in and a single
+					// editor hitch there is measured in seconds: it would swallow the whole
+					// lead-in, and fling every oscillator that integrates dt far outside its
+					// range - the sway is written to reverse when it passes rhythm / 2, not
+					// to clamp, so one huge step leaves the entire screen visibly tilted for
+					// seconds afterwards. Flash never saw a stall this size.
+					dt = Mathf.Min(currentTime - lastTime, MaxAccumulatedDt);
 					time += dt;
 				}
 			}
@@ -166,7 +305,6 @@ namespace Games.SleepyTime
 		protected override void Awake()
 		{
 			base.Awake();
-			ResetStatics();
 			lastTime = getTimer();
 		}
 	}

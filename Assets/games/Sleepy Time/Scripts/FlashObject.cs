@@ -149,9 +149,16 @@ namespace Games.SleepyTime
 			rotation = rotationValue;
 		}
 
+		/// <summary>
+		/// Starts inactive, because a Flash display object draws nothing until it is added to
+		/// the display list, and addChild is what activates it. Scene's hundred-particle pool
+		/// is built up front and only added when a particle is fired - left active they would
+		/// all sit visible at the stage origin.
+		/// </summary>
 		protected static GameObject NewNode(string name)
 		{
 			GameObject node = new GameObject(name);
+			node.SetActive(false);
 			node.transform.localPosition = Vector3.zero;
 			return node;
 		}

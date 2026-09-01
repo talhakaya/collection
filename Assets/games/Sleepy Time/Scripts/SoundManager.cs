@@ -295,6 +295,16 @@ namespace Games.SleepyTime
 					break;
 			}
 
+			// Music is imported compressed-in-memory and not preloaded - six songs is ~17 MB
+			// of mp3 - so the first Play() would otherwise decode on the spot. That moment is
+			// the worst possible one: playMusic is what starts the song clock, so the stall
+			// would land exactly as timing starts to matter. changeMusic runs two seconds
+			// earlier, at the top of the lead-in, with nothing else to do.
+			if (currentMusic != null)
+			{
+				currentMusic.LoadAudioData();
+			}
+
 			position = 0.0;
 			GameManager.time = 0;
 			syncPrimed = false;
