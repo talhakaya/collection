@@ -71,6 +71,13 @@ namespace Games.SleepyTime
 		{
 			GameManager gameManager = NewNode("GameManager").AddComponent<GameManager>();
 
+			// SleepyTime.swf's header declares 800x450 at 60 fps, and several effects are
+			// written per-frame rather than per-millisecond: Citmap.blink randomises alpha
+			// every frame and updateGraphicsTimeline swaps line1/line2 every frame. Their
+			// rate *is* the frame rate, so an uncapped editor strobes them several times too
+			// fast. Golfinity pins 60 the same way.
+			Application.targetFrameRate = 60;
+
 			FlashBitmap bg = FlashBitmap.New(SleepyAssets.GetSprite("img/bg.jpg"));
 			bg.scaleX = Main.stageWidth / 600f;
 			bg.scaleY = Main.stageHeight / 600f;
