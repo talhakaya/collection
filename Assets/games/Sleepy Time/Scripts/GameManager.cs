@@ -177,6 +177,19 @@ namespace Games.SleepyTime
 			calculateTime();
 			buttonHandler();
 
+			// Pause was mouse-only in Flash - the original bound no key to it at all - which
+			// leaves a gamepad with no way to reach it, since the Pause/Menu buttons are
+			// deliberately not gamepad-selectable. Start routes through the same
+			// buttonPressHandler the mouse path calls, so the ordering quirk that makes
+			// unpausing work applies to both.
+			//
+			// Deliberately not on the keyboard: Press is bound to anyKey, so any pause key
+			// would also register as a note hit.
+			if (pauseButton != null && TaloketoInputManager.GetButtonDown("Pause"))
+			{
+				buttonPressHandler(pauseButton);
+			}
+
 			if (sceneManager != null)
 			{
 				sceneManager.Tick();
