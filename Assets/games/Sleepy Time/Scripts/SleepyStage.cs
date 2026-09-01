@@ -56,6 +56,13 @@ namespace Games.SleepyTime
 			}
 		}
 
+		/// Main.init(): the stage exists, so make the game and add it. Deferred to Start so
+		/// GameManager's construction can rely on every Awake in the scene having run.
+		private void Start()
+		{
+			Root.addChild(GameManager.New());
+		}
+
 		private void OnDestroy()
 		{
 			if (Instance == this)
