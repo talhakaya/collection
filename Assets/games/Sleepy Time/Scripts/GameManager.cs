@@ -80,6 +80,20 @@ namespace Games.SleepyTime
 			return keyDown;
 		}
 
+		/// <summary>
+		/// The per-frame alpha flicker that gives everything in this game its nervous look.
+		///
+		/// Deviation from the original, and the only reason this is a function at all:
+		/// it stops while paused. enterFrameHandler had no paused check anywhere, so pausing
+		/// froze dt but left the whole update chain running - and blink() re-rolls from
+		/// Math.random() every frame regardless of dt, so a paused screen kept flickering.
+		/// Holding the current value freezes the picture along with the clock.
+		/// </summary>
+		public static float blink(float current, float min, float range)
+		{
+			return paused ? current : min + Random.value * range;
+		}
+
 		public static int getTimer()
 		{
 			return (int)(Time.unscaledTime * 1000f);

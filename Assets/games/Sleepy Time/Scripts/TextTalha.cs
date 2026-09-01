@@ -108,7 +108,7 @@ namespace Games.SleepyTime
 
 			if (blinking)
 			{
-				field1.alpha = 0.4f + 0.6f * Random.value;
+				field1.alpha = GameManager.blink(field1.alpha, 0.4f, 0.6f);
 				field2.alpha = field1.alpha / 2f;
 			}
 		}

@@ -42,7 +42,7 @@ namespace Games.SleepyTime
 				x += accelerationX * GameManager.dt / 50f;
 				y += accelerationY * GameManager.dt / 50f;
 				accelerationY += GameManager.dt / 15f;
-				alpha = 0.5f + 0.5f * Random.value;
+				alpha = GameManager.blink(alpha, 0.5f, 0.5f);
 			}
 		}
 

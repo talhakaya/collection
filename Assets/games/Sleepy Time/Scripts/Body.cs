@@ -85,8 +85,8 @@ namespace Games.SleepyTime
 			head.y = Main.stageHeight + (36f - penisHeight) * penis.scaleY / 4f + shakeFactor - YOffset;
 			head.x = 45f * head.scaleX - XOffset;
 			penis.x = Main.stageWidth - 32f * penis.scaleX - XOffset;
-			penis.bitmap.alpha = 0.4f + 0.6f * Random.value;
-			head.bitmap.alpha = 0.4f + 0.6f * Random.value;
+			penis.bitmap.alpha = GameManager.blink(penis.bitmap.alpha, 0.4f, 0.6f);
+			head.bitmap.alpha = GameManager.blink(head.bitmap.alpha, 0.4f, 0.6f);
 
 			if (headRotating)
 			{

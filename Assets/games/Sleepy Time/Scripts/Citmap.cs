@@ -82,7 +82,7 @@ namespace Games.SleepyTime
 
 		public void Blink()
 		{
-			bitmap.alpha = 0.4f + Random.value * 0.6f;
+			bitmap.alpha = GameManager.blink(bitmap.alpha, 0.4f, 0.6f);
 		}
 	}
 }
