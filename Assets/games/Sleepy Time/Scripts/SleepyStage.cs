@@ -36,12 +36,17 @@ namespace Games.SleepyTime
 
 			SleepyAssets.Preload();
 
-			GameObject root = new GameObject("Root");
-			root.transform.SetParent(transform, false);
-			root.transform.localPosition = new Vector3(
+			// The corner offset lives here rather than on the root, because the root is a
+			// FlashObject and a FlashObject owns its transform: its Awake applies its own
+			// (x, y) - (0, 0) for the root - and would overwrite anything set from outside.
+			// The stage is not a display-list node, so it is the right place to sit.
+			transform.localPosition = new Vector3(
 				-Main.stageWidth / 2f / FlashObject.PixelsPerUnit,
 				Main.stageHeight / 2f / FlashObject.PixelsPerUnit,
 				0f);
+
+			GameObject root = new GameObject("Root");
+			root.transform.SetParent(transform, false);
 			Root = root.AddComponent<FlashObject>();
 
 			if (stageCamera == null)
