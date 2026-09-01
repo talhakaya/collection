@@ -177,16 +177,18 @@ namespace Games.SleepyTime
 		}
 
 		/// <summary>
-		/// The quarter-beat grid deliberately runs on the *submission* clock, not the audible
-		/// one: a sound flushed here is only heard audioOffsetMs later, so scheduling it against
-		/// GameManager.time - which is now the audible position - would land every hit sound a
-		/// full output latency behind the beat it belongs to. Adding the offset back puts them
-		/// on the beat as heard.
+		/// The grid runs on GameManager.time exactly as the original wrote it.
+		///
+		/// Shifting it by the output latency, so sounds are *heard* on the beat rather than
+		/// submitted on it, looks tempting and is a bad trade. The notes of songs 1-4 sit
+		/// exactly on this grid, so a press on the beat crosses the boundary in the same frame
+		/// it is queued and flushes immediately. Move the grid earlier by even one frame and
+		/// that press instead arrives just after its own slot and waits most of a quarter beat
+		/// - trading 21 ms of lateness for over 100 ms of delay on every well-timed hit.
 		/// </summary>
 		public void _update()
 		{
-			float submittedTime = GameManager.time + audioOffsetMs;
-			soundRhythmCount = submittedTime % (GameManager.rhythm * 0.25f);
+			soundRhythmCount = GameManager.time % (GameManager.rhythm * 0.25f);
 			if (soundRhythmCount < GameManager.rhythm * 0.25f / 2f && soundRhythmCountOld > GameManager.rhythm * 0.25f / 2f)
 			{
 				if (soundQueue.Count > 0)
