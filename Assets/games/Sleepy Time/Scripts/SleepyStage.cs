@@ -30,10 +30,21 @@ namespace Games.SleepyTime
 		[Tooltip("Framed to the 800x450 stage on Awake. Leave empty to use Camera.main.")]
 		public Camera stageCamera;
 
+		[Header("Audio")]
 		[Tooltip("Milliseconds the song clock is pulled back so it tracks what you HEAR rather " +
 			"than what has been handed to the mixer. Raise it if notes still arrive before their " +
 			"beat and you find yourself pressing late. Negative means auto: the mixer's own buffer.")]
 		public float audioOffsetMs = -1f;
+
+		[Range(0f, 2f)]
+		[Tooltip("Multiplies the hit and miss sounds. 1 is the original's level; the ghost " +
+			"scenes stay quieter than the player by the same ratio either way.")]
+		public float sfxVolume = 1f;
+
+		[Tooltip("Original behaviour: hit sounds wait for the quarter-beat grid so they land on " +
+			"the beat, costing up to a quarter beat of delay (125 ms on song 1). Untick to fire " +
+			"them the frame they happen instead.")]
+		public bool quantiseSfx = true;
 
 		private int letterboxedWidth;
 		private int letterboxedHeight;
@@ -44,10 +55,8 @@ namespace Games.SleepyTime
 
 			SleepyAssets.Preload();
 
-			// Applied before GameManager builds SoundManager, which is what reads it.
-			SoundManager.audioOffsetMs = audioOffsetMs < 0f
-				? SoundManager.AutoOutputLatencyMs()
-				: audioOffsetMs;
+			// Applied before GameManager builds SoundManager, which is what reads them.
+			ApplyAudioSettings();
 
 			// The corner offset lives here rather than on the root, because the root is a
 			// FlashObject and a FlashObject owns its transform: its Awake applies its own
@@ -118,14 +127,23 @@ namespace Games.SleepyTime
 			}
 		}
 
-		/// Live-tunable while playing: drag the offset in the Inspector and it takes effect on
-		/// the next frame, so it can be dialled in by ear against the music.
+		/// <summary>
+		/// Pushed every frame so all three can be dialled in by ear during play - the offset
+		/// against the music, the others by taste. Values changed while playing are not kept;
+		/// set them outside play mode to save them with the scene.
+		/// </summary>
+		private void ApplyAudioSettings()
+		{
+			SoundManager.audioOffsetMs = audioOffsetMs < 0f
+				? SoundManager.AutoOutputLatencyMs()
+				: audioOffsetMs;
+			SoundManager.sfxVolume = sfxVolume;
+			SoundManager.quantiseSfx = quantiseSfx;
+		}
+
 		private void LateUpdate()
 		{
-			if (audioOffsetMs >= 0f && !Mathf.Approximately(audioOffsetMs, SoundManager.audioOffsetMs))
-			{
-				SoundManager.audioOffsetMs = audioOffsetMs;
-			}
+			ApplyAudioSettings();
 
 			if (stageCamera != null && (Screen.width != letterboxedWidth || Screen.height != letterboxedHeight))
 			{

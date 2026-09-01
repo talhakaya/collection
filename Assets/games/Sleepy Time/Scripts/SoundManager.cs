@@ -53,6 +53,28 @@ namespace Games.SleepyTime
 		/// </summary>
 		public static float audioOffsetMs = float.NaN;
 
+		/// <summary>
+		/// Multiplies every sound effect's volume. The original's two SoundTransforms are 0.05
+		/// for the active scene and 0.02 for the ghosts, and this scales both, so the ghosts stay
+		/// quieter than the player by the same ratio.
+		/// </summary>
+		public static float sfxVolume = 1f;
+
+		/// <summary>
+		/// Whether hit and miss sounds wait for the quarter-beat grid before firing.
+		///
+		/// True is the original: sounds land on the beat rather than when the player pressed,
+		/// which costs up to a quarter beat of delay - 125 ms on song 1, 139 on song 2 - on any
+		/// press that is not already on the grid.
+		///
+		/// False flushes the queue every frame instead. Note it still flushes the *queue*, not
+		/// each sound as it is requested: the rule that an explosion is dropped when anything
+		/// else shares the batch only works because a press and the rating it earns are queued in
+		/// the same frame. Playing them the instant they are asked for would sound a miss under
+		/// every hit.
+		/// </summary>
+		public static bool quantiseSfx = true;
+
 		public static float MinSoundRhythmRatio = 0.25f;
 		public static string currentRate = "";
 		public static bool currentExplosion = false;
@@ -189,7 +211,8 @@ namespace Games.SleepyTime
 		public void _update()
 		{
 			soundRhythmCount = GameManager.time % (GameManager.rhythm * 0.25f);
-			if (soundRhythmCount < GameManager.rhythm * 0.25f / 2f && soundRhythmCountOld > GameManager.rhythm * 0.25f / 2f)
+			bool onGrid = soundRhythmCount < GameManager.rhythm * 0.25f / 2f && soundRhythmCountOld > GameManager.rhythm * 0.25f / 2f;
+			if (onGrid || !quantiseSfx)
 			{
 				if (soundQueue.Count > 0)
 				{
@@ -454,7 +477,7 @@ namespace Games.SleepyTime
 
 			voice.Stop();
 			voice.clip = clip;
-			voice.volume = transform.volume;
+			voice.volume = transform.volume * sfxVolume;
 			voice.panStereo = transform.pan;
 			voice.Play();
 		}
