@@ -29,6 +29,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/games/Abused/main.unity
     guid: e0eefedd350e54ec5997f21ac87db47a
+  - enabled: 1
+    path: Assets/games/Sleepy Time/main.unity
+    guid: 5583e350dfa7831a50ba5e22b3900faa
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

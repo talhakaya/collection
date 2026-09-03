@@ -49,3 +49,10 @@ MonoBehaviour:
     mouseEmulationSpeed: 0
     entryScene: {fileID: 102900000, guid: e0eefedd350e54ec5997f21ac87db47a, type: 3}
     entryScenePath: Assets/games/Abused/main.unity
+  - gameName: Sleepy Time
+    description:
+    gravity: {x: 0, y: 0}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 0
+    entryScene: {fileID: 102900000, guid: 5583e350dfa7831a50ba5e22b3900faa, type: 3}
+    entryScenePath: Assets/games/Sleepy Time/main.unity
