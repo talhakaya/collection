@@ -201,7 +201,6 @@ namespace Games.Golfinity
 	        }
 	        buttonRetry.gameObject.SetActive(true);
 	        buttonNext.gameObject.SetActive(true);
-	        buttonNext.text.gameObject.SetActive(Game.removedAds);
 	        buttonAd.gameObject.SetActive(!Game.removedAds);
 	    }
 

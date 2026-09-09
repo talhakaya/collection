@@ -50,12 +50,6 @@ namespace Games.Golfinity
 		public float stepRepeatDelay = 0.4f;
 		public float stepRepeatRate = 0.18f;
 
-		[Header("Shortcut labels (temporary)")]
-		[Tooltip("Show which button triggers each top-bar action. Debug aid - turn off to hide them all.")]
-		public bool showShortcutLabels = true;
-		[Tooltip("Gap below the button, in canvas units.")]
-		public float shortcutLabelGap = 1f;
-		public float shortcutLabelFontSize = 8f;
 
 		private const int NoTarget = -1;
 		private int anchorHole = NoTarget;
@@ -66,20 +60,25 @@ namespace Games.Golfinity
 		private float scrollBackApplied;
 		private float scrollBackSeconds;
 
-		private struct ShortcutLabel
-		{
-			public TextMeshProUGUI text;
-			public string actionName;
-			public string lastGlyph;
-			public RectTransform button;
-			public bool hideWhenPopupOpen;
-			public bool positioned;
-		}
+		private static GolfinityGamepad instance;
 
 		private int lastPadId;
 		private bool usingGamepad;
 
-		private readonly List<ShortcutLabel> shortcutLabels = new List<ShortcutLabel>();
+		/// <summary>
+		/// Read by ButtonPrompt, which now lives on every button rather than here. A connected
+		/// pad is not the same as a pad being driven - see UpdateActiveDevice.
+		/// </summary>
+		public static bool UsingGamepad
+		{
+			get { return instance != null && instance.usingGamepad; }
+		}
+
+		/// Whether a popup is covering the top bar, which stops its shortcuts firing.
+		public static bool PopupOpen
+		{
+			get { return instance != null && instance.activePopup != null; }
+		}
 
 		private RectTransform canvasRect;
 		private RectTransform cursorRect;
@@ -88,6 +87,11 @@ namespace Games.Golfinity
 		private float stepCooldown;
 		private bool stepLatched;
 		private bool mapWasActive;
+
+		private void Awake()
+		{
+			instance = this;
+		}
 
 		private void Start()
 		{
@@ -102,61 +106,6 @@ namespace Games.Golfinity
 
 			canvasRect = canvas.GetComponent<RectTransform>();
 			CreateCursor(canvas);
-			CreateShortcutLabels(canvas);
-		}
-
-		/// Labels the top-bar buttons with the pad button that triggers them. Text comes from
-		/// the binding itself rather than hardcoded letters, so it stays honest if the action
-		/// is rebound. Parented to each button, so buttonMap's label inherits its show/hide
-		/// (it only exists during Play).
-		private void CreateShortcutLabels(Canvas canvas)
-		{
-			if (!showShortcutLabels) return;
-
-			TMP_FontAsset font = null;
-			TextMeshProUGUI sample = canvas.GetComponentInChildren<TextMeshProUGUI>(true);
-			if (sample != null) font = sample.font;
-
-			// Top bar: only usable when no popup is covering it, so these hide with one open.
-			CreateShortcutLabel(canvas, "buttonOptions", "Settings", font, true);
-			CreateShortcutLabel(canvas, "buttonUpgrade", "Upgrade", font, true);
-			CreateShortcutLabel(canvas, "buttonMap", "Back", font, true);
-
-			// Level score popup. Its buttons are only active while it's up, so they need no
-			// extra visibility rule. buttonRetry goes to the map despite the name.
-			CreateShortcutLabel(canvas, "LevelScorePopup/Buttons/buttonRetry", "Back", font, false);
-			CreateShortcutLabel(canvas, "LevelScorePopup/Buttons/buttonPlay", "Throw", font, false);
-		}
-
-		private void CreateShortcutLabel(Canvas canvas, string buttonPath, string actionName, TMP_FontAsset font, bool hideWhenPopupOpen)
-		{
-			var button = canvas.transform.Find(buttonPath) as RectTransform;
-			if (button == null) return;
-
-			// Parented to the canvas, not the button. The top-bar buttons are zero-size rects
-			// at localScale 0.15 with their artwork in a 96x96 child, so a label parented to
-			// one inherits that 0.15 and renders about four pixels tall.
-			var go = new GameObject("ShortcutLabel", typeof(RectTransform), typeof(TextMeshProUGUI));
-			var rect = go.GetComponent<RectTransform>();
-			rect.SetParent(canvas.transform, false);
-			rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0.5f);
-			rect.pivot = new Vector2(0.5f, 1f);
-			rect.sizeDelta = new Vector2(40f, shortcutLabelFontSize * 1.6f);
-
-			var text = go.GetComponent<TextMeshProUGUI>();
-			if (font != null) text.font = font;
-			text.fontSize = shortcutLabelFontSize;
-			text.alignment = TextAlignmentOptions.Top;
-			text.raycastTarget = false;
-			text.textWrappingMode = TextWrappingModes.NoWrap;
-
-			shortcutLabels.Add(new ShortcutLabel
-			{
-				text = text,
-				actionName = actionName,
-				button = button,
-				hideWhenPopupOpen = hideWhenPopupOpen,
-			});
 		}
 
 		/// A gamepad being connected doesn't mean it's the thing driving the game right now - it
@@ -184,59 +133,8 @@ namespace Games.Golfinity
 		/// Refreshes the labels: hidden unless the player is actively driving with a pad right
 		/// now, and re-read from the binding so a rebind shows up. Only writes when the string
 		/// actually changes - assigning TMP.text every frame forces a mesh rebuild.
-		private void UpdateShortcutLabels()
-		{
-			if (shortcutLabels.Count == 0) return;
-
-			Gamepad pad = Gamepad.current;
-
-			// Resolving a binding to its display string allocates, so it's done only when the
-			// pad actually changes rather than every frame for every label.
-			int padId = pad != null ? pad.deviceId : 0;
-			bool bindingsMayHaveChanged = padId != lastPadId;
-			lastPadId = padId;
-
-			for (int i = 0; i < shortcutLabels.Count; i++)
-			{
-				ShortcutLabel label = shortcutLabels[i];
-				if (label.text == null || label.button == null) continue;
-
-				// The label isn't a child of its button any more, so it has to mirror the
-				// button's visibility itself - buttonMap only exists during Play. The top bar
-				// also stays active behind an open popup, but its shortcuts don't fire then,
-				// so advertising them would be a lie.
-				bool visible = usingGamepad
-					&& label.button.gameObject.activeInHierarchy
-					&& !(label.hideWhenPopupOpen && activePopup != null);
-				if (label.text.enabled != visible) label.text.enabled = visible;
-				if (!visible) continue;
-
-				// These buttons don't move, so their position is measured once - the bounds
-				// call walks the whole child hierarchy and isn't worth repeating every frame.
-				if (!label.positioned)
-				{
-					Bounds bounds = RectTransformUtility.CalculateRelativeRectTransformBounds(canvasRect, label.button);
-					label.text.rectTransform.anchoredPosition =
-						new Vector2(bounds.center.x, bounds.min.y - shortcutLabelGap);
-					label.positioned = true;
-					shortcutLabels[i] = label;
-				}
-
-				if (bindingsMayHaveChanged || label.lastGlyph == null)
-				{
-					string glyph = GamepadGlyph(label.actionName);
-					if (glyph != label.lastGlyph)
-					{
-						label.text.text = glyph;
-						label.lastGlyph = glyph;
-						shortcutLabels[i] = label;
-					}
-				}
-			}
-		}
-
 		/// The pad button bound to an action, as a short display string ("X", "Y", "B").
-		private static string GamepadGlyph(string actionName)
+		public static string GamepadGlyph(string actionName)
 		{
 			InputAction action = TaloketoInputManager.GetAction(actionName);
 			if (action == null) return "";
@@ -291,7 +189,6 @@ namespace Games.Golfinity
 			// must not run every frame - only when the layering could actually have changed.
 
 			UpdateActiveDevice();
-			UpdateShortcutLabels();
 
 			GameObject popup = GetActivePopup();
 			if (popup != activePopup)
