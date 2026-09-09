@@ -104,6 +104,22 @@ namespace Collection.Controls
 
 		private void OnExitToMainMenu(InputAction.CallbackContext context)
 		{
+			ReturnToMainMenu();
+		}
+
+		/// <summary>
+		/// Leaves the current game for the collection's main menu.
+		///
+		/// Public because game code calls it too, wherever a game used to call
+		/// Application.Quit(): a game running inside the collection is never the thing that
+		/// should be closing the application, and quitting one should land you back in the
+		/// list rather than on the desktop. Keeping it here means the games don't each need
+		/// to know which build index the menu is.
+		///
+		/// A no-op when the menu is already what's loaded.
+		/// </summary>
+		public static void ReturnToMainMenu()
+		{
 			if (SceneManager.GetActiveScene().buildIndex == MainMenuBuildIndex)
 			{
 				return;

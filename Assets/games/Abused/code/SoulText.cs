@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using Collection.Controls;
 using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 namespace Games.Abused
@@ -43,7 +44,7 @@ namespace Games.Abused
                 RenderGrayScale.instance.greyScaleRatio += Game.dt;
                 if (text.color.a <= 0f)
 	            {
-	                Application.Quit();
+	                GlobalInputManager.ReturnToMainMenu();
 	            }
 	            else
 	            {
