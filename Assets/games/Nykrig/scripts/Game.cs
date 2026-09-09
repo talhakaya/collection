@@ -83,7 +83,7 @@ namespace Games.Nykrig
 			if (TaloketoInputManager.GetButtonDown("Escape"))
 	        {
 	            if (menu.gameObject.activeSelf) {
-	                Application.Quit();
+	                GlobalInputManager.ReturnToMainMenu();
 	            }
 	            else {
 	                menu.gameObject.SetActive(true);

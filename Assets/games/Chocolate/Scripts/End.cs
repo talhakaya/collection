@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Collection.Controls;
 
 namespace Games.Chocolate
 {
@@ -7,7 +8,7 @@ namespace Games.Chocolate
 
 		// Use this for initialization
 		void Start () {
-			Application.Quit ();
+			GlobalInputManager.ReturnToMainMenu();
 		}
 
 		// Update is called once per frame

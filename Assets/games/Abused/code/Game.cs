@@ -55,10 +55,9 @@ namespace Games.Abused
 
 			inputOld = input;
 
-	        if (Input.GetKey(KeyCode.Escape))
-	        {
-	            Application.Quit();
-	        }
+			// Escape used to quit the application here. The collection binds its own exit
+			// combination (Select+Start, or Shift+Escape), so a bare Escape quitting is both
+			// redundant and a way to lose the whole collection by accident.
 		}
 	}
 

@@ -295,6 +295,20 @@ namespace Collection.EditorTools
 				}
 			}
 
+			// Every game arrives written as though it were the whole application, so its exit
+			// code has to be brought into the collection: Escape-quits removed, real quits
+			// pointed at the main menu. Runs before the namespace rewrite for the same reason
+			// the input migration does - that is the last script-touching step.
+			try
+			{
+				QuitCodeMigrator.MigrateFolder(destinationFolder, extraLog);
+			}
+			catch (Exception e)
+			{
+				extraLog.Add($"Quit migration failed: {e.Message}");
+				Debug.LogError($"[GameImportWindow] Quit migration failed: {e}");
+			}
+
 			// Build Settings must be updated before the namespace rewrite below: rewriting
 			// dozens of .cs files triggers a script recompile, which can synchronously tear
 			// down this call stack via a domain reload - anything after that point may never
