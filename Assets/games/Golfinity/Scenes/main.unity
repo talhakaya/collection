@@ -3302,6 +3302,14 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 4eb7575def699314784af1d7699019ee, type: 3}
+    - target: {fileID: 3859644558828766808, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
+      propertyPath: actionName
+      value: Upgrade
+      objectReference: {fileID: 0}
+    - target: {fileID: 3859644558828766808, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
+      propertyPath: hideWhenPopupOpen
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4956,6 +4964,10 @@ PrefabInstance:
       propertyPath: m_textInfo.characterCount
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3859644558828766808, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
+      propertyPath: actionName
+      value: Throw
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -5479,6 +5491,10 @@ PrefabInstance:
       propertyPath: m_textInfo.characterCount
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 3859644558828766808, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
+      propertyPath: actionName
+      value: Back
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -5739,6 +5755,14 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 1c85ae2d31a0dd84ea1fac3e57a14701, type: 3}
+    - target: {fileID: 3859644558828766808, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
+      propertyPath: actionName
+      value: Settings
+      objectReference: {fileID: 0}
+    - target: {fileID: 3859644558828766808, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
+      propertyPath: hideWhenPopupOpen
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8989,6 +9013,14 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: b8cec5bd6ddcd4b448707ff68ce382f1, type: 3}
+    - target: {fileID: 3859644558828766808, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
+      propertyPath: actionName
+      value: Back
+      objectReference: {fileID: 0}
+    - target: {fileID: 3859644558828766808, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
+      propertyPath: hideWhenPopupOpen
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11958,9 +11990,6 @@ MonoBehaviour:
   stepThreshold: 0.5
   stepRepeatDelay: 0.4
   stepRepeatRate: 0.18
-  showShortcutLabels: 1
-  shortcutLabelGap: 1
-  shortcutLabelFontSize: 8
 --- !u!1 &1525533635
 GameObject:
   m_ObjectHideFlags: 0
@@ -17290,6 +17319,10 @@ PrefabInstance:
     - target: {fileID: 3165543646915167515, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
       propertyPath: m_textAlignment
       value: 514
+      objectReference: {fileID: 0}
+    - target: {fileID: 3165543646915167515, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
+      propertyPath: m_TextWrappingMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3165543646915167515, guid: 7b72cf9a9eaa1ca4195d6af205ebd2ff, type: 3}
       propertyPath: m_enableAutoSizing
