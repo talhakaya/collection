@@ -26,6 +26,11 @@ namespace Collection.Controls
 			[ConditionalField(nameof(enableMouseEmulation))]
 			public float mouseEmulationSpeed = 1000f;
 
+			[Tooltip("Cursor shown while this game is running, replacing both the OS cursor and the emulated gamepad cursor. Leave empty for the defaults. For a game that draws its own pointer, assign a fully transparent texture so neither is drawn over it. Must be imported with Texture Type 'Cursor'.")]
+			public Texture2D cursorTexture;
+			[Tooltip("The click point within cursorTexture, in pixels from its top-left corner.")]
+			public Vector2 cursorHotspot;
+
 #if UNITY_EDITOR
 			// Editor-only scene picker, synced into entryScenePath (below) by OnValidate.
 			// SceneAsset lives in UnityEditor and can't be referenced from runtime code -

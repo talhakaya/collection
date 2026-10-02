@@ -58,6 +58,8 @@ namespace Collection.Controls
 
 		private RectTransform cursorRect;
 		private Image cursorImage;
+		private Sprite defaultCursorSprite;
+		private Sprite gameCursorSprite;
 
 		public static bool MouseEmulationActive { get; private set; }
 		public static Vector2 EmulatedMousePosition { get; private set; }
@@ -134,6 +136,10 @@ namespace Collection.Controls
 			{
 				exitAction.performed -= OnExitToMainMenu;
 			}
+
+			// The OS cursor outlives play mode in the Editor, so a game's cursor would otherwise
+			// linger over the Game view after stopping.
+			ApplyCursorTexture(null, Vector2.zero);
 		}
 
 		// ---- Mouse emulation -------------------------------------------------------------
@@ -148,12 +154,22 @@ namespace Collection.Controls
 			currentGameName = gameName;
 			mouseEmulationEnabled = false;
 			mouseEmulationSpeed = 1000f;
+			Texture2D cursorTexture = null;
+			Vector2 cursorHotspot = Vector2.zero;
 
 			if (gameList != null && gameName != null && gameList.TryGetEntry(gameName, out GameList.Entry entry))
 			{
 				mouseEmulationEnabled = entry.enableMouseEmulation;
 				mouseEmulationSpeed = entry.mouseEmulationSpeed > 0f ? entry.mouseEmulationSpeed : 1000f;
+				cursorTexture = entry.cursorTexture;
+				cursorHotspot = entry.cursorHotspot;
 			}
+
+			// Applied unconditionally rather than only when a game has a texture: the main menu
+			// and games without one take the null branch, which is what puts the defaults back
+			// after a game that had its own. There is no separate "leaving a game" cleanup to
+			// forget.
+			ApplyCursorTexture(cursorTexture, cursorHotspot);
 
 			// New scene: nothing's told us yet whether the player's holding a pad or the mouse
 			// for it, so default to the real mouse until the pad actually moves - Update()'s
@@ -293,15 +309,54 @@ namespace Collection.Controls
 			cursorImage.raycastTarget = false;
 			cursorImage.enabled = false;
 
-			Sprite sprite = Resources.Load<Sprite>(CursorResourcePath);
-			if (sprite != null)
+			defaultCursorSprite = Resources.Load<Sprite>(CursorResourcePath);
+			if (defaultCursorSprite != null)
 			{
-				cursorImage.sprite = sprite;
+				cursorImage.sprite = defaultCursorSprite;
 			}
 			else
 			{
 				Debug.LogWarning($"GlobalInputManager: no cursor sprite at Resources/{CursorResourcePath} - mouse emulation still works, the cursor just won't be visible until one is added there.");
 			}
+		}
+
+		/// Sets what the pointer looks like for the current game, on both of its forms at once:
+		/// the OS cursor (real mouse) and the emulated cursor (gamepad). Null means the
+		/// defaults - the system cursor and the MouseEmulationCursor sprite.
+		///
+		/// Only the appearance changes here. Whether either cursor is shown at all is still
+		/// decided in Update, so a game's texture can't override hide-when-using-gamepad.
+		private void ApplyCursorTexture(Texture2D texture, Vector2 hotspot)
+		{
+			UnityEngine.Cursor.SetCursor(texture, texture != null ? hotspot : Vector2.zero, CursorMode.Auto);
+
+			if (gameCursorSprite != null)
+			{
+				Destroy(gameCursorSprite);
+				gameCursorSprite = null;
+			}
+
+			if (cursorImage == null)
+			{
+				return;
+			}
+
+			if (texture == null)
+			{
+				cursorImage.sprite = defaultCursorSprite;
+				cursorRect.pivot = Vector2.zero;
+				cursorRect.sizeDelta = new Vector2(DefaultCursorSize, DefaultCursorSize);
+				return;
+			}
+
+			// Drawn at the texture's own pixel size with the hotspot as the pivot, which is how
+			// the OS draws the same texture - so the pointer looks and clicks the same whichever
+			// device is driving it. The hotspot is measured from the top-left, a pivot from the
+			// bottom-left, hence the flipped Y.
+			gameCursorSprite = Sprite.Create(texture, new Rect(0f, 0f, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+			cursorImage.sprite = gameCursorSprite;
+			cursorRect.pivot = new Vector2(hotspot.x / texture.width, 1f - hotspot.y / texture.height);
+			cursorRect.sizeDelta = new Vector2(texture.width, texture.height);
 		}
 
 		public static bool GetMouseButton(int button)
