@@ -56,6 +56,11 @@ namespace Collection.Controls
 		private bool usingGamepadForMouse;
 		private bool emulationActiveLastFrame;
 
+		// Whether the real mouse has genuinely been moved or clicked at any point this session.
+		// Until it has, a connected gamepad is taken to be the active device - see
+		// UpdateActiveDevice.
+		private bool mouseEverUsed;
+
 		private RectTransform cursorRect;
 		private Image cursorImage;
 		private Sprite defaultCursorSprite;
@@ -273,6 +278,14 @@ namespace Collection.Controls
 		/// whether one happens to be connected. Compares each device's own InputSystem
 		/// timestamp for its last actual input event, so whichever was touched most recently
 		/// wins - same idea as GolfinityGamepad's shortcut-prompt visibility.
+		///
+		/// The exception is before the mouse has been used at all: then a connected gamepad
+		/// wins outright. On a pad-first machine (a Steam Deck, a console-style setup) that is
+		/// what keeps the cursor off the screen from the very first frame, instead of leaving
+		/// it up until the first pad input. The timestamps can't be trusted for this - devices
+		/// report an initial state when they are added, so which one looks "most recent" at
+		/// startup is down to the order they happened to arrive in, not to anything the player
+		/// did.
 		private void UpdateActiveDevice()
 		{
 			Gamepad pad = Gamepad.current;
@@ -282,10 +295,33 @@ namespace Collection.Controls
 				return;
 			}
 
-			double mouseTime = Mouse.current != null ? Mouse.current.lastUpdateTime : 0.0;
+			Mouse mouse = Mouse.current;
+			if (!mouseEverUsed && mouse != null && MouseShowsActivity(mouse))
+			{
+				mouseEverUsed = true;
+			}
+
+			if (!mouseEverUsed)
+			{
+				usingGamepadForMouse = true;
+				return;
+			}
+
+			double mouseTime = mouse != null ? mouse.lastUpdateTime : 0.0;
 			if (pad.lastUpdateTime > mouseTime) usingGamepadForMouse = true;
 			else if (mouseTime > pad.lastUpdateTime) usingGamepadForMouse = false;
-			// Equal (neither touched yet this session) - keep whatever it already was.
+			// Equal - keep whatever it already was.
+		}
+
+		/// Real use of the mouse this frame - movement, a button or the wheel - as opposed to
+		/// the device merely having reported a state.
+		private static bool MouseShowsActivity(Mouse mouse)
+		{
+			return mouse.delta.ReadValue() != Vector2.zero
+				|| mouse.scroll.ReadValue() != Vector2.zero
+				|| mouse.leftButton.isPressed
+				|| mouse.rightButton.isPressed
+				|| mouse.middleButton.isPressed;
 		}
 
 		/// Sizes and positions itself in raw screen pixels (anchored/pivot at the bottom-left,
