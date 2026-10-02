@@ -1,0 +1,216 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1244306327515194
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4557559934152030}
+  - component: {fileID: 212728168200732222}
+  - component: {fileID: 6908173247509979570}
+  - component: {fileID: 114865517430554480}
+  m_Layer: 0
+  m_Name: player
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4557559934152030
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1244306327515194}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2.46, y: 0, z: -1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &212728168200732222
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1244306327515194}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: 2611c94a0f79ed94ca858c264d742801, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!114 &6908173247509979570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1244306327515194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c90755334a6f34e4fbf44d9d66a9190a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  kind: 1
+  gameElement: 1
+  col: 0
+  row: 0
+  parent: {fileID: 0}
+  widthInit: 0.6
+  heightInit: 1.4
+  vel: {x: 0, y: 0}
+  visualPosOffset: {x: 0, y: 0.15}
+  visualScale: 1
+  hasOutlines: 0
+  isRight: 1
+  friction: 25
+  gravityMult: 1
+  bossVulnerablePoints: []
+  lastPos: {x: 0, y: 0}
+  groundIfBody: {fileID: 0}
+  tileChar: 0
+  MaxSpeedHor: 6.5
+  MaxSpeedVer: 15
+  input: {x: 0, y: 0}
+  inputOld: {x: 0, y: 0}
+  inputJump: 0
+  inputJumpOld: 0
+  inputHoldUp: 0
+  inputHoldDown: 0
+  airCounter: 0
+  fireTime: 0
+  fireCoolingTime: 0
+  onLadder: 0
+  ladderActive: {fileID: 0}
+  ladderActiveClimbable: 0
+  ladders: []
+  ladderClimbables: 
+  dontGoOnLadderTimer: 0
+  hp: 0
+  invincibilityTime: 0
+  waitTime: 0
+  isGroundedOldForSound: 0
+  hpMax: 2
+--- !u!114 &114865517430554480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1244306327515194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70e738463ad9449408bd1b9b092aeb3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  idle:
+  - {fileID: 21300000, guid: 2611c94a0f79ed94ca858c264d742801, type: 3}
+  - {fileID: 21300000, guid: b67a56a3b043bb6489e77d729ee76578, type: 3}
+  - {fileID: 21300000, guid: f876be40514dd1344bd17297f73ce263, type: 3}
+  - {fileID: 21300000, guid: b67a56a3b043bb6489e77d729ee76578, type: 3}
+  walk:
+  - {fileID: 21300000, guid: 03fa577f012d334439e9415bbb8147f3, type: 3}
+  - {fileID: 21300000, guid: fc9bbf8eb49cc614db42917575528385, type: 3}
+  - {fileID: 21300000, guid: b9f7ba1f75b4e6e41bffcb1d941335ee, type: 3}
+  - {fileID: 21300000, guid: 4ca5d9010e80af249a8ed6c8a839ad13, type: 3}
+  - {fileID: 21300000, guid: 6952c2504ce80e64bb066afe282a661c, type: 3}
+  - {fileID: 21300000, guid: 9358049c0a58b854bb470c0d02e7d9df, type: 3}
+  - {fileID: 21300000, guid: a4f88a664f494fa448b786925529694b, type: 3}
+  - {fileID: 21300000, guid: 0f2873f0f5fd4c045b046654516135c1, type: 3}
+  fall:
+  - {fileID: 21300000, guid: f7984770c863e5941877f05a4fc5ff1e, type: 3}
+  - {fileID: 21300000, guid: d636f02a1d43a9943bfc5cf4e58227b2, type: 3}
+  - {fileID: 21300000, guid: 922863d52950a4c4f9c9dcfe5cf7721e, type: 3}
+  - {fileID: 21300000, guid: d636f02a1d43a9943bfc5cf4e58227b2, type: 3}
+  jump:
+  - {fileID: 21300000, guid: bff01557fb9ff2546924c7cb26bc7d2e, type: 3}
+  - {fileID: 21300000, guid: b8fb106a4598f154b80c6cf542a25605, type: 3}
+  ceiling:
+  - {fileID: 21300000, guid: 89049c7f8e7d8c64aadfb4c3045a304d, type: 3}
+  ceilingMove:
+  - {fileID: 21300000, guid: 89049c7f8e7d8c64aadfb4c3045a304d, type: 3}
+  - {fileID: 21300000, guid: 7d7cab13a68b141479312ce4bf18ecd6, type: 3}
+  - {fileID: 21300000, guid: 36990afbc86559f43b6eb71d1e7f96db, type: 3}
+  - {fileID: 21300000, guid: c84c7efb8cb3b9341afa982848dc517a, type: 3}
+  - {fileID: 21300000, guid: ed62ec3a158d5954282dd3a08402ead7, type: 3}
+  - {fileID: 21300000, guid: be0c51be92eb3d3469830bf7a3364086, type: 3}
+  - {fileID: 21300000, guid: 8872a5e8b3528894582a2b548839369a, type: 3}
+  - {fileID: 21300000, guid: d57e51c0f94f61242a8c6ec3e6cadb5b, type: 3}
+  ladder:
+  - {fileID: 21300000, guid: 89049c7f8e7d8c64aadfb4c3045a304d, type: 3}
+  ladderMove:
+  - {fileID: 21300000, guid: 89049c7f8e7d8c64aadfb4c3045a304d, type: 3}
+  - {fileID: 21300000, guid: 7d7cab13a68b141479312ce4bf18ecd6, type: 3}
+  - {fileID: 21300000, guid: 36990afbc86559f43b6eb71d1e7f96db, type: 3}
+  - {fileID: 21300000, guid: c84c7efb8cb3b9341afa982848dc517a, type: 3}
+  - {fileID: 21300000, guid: ed62ec3a158d5954282dd3a08402ead7, type: 3}
+  - {fileID: 21300000, guid: be0c51be92eb3d3469830bf7a3364086, type: 3}
+  - {fileID: 21300000, guid: 8872a5e8b3528894582a2b548839369a, type: 3}
+  - {fileID: 21300000, guid: d57e51c0f94f61242a8c6ec3e6cadb5b, type: 3}
+  hanger:
+  - {fileID: 21300000, guid: 89049c7f8e7d8c64aadfb4c3045a304d, type: 3}
+  wallClimb:
+  - {fileID: 21300000, guid: 89049c7f8e7d8c64aadfb4c3045a304d, type: 3}
+  wallClimbMove:
+  - {fileID: 21300000, guid: 89049c7f8e7d8c64aadfb4c3045a304d, type: 3}
+  - {fileID: 21300000, guid: 7d7cab13a68b141479312ce4bf18ecd6, type: 3}
+  - {fileID: 21300000, guid: 36990afbc86559f43b6eb71d1e7f96db, type: 3}
+  - {fileID: 21300000, guid: c84c7efb8cb3b9341afa982848dc517a, type: 3}
+  - {fileID: 21300000, guid: ed62ec3a158d5954282dd3a08402ead7, type: 3}
+  - {fileID: 21300000, guid: be0c51be92eb3d3469830bf7a3364086, type: 3}
+  - {fileID: 21300000, guid: 8872a5e8b3528894582a2b548839369a, type: 3}
+  - {fileID: 21300000, guid: d57e51c0f94f61242a8c6ec3e6cadb5b, type: 3}
+  fire:
+  - {fileID: 21300000, guid: 2611c94a0f79ed94ca858c264d742801, type: 3}
+  fireCeiling:
+  - {fileID: 21300000, guid: 89049c7f8e7d8c64aadfb4c3045a304d, type: 3}
+  fireWallClimb:
+  - {fileID: 21300000, guid: 89049c7f8e7d8c64aadfb4c3045a304d, type: 3}
+  fireHanger:
+  - {fileID: 21300000, guid: 89049c7f8e7d8c64aadfb4c3045a304d, type: 3}
+  fireLadder:
+  - {fileID: 21300000, guid: 89049c7f8e7d8c64aadfb4c3045a304d, type: 3}
+  yScaleFactor: 0
+  deathTimer: 0

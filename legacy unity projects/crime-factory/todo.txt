@@ -1,0 +1,29 @@
+bomb
+better level generation
+door
+undestructable tiles (under door and around level)
+bullet and bomb limit, pickups
+should be able to change direction while firing
+ladder climb anim
+make bosses have behaviours
+make spider head bump
+ladder top should act as platform
+mk: ladder top render
+bomb count start 0
+bomb count work with restart
+don't finish level without killing boss
+ladder area
+wall climb area
+sounds
+music
+tutorial signs
+integrate new character animation
+faster moving platforms
+level editor should be able to add tile specific info
+- scale for walls and platforms
+- speed overwrite for moving platforms
+- level information for doors
+
+- art for pipes etc
+drop gold
+physbox inheritance

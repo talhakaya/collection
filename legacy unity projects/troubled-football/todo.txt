@@ -1,0 +1,4 @@
+//gol pitch düzelt
+//weather color 4 ihtimal (white, red, green, blue)
+//glitch effect ile oyna
+//mouse ile basınca daha hızlı dönsün bacakla kafa
