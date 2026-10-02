@@ -96,6 +96,15 @@ namespace Games.SleepyTime
 		private TextTalha AddLine(FlashObject container, string placeholder, float eighths)
 		{
 			TextTalha line = TextTalha.New(placeholder);
+
+			// Dialogue lines sit level. The source leaves the sway on for them like every
+			// other TextTalha, but three lines of prose rocking to the beat is hard to read -
+			// this is a deliberate departure. TextTalha.New has already ticked once with the
+			// sway on, so the tilt that left behind is cleared too. The shadow (field2) is a
+			// child of the line, so it stays level with it.
+			line.rotating = false;
+			line.rotation = 0f;
+
 			line.x = Main.stageWidth / 2f;
 			line.y = Main.stageHeight * eighths / 8f;
 			container.addChild(line);

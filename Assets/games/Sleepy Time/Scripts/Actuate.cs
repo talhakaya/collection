@@ -31,11 +31,38 @@ namespace Games.SleepyTime
 
 		private static readonly List<Tween> tweens = new List<Tween>();
 
+		/// <summary>
+		/// A new tween takes over the properties it animates from any tween already running
+		/// on the same target, as motion.Actuate does by default (overwrite = true).
+		///
+		/// The game depends on it. A dialogue speaker leaves on a two-second tween, but the
+		/// next line can be asked for after one - so the same container is sent back in while
+		/// its exit is still running. Without the takeover both tweens wrote its x every
+		/// frame and the older one, applied last, won: the speaker sat off stage until the
+		/// exit ran out and then snapped to centre with the entry already finished.
+		/// </summary>
 		public static void tween(FlashObject target, float seconds, float? x = null, float? y = null)
 		{
 			if (target == null)
 			{
 				return;
+			}
+
+			for (int i = tweens.Count - 1; i >= 0; i--)
+			{
+				Tween running = tweens[i];
+				if (running.target != target)
+				{
+					continue;
+				}
+
+				if (x.HasValue) running.tweenX = false;
+				if (y.HasValue) running.tweenY = false;
+
+				if (!running.tweenX && !running.tweenY)
+				{
+					tweens.RemoveAt(i);
+				}
 			}
 
 			Tween t = new Tween
