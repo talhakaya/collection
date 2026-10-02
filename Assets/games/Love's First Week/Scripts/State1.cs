@@ -181,13 +181,16 @@ namespace Games.LovesFirstWeek
 			diyalogKutusu.scrollFactor.y = 0;
 			diyalogKutusu.alpha = 0;
 			add(diyalogKutusu);
+			// Changed for the collection: the dialogue is white over its black shadow. The
+			// source had it black (4278190080) on the black shadow, which reads as one
+			// smudged line.
 			diyalogText1 = new FlxText(90, 195, 300, "");
-			diyalogText1.setFormat("NES", 12, 4278190080, "left", 1);
+			diyalogText1.setFormat("NES", 12, 0xffffffff, "left", 1);
 			diyalogText1.scrollFactor.x = 0;
 			diyalogText1.scrollFactor.y = 0;
 			add(diyalogText1);
 			diyalogText2 = new FlxText(90, 208, 300, "");
-			diyalogText2.setFormat("NES", 12, 4278190080, "left", 1);
+			diyalogText2.setFormat("NES", 12, 0xffffffff, "left", 1);
 			diyalogText2.scrollFactor.x = 0;
 			diyalogText2.scrollFactor.y = 0;
 			add(diyalogText2);

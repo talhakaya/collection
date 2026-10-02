@@ -79,11 +79,13 @@ namespace Games.LovesFirstWeek
 			}
 
 			enOndekiler.add(new FlxSprite((455 - 120) / 2.0, 204, img4));
+			// Changed for the collection: the title at 60% of the source's size (60, with
+			// the second line at y 50), which was too big.
 			oyun = new FlxText(0, 0, 455, "");
-			oyun.setFormat("NES", 60, 4281017343, "center", 2);
+			oyun.setFormat("NES", 36, 4281017343, "center", 2);
 			add(oyun);
-			oyun2 = new FlxText(0, 50, 455, "");
-			oyun2.setFormat("NES", 60, 4281017343, "center", 2);
+			oyun2 = new FlxText(0, 30, 455, "");
+			oyun2.setFormat("NES", 36, 4281017343, "center", 2);
 			add(oyun2);
 			enOndekiler.add(new FlxText(193, 212, 100, "Language / Dil"));
 			FlxButton turkceButton = enOndekiler.add(new FlxButton(150, 224, "Turkce", turkce));
