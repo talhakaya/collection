@@ -66,6 +66,11 @@ namespace Collection.MainMenu
 			GameObject selected = events.currentSelectedGameObject;
 			if (selected != null && selected.transform.parent == contentParent)
 			{
+				if (selected != lastSelected)
+				{
+					ScrollIntoView((RectTransform)selected.transform);
+				}
+
 				lastSelected = selected;
 				return;
 			}
@@ -73,6 +78,37 @@ namespace Collection.MainMenu
 			if (lastSelected != null && lastSelected.activeInHierarchy)
 			{
 				events.SetSelectedGameObject(lastSelected);
+			}
+		}
+
+		/// Moves the list just far enough that the newly selected button is fully inside
+		/// the viewport. Navigation moves the selection, not the scroll position, so once
+		/// there are more games than fit on screen the pad would otherwise select buttons
+		/// that cannot be seen.
+		private void ScrollIntoView(RectTransform item)
+		{
+			ScrollRect scroll = contentParent.GetComponentInParent<ScrollRect>();
+			if (scroll == null) return;
+
+			RectTransform viewport = scroll.viewport != null ? scroll.viewport : (RectTransform)scroll.transform;
+			Canvas.ForceUpdateCanvases();
+			Bounds bounds = RectTransformUtility.CalculateRelativeRectTransformBounds(viewport, item);
+			Rect view = viewport.rect;
+
+			float shift = 0f;
+			if (bounds.max.y > view.yMax)
+			{
+				shift = view.yMax - bounds.max.y;
+			}
+			else if (bounds.min.y < view.yMin)
+			{
+				shift = view.yMin - bounds.min.y;
+			}
+
+			if (shift != 0f)
+			{
+				scroll.StopMovement();
+				scroll.content.anchoredPosition += new Vector2(0f, shift);
 			}
 		}
 

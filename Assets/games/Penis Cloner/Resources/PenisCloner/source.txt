@@ -1,0 +1,241 @@
+title Penis Cloner
+author Talha Kaya
+homepage talhakayagames.tumblr.com
+(youtube RH76tfDxm7Y)
+background_color #aa6666
+text_color #00cccc
+
+========
+OBJECTS
+========
+
+Background 
+#553333
+
+Target 
+blue
+.000.
+0...0
+0...0
+0...0
+.000.
+
+Wall 
+#222222
+
+Player 
+#C1AC68 #A8935A
+.000.
+.000.
+.000.
+11011
+11.11 
+
+Create 
+#E0924A #8E5E34 #774E2C #563920
+30.03
+13031
+.131.
+13231
+32.23
+
+=======
+LEGEND
+=======
+
+. = Background
+# = Wall
+P = Player
+R = Player and Target
+* = Create
+O = Target
+
+=======
+SOUNDS
+=======
+
+================
+COLLISIONLAYERS
+================
+
+Background
+Create, Target
+Player, Wall
+
+======
+RULES     
+======     
+
+ [ > Player | Create | ] -> [ Player | Create | Player  ]     
+
+==============
+WINCONDITIONS
+==============
+
+All Target On Player 
+All Player On Target
+
+=======     
+LEVELS
+=======
+
+
+message You are a penis.
+
+message You go on an adventure.
+
+message Level 1/10: Go to the blue circle to win.
+
+#########
+#.......#
+#.....O.#
+#.......#
+#.P.....#
+#.......#
+#########
+
+message You won!!!!!
+
+message Level 2/10: Clone yourself with the machine.
+
+message Because world needs more penis.
+
+#########
+####O####
+####*####
+####O####
+####.####
+####P####
+#########
+
+message Level 3/10: Don't clone too many, clone just enough.
+
+message Press R to restart when you fuck up.
+
+message Because you will... fuck up.
+
+message Remember: R to restart.
+
+#########
+#..O.O..#
+#.......#
+#...*...#
+#.......#
+#...P...#
+#########
+
+message Level 4/10: Was that hard? Here's harder.
+
+message You don't have a problem with hard because you're a penis.
+
+#########
+#....O.O#
+#.......#
+#....#*##
+#.......#
+#.....P.#
+#########
+
+message Level 5/10: Form patterns with penises.
+
+message Why not?
+
+#########
+###...###
+###O*O###
+##.....##
+#O*O*O*O#
+#P......#
+#########
+
+message Level 6/10: A lonely penis is a sad penis.
+
+message A sad penis is a small penis.
+
+message A small penis is a lonely penis.
+
+message Circle of life, yo.
+
+#########
+#O..*...#
+#O..*...#
+###O*O..#
+#O..*...#
+#OP.*...#
+#########
+
+message Level 7/10: Demand for penis is still high.
+
+message As men, we can't really understand that.
+
+#########
+#...#...#
+#.......#
+#..O*O..#
+#.O#.#O.#
+#O#.R.#O#
+#########
+
+message Level 8/10: Adventure of a penis never ends.
+
+message Life of a penis is full of surprises.
+
+message Penises know how to cherish their lives.
+
+#########
+#O#####O#
+#O#OOO#O#
+#.#O*O#.#
+#.......#
+#...P...#
+#########
+
+message Level 9/10: Running out of penis jokes.
+
+message c===3
+
+#########
+#.....*.#
+#.P...#.#
+#..O.O.O#
+#.#.#.#.#
+#O.O.O..#
+#########
+
+message Level 10/10: Crazy amounts of penis
+
+message The time has come.
+
+message Time to fill up the world with your penis.
+
+#########
+#OOOOOOO#
+#OOOOOOO#
+#OOO*OOO#
+#OOOO...#
+#OOOO.P.#
+#########
+
+message Penises...
+
+message Everywhere...
+
+message Are you proud?
+
+message Wherever we look, we see your penis clones.
+
+message They are self aware now.
+
+message They can clone themselves without your permission.
+
+message We're fucked.
+
+message You fucked up the whole world.
+
+message Are you happy?
+
+message Congratulations! You beat the game!
+
+message c===3
+
+message You're a dick.
