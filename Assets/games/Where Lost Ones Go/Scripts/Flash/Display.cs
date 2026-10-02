@@ -354,14 +354,17 @@ namespace Games.WhereLostOnesGo
 	///
 	/// The game's fields use the device font - it embeds Verdana but never sets
 	/// embedFonts - and Flash Player does not apply alpha to device text, neither the
-	/// field's own nor its parents'. So the flickering alpha the game sets on its text
-	/// never showed, and the message box hid its text by emptying it rather than by its
-	/// alpha. This draws text the same way: alpha is kept but not used.
+	/// field's own nor its parents'. So in the original the flickering alpha the game
+	/// sets on its text most likely never showed: the jittering copies behind the title
+	/// and the messages were as solid as the text itself.
+	///
+	/// They are drawn faint here, with the alpha the code gives them - the user's choice,
+	/// and what that code was evidently written for. Set DeviceFontIgnoresAlpha to draw
+	/// them as Flash Player did.
 	/// </summary>
 	public class TextField : DisplayObject
 	{
-		/// Set false to draw text with its alpha, as it would look with an embedded font.
-		public const bool DeviceFontIgnoresAlpha = true;
+		public const bool DeviceFontIgnoresAlpha = false;
 
 		public string text = "";
 		public double width = 100;
