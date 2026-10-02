@@ -66,6 +66,12 @@ namespace Collection.Controls
 		private Sprite defaultCursorSprite;
 		private Sprite gameCursorSprite;
 
+		// What the current game's GameList entry asks for, kept so ClearGameCursor has
+		// something to go back to after the game has overridden it from code.
+		private Texture2D entryCursorTexture;
+		private Vector2 entryCursorHotspot;
+		private bool gameCursorHidden;
+
 		public static bool MouseEmulationActive { get; private set; }
 		public static Vector2 EmulatedMousePosition { get; private set; }
 
@@ -135,6 +141,53 @@ namespace Collection.Controls
 			SceneManager.LoadScene(MainMenuBuildIndex);
 		}
 
+		// ---- Cursor control for game code ------------------------------------------------
+		// For a game whose pointer changes as it plays, which the fixed cursorTexture on its
+		// GameList entry can't express. These act on both forms of the pointer at once - the
+		// OS cursor and the emulated gamepad cursor - which Unity's own Cursor.SetCursor and
+		// Cursor.visible do not.
+		//
+		// A game never has to undo any of this before it exits: everything set here is dropped
+		// when the game changes (see ApplyMouseEmulation), by whatever route the player left.
+		// It does persist across the game's own scenes, until the game clears it.
+
+		/// <summary>
+		/// Replaces the cursor until ClearGameCursor or the game is left. Null means the
+		/// collection's default cursor, even for a game whose GameList entry sets one.
+		/// The texture needs the same import settings as GameList's cursorTexture.
+		/// </summary>
+		public static void SetGameCursor(Texture2D texture, Vector2 hotspot)
+		{
+			if (instance == null) return;
+
+			instance.gameCursorHidden = false;
+			instance.ApplyCursorTexture(texture, hotspot);
+		}
+
+		/// <summary>
+		/// Stops the collection drawing any cursor, for while the game is drawing its own
+		/// pointer. The pointer keeps working - a gamepad still moves and clicks it - there is
+		/// just nothing of ours on top of the game's.
+		/// </summary>
+		public static void HideGameCursor()
+		{
+			if (instance == null) return;
+
+			instance.gameCursorHidden = true;
+		}
+
+		/// <summary>
+		/// Undoes SetGameCursor and HideGameCursor, back to what the game's GameList entry
+		/// specifies (or the defaults, if it specifies nothing).
+		/// </summary>
+		public static void ClearGameCursor()
+		{
+			if (instance == null) return;
+
+			instance.gameCursorHidden = false;
+			instance.ApplyCursorTexture(instance.entryCursorTexture, instance.entryCursorHotspot);
+		}
+
 		private void OnDestroy()
 		{
 			if (exitAction != null)
@@ -173,7 +226,11 @@ namespace Collection.Controls
 			// Applied unconditionally rather than only when a game has a texture: the main menu
 			// and games without one take the null branch, which is what puts the defaults back
 			// after a game that had its own. There is no separate "leaving a game" cleanup to
-			// forget.
+			// forget. The same goes for anything the previous game set from its own code
+			// (SetGameCursor/HideGameCursor): overwriting it here is the whole reset.
+			entryCursorTexture = cursorTexture;
+			entryCursorHotspot = cursorHotspot;
+			gameCursorHidden = false;
 			ApplyCursorTexture(cursorTexture, cursorHotspot);
 
 			// New scene: nothing's told us yet whether the player's holding a pad or the mouse
@@ -222,7 +279,7 @@ namespace Collection.Controls
 				gameWantsCursorVisible = UnityEngine.Cursor.visible;
 			}
 
-			UnityEngine.Cursor.visible = gameWantsCursorVisible && !suppressRealCursor;
+			UnityEngine.Cursor.visible = gameWantsCursorVisible && !suppressRealCursor && !gameCursorHidden;
 			lastAppliedCursorVisible = UnityEngine.Cursor.visible;
 
 			// Moving a virtual cursor with the stick only makes sense for games that opted in,
@@ -259,7 +316,7 @@ namespace Collection.Controls
 
 			if (cursorImage != null)
 			{
-				cursorImage.enabled = gameWantsCursorVisible && cursorImage.sprite != null;
+				cursorImage.enabled = gameWantsCursorVisible && !gameCursorHidden && cursorImage.sprite != null;
 			}
 
 			Vector2 stick = mouseMoveAction != null ? mouseMoveAction.ReadValue<Vector2>() : Vector2.zero;

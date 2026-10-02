@@ -13,6 +13,31 @@ namespace Games.Chocolate
 		private Door door;
 		private SpriteRenderer spriteRenderer;
 
+		// How many of these are on screen. Consecutive slides each carry their own cursor, and
+		// the outgoing slide is only destroyed at the end of the frame the incoming one appears
+		// in - so its OnDisable runs after the new one's OnEnable. Counting is what stops that
+		// late OnDisable handing the collection's cursor back while the new arrow is up.
+		private static int activeCount;
+
+		// This arrow is the pointer on the slides that have it, so the collection must not
+		// draw its own on top. Slides without one (the blurred ones) get the normal cursor
+		// back. Leaving the game mid-slide needs nothing here: the collection resets it.
+		void OnEnable ()
+		{
+			if (activeCount++ == 0)
+			{
+				GlobalInputManager.HideGameCursor();
+			}
+		}
+
+		void OnDisable ()
+		{
+			if (--activeCount == 0)
+			{
+				GlobalInputManager.ClearGameCursor();
+			}
+		}
+
 		void Start ()
 		{
 			spriteRenderer = GetComponent<SpriteRenderer> ();
