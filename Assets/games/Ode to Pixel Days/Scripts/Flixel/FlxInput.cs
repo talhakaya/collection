@@ -33,6 +33,9 @@ namespace Games.OdeToPixelDays
 		{
 			"LEFT", "RIGHT", "UP", "DOWN", "A", "D", "W", "S",
 			"SPACE", "ENTER", "ESCAPE", "M", "N", "E",
+
+			// Not Flixel keys: the port's own actions for working the menu without a mouse.
+			"MENU_UP", "MENU_DOWN", "MENU_SELECT",
 		};
 
 		private readonly Dictionary<string, Key> keys = new Dictionary<string, Key>();
@@ -147,6 +150,14 @@ namespace Games.OdeToPixelDays
 		public double x;
 		public double y;
 
+		/// Flixel: whether its cursor sprite is showing, which is what makes buttons
+		/// respond to the mouse. Here: whether the mouse is in use - it has moved or
+		/// clicked since anything last said otherwise - so a mouse left lying over a
+		/// button does not hold the highlight while the menu is worked from a pad.
+		public bool visible;
+
+		private Vector2 lastPosition;
+		private bool positionKnown;
 		private int current;
 		private int last;
 		private bool down;
@@ -189,7 +200,23 @@ namespace Games.OdeToPixelDays
 			x = gamePosition.x + (camera != null ? camera.scroll.x : 0);
 			y = gamePosition.y + (camera != null ? camera.scroll.y : 0);
 
+			if (!positionKnown)
+			{
+				positionKnown = true;
+				lastPosition = gamePosition;
+			}
+			else if ((gamePosition - lastPosition).sqrMagnitude > 0.01f)
+			{
+				lastPosition = gamePosition;
+				visible = true;
+			}
+
 			bool isDown = TaloketoInputManager.GetMouseButton(0);
+			if (isDown)
+			{
+				visible = true;
+			}
+
 			if (isDown && !down)
 			{
 				current = current > 0 ? 1 : 2;

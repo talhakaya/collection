@@ -1,32 +1,25 @@
 namespace Games.OdeToPixelDays
 {
 	/// <summary>
-	/// The first level. Ported from levels/Level1.as.
-	///
-	/// One screen: Hans on the left, the cheerleader in the middle - who walks off through
-	/// the door as he approaches - and the tutorial prompts for moving and for the door.
+	/// Ported from levels/Level7.as.
 	/// </summary>
-	public class Level1 : Level
+	public class Level7 : Level
 	{
-		private static string S_tiles = "Level1_S_tiles";
-		private static string S_tutoWASD = "Level1_S_tutoWASD";
-		private static string S_tutoDirs = "Level1_S_tutoDirs";
-		private static string music = "Level1_music";
+		private static string S_tiles = "Level7_S_tiles";
 
-		private TutoSpace tutospace;
+		private bool narratorPut;
 
 		public override void create()
 		{
 			gameSave = new FlxSave();
 			gameSave.bind("save");
-			gameSave.data.level = 1;
-			FlxG.playMusic(music, 1);
+			gameSave.data.level = 8;
 			levelwidth = 40;
 			levelheight = 30;
-			scale = new FlxPoint(1, 1);
+			scale = new FlxPoint(2, 2);
 			base.create();
-			FlxG.bgColor = 4289357414;
-			int[] data =
+			FlxG.bgColor = 4288900388;
+			int[] data = new int[]
 			{
 				1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 				1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -35,7 +28,6 @@ namespace Games.OdeToPixelDays
 				1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 				1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 				1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-				1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 				1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
 				1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
 				1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
@@ -48,7 +40,8 @@ namespace Games.OdeToPixelDays
 				1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
 				1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
 				1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-				1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+				1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+				1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
 				1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 				1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 				1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -62,24 +55,22 @@ namespace Games.OdeToPixelDays
 			level = new FlxTilemap();
 			level.loadMap(FlxTilemap.arrayToCSV(data, 40), S_tiles, 0, 0, FlxTilemap.AUTO);
 			add(level);
-			interacts.add(new Door(280, 120, false, scale));
-			narrator = new Narrator(35, 68, 400, 1, false);
+			add(new Door(10, 88, true, scale));
+			interacts.add(new Door(270, 88, false, scale));
+			narrator = new Narrator(20, 66, 400, 13, false);
 			add(narrator);
-			narrator = new Narrator(25, 88, 400, 2, true);
-			add(narrator);
-			narrators.add(new NarratorTouch(180, 0, narrator));
-			player = new Hans(16, 132, scale);
+			player = new Hans(26, 140, scale);
 			add(player);
-			cheerleader = new Cheerleader(220, 130, scale, 1, player);
+			cheerleader = new Cheerleader(220, 140, scale, 7, player);
 			add(cheerleader);
-			FlxText tutorial = new FlxText(60, 201, 280, "OR");
-			tutorial.color = 4286019447;
-			add(tutorial);
-			add(new FlxSprite(8, 192, S_tutoWASD));
-			add(new FlxSprite(80, 192, S_tutoDirs));
-			tutospace = new TutoSpace(264, 196);
-			tutospace.alpha = 0;
-			add(tutospace);
+			FlxG.camera.setBounds(0, 0, 320, 240, true);
+			FlxG.camera.follow(player, FlxCamera.STYLE_LOCKON);
+			narratorPut = false;
+		}
+
+		public override void getWell()
+		{
+			FlxG.bgColor = 4288900388;
 		}
 
 		public override void update()
@@ -87,15 +78,29 @@ namespace Games.OdeToPixelDays
 			base.update();
 			FlxG.collide(level, cheerleader);
 			FlxG.overlap<FlxSprite, FlxSprite>(cheerleader, interacts, overlapped);
-			if (tutospace.alpha < 1 && player.x > 240)
+		}
+
+		protected override void overlapped(FlxSprite Sprite1, FlxSprite Sprite2)
+		{
+			base.overlapped(Sprite1, Sprite2);
+			if (Sprite1 is Cheerleader && Sprite2 is Door && cheerleader.gone)
 			{
-				tutospace.alpha += 0.02;
+				if (!cheerleaderTouchedDoor)
+				{
+					Sprite2.kill();
+				}
+
+				if (!narratorPut)
+				{
+					narratorPut = true;
+					narrators.add(new Narrator(140, 100, 200, 14, false));
+				}
 			}
 		}
 
 		public override void nextLevel()
 		{
-			FlxG.switchState(new Level2());
+			FlxG.switchState(new Level8());
 		}
 	}
 }

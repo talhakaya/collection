@@ -224,9 +224,10 @@ namespace Games.OdeToPixelDays
 				xAndY.text = Math.Floor(player.x) + ", " + Math.Floor(player.y);
 			}
 
-			// Not ported yet: Escape went back to the game's own Menu state, which is not
-			// part of this milestone. The collection's exit shortcut still leaves the game.
-			// if (FlxG.keys.justPressed("ESCAPE")) FlxG.switchState(new Menu());
+			if (FlxG.keys.justPressed("ESCAPE"))
+			{
+				FlxG.switchState(new Menu());
+			}
 
 			if (timer1.complete)
 			{
@@ -310,7 +311,7 @@ namespace Games.OdeToPixelDays
 			// the corner of every level, linking to their site.
 		}
 
-		protected void overlapped(FlxSprite Sprite1, FlxSprite Sprite2)
+		protected virtual void overlapped(FlxSprite Sprite1, FlxSprite Sprite2)
 		{
 			if (Sprite1 is Hans && Sprite2 is Door && player.interact)
 			{
@@ -385,7 +386,7 @@ namespace Games.OdeToPixelDays
 			noMusic = true;
 		}
 
-		protected void cheerleaderOverlappedWithMachine(Cheerleader Sprite1, Machine Sprite2)
+		protected virtual void cheerleaderOverlappedWithMachine(Cheerleader Sprite1, Machine Sprite2)
 		{
 			Sprite2.kill();
 			timer3.start(60);

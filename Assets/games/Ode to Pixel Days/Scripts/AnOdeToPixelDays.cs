@@ -12,9 +12,7 @@ namespace Games.OdeToPixelDays
 	{
 		private void Awake()
 		{
-			// Not ported yet: the source starts at Menu. Until the menu exists the game
-			// starts straight in the first level.
-			Init(320, 240, () => new Level1(), 2);
+			Init(320, 240, () => new Menu(), 2);
 		}
 	}
 }
