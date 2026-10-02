@@ -16,9 +16,11 @@ namespace Games.WhereLostOnesGo
 	/// thirtieth of a second per frame - so the piece takes the same time however fast the
 	/// machine is, and a slow frame catches up rather than stretching it.
 	///
-	/// The stage is rendered at its own size into a texture, then shown as large as fits
-	/// the window with hard pixels: the game zooms twenty times into a photo, and was asked
-	/// to look pixelated doing it, not smoothed.
+	/// The stage is rendered into a texture a whole number of times its size - as many as
+	/// fit the screen's height - then shown as large as fits the window. Bitmaps are
+	/// point-sampled, so the twenty-times zoom into the photo stays pixelated, as asked;
+	/// text and the vector shapes get the extra resolution, so Verdana reads as Verdana
+	/// rather than as stretched one-pixel strokes.
 	///
 	/// The mouse is whatever TaloketoInputManager says it is, so the collection's mouse
 	/// emulation drives it from a gamepad.
@@ -90,7 +92,8 @@ namespace Games.WhereLostOnesGo
 
 		private void buildDisplay()
 		{
-			target = new RenderTexture(StageWidth, StageHeight, 0, RenderTextureFormat.ARGB32);
+			int multiple = Mathf.Max(1, Screen.height / StageHeight);
+			target = new RenderTexture(StageWidth * multiple, StageHeight * multiple, 0, RenderTextureFormat.ARGB32);
 			target.filterMode = FilterMode.Point;
 			target.Create();
 
