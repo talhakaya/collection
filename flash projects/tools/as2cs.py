@@ -6,32 +6,51 @@ parsing. It does the mechanical part (declarations, types, embedded asset names,
 data, collision callbacks); what it cannot do is reported or left for the compiler to
 point at, and fixed by hand afterwards.
 
-It was written for Ode to Pixel Days (see SRC and DST below) and is kept for the next
-Flixel game; the paths, the namespace and the callbacks table are the parts to change.
+It was written for Ode to Pixel Days and reused for Love's First Week; each game's paths,
+namespace and hand-ported callbacks are an entry in GAMES.
 
 What needed doing by hand afterwards, for Ode: Array fields (typed lists), "for each",
 [a, b] literals outside addAnimation, integer division (30 / 8), a Number assigned to a
 uint, Flash-only calls (navigateToURL), and the class summaries.
 
-Usage, from the repository root: python "flash projects/tools/as2cs.py" Name [Name...]
-(levels are found under levels/). It overwrites the target files.
+Usage, from the repository root: python "flash projects/tools/as2cs.py" <game> Name [Name...]
+where <game> is a key of GAMES below. It overwrites the target files.
 """
 import io, os, re, sys
 
-SRC = 'flash projects/OdeToPixelDays_decompiled/scripts'
-DST = 'Assets/games/Ode to Pixel Days/Scripts'
+# One entry per game: where its decompiled classes are, where the C# goes, its namespace,
+# and the collision callbacks that live in hand-ported classes (the converter finds the
+# ones in the classes it is given by itself).
+GAMES = {
+    'ode': {
+        'src': 'flash projects/OdeToPixelDays_decompiled/scripts',
+        'dst': 'Assets/games/Ode to Pixel Days/Scripts',
+        'namespace': 'Games.OdeToPixelDays',
+        'callbacks': {
+            'overlapped': ('FlxSprite', 'FlxSprite'),
+            'overlappedMonsters': ('FlxSprite', 'Monster'),
+            'cheerleaderOverlappedWithMachine': ('Cheerleader', 'Machine'),
+            'blockParticle': ('FlxTilemap', 'BlockFalling'),
+            'blockCollision': ('Hans', 'FlxSprite'),
+        },
+    },
+    'love': {
+        'src': 'flash projects/Love_s_First_Week_682x384_decompiled/scripts',
+        'dst': "Assets/games/Love's First Week/Scripts",
+        'namespace': 'Games.LovesFirstWeek',
+        'callbacks': {},
+    },
+}
+
+SRC = DST = NAMESPACE = None
 
 TYPES = {'Number': 'double', 'Boolean': 'bool', 'String': 'string', 'int': 'int', 'uint': 'int',
          'void': 'void', 'Array': 'Array', '*': 'object', 'Class': 'string'}
 
-# Callbacks defined in Level.cs (already ported by hand), for FlxG.overlap/collide type arguments.
-CALLBACKS = {
-    'overlapped': ('FlxSprite', 'FlxSprite'),
-    'overlappedMonsters': ('FlxSprite', 'Monster'),
-    'cheerleaderOverlappedWithMachine': ('Cheerleader', 'Machine'),
-    'blockParticle': ('FlxTilemap', 'BlockFalling'),
-    'blockCollision': ('Hans', 'FlxSprite'),
-}
+CALLBACKS = {}
+
+# Names of methods that some converted class overrides: their first declaration is virtual.
+OVERRIDDEN = set()
 
 SUMMARIES = {}
 
@@ -85,6 +104,7 @@ def expr(line, locals_, cls_callbacks):
     # this.x -> x, unless a local or parameter of the same name is in the way.
     line = re.sub(r'\bthis\.(\w+)', lambda m: m.group(0) if m.group(1) in locals_ else m.group(1), line)
     line = re.sub(r'\bsuper\.', 'base.', line)
+    line = re.sub(r'\bfor\(var (\w+):([\w*]+) = ', lambda m: 'for(%s %s = ' % (cstype(m.group(2)), m.group(1)), line)
     line = line.replace('Math.random()', 'FlxG.random()')
     line = line.replace('Math.floor(', 'Math.Floor(').replace('Math.ceil(', 'Math.Ceiling(').replace('Math.abs(', 'Math.Abs(')
     line = line.replace("\\'", "'")
@@ -142,6 +162,11 @@ def convert(name):
     m = re.search(r'arrayToCSV\(data,(\d+)\)', '\n'.join(lines))
     if m:
         width = int(m.group(1))
+    else:
+        # Love's First Week passes its levelwidth field instead of a number.
+        m = re.search(r'levelwidth = (\d+);', '\n'.join(lines))
+        if m:
+            width = int(m.group(1))
 
     def emit(text):
         out.append(('\t' * (depth + 1)) + text if text else '')
@@ -217,9 +242,15 @@ def convert(name):
                         if out and out[-1] == '':
                             out.pop()
                         continue
-                    emit('public %s(%s)' % (name, plist))
+                    supers = [b for b in body if re.match(r'super\(.+\);$', b)]
+                    if supers:
+                        base_args = expr(supers[0][len('super('):-2], locals_, cls_callbacks)
+                        emit(spaced('public %s(%s) : base(%s)' % (name, plist, base_args)))
+                    else:
+                        emit('public %s(%s)' % (name, plist))
                 else:
-                    emit('%s %s%s %s(%s)' % (m.group(2), 'override ' if m.group(1) else '', cstype(m.group(6)), m.group(3), plist))
+                    modifier = 'override ' if m.group(1) else ('virtual ' if m.group(3) in OVERRIDDEN and m.group(2) != 'private' else '')
+                    emit('%s %s%s %s(%s)' % (m.group(2), modifier, cstype(m.group(6)), m.group(3), plist))
                 func_depth = depth
                 continue
 
@@ -242,7 +273,7 @@ def convert(name):
                     out.append('')
             continue
 
-        if l == 'super();' or l.startswith('trace('):
+        if l == 'super();' or l.startswith('trace(') or (is_ctor and re.match(r'super\(.+\);$', l)):
             continue
 
         # Tile data. Long arrays are wrapped over several source lines.
@@ -286,7 +317,7 @@ def convert(name):
     header = ''
     if uses_math:
         header += 'using System;\n\n'
-    header += 'namespace Games.OdeToPixelDays\n{\n'
+    header += 'namespace %s\n{\n' % NAMESPACE
     header += '\t/// <summary>\n' + ''.join('\t/// %s\n' % s if s else '\t///\n' for s in summary.split('\n')) + '\t/// </summary>\n'
     text = header + text + '\n}\n'
 
@@ -295,12 +326,24 @@ def convert(name):
     print(name, '->', target, '(%d lines)' % text.count('\n'))
 
 
+def collect_callbacks(names):
+    """Every two-argument method of the classes being converted can be a collision callback,
+    and every method one of them overrides has to be virtual where it is first declared."""
+    for n in names:
+        path, _ = find_source(n)
+        for l in io.open(path, encoding='utf-8').read().splitlines():
+            m = re.match(r'\s*(?:override )?(?:public|private|protected) function (\w+)\((\w+):(\w+), (\w+):(\w+)\) : void', l)
+            if m:
+                CALLBACKS[m.group(1)] = (m.group(3), m.group(5))
+            m = re.match(r'\s*override (?:public|protected) function (\w+)\(', l)
+            if m:
+                OVERRIDDEN.add(m.group(1))
+
+
 if __name__ == '__main__':
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    try:
-        import summaries
-        SUMMARIES.update(summaries.SUMMARIES)
-    except ImportError:
-        pass
-    for n in sys.argv[1:]:
+    game = GAMES[sys.argv[1]]
+    SRC, DST, NAMESPACE = game['src'], game['dst'], game['namespace']
+    CALLBACKS.update(game['callbacks'])
+    collect_callbacks(sys.argv[2:])
+    for n in sys.argv[2:]:
         convert(n)
