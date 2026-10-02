@@ -7,11 +7,15 @@ namespace Collection.Controls
 {
 	/// <summary>
 	/// Always-on input that lives outside any single game's context: the gamepad
-	/// Start+Select / keyboard Shift+Escape shortcut back to the main menu, hiding the real
-	/// mouse cursor while a gamepad is the active input device (everywhere - menus included,
-	/// not just games), and mouse emulation for mouse-only games with no gamepad support of
-	/// their own. Bootstraps itself before the first scene loads, so no manual placement is
-	/// needed.
+	/// Start+Select / keyboard Shift+Escape shortcut back to the main menu, the cursor, and
+	/// mouse emulation for mouse-only games with no gamepad support of their own. Bootstraps
+	/// itself before the first scene loads, so no manual placement is needed.
+	///
+	/// The cursor is drawn by the collection itself, always - the OS cursor is never shown
+	/// over the game. A mouse and a gamepad stick move the same sprite, so switching between
+	/// them changes nothing on screen, and it is the only kind of pointer that exists on a
+	/// platform with no OS cursor. With a gamepad it is shown only in games that opted into
+	/// mouse emulation; everywhere else (menus included) a pad means no cursor at all.
 	///
 	/// This lives here rather than in TaloketoInputManager because it needs an Update loop and
 	/// a persistent on-screen cursor - the same always-on, scene-independent shape as the exit
@@ -28,6 +32,10 @@ namespace Collection.Controls
 		private const string MapName = "Global";
 		private const string ExitActionName = "ExitToMainMenu";
 		private const int MainMenuBuildIndex = 0;
+
+		// The cursor is sized for a 1080-pixel-high screen and scaled with the real height, so
+		// it is the same size relative to the picture on a Steam Deck and at 4K.
+		private const float CursorReferenceHeight = 1080f;
 		private const float DefaultCursorSize = 32f;
 
 		private InputActionAsset asset;
@@ -42,14 +50,6 @@ namespace Collection.Controls
 		private float mouseEmulationSpeed;
 		private bool hideCursorWhenUsingGamepad = true;
 
-		// The game may show/hide the real cursor itself (a cutscene, a crosshair-driven
-		// screen, ...) and we want to respect that rather than always forcing ours over it.
-		// We also write to Cursor.visible ourselves though, so a bare read can't tell "the
-		// game changed its mind" apart from "that's just what we set last frame" - comparing
-		// against what we last wrote resolves that.
-		private bool gameWantsCursorVisible = true;
-		private bool lastAppliedCursorVisible = true;
-
 		// A gamepad being connected doesn't mean it's what's driving the pointer right now -
 		// the player might just be using the real mouse. Tracked so picking the mouse back up
 		// hands control back immediately instead of the emulated cursor fighting it.
@@ -57,14 +57,17 @@ namespace Collection.Controls
 		private bool emulationActiveLastFrame;
 
 		// Whether the real mouse has genuinely been moved or clicked at any point this session.
-		// Until it has, a connected gamepad is taken to be the active device - see
-		// UpdateActiveDevice.
+		// Until it has, a connected gamepad is taken to be the active device, and no mouse
+		// cursor is drawn at all - see UpdateActiveDevice.
 		private bool mouseEverUsed;
 
 		private RectTransform cursorRect;
 		private Image cursorImage;
 		private Sprite defaultCursorSprite;
 		private Sprite gameCursorSprite;
+
+		// The current cursor's size on a CursorReferenceHeight-high screen.
+		private Vector2 cursorBaseSize = new Vector2(DefaultCursorSize, DefaultCursorSize);
 
 		// What the current game's GameList entry asks for, kept so ClearGameCursor has
 		// something to go back to after the game has overridden it from code.
@@ -143,9 +146,8 @@ namespace Collection.Controls
 
 		// ---- Cursor control for game code ------------------------------------------------
 		// For a game whose pointer changes as it plays, which the fixed cursorTexture on its
-		// GameList entry can't express. These act on both forms of the pointer at once - the
-		// OS cursor and the emulated gamepad cursor - which Unity's own Cursor.SetCursor and
-		// Cursor.visible do not.
+		// GameList entry can't express. Unity's own Cursor.SetCursor and Cursor.visible do
+		// nothing useful here: they act on the OS cursor, which the collection never shows.
 		//
 		// A game never has to undo any of this before it exits: everything set here is dropped
 		// when the game changes (see ApplyMouseEmulation), by whatever route the player left.
@@ -154,7 +156,7 @@ namespace Collection.Controls
 		/// <summary>
 		/// Replaces the cursor until ClearGameCursor or the game is left. Null means the
 		/// collection's default cursor, even for a game whose GameList entry sets one.
-		/// The texture needs the same import settings as GameList's cursorTexture.
+		/// The hotspot is the click point, in pixels from the texture's top-left corner.
 		/// </summary>
 		public static void SetGameCursor(Texture2D texture, Vector2 hotspot)
 		{
@@ -195,9 +197,9 @@ namespace Collection.Controls
 				exitAction.performed -= OnExitToMainMenu;
 			}
 
-			// The OS cursor outlives play mode in the Editor, so a game's cursor would otherwise
-			// linger over the Game view after stopping.
-			ApplyCursorTexture(null, Vector2.zero);
+			// Cursor.visible outlives play mode in the Editor, so the OS cursor would otherwise
+			// stay hidden over the Game view after stopping.
+			UnityEngine.Cursor.visible = true;
 		}
 
 		// ---- Mouse emulation -------------------------------------------------------------
@@ -239,19 +241,11 @@ namespace Collection.Controls
 			usingGamepadForMouse = false;
 			emulationActiveLastFrame = false;
 			MouseEmulationActive = false;
-			// Fresh scene, fresh assumption: start as if it wants a visible cursor (Unity's own
-			// default) until its own Cursor.visible writes say otherwise.
-			gameWantsCursorVisible = true;
 
 			if (mouseEmulationEnabled)
 			{
 				EmulatedMousePosition = new Vector2(Screen.width * 0.5f, Screen.height * 0.5f);
 			}
-
-			// Whatever the previous scene left it as, a fresh scene starts with a normal real
-			// cursor; Update() hides it again the moment a gamepad actually takes over.
-			UnityEngine.Cursor.visible = true;
-			lastAppliedCursorVisible = true;
 
 			if (cursorImage != null)
 			{
@@ -261,74 +255,91 @@ namespace Collection.Controls
 
 		private void Update()
 		{
-			// Runs in every scene, not just ones with mouse emulation opted in - hiding the
-			// real cursor while a gamepad drives is a global behaviour (menus included); the
-			// stick-moves-a-virtual-cursor part below is the only bit still per-game.
+			// Runs in every scene, not just ones with mouse emulation opted in - the cursor is
+			// global (menus included); the stick-moves-the-pointer part below is the only bit
+			// that is per-game.
 			UpdateActiveDevice();
 
-			bool suppressRealCursor = hideCursorWhenUsingGamepad && usingGamepadForMouse;
+			// Written every frame rather than once: the Editor and the OS put the cursor back
+			// when the window regains focus. Outside the window the OS shows it regardless.
+			UnityEngine.Cursor.visible = false;
 
-			// The game/scene may show or hide the real cursor itself (a cutscene, a
-			// crosshair-driven screen, ...) and that should be respected rather than always
-			// forcing our own idea of visibility over it. We also write to Cursor.visible
-			// ourselves though, so a bare read can't tell "it changed its mind" apart from
-			// "that's just what we set last frame" - comparing against what we last wrote
-			// resolves that.
-			if (UnityEngine.Cursor.visible != lastAppliedCursorVisible)
-			{
-				gameWantsCursorVisible = UnityEngine.Cursor.visible;
-			}
+			bool gamepadDriving = hideCursorWhenUsingGamepad && usingGamepadForMouse;
 
-			UnityEngine.Cursor.visible = gameWantsCursorVisible && !suppressRealCursor && !gameCursorHidden;
-			lastAppliedCursorVisible = UnityEngine.Cursor.visible;
-
-			// Moving a virtual cursor with the stick only makes sense for games that opted in,
-			// and only while we're actually suppressing the real one for a gamepad - if the
-			// debug toggle is forcing the real cursor to stay on, emulation stands down too.
-			bool emulating = mouseEmulationEnabled && suppressRealCursor;
+			// Moving the pointer with the stick only makes sense for games that opted in, and
+			// only while a gamepad is actually what's driving - if the debug toggle is keeping
+			// the mouse cursor on regardless, emulation stands down too.
+			bool emulating = mouseEmulationEnabled && gamepadDriving;
 			MouseEmulationActive = emulating;
 
-			if (!emulating)
+			Mouse mouse = Mouse.current;
+
+			if (emulating)
 			{
-				if (cursorImage != null) cursorImage.enabled = false;
+				emulationActiveLastFrame = true;
 
-				if (emulationActiveLastFrame && Mouse.current != null)
-				{
-					// Player picked the real mouse back up - warp it to where the emulated
-					// cursor was so it doesn't jump. Only fires on the single frame the switch
-					// happens, so it doesn't fight whatever mouse movement triggered the switch.
-					Mouse.current.WarpCursorPosition(EmulatedMousePosition);
-				}
-				emulationActiveLastFrame = false;
+				Vector2 stick = mouseMoveAction != null ? mouseMoveAction.ReadValue<Vector2>() : Vector2.zero;
+				Vector2 pos = EmulatedMousePosition + stick * mouseEmulationSpeed * Time.deltaTime;
+				pos.x = Mathf.Clamp(pos.x, 0f, Screen.width);
+				pos.y = Mathf.Clamp(pos.y, 0f, Screen.height);
+				EmulatedMousePosition = pos;
 
-				// Keep tracking the real mouse even while it isn't the active device, so
-				// whenever the pad takes emulation back over it picks up from wherever the
-				// mouse actually left the pointer instead of jumping to a stale position.
-				if (mouseEmulationEnabled && Mouse.current != null)
-				{
-					EmulatedMousePosition = Mouse.current.position.ReadValue();
-				}
-
+				DrawCursor(EmulatedMousePosition, true);
 				return;
 			}
 
-			emulationActiveLastFrame = true;
-
-			if (cursorImage != null)
+			if (emulationActiveLastFrame && mouse != null)
 			{
-				cursorImage.enabled = gameWantsCursorVisible && !gameCursorHidden && cursorImage.sprite != null;
+				// Player picked the real mouse back up - warp it to where the emulated
+				// cursor was so it doesn't jump. Only fires on the single frame the switch
+				// happens, so it doesn't fight whatever mouse movement triggered the switch.
+				mouse.WarpCursorPosition(EmulatedMousePosition);
+			}
+			emulationActiveLastFrame = false;
+
+			Vector2 mousePosition = mouse != null ? mouse.position.ReadValue() : Vector2.zero;
+
+			// Keep tracking the real mouse even while it isn't the active device, so
+			// whenever the pad takes emulation back over it picks up from wherever the
+			// mouse actually left the pointer instead of jumping to a stale position.
+			if (mouseEmulationEnabled && mouse != null)
+			{
+				EmulatedMousePosition = mousePosition;
 			}
 
-			Vector2 stick = mouseMoveAction != null ? mouseMoveAction.ReadValue<Vector2>() : Vector2.zero;
-			Vector2 pos = EmulatedMousePosition + stick * mouseEmulationSpeed * Time.deltaTime;
-			pos.x = Mathf.Clamp(pos.x, 0f, Screen.width);
-			pos.y = Mathf.Clamp(pos.y, 0f, Screen.height);
-			EmulatedMousePosition = pos;
+			// The mouse's own cursor: only once the mouse has really been used (a position
+			// nobody has moved to is meaningless, and on a pad-only machine there may never be
+			// one), not while a gamepad is driving, and not when the pointer has left the
+			// window, where the OS cursor takes over.
+			bool mouseOnScreen = mouse != null && mouseEverUsed && !gamepadDriving && Application.isFocused
+				&& mousePosition.x >= 0f && mousePosition.x <= Screen.width
+				&& mousePosition.y >= 0f && mousePosition.y <= Screen.height;
 
-			if (cursorRect != null)
+			DrawCursor(mousePosition, mouseOnScreen);
+		}
+
+		/// Places the cursor sprite at a pointer position in screen pixels, or hides it. The
+		/// size is reapplied every frame because the window can be resized at any time.
+		private void DrawCursor(Vector2 screenPosition, bool pointerOnScreen)
+		{
+			if (cursorImage == null)
 			{
-				cursorRect.anchoredPosition = EmulatedMousePosition;
+				return;
 			}
+
+			bool visible = pointerOnScreen && !gameCursorHidden && cursorImage.sprite != null;
+			if (cursorImage.enabled != visible)
+			{
+				cursorImage.enabled = visible;
+			}
+
+			if (!visible)
+			{
+				return;
+			}
+
+			cursorRect.sizeDelta = cursorBaseSize * (Screen.height / CursorReferenceHeight);
+			cursorRect.anchoredPosition = screenPosition;
 		}
 
 		/// Whether a gamepad is the thing actually moving the pointer right now, not just
@@ -345,17 +356,19 @@ namespace Collection.Controls
 		/// did.
 		private void UpdateActiveDevice()
 		{
+			// Tracked whether or not a gamepad is connected: it also decides when the mouse's
+			// cursor first appears.
+			Mouse mouse = Mouse.current;
+			if (!mouseEverUsed && mouse != null && MouseShowsActivity(mouse))
+			{
+				mouseEverUsed = true;
+			}
+
 			Gamepad pad = Gamepad.current;
 			if (pad == null)
 			{
 				usingGamepadForMouse = false;
 				return;
-			}
-
-			Mouse mouse = Mouse.current;
-			if (!mouseEverUsed && mouse != null && MouseShowsActivity(mouse))
-			{
-				mouseEverUsed = true;
 			}
 
 			if (!mouseEverUsed)
@@ -381,12 +394,12 @@ namespace Collection.Controls
 				|| mouse.middleButton.isPressed;
 		}
 
-		/// Sizes and positions itself in raw screen pixels (anchored/pivot at the bottom-left,
-		/// no CanvasScaler) so EmulatedMousePosition - which mirrors Input.mousePosition's own
-		/// screen-pixel convention - can be assigned to anchoredPosition directly.
+		/// Positioned in raw screen pixels (anchored at the bottom-left, no CanvasScaler) so a
+		/// pointer position - which follows Input.mousePosition's own screen-pixel convention -
+		/// can be assigned to anchoredPosition directly. Drawn above every game's own UI.
 		private void CreateCursor()
 		{
-			var canvasGo = new GameObject("MouseEmulationCanvas", typeof(Canvas));
+			var canvasGo = new GameObject("CursorCanvas", typeof(Canvas));
 			canvasGo.transform.SetParent(transform, false);
 			Canvas canvas = canvasGo.GetComponent<Canvas>();
 			canvas.renderMode = RenderMode.ScreenSpaceOverlay;
@@ -403,26 +416,20 @@ namespace Collection.Controls
 			cursorImage.enabled = false;
 
 			defaultCursorSprite = Resources.Load<Sprite>(CursorResourcePath);
-			if (defaultCursorSprite != null)
+			ApplyCursorTexture(null, Vector2.zero);
+			if (defaultCursorSprite == null)
 			{
-				cursorImage.sprite = defaultCursorSprite;
-			}
-			else
-			{
-				Debug.LogWarning($"GlobalInputManager: no cursor sprite at Resources/{CursorResourcePath} - mouse emulation still works, the cursor just won't be visible until one is added there.");
+				Debug.LogWarning($"GlobalInputManager: no cursor sprite at Resources/{CursorResourcePath} - the pointer still works, the cursor just won't be visible until one is added there.");
 			}
 		}
 
-		/// Sets what the pointer looks like for the current game, on both of its forms at once:
-		/// the OS cursor (real mouse) and the emulated cursor (gamepad). Null means the
-		/// defaults - the system cursor and the MouseEmulationCursor sprite.
+		/// Sets what the cursor looks like for the current game. Null means the default, the
+		/// MouseEmulationCursor sprite.
 		///
-		/// Only the appearance changes here. Whether either cursor is shown at all is still
+		/// Only the appearance changes here. Whether the cursor is shown at all is still
 		/// decided in Update, so a game's texture can't override hide-when-using-gamepad.
 		private void ApplyCursorTexture(Texture2D texture, Vector2 hotspot)
 		{
-			UnityEngine.Cursor.SetCursor(texture, texture != null ? hotspot : Vector2.zero, CursorMode.Auto);
-
 			if (gameCursorSprite != null)
 			{
 				Destroy(gameCursorSprite);
@@ -437,19 +444,33 @@ namespace Collection.Controls
 			if (texture == null)
 			{
 				cursorImage.sprite = defaultCursorSprite;
-				cursorRect.pivot = Vector2.zero;
-				cursorRect.sizeDelta = new Vector2(DefaultCursorSize, DefaultCursorSize);
+
+				// The default sprite's click point is its own pivot, set in its import settings
+				// (Sprite Editor) - so swapping the artwork means placing the pivot on the new
+				// tip, with nothing to change here. Its height is DefaultCursorSize and its
+				// width follows the artwork's aspect.
+				if (defaultCursorSprite != null && defaultCursorSprite.rect.height > 0f)
+				{
+					Rect rect = defaultCursorSprite.rect;
+					cursorRect.pivot = new Vector2(defaultCursorSprite.pivot.x / rect.width, defaultCursorSprite.pivot.y / rect.height);
+					cursorBaseSize = new Vector2(DefaultCursorSize * rect.width / rect.height, DefaultCursorSize);
+				}
+				else
+				{
+					cursorRect.pivot = Vector2.zero;
+					cursorBaseSize = new Vector2(DefaultCursorSize, DefaultCursorSize);
+				}
+
 				return;
 			}
 
-			// Drawn at the texture's own pixel size with the hotspot as the pivot, which is how
-			// the OS draws the same texture - so the pointer looks and clicks the same whichever
-			// device is driving it. The hotspot is measured from the top-left, a pivot from the
-			// bottom-left, hence the flipped Y.
+			// A game's own texture is drawn at its pixel size (on the reference screen) with
+			// the hotspot as the pivot. The hotspot is measured from the top-left, a pivot from
+			// the bottom-left, hence the flipped Y.
 			gameCursorSprite = Sprite.Create(texture, new Rect(0f, 0f, texture.width, texture.height), new Vector2(0.5f, 0.5f));
 			cursorImage.sprite = gameCursorSprite;
 			cursorRect.pivot = new Vector2(hotspot.x / texture.width, 1f - hotspot.y / texture.height);
-			cursorRect.sizeDelta = new Vector2(texture.width, texture.height);
+			cursorBaseSize = new Vector2(texture.width, texture.height);
 		}
 
 		public static bool GetMouseButton(int button)

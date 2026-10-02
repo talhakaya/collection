@@ -26,7 +26,7 @@ namespace Collection.Controls
 			[ConditionalField(nameof(enableMouseEmulation))]
 			public float mouseEmulationSpeed = 1000f;
 
-			[Tooltip("Cursor shown while this game is running, replacing both the OS cursor and the emulated gamepad cursor. Leave empty for the defaults. For a game that draws its own pointer, assign a fully transparent texture so neither is drawn over it. Must be imported with Texture Type 'Cursor'.")]
+			[Tooltip("Cursor shown while this game is running, in place of the collection's default one - for mouse and gamepad alike. Leave empty for the default. Drawn at its own pixel size on a 1080p screen and scaled with the resolution. For a game that draws its own pointer, assign a fully transparent texture so nothing is drawn over it.")]
 			public Texture2D cursorTexture;
 			[Tooltip("The click point within cursorTexture, in pixels from its top-left corner.")]
 			public Vector2 cursorHotspot;
@@ -49,7 +49,7 @@ namespace Collection.Controls
 		}
 
 		[Header("Global cursor behavior")]
-		[Tooltip("Hide the real mouse cursor whenever a gamepad is the active input device, across every game/menu - not just ones with mouse emulation enabled. Turn off to always show the real cursor, e.g. for debugging.")]
+		[Tooltip("Hide the mouse cursor whenever a gamepad is the active input device, across every game/menu - not just ones with mouse emulation enabled. Turn off to keep showing it at the mouse's position regardless, e.g. for debugging; gamepad mouse emulation is then off too.")]
 		public bool hideCursorWhenUsingGamepad = true;
 
 		public Entry[] entries = Array.Empty<Entry>();
