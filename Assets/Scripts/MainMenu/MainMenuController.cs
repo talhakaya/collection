@@ -11,6 +11,7 @@ namespace Collection.MainMenu
 	{
 		[SerializeField] private RectTransform contentParent;
 		[SerializeField] private GameObject buttonTemplate;
+		[SerializeField] private Text versionLabel;
 
 		private GameObject lastSelected;
 
@@ -23,6 +24,13 @@ namespace Collection.MainMenu
 		private void Start()
 		{
 			buttonTemplate.SetActive(false);
+
+			// Read at runtime rather than typed into the scene, so the label is always the
+			// version this build was actually made with (see BuildScript's Version region).
+			if (versionLabel != null)
+			{
+				versionLabel.text = "v" + Application.version;
+			}
 
 			GameObject firstButton = null;
 			foreach (GameEntry entry in FindGameEntries())

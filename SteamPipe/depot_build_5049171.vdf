@@ -1,0 +1,35 @@
+"DepotBuildConfig"
+{
+	// Set your assigned depot ID here
+	"DepotID" "5049171"
+
+	// No ContentRoot here: the depot takes the app build script's "contentroot", which is
+	// Builds\Steam\Win. A relative ContentRoot in this file is resolved against that one,
+	// not against this file's location, so setting both would double the path up.
+	// All relative paths below (LocalPath in FileMapping entries, and FileExclusion paths)
+	// are relative to that root.
+
+	// include all files recursivley
+  "FileMapping"
+  {
+  	// This can be a full path, or a path relative to ContentRoot
+    "LocalPath" "*"
+    
+    // This is a path relative to the install folder of your game
+    "DepotPath" "."
+    
+    // If LocalPath contains wildcards, setting this means that all
+    // matching files within subdirectories of LocalPath will also
+    // be included.
+    "recursive" "1"
+  }
+
+	// but exclude all symbol files  
+	// This can be a full path, or a path relative to ContentRoot
+  "FileExclusion" "*.pdb"
+
+	// and the folders Unity writes next to the player that are not part of the game.
+	// BuildScript deletes these before uploading; this is only a second line of defence.
+  "FileExclusion" "*_DoNotShip*"
+  "FileExclusion" "*_ButDontShipItWithYourGame*"
+}
