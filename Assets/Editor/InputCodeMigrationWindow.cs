@@ -55,7 +55,9 @@ namespace Collection.EditorTools
 				"Rewrites Input.GetAxis/GetAxisRaw/GetButton/GetButtonDown/GetButtonUp calls whose " +
 				"name matches an action in the map to TaloketoInputManager. Names that don't match " +
 				"(e.g. a Mac-only axis dropped during JSON import) become a literal 0f/false instead " +
-				"of being left as a legacy call that would throw at runtime.",
+				"of being left as a legacy call that would throw at runtime. Input.mousePosition and " +
+				"Input.GetMouseButton/Down/Up are rewritten too, so the game picks up gamepad mouse " +
+				"emulation.",
 				MessageType.Info);
 
 			EditorGUILayout.Space();
