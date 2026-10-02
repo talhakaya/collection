@@ -74,9 +74,12 @@ namespace Games.LovesFirstWeek
 	/// fit, then draws once. The cap on the accumulator is Flixel's too: after a long
 	/// hitch the game resumes rather than racing to catch up.
 	///
-	/// The game renders at its own resolution into a texture, which is then stretched to
-	/// the window with hard pixels and bars at the sides. That is what keeps a sprite
-	/// scaled up 16x on the same pixel grid as everything else, as it was in Flash.
+	/// The game renders into a texture a whole number of times its own size - as many as
+	/// fit the screen's height - which is then fitted to the window with bars at the
+	/// sides. Sprites and tiles are point-sampled, so at that multiple they look exactly
+	/// as at the game's own size: every game pixel a square block, on one grid. Text is
+	/// the difference: it gets the extra resolution, so the game's smooth NES font reads
+	/// as a font rather than as stretched one-pixel strokes.
 	/// </summary>
 	public class FlxGame : MonoBehaviour
 	{
@@ -145,7 +148,8 @@ namespace Games.LovesFirstWeek
 			audioRoot = new GameObject("Audio").transform;
 			audioRoot.SetParent(transform, false);
 
-			target = new RenderTexture(width, height, 0, RenderTextureFormat.ARGB32);
+			int multiple = Mathf.Max(1, Screen.height / height);
+			target = new RenderTexture(width * multiple, height * multiple, 0, RenderTextureFormat.ARGB32);
 			target.filterMode = FilterMode.Point;
 			target.wrapMode = TextureWrapMode.Clamp;
 			target.Create();

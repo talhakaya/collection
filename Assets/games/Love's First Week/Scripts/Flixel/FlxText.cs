@@ -14,10 +14,9 @@ namespace Games.LovesFirstWeek
 	/// Two fonts, as in the game: Flixel's own embedded "system" pixel font for buttons
 	/// and small print, and the game's "NES" font for dialogue and titles. The system font
 	/// is a raster TMP asset sampled at its native 8 pixels, so one texel is one game
-	/// pixel. NES at the dialogue's size, 12, is a raster asset sampled at 12: drawn with
-	/// distance fields at that size in a 455-pixel-wide picture, its thinnest strokes -
-	/// the i and l of "milk" - fell between pixels and vanished. At its larger sizes (20,
-	/// 36) it is a distance-field asset, smoothed as Flash drew it.
+	/// pixel. NES is a distance-field asset, smooth at every size it is used at (12, 20,
+	/// 36) - FlxGame renders at a multiple of the game's size, so there are enough pixels
+	/// for it.
 	///
 	/// A Flash TextField keeps a 2-pixel gutter inside its box on every side, so the text
 	/// starts 2 pixels in and wraps 4 pixels short of the width.
@@ -208,7 +207,7 @@ namespace Games.LovesFirstWeek
 		/// "NES" is the game's embedded font; anything else is Flixel's "system".
 		private static TMP_FontAsset ResolveFont(string name, double size)
 		{
-			string asset = name != "NES" ? "system" : size == 12 ? "NES12" : "NES";
+			string asset = name == "NES" ? "NES" : "system";
 			TMP_FontAsset font;
 			if (fonts.TryGetValue(asset, out font) && font != null)
 			{
