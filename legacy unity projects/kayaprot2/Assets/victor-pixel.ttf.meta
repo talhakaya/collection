@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 80622d7940f0a3b4eb72467fce17600d
+timeCreated: 1490522932
+licenseType: Pro
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Victor's Pixel Font
+  fontNames:
+  - Victor's Pixel Font
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

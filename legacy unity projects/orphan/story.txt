@@ -1,0 +1,60 @@
+Çocuk uyanýr, etrafýna bakar. Annesi baþýnda beklemektedir. Hastalýðý baþlayalý birkaç yýl olmuþ, annesi iþinden ayrýlmýþ ve gece gündüz onun nöbetini tutmaya baþlamýþtýr. Babasý ise bunalýma girmiþtir ve çocuðu için para kazanmasý lazým olduðundan sürekli çalýþmaktadýr.
+
+Ancak anne evde nöbet tutarken hastalanýr ve çocuðuna zorla bakmaya baþlar.
+
+Anne ve baba yaþam zorluklarý yüzünden kavgalar fazlalaþmýþ ve kendileri için hayatý daha zor etmeye baþlamýþlardýr.
+
+Anne vefat eder, ve bütün yük babaya kalýr. Bir yandan para kazanmaya bir yandan çocuðuna bakmaya çalýþýrken çocuðu babanýn elinden alýrlar ve götürürler.
+
+Çocuk babanýn elinden alýnýnca yetimhaneye verilir. Hastalýk ateþinden dolayý çocuk bazý þeyleri hatýrlayamamaktadýr ve halüsinasyon görmektedir. Anne babasýnýn nerede olduðunu merak etmektedir ancak kime sorsa öðrenememektedir. En sonunda yurt müdürüne gidip sormaya karar verir. Yurt müdürü þiþman kel ceketli bir adamdýr ve bir masa baþýnda oturmaktadýr. Çocuða zaten hastalýðýyla uðraþýp dururken anne babasýný aramayý býrakmasýný öðütler.
+
+Çocuk yetimhanede günden güne fenalaþmaktadýr. Ölüm yaklaþmaya baþlamýþtýr. Her gün düzenli olarak yetim yurdunun hemþiresine gidip gelmeye baþlar. Ancak yurdun þartlarý altýnda hemþirenin yapabileceði pek bir þey yoktur. Aðrý kesici ve aspirinden baþka birþey saðlayamamaktadýr. Hemþire keþke çocuk yurdun dýþýndaki bir hastaneye gidebilse diye düþünmektedir ancak müdür çocuðun zaten ömrü kalmadýðýný düþünmektedir.
+
+Çocuk son günlerini anne babasýný insanlara sorup soruþturarak geçirir.
+
+Çocuk ölüm yataðýndayken hayaller görmeye baþlar. Oyuncu bu andan itibaren oyuna dahil olur.
+
+Prologue:
+
+
+Çocuk rüya aleminde bir sahildedir, ve yetimhanede yattýðý yataðýn yanýndadýr. Yaþlý adam ona annesi ve babasýný aramasýný, çaresinin onlarda olduðunu söyler.
+(Bu bölüm yürüme ve diyalog tutoriali iþlevi görür. Sahilden çýkýnca beyaz rüya alemine girer. Rüya aleminde anne babasýyla kalýrken kaldýðý kendi odasýný görür. Posterli, oyun konsolu olan bir odadýr (konsolda oyun oynama arcade oyun tutorial'i olabilir)
+
+Odadan çýktýðýnda etraf çok yavaþ þekilde kararmaya baþlar. yaðmur yaðmaktadýr.
+
+Simsiyah bir ekranda çocuk ve yaþlý adam belirir. Ona tekrar anne babasýný bulmasýný, çaresinin bu olduðunu söyler.
+
+
+
+Chapters:
+
+
+
+Çocuk yetimhanede uyanýr.
+
+Yetimhanede yapýlabilecekler:
+
+Oda arkadaþýyla konuþmak: Ona genel bilgiler ve cahil bi arkaplan hikayesi veren bir oda arkadaþý. Onla konuþunca yetimhanede neler yapabileceðine dair birþeyler öðrenir (hemþireye gitmek, sigara içmek, müdüre gitmek, sakat çocuða yardým etmek, yurttan kaçma ihtimali)
+öðrenmeyecekleri: odasýndaki hayali gizli geçit: bu hayali geçit onun eski evindeki odasýna çýkacak.
+
+Sigara içen çocuk: Bu çocuk yurdun sigara alým satýmýný kontrol ettiði için sözü geçen biri. Bu çocuða gittiðimizde bize ne istediðimizi soruyor. Biz de yurt müdürüyle ilgili, kaçmak ile ilgili sorular sorabiliyoruz. Biraz yurttan nasýl kaçýlacaðýný sorarsak ilk önce bizden ona bir iyilik yapmamýzý istiyor. Bu iþ ise hemþirenin odasýndan aðrý kesici (kafa yapan biþey?) çalmak. Bunu yaparsak bize yurtta bir kaçýþ yolu olduðunu söylüyor ve gece yurt boþken binadaki bir boþluktan kaçýyoruz.Kaçýnca kendimizi sahilde buluyoruz. Sahilde uzun uzun yürüdükten sonra (taþlarý aþma oyunu?) rüya alemine baðlanýrýz, kendi odamýza gireriz, yatarýz. Biz hasta yataðýnda, annemiz baþýmýzda bizimle konuþmaktadýr.(SON1)
+
+Hemþire: Anaç bir kadýndýr, bize iyi davranmaya çalýþýr. Ona gittiðimizde bize ilaçlarýmýzý verir (arcade oyunu). Eðer anne babamýzla ilgili bir þeyler sormak istersek 1 hafta önce buraya bir adamla, herhalde babamýzla, geldiðimizi ve bu haftanýn çoðunu yatarak geçirdiðimizi söyler. Ateþli hastalýktan birþeyleri unutmuþ olabileceðimizi, daha çok þey öðrenmek için müdüre gitmemiz gerektiðini öðreniriz. Ayrýca üst kattaki çocuklardan biri de sen geldiðinde babaný görmüþtü, ona da sor istersen diyecek.
+
+Müdür: Aile konusunu konuþmak istemeyecek. 
+
+
+
+
+
+Karakterler:
+	Çocuk: Çok saf olmalý, çocukluðunu çoðu dediðinde hissettirmeli
+	Yaþlý Adam: Gizemli, herþeyi bilen, dýþ ses.
+	Baba: Bunalýmda, ayaða kalkmaya hali olmayan (therefore no walk animation!)
+	Müdür: Çocuðun zaten yakýnda öleceðini düþünen, umursamaz
+	Anne: Melek figürü, fedakar, kendini feda eden
+
+Mekanlar:
+	Yetimhane: 
+	Sahil / Yaðmur: 
+	Eski oda

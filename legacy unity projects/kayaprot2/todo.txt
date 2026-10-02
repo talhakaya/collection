@@ -1,0 +1,13 @@
+guard colors
+guard react to noise
+drone and bug should actually do something
+dialogue system
+score screen
+collect money / shop screen / buy milk
+level design
+money gained shouldn't be upped at the start
+short time achievement should be easier
+dialogue bubble should have right click button
+drink 1.8 on level 19
+
+sound/music

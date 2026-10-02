@@ -1,0 +1,79 @@
+(done)stylish font
+(done)loading screen
+(done)mini game: avoid stuff
+(done)fix the z's of particle effects on the upper side of the dream level
+(done)avoid stuff mini game player not dying when not walking
+(done)fix walking animation.
+(done)make room lines invisible or barely visible
+(done)dialogue system
+(done)"dialogue start when overlap" object
+(done)gölge
+(done)Old man çiz
+(done)write the main story
+(done)aktif kamera
+(done)make prologue level design
+(done)ArcadeGame: Nurse: Day1: hap içme oyunu
+(done)ArcadeGame: Principal: Day1: aðlama
+(done)screen filter effects
+(done)none of dialogue answers should be bigger when node is appearing
+(done)ghosts that you can talk who are only visible when you are close
+(done)nurse should give you the medicine again if you fail
+(done)
+(done)
+(done)
+(done)
+(done)
+
+kendisini özlestiremeyecegi ana karakter
+anne babayi kaybetmenin kaybini empatisini yaratmak için önce anneye babaya alistirmak lazim
+orphan new engine:
+	tinting
+	field of depth (bulaniklik)
+	parallax scrolling
+	bloom effect (parlama)
+	rgb split effect
+	scanline effect
+	global alpha multiplier
+	trace of movement (echo)
+	efekt
+
+
+
+
+
+
+
+
+
+
+bugs:
+
+	prologue'da kamerayý yukarý çýkarýnca foreground yanýp sönüyor
+
+
+ideas:
+	"Silence is the pause in me when I am near to God." - Arvo Pärt
+	fuck up music track's pitch at arcade sections
+	maybe a space metaphor for things we can't reach: the kid is weak and he can't do much. if you somehow relate him with an interest to space (maybe with a videogame at his room), you can use that for the end game, when his mother appears and takes him to the space where he can't go by himself. maybe he can get out the dormitory where everyone says good things about him today, find his mother near a spaceship, talk and cry some, and ride the spaceship to space with psychedelic dreams.
+
+
+music:
+
+	credits: 30 pieces of silver
+
+	prog jazz (all musicians are freaks)
+	treacherous
+	we are only safe before sunrise (hatýrlatma: he will give me drugs to keep)
+	sky is dust. thunder crawls like rust.
+	goodbye voltaire (without you, they will never find me)
+	curl up, time to die (gentle death remix)
+
+
+	Don't Look Behind
+	The Fetid Organism
+	Imaginary Enemy
+	Interzone
+	No Sleep Will Come
+	Phantastic Finity Of Fortitude
+	To Those Who Lost Their Way
+	...
