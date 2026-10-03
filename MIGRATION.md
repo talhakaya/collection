@@ -257,3 +257,34 @@ no `Shader.Find`. What changed:
 - Input map: `Horizontal` (body), `Vertical` (arms), `Submit`.
 - The end screen has no way on, as in the original; the collection's exit leaves it.
 - `UnityVS` and `Thumbs.db` were not copied.
+
+## bloodspace
+
+Unity 4.5.2 project folder (product name "BloodSpace", by Kayabros and Amon26, music by
+Erdogan Cem Evin), one scene, a shoot-em-up with a mouse mode, ported by `PORTING.md`.
+What changed:
+
+- **Sorting layers.** The game draws in three sorting layers (Background, Gameplay,
+  Default, in that order). They were added to the project's `TagManager.asset` with the
+  old project's unique IDs (648055327 and 3753717039), ahead of Default, so the scene and
+  prefabs resolve them unchanged. The tag `Enemy` already existed; the named physics
+  layers were not used by any object.
+- **Cursor.** `Screen.showCursor = false` became `GlobalInputManager.HideGameCursor()`:
+  the game draws its own pointer.
+- **Saved settings.** The five `PlayerPrefs` keys (`mouseMode`, `GameMode`, `highscore`,
+  `musicOn`, `Won`) are prefixed `BloodSpace.`.
+- **Input.** `Horizontal1`/`Vertical1` (the old joystick axes) are the left stick and
+  d-pad, with the 0.19 dead zone; `Vertical1` is inverted in the binding because the code
+  subtracts it. A is special attack and select, Start and RB select too. `KeyCode.C`
+  (game mode) became a `GameMode` action with the gamepad's Y. M (mouse mode) and N
+  (music) stay on the keyboard.
+- The Escape quit and the F4 fullscreen switch are gone; the logo screen's line reads
+  "ENTER to begin" or "A to begin" instead of "F4 for fullscreen, ENTER to begin".
+- `EnemyHead` added its pull force once per frame whatever the frame rate; it is scaled
+  to what it was at 60 frames a second.
+- `Game.Awake` clears the statics a run leaves behind (score, dead octopus count, screen
+  shake, `Shield.thereIs`, the weather tint). Prefabs load from `Resources/BloodSpace/`.
+- Two bare component shortcuts (`audioSource = audio;`, `connectedBody = rigidbody2D;`)
+  were fixed by hand; `legacy_scripts.py` only rewrites the ones used with a dot.
+- Not copied: `UnityVS`-style leftovers, `Thumbs.db`, `PNG.rar`, and 37 images and sounds
+  that no scene or prefab references (older art, two unused music tracks).

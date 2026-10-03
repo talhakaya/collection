@@ -176,3 +176,12 @@ MonoBehaviour:
     cursorHotspot: {x: 0, y: 0}
     entryScene: {fileID: 102900000, guid: 454b5d9576356a8419084340c5c47e9a, type: 3}
     entryScenePath: Assets/games/Over-Eating 101/scene0.unity
+  - gameName: BloodSpace
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: 5797a9ce61311fc47b941e36c8047757, type: 3}
+    entryScenePath: Assets/games/BloodSpace/scene.unity

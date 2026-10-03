@@ -273,3 +273,24 @@ GUI. Things it did not exercise, to check for in step 0:
   the game.
 - **Gravity changed by the game** across its own scenes carries over fine; the
   collection applies the GameList gravity only when the game changes.
+
+## Added by BloodSpace (Unity 4.5)
+
+- **Sorting layers.** `grep m_SortingLayerID` in the re-saved scene and prefabs: any
+  value other than 0 is a layer of the old project, and the renderer silently falls
+  back to Default. Decode the names, order and unique IDs from the end of the old
+  `TagManager.asset` and add them to the project's sorting layers with the same IDs
+  (a `SerializedObject` on `ProjectSettings/TagManager.asset`, `m_SortingLayers`).
+- **Bare shortcuts** (`x = audio;`, `joint.connectedBody = rigidbody2D;`) are not
+  rewritten by `legacy_scripts.py`. They raise the Script Updating Consent dialog; fix
+  them by hand and answer No.
+- **`Screen.showCursor = false`** with a cursor sprite of the game's own:
+  `GlobalInputManager.HideGameCursor()`.
+- **`PlayerPrefs`** keys get the game's name as a prefix.
+- **A force added every frame without `Time.deltaTime`** scales with the frame rate;
+  multiply by `Time.deltaTime * 60f`.
+- **Unreferenced assets.** Search the old scene and prefabs for each asset's GUID (in
+  the binary files the bytes have their nibbles swapped) and leave out what nothing
+  references, apart from `Resources/`.
+- A test that writes a high score leaves it in the editor's `PlayerPrefs`; delete the
+  keys afterwards.
