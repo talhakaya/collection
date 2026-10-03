@@ -359,3 +359,27 @@ first person. Ported by `PORTING.md`:
   is eased as the old `Input.GetAxis` did (3 per second).
 - **Ground material** converted from Standard to URP/Lit; stars stay on
   `Unlit/Transparent`.
+
+## the parasite
+
+Unity 5.0 project folder (product name "TheParasite"), binary format, one scene
+(`test.unity`), a conversation played with the mouse. Ported by `PORTING.md`:
+
+- **Only what the scene references was copied** (plus the game's own scripts). Left out:
+  `Resources/bg.prefab` (nothing loads it, and three scripts on it were already missing
+  in the old project), `png/2.png`, `png/3.png`, the unused `PlatformerController.cs`
+  and the UnityVS editor DLLs.
+- **GUID clashes with Abused**, which grew out of this project: `RenderGrayScale.cs` and
+  the scene had the same GUIDs. Both got new ones; the script's was patched into the
+  binary scene before import (same length, nibble-swapped bytes).
+- **The screen effect** (`RenderGrayScale`) read the screen back in `OnPostRender`,
+  changed every pixel in a C# loop and drew it over the screen. URP never calls
+  `OnPostRender`. Now the camera renders into a texture and a full-screen `RawImage`
+  on an overlay canvas (sorting order -100, under the game's text) shows it through
+  `PassThru.shader`, which does the same arithmetic on gamma-space bytes, including
+  the byte wrap-around that makes the garbled colours for ratios below zero.
+- **Mouse game:** `enableMouseEmulation` in GameList, no action map. The left stick
+  moves the pointer and A clicks. The title still says "Play with mouse, select
+  answers".
+- **Statics** (`answerId`, the title texts, blinking, talking) are reset in `Game.Awake`;
+  the Escape-quit is removed.
