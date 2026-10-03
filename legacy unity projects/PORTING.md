@@ -402,3 +402,11 @@ GUI. Things it did not exercise, to check for in step 0:
   Windows console encoding and silently shortened the copy list; write the list as
   UTF-8 and compare the copied count with the scene's needs before importing.
 - **Test with two virtual pads**, then remove one mid-run to test the shared scheme.
+
+## Added by Talha's Screensaver and Hello Fractals (toys)
+
+- **A toy with no input** needs no action map and no mouse emulation; test that it
+  renders, that leaving releases what it opened (webcam), and that statics start over.
+- **Input asked for by thousands of objects per frame:** read it once in the game's
+  main script into statics. `TaloketoInputManager` looks actions up by name.
+- **Screenshots of a webcam toy show the room.** Delete them after looking.
