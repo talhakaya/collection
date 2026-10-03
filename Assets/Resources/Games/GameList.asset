@@ -365,3 +365,39 @@ MonoBehaviour:
     cursorHotspot: {x: 0, y: 0}
     entryScene: {fileID: 102900000, guid: 293bb4ae384f59e48aa4b165ebea12da, type: 3}
     entryScenePath: Assets/games/Virtual Pet/main.unity
+  - gameName: Gridsplosion
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: ce5f58a4bbb61a045817cb2506e8e584, type: 3}
+    entryScenePath: Assets/games/Gridsplosion/scene0.unity
+  - gameName: Slime Fight
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 1
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: a2a0b8bee9c60f94792c26d39712c64b, type: 3}
+    entryScenePath: Assets/games/Slime Fight/Scenes/scene1.unity
+  - gameName: GGJ2015
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: 84b4d8a61244d5b4d8bdec74aec62e99, type: 3}
+    entryScenePath: Assets/games/GGJ2015/scene0.unity
+  - gameName: But You Are A Horse
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: 9cf4c4d122da41f9bf9eecceed01c9ef, type: 3}
+    entryScenePath: Assets/games/But You Are A Horse/test.unity

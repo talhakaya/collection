@@ -587,3 +587,28 @@ Four small project folders, one scene each, ported with `tools/legacy_port.py`.
   emulated pointer presses its uGUI buttons through
   `PortHelpers.ClickUiWithEmulatedPointer` (the old input module only sees the real
   mouse). Typing the names still needs a keyboard.
+
+## gridsplosion, slime fight, ggj2015, but you are a horse
+
+Four project folders, ported with `tools/legacy_port.py`.
+
+- **Gridsplosion** (`gridsplosion`, Unity 5.0): a twin-stick prototype on a grid with
+  TNT. Mouse-aimed; the right stick aims on a pad and `Fire` (right trigger, X or A)
+  fires as the mouse button does.
+- **Slime Fight** (`slime-fight`, Unity 4.5, product name "Ben BelayÄ±m Kolektif 1
+  Deneme 2"): hand-drawn cutscenes and a mouse game. Pointer emulation on. The five
+  `Resources.Load` calls sat in static field initializers of MonoBehaviours, which
+  Unity no longer allows; they load on first use. The game sets
+  `AudioListener.volume = 5`; it is put back to 1 when the game is left. Its last
+  cutscene quit the application; it returns to the collection's menu. The N key stays
+  on the keyboard.
+- **GGJ2015** (`ggj2015`, Unity 4.6): a rotating-world puzzle with 15 levels in one
+  scene (2400 objects). `SpeedUp` (Enter, right trigger, A) is the old keypad-Enter
+  fast-forward; the O debug key stays on the keyboard.
+- **But You Are A Horse** (`but-you-are-a-horse`, Unity 5.0): a horse-man platformer.
+  `test.unity` is the game and the GameList entry; `scene0.unity` (a single picture)
+  is kept in the folder. Its `PlatformerController` is the player here (the port script
+  leaves that file out by default). `Up` (W, Up, A, d-pad up) jumps, `Jump` (Space, Z,
+  X, right trigger) kicks. `OnCollisionExit2D` remembers which colliders counted as
+  ground instead of reading contact points; `fixedAngle` is `freezeRotation`. The
+  screen effect is the shader written for The Parasite.
