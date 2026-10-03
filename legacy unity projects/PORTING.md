@@ -262,3 +262,14 @@ GUI. Things it did not exercise, to check for in step 0:
   collider offsets differ by whole units.
 - A product name left at the template's default ("ArtisticGame") is no use; take the
   name from the title art.
+
+## Added by Let's Never Do That Again (Unity 4.6)
+
+- **`Application.LoadLevel(n)` with a counter**: put the old build order (strings in
+  `EditorBuildSettings.asset`) in an array of scene names and load by path.
+- **Any non-zero axis treated as full input** (`GetAxisRaw(...) != 0`, a vector
+  normalised to a fixed speed, `> 0f` as a trigger): give the stick bindings the old
+  joystick dead zone, `"processors": "AxisDeadzone(min=0.19)"`, or stick drift plays
+  the game.
+- **Gravity changed by the game** across its own scenes carries over fine; the
+  collection applies the GameList gravity only when the game changes.

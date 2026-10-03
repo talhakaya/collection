@@ -217,3 +217,25 @@ Unity 5.1 project folder ("ArtisticGame"), one scene of thirteen states, ported 
   (`Jump` action, remembered ground colliders) and nothing more.
 - Input map: `Horizontal`, `Vertical` (arrows/WASD, left stick, d-pad), `Jump`.
 - `UnityVS` and `Thumbs.db` were not copied.
+
+## let's never do that again
+
+Unity 4.6.1 project folder ("LetsNeverDoThatAgain", Nordic Game Jam 2015), five scenes
+walked through by a static counter, ported by `PORTING.md`. No custom tags or layers, no
+`Resources`, no `Shader.Find`. What changed:
+
+- `Application.LoadLevel(sceneCount)` loaded by build index; `Scene0` now has the five
+  scene names in that order and loads by path. `Game.Awake` starts the run again
+  (`sceneCount`, clock) unless the scene was reached through `Scene0.nextLevel`.
+- The game switches `Physics2D.gravity` off for its last two scenes. Nothing was needed
+  for that: the collection sets a game's gravity when the game changes, not per scene.
+- The Escape-quit is gone. Enter / keypad Enter still runs the game four times faster,
+  on the keyboard only.
+- "W to jump" reads "A to jump" while a gamepad is in use, and a `Jump` action
+  (gamepad A only) jumps as well as up does.
+- Movement is normalised from any non-zero axis, so the stick bindings carry the old
+  Input Manager's 0.19 dead zone (`AxisDeadzone`); without it a drifting stick walks the
+  penguin at full speed and jumps for him.
+- The two animation index calculations are clamped.
+- Input map: `Horizontal`, `Vertical` (arrows/WASD, left stick, d-pad), `Jump`.
+- `UnityVS` and `Thumbs.db` were not copied.
