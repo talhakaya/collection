@@ -50,6 +50,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/games/Herbie/scene0.unity
     guid: 5f284bf69857e0e46b0f6885abacfdaf
+  - enabled: 1
+    path: Assets/games/Lost Shader/main.unity
+    guid: 4501c507ccef93f4bb5901189a686757
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

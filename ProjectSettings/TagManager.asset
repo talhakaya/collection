@@ -11,6 +11,7 @@ TagManager:
   - GetObject
   - PlaneBG
   - Plane
+  - Spoon
   layers:
   - Default
   - TransparentFX
