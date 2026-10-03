@@ -252,10 +252,12 @@ GUI. Things it did not exercise, to check for in step 0:
 
 ## Added by Casket Fucker (Unity 5.1)
 
-- **`OnTriggerStay2D` against a kinematic goal** stops when that body falls asleep,
-  even though the thing moved onto it has no body of its own. Set the goal's
-  `sleepMode` to `NeverSleep`. A test bot that steers onto the goal and stops there
-  finds this; one that keeps moving does not.
+- **`OnTriggerStay2D` for a collider moved by its transform** (no body of its own) is
+  unreliable: rare while it moves, absent once the other body sleeps. A timer counted
+  down in it runs many times too slowly. Test the overlap in `Update`
+  (`Physics2D.SyncTransforms`, then `Collider2D.Distance(...).isOverlapped`), as
+  `MoveToFind.cs` does. Have the bot log how long each state took and compare with
+  the time the scene asks for.
 - **Steer bots by collider bounds**, not transform positions: sprite pivots and
   collider offsets differ by whole units.
 - A product name left at the template's default ("ArtisticGame") is no use; take the

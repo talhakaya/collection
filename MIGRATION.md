@@ -206,9 +206,11 @@ Unity 5.1 project folder ("ArtisticGame"), one scene of thirteen states, ported 
 
 - `Input.anyKeyDown` (the whole game is "tap random keys") became `Game.anyKeyDown`:
   every key, the mouse buttons, and the pad's face buttons, shoulders, triggers and d-pad.
-- The arrow-key states (`MoveToFind`) stalled when the player held still on the goal:
-  the goal's kinematic body falls asleep and a sleeping body sends no
-  `OnTriggerStay2D`. `MoveToFind.Start` sets the goal's body to `NeverSleep`.
+- The arrow-key states (`MoveToFind`) counted in `OnTriggerStay2D`. Unity 6 sends it
+  only now and then while the object is moved by its transform (cutting the hole took
+  half a minute instead of `moveTime` = 3 seconds) and never once the goal's body is
+  asleep. `MoveToFind.Update` tests the overlap itself, and only on frames the player
+  moves: the knife has to keep moving to count (the owner's call).
 - The Escape-quit is gone; `Game.Awake` resets the clock; the four animation index
   calculations are clamped; `TintScript.OnValidate` has its null check.
 - `PlatformerController` is in the folder but on no object. It was fixed up to compile

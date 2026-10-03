@@ -15,18 +15,16 @@ namespace Games.CasketFucker
 		void Start ()
 	    {
 	        audioSource = GetComponent<AudioSource>();
-
-	        // In the collection: the goal's body falls asleep, and a sleeping body sends no
-	        // OnTriggerStay2D, so holding still on the goal stopped counting. It is kept awake.
-	        if (goal != null && goal.GetComponent<Rigidbody2D>() != null)
-	        {
-	            goal.GetComponent<Rigidbody2D>().sleepMode = RigidbodySleepMode2D.NeverSleep;
-	        }
 		}
 
 		void Update ()
 	    {
-	        transform.position += new Vector3(TaloketoInputManager.GetAxis("Horizontal"), TaloketoInputManager.GetAxis("Vertical"), 0f) * moveSpeed * Game.dt;
+	        Vector3 step = new Vector3(TaloketoInputManager.GetAxis("Horizontal"), TaloketoInputManager.GetAxis("Vertical"), 0f) * moveSpeed * Game.dt;
+	        transform.position += step;
+	        if (step != Vector3.zero && touchingGoal())
+	        {
+	            found();
+	        }
 		    if (audioSource != null)
 	        {
 	            if (audioTime > 0)
@@ -41,16 +39,35 @@ namespace Games.CasketFucker
 	        }
 		}
 
-	    void OnTriggerStay2D(Collider2D other)
+	    // In the collection: this was OnTriggerStay2D. Unity 6 sends it only now and then
+	    // while this object is being moved by its transform, and not at all once the goal's
+	    // body has fallen asleep, so cutting the hole took half a minute instead of
+	    // moveTime seconds. The overlap is tested directly, on the frames the player moves.
+	    bool touchingGoal()
 	    {
-	        if (other.gameObject == goal)
+	        Collider2D mine = GetComponent<Collider2D>();
+	        if (goal == null || mine == null)
 	        {
-	            audioTime = Game.dt * 10f;
-	            moveTime -= Game.dt;
-	            if (moveTime < 0)
+	            return false;
+	        }
+	        Physics2D.SyncTransforms();
+	        foreach (Collider2D other in goal.GetComponents<Collider2D>())
+	        {
+	            if (mine.Distance(other).isOverlapped)
 	            {
-	                State.next();
+	                return true;
 	            }
+	        }
+	        return false;
+	    }
+
+	    void found()
+	    {
+	        audioTime = Game.dt * 10f;
+	        moveTime -= Game.dt;
+	        if (moveTime < 0)
+	        {
+	            State.next();
 	        }
 	    }
 	}
