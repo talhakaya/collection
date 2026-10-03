@@ -12,6 +12,7 @@ TagManager:
   - PlaneBG
   - Plane
   - Spoon
+  - Bullet
   layers:
   - Default
   - TransparentFX

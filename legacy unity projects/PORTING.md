@@ -235,3 +235,17 @@ GUI. Things it did not exercise, to check for in step 0:
 - **`Collision2D.contacts` is empty in `OnCollisionExit2D`.**
 - **Mouse look:** bind `Mouse X`/`Mouse Y` to `<Mouse>/delta` with `scale(factor=0.1)`
   (the old axis sensitivity) and add the right stick in code, scaled by frame time.
+
+## Added by Where Is He (Unity 5.2)
+
+- **`Shader.Find` by an old name** returns null: the built-in shaders moved under
+  `Legacy Shaders/`. Grep the scripts for `Shader.Find` in step 0. A material made from
+  such a shader in code gets the default grey tint, which needs the Linear correction.
+- **Named layers.** `LayerMask.NameToLayer("X")` is -1 unless the collection names that
+  layer. Decode the old `TagManager.asset` (tags, then 32 length-prefixed layer names)
+  and use the index as a constant; objects keep their layer index through the import.
+- **Tags compared as strings** (`tag == "Ground"`) do not throw when the tag does not
+  exist; only tags actually set on objects have to be added to the project.
+- **`OnValidate` runs on `AddComponent` in play mode in the editor.** One that assumes a
+  sibling component needs a null check.
+- **Prompts that name ESC** as the way out are now wrong: name the collection's exit.

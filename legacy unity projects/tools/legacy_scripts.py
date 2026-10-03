@@ -54,6 +54,11 @@ def convert(src, namespace, notes):
         # "x.rigidbody2D" and a bare "rigidbody2D." / "rigidbody2D;" on this object. A
         # bare word is only rewritten when it is used as an object (followed by a dot),
         # so locals or fields that happen to share the name are left alone.
+        # A script that declares its own member of that name ("public AudioClip[] audio;")
+        # is not using the shortcut at all.
+        if re.search(r"[\w>\]]\s+%s\s*[=;]" % prop, out):
+            notes.append("%s declared here - left alone" % prop)
+            continue
         out, n = re.subn(r"\.%s\b(?!\s*\()" % prop, ".GetComponent<%s>()" % component, out)
         note("." + prop, n)
         out, n = re.subn(r"(?<![\w.<])%s\." % prop, "GetComponent<%s>()." % component, out)

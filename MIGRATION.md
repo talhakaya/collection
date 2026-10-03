@@ -177,3 +177,24 @@ What broke:
 - `Screen.showCursor = false` became `GlobalInputManager.HideGameCursor()`.
 - Not copied: the UnityVS plugin, `Thumbs.db`, `.pdn` sources, and the unused parts of
   Standard Assets (third-person controller, prototype character).
+
+## where is he
+
+Unity 5.2 project folder ("Collab2"), one scene, ported by `PORTING.md`. What broke:
+
+- `Shader.Find("Particles/Additive")` finds nothing now (the shader is
+  `Legacy Shaders/Particles/Additive`), so every line's `Start` threw. `LineManager`
+  asks for the new name, and gives the material the tint that still doubles to 1 in
+  Linear colour space, as in Lost Shader.
+- The old project's `Ground` layer (index 8) is not named in the collection, so
+  `LayerMask.NameToLayer("Ground")` returned -1. The objects keep the index; the three
+  linecasts use `Game.GroundMask`.
+- `PlatformerController` read `contacts[0]` of an ended collision (empty in Unity 6).
+- `TintScript.OnValidate` threw in the editor when `SpriteEffect` added it at run time.
+- `Resources.Load` names take the `WhereIsHe/` prefix. The `Bullet` tag was added to the
+  project. Statics are reset in `Game.Awake`.
+- Input: Z/W/Up became `Jump` (A on a pad), X became `Fire` (X or right trigger),
+  Return became `Submit` (Start or A). "Press Enter" reads "Press A" on a pad, and
+  "Press ESC to quit" names the collection's exit instead.
+- `legacy_scripts.py` took a field named `audio` for the removed component shortcut;
+  it now leaves a name alone when the script declares it.
