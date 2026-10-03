@@ -383,3 +383,19 @@ Unity 5.0 project folder (product name "TheParasite"), binary format, one scene
   answers".
 - **Statics** (`answerId`, the title texts, blinking, talking) are reset in `Game.Awake`;
   the Escape-quit is removed.
+
+## troubled football
+
+Unity 4 project folder (product name "KickVolley", title on screen "TROUBLED FOOTBALL"),
+binary format, one scene, a mouse game. Ported by `PORTING.md`:
+
+- Only what the scene references was copied (11 MB of 27); the `.bmp` and `.pdn` sources
+  stayed behind.
+- **Mouse game:** `enableMouseEmulation` in GameList. The left stick moves the pointer,
+  A kicks, B restarts (it is the emulated right click).
+- **`OnMouseUp`** is never sent with the new Input System. The four on-screen buttons
+  ask `GameManager.clickedOn(gameObject)` in their `Update` (button released while the
+  pointer is over their collider) and call their `OnMouseUp` themselves.
+- **Keys** became actions: `Music` (M, gamepad Y), `Eyesore` (N, gamepad X), `Restart`
+  (Space). The close button returns to the collection's menu; the Escape-quit is gone.
+- Statics are reset in `GameManager.Awake`; `Rigidbody2D.velocity` is `linearVelocity`.

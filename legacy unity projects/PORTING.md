@@ -355,3 +355,13 @@ GUI. Things it did not exercise, to check for in step 0:
 - **Bots on an emulated pointer:** hold the stick until the game reports the wanted
   hover state for a few frames, then tap; do not wait for an exact position when the
   camera moves.
+
+## Added by Troubled Football (Unity 4, mouse game with OnMouseUp buttons)
+
+- **`OnMouseDown` / `OnMouseUp` / `OnMouseOver`** are only sent with the old Input
+  Manager. Test the pointer against the object's collider in `Update` and call the
+  handler from there (`GameManager.clickedOn` in Troubled Football).
+- **`body.velocity` on a `Rigidbody2D` field** is `linearVelocity` in Unity 6; rename it
+  by hand before the first import or the script updater asks.
+- **Bot button presses must be timed in game time** (hold for 0.15 s), not counted in
+  `EditorApplication.update` ticks, which run several times per frame.

@@ -212,3 +212,12 @@ MonoBehaviour:
     cursorHotspot: {x: 0, y: 0}
     entryScene: {fileID: 102900000, guid: e34da1590ffd42569817aae771de488a, type: 3}
     entryScenePath: Assets/games/The Parasite/test.unity
+  - gameName: Troubled Football
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 1
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: f6440ccbd1640824b9d8ebba97876f59, type: 3}
+    entryScenePath: Assets/games/Troubled Football/Scenes/mainScene.unity
