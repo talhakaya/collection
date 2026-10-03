@@ -488,3 +488,23 @@ Ported by `PORTING.md`:
   rectangles used to ask for five keys itself every frame.
 - Statics (`time`, `trigon`, `blackWhite`) start over in `Game.Awake`; the Escape-quit
   is gone.
+
+## incredible penis
+
+Unity 5.0 project folder `incredible-penis` (product name "IncrediblePenis"), binary
+format, ten build scenes: six full-screen videos alternating with four first-person
+walks over a terrain, where the score is the distance walked. Ported by `PORTING.md`:
+
+- **Videos.** `MovieTexture` no longer exists. `VideoPlay` is rewritten around
+  `VideoPlayer` (material override on the same renderer, sound through the same
+  `AudioSource`); the `.mp4` files import as `VideoClip`s, and the scenes' references
+  were repointed in the text scenes (file ID 15200000 to 32900000, same GUIDs).
+- **Scene order** was `LoadLevel(loadedLevel + 1)` over the build order; it is the
+  `Levels.order` array now, loaded by path. After the last video the game used to quit;
+  it returns to the collection's menu.
+- **First-person controller** is the one ported for Wall Stains (walk, run on Shift /
+  right trigger, jump on Space / A, right stick to look), under new GUIDs.
+- The I+O+P score cheat stays on the keyboard. `YellowMaterial` and the objects on
+  Unity's default material are URP/Lit. The terrain has no texture layers; URP draws it
+  as a red checkerboard.
+- 83 MB of the folder is the game's own video and audio.

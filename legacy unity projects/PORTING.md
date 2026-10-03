@@ -410,3 +410,14 @@ GUI. Things it did not exercise, to check for in step 0:
 - **Input asked for by thousands of objects per frame:** read it once in the game's
   main script into statics. `TaloketoInputManager` looks actions up by name.
 - **Screenshots of a webcam toy show the room.** Delete them after looking.
+
+## Added by Incredible Penis (Unity 5.0, MovieTexture)
+
+- **`MovieTexture`** is gone. The `.mp4` imports as a `VideoClip` under the same GUID
+  with file ID 32900000; change the field type, re-save the scenes as text and replace
+  the old file ID (15200000) in the references. Play it with a `VideoPlayer` added at
+  start (`MaterialOverride` on the renderer, `loopPointReached` for "finished").
+- **`LoadLevel(loadedLevel + 1)`**: keep the old build order in an array of scene names
+  and find the current scene in it.
+- **Long linear games:** let the bot prove each mechanic for a few seconds, then set
+  the counter near its goal by reflection, and say so.
