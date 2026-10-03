@@ -53,6 +53,27 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/games/Lost Shader/main.unity
     guid: 4501c507ccef93f4bb5901189a686757
+  - enabled: 1
+    path: Assets/games/Ode to Cactus/scenes/road.unity
+    guid: 0d99b7d14d7e6484c99a6a291276a150
+  - enabled: 1
+    path: Assets/games/Ode to Cactus/scenes/noise.unity
+    guid: 9b0904f5d3980f942918a479ec4ff000
+  - enabled: 1
+    path: Assets/games/Ode to Cactus/scenes/mondo.unity
+    guid: ec701852680e3b24a959c8b94c27e0d1
+  - enabled: 1
+    path: Assets/games/Ode to Cactus/scenes/asia.unity
+    guid: 31beb8ecbf745c34bbe73d4264da7def
+  - enabled: 1
+    path: Assets/games/Ode to Cactus/scenes/norr.unity
+    guid: 624a67e8ef8655641bd4a5a7dd746b59
+  - enabled: 1
+    path: Assets/games/Ode to Cactus/scenes/norr2.unity
+    guid: ef68cc8123f723d4583f326387ca9660
+  - enabled: 1
+    path: Assets/games/Ode to Cactus/scenes/end.unity
+    guid: 3ba5dcbd2674b0140ab9e791b21e0be2
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
