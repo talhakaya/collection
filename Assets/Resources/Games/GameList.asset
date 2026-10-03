@@ -149,3 +149,12 @@ MonoBehaviour:
     cursorHotspot: {x: 0, y: 0}
     entryScene: {fileID: 102900000, guid: f9ee539bec4e88b41ba61cb30b9402a7, type: 3}
     entryScenePath: Assets/games/Where Is He/main.unity
+  - gameName: Casket Fucker
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: 13ce2a6a060a5d249a45a533c02f5357, type: 3}
+    entryScenePath: Assets/games/Casket Fucker/scene0.unity

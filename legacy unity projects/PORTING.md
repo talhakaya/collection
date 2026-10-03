@@ -249,3 +249,16 @@ GUI. Things it did not exercise, to check for in step 0:
 - **`OnValidate` runs on `AddComponent` in play mode in the editor.** One that assumes a
   sibling component needs a null check.
 - **Prompts that name ESC** as the way out are now wrong: name the collection's exit.
+
+## Added by Casket Fucker (Unity 5.1)
+
+- **`OnTriggerStay2D` for a collider moved by its transform** (no body of its own) is
+  unreliable: rare while it moves, absent once the other body sleeps. A timer counted
+  down in it runs many times too slowly. Test the overlap in `Update`
+  (`Physics2D.SyncTransforms`, then `Collider2D.Distance(...).isOverlapped`), as
+  `MoveToFind.cs` does. Have the bot log how long each state took and compare with
+  the time the scene asks for.
+- **Steer bots by collider bounds**, not transform positions: sprite pivots and
+  collider offsets differ by whole units.
+- A product name left at the template's default ("ArtisticGame") is no use; take the
+  name from the title art.
