@@ -248,3 +248,12 @@ MonoBehaviour:
     cursorHotspot: {x: 0, y: 0}
     entryScene: {fileID: 102900000, guid: 0e705967e0dcccd43b71fba0cd377010, type: 3}
     entryScenePath: Assets/games/Azer AVM/scene0.unity
+  - gameName: Talha's Screensaver
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: a9a0198c8596c26488f6f7c51b2bf29a, type: 3}
+    entryScenePath: Assets/games/Talha's Screensaver/main.unity

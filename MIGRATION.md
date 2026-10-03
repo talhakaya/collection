@@ -459,3 +459,17 @@ Ported by `PORTING.md`:
   frames a second. `OnCollisionExit2D` no longer reads contact points (Unity 6 gives
   none there).
 - Scene changes are by path; the Escape-quit is gone.
+
+## talha's screensaver
+
+Unity 5.3 project folder `screensaver` (no product name set; the name is the owner's),
+binary format, one scene, no input: a toy that feeds the webcam and a few particles
+through a camera that never clears its render texture. A sibling of Lost Shader.
+Ported by `PORTING.md`:
+
+- **Tints** set from code (`_TintColor` on `Particles/Additive`) go through
+  `Game.gammaTint`, for the Linear colour space reason described under Lost Shader.
+- **The webcam** is stopped and released in `WebcamOnMaterial.OnDestroy`; it used to
+  stop with the application.
+- The Escape-quit is gone; `Game.time` starts over in `Awake`. No action map, no mouse
+  emulation: there is nothing to press.
