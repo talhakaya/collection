@@ -131,3 +131,12 @@ MonoBehaviour:
     cursorHotspot: {x: 0, y: 0}
     entryScene: {fileID: 102900000, guid: 4501c507ccef93f4bb5901189a686757, type: 3}
     entryScenePath: Assets/games/Lost Shader/main.unity
+  - gameName: Ode to Cactus
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: 0d99b7d14d7e6484c99a6a291276a150, type: 3}
+    entryScenePath: Assets/games/Ode to Cactus/scenes/road.unity

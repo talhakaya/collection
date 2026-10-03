@@ -209,3 +209,29 @@ GUI. Things it did not exercise, to check for in step 0:
 - **Test bots:** walking in a straight line gets stuck on scenery; place the player next
   to the goal instead and say so. Log on state changes only. Cap the frame rate at 60
   (`Application.targetFrameRate`) when judging per-frame effects.
+
+## Added by Ode to Cactus (Unity 4.6, 3D, several scenes)
+
+- **Lit 3D scenes are magenta under URP.** Every built-in lit shader (`Diffuse`,
+  `Transparent/Diffuse`, the `Default-Diffuse` material on primitives) has no URP pass.
+  `Assets/games/Ode to Cactus/collection/` has a shader and a light feeder that
+  reproduce Unity 4's forward lighting; copy and rename them for the next lit game
+  rather than switching to URP/Lit, which changes the look entirely. Renderers on the
+  built-in default material have to be repointed in the scenes (an editor script: any
+  `sharedMaterial` whose asset path starts with `Resources/unity_builtin`).
+  `ShaderUtil.GetShaderMessages` tells why a new shader is still magenta.
+- **Upgraded light intensities.** Unity rewrites a Unity 4 intensity `i` as
+  `(2i)^(1/2.2)`; code that sets `Light.intensity` still uses the old numbers.
+- **UnityScript (`.js`).** Translate to C#, keep the class and field names, and rename
+  the `.js.meta` to `.cs.meta` so the GUID and the scene bindings survive. A function
+  containing `yield` was started as a coroutine implicitly: `StartCoroutine` it.
+- **Standard Assets, editor plugins, `Thumbs.db`, `.pdn`:** copy only what the scenes
+  use. A scan for missing scripts and broken references after import shows if too much
+  was left out.
+- **Several scenes.** `Application.LoadLevel("name")` becomes `LoadScene` with the full
+  path. A game that counts scenes in a static needs to know a fresh start from its own
+  scene change (`Game.travelling` in Ode to Cactus). All scenes go into Build Settings;
+  the GameList entry points at the first.
+- **`Collision2D.contacts` is empty in `OnCollisionExit2D`.**
+- **Mouse look:** bind `Mouse X`/`Mouse Y` to `<Mouse>/delta` with `scale(factor=0.1)`
+  (the old axis sensitivity) and add the right stick in code, scaled by frame time.
