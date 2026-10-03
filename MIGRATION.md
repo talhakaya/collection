@@ -421,3 +421,21 @@ the wall falls open, walk out. Ported by `PORTING.md`:
   built-in default material has a `DefaultMat` of the game's own.
 - `Application.Quit()` at the end returns to the collection's menu; statics
   (`LightStart.candles`, `Suicide.done`) are reset in `Game.Awake`.
+
+## childhood nightmare
+
+Unity 4 project folder (product name "Childhood Nightmare"), binary format, two scenes
+(`first`, `scene1`): a title that blurs away on a click, then a first-person scene that
+runs a timed 90-second sequence and returns to the title. Ported by `PORTING.md`:
+
+- Only what the two scenes reference was copied (4.6 MB of 43); iTween was not used by
+  any script and stayed behind.
+- **Start** is the mouse button, and now also gamepad A or Space.
+- **Mouse look** is the Unity 4 Standard Assets script as ported for Ode to Cactus
+  (right stick added), under a new GUID, but with this project's own horizontal
+  rotation: Ode to Cactus's copy clamps the turn to one full circle, this one did not.
+- **Tag** `Ground` is added to the project (the jump resets on it).
+- **Ground plane** was on Unity's built-in diffuse material, lit by the ambient colour
+  only; it has an unlit grey `GroundMat` now. The shade is my estimate.
+- Scene changes are by path; `TintScript.weatherColor` and the RGB-split constant are
+  reset when the title starts.

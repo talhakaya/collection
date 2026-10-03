@@ -381,3 +381,14 @@ GUI. Things it did not exercise, to check for in step 0:
   highlights off. Save each material with `AssetDatabase.SaveAssetIfDirty` right away;
   a conversion followed by opening a scene was lost once.
 - **Check the first screenshot for magenta** before judging anything else.
+
+## Added by Childhood Nightmare (Unity 4, two scenes, first person)
+
+- **A script reused from an earlier port may carry that game's own changes.** Diff the
+  two legacy originals first (Ode to Cactus's `MouseLook` clamps the turn; the stock
+  one does not). A bot that holds the stick for more than one full turn shows it.
+- **`legacy_scripts.py` turns `Application.LoadLevel(0)` into a reload of the active
+  scene**, which is wrong when the game has more than one scene: load the first scene
+  by path.
+- **A renderer on `Default-Diffuse` with no light in the scene** showed albedo times
+  ambient; an unlit material in that shade is the closest thing.

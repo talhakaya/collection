@@ -119,6 +119,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/games/Wall Stains/Scenes/scene0.unity
     guid: fd053c8eca0df1143bfeacba5e791ccf
+  - enabled: 1
+    path: Assets/games/Childhood Nightmare/first.unity
+    guid: 14b8e5fc011cc3b41bc883f006d596e6
+  - enabled: 1
+    path: Assets/games/Childhood Nightmare/scene1.unity
+    guid: 8ba89418d22159542b96ee7a93c0471c
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
