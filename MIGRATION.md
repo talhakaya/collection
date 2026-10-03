@@ -531,3 +531,14 @@ platformer aimed with the mouse. Ported by `PORTING.md`:
   `hit.collider` of raycast hits into `GetComponent<Collider>()`; that was put back.
   Unity's own script updater handled `velocity` (answered "just for these files").
 - Tags `Bug` and `Drone` were added to the project (`Enemy`, `Wall` and `Door` existed).
+
+## 120 pixels
+
+Unity 4.5 project folder `120-pixels` (product name "ColorRGBA"), one scene: circles
+grow, a grid of 180 tiles lights up, and a figure can be pushed around it. A sketch with
+no goal. Ported with `tools/legacy_port.py`:
+
+- Namespace `Games.Pixels120` (a namespace cannot start with a digit); the folder, map
+  and GameList entry are "120 Pixels", Resources under `Resources/120Pixels/`.
+- `Fast` (Space, gamepad A or right trigger) is the old "hold Space for ten times speed".
+- `Circle`'s static counter is reset from `Game.Awake`.
