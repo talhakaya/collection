@@ -508,3 +508,26 @@ walks over a terrain, where the score is the distance walked. Ported by `PORTING
   Unity's default material are URP/Lit. The terrain has no texture layers; URP draws it
   as a red checkerboard.
 - 83 MB of the folder is the game's own video and audio.
+
+## milky mike
+
+Unity 5.6 project folder `kayaprot2` (product name "Kayabros Prototype 2"; the owner's
+name for it is Milky Mike), binary format, one scene and 24 level prefabs: a stealth
+platformer aimed with the mouse. Ported by `PORTING.md`:
+
+- **Everything was copied** (7.7 MB) except three unused scripts: `UDPManager.cs`
+  (opens UDP sockets), `Rotate3D.cs` and `SpriteButton.cs`. `Carryable.cs` never
+  compiled against this version of `Level` and was removed with the one unused prefab
+  that used it (`moneyCase`).
+- **First level.** `Level0.prefab` and `Level0Mama.prefab` had the same GUID in the old
+  project. The newer one (`Level0Mama`) is kept under that GUID; the older file is gone.
+- **Aiming.** The game aims at the mouse. On a gamepad the right stick aims: the aim
+  point sits three units from the player in the stick's direction until the mouse moves.
+- **Actions:** move (arrows/WASD, left stick, d-pad), `Fire` (Space, left mouse, right
+  trigger, X), `Fire2` (left Alt, right mouse, left trigger, B), `Interact` (Space, A),
+  `WeaponSelect` (Q/E, LB/RB), `Restart` (R, Y), mouse wheel zoom. The number keys and
+  the O/P level-skip keys stay on the keyboard. The Escape-quit is gone.
+- **`legacy_scripts.py` is for Unity 4 and early 5 code.** Here it turned the valid
+  `hit.collider` of raycast hits into `GetComponent<Collider>()`; that was put back.
+  Unity's own script updater handled `velocity` (answered "just for these files").
+- Tags `Bug` and `Drone` were added to the project (`Enemy`, `Wall` and `Door` existed).

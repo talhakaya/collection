@@ -421,3 +421,21 @@ GUI. Things it did not exercise, to check for in step 0:
   and find the current scene in it.
 - **Long linear games:** let the bot prove each mechanic for a few seconds, then set
   the counter near its goal by reflection, and say so.
+
+## Added by Milky Mike (Unity 5.6, larger, mouse-aimed)
+
+- **Unity 5.5+ code does not need the shortcut rewrite.** `legacy_scripts.py` mangles
+  `hit.collider` on `RaycastHit2D`; after running it, turn `x.GetComponent<Collider>()`
+  back into `x.collider` wherever the old source had it.
+- **Two assets with one GUID** in the old project: Unity gives both new ones on import
+  and the reference breaks. Keep the one the project was using (the newer file) and
+  write the old GUID back into its meta.
+- **Scripts that never compiled** (leftovers) stop the whole import: remove them with
+  the unused prefabs that carry them.
+- **`CompareTag` throws on an undefined tag**: add every tag the code names.
+- **Mouse-aimed games on a pad:** move a virtual aim point with the right stick in the
+  place where the game reads the mouse, and hand back to the mouse when it moves.
+- **Mouse buttons and the wheel can be bound in the action map**
+  (`<Mouse>/leftButton`, `<Mouse>/scroll/y` with `Clamp` and `Scale`).
+- **Many levels:** switch through all of them with the game's own next-level call and
+  log one line each; then play one by pad.
