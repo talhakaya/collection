@@ -198,3 +198,20 @@ Unity 5.2 project folder ("Collab2"), one scene, ported by `PORTING.md`. What br
   "Press ESC to quit" names the collection's exit instead.
 - `legacy_scripts.py` took a field named `audio` for the removed component shortcut;
   it now leaves a name alone when the script declares it.
+
+## casket fucker
+
+Unity 5.1 project folder ("ArtisticGame"), one scene of thirteen states, ported by
+`PORTING.md`. No custom tags or layers, no `Resources`, no `Shader.Find`. What changed:
+
+- `Input.anyKeyDown` (the whole game is "tap random keys") became `Game.anyKeyDown`:
+  every key, the mouse buttons, and the pad's face buttons, shoulders, triggers and d-pad.
+- The arrow-key states (`MoveToFind`) stalled when the player held still on the goal:
+  the goal's kinematic body falls asleep and a sleeping body sends no
+  `OnTriggerStay2D`. `MoveToFind.Start` sets the goal's body to `NeverSleep`.
+- The Escape-quit is gone; `Game.Awake` resets the clock; the four animation index
+  calculations are clamped; `TintScript.OnValidate` has its null check.
+- `PlatformerController` is in the folder but on no object. It was fixed up to compile
+  (`Jump` action, remembered ground colliders) and nothing more.
+- Input map: `Horizontal`, `Vertical` (arrows/WASD, left stick, d-pad), `Jump`.
+- `UnityVS` and `Thumbs.db` were not copied.

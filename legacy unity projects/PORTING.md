@@ -249,3 +249,14 @@ GUI. Things it did not exercise, to check for in step 0:
 - **`OnValidate` runs on `AddComponent` in play mode in the editor.** One that assumes a
   sibling component needs a null check.
 - **Prompts that name ESC** as the way out are now wrong: name the collection's exit.
+
+## Added by Casket Fucker (Unity 5.1)
+
+- **`OnTriggerStay2D` against a kinematic goal** stops when that body falls asleep,
+  even though the thing moved onto it has no body of its own. Set the goal's
+  `sleepMode` to `NeverSleep`. A test bot that steers onto the goal and stops there
+  finds this; one that keeps moving does not.
+- **Steer bots by collider bounds**, not transform positions: sprite pivots and
+  collider offsets differ by whole units.
+- A product name left at the template's default ("ArtisticGame") is no use; take the
+  name from the title art.
