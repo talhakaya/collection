@@ -74,6 +74,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/games/Ode to Cactus/scenes/end.unity
     guid: 3ba5dcbd2674b0140ab9e791b21e0be2
+  - enabled: 1
+    path: Assets/games/Where Is He/main.unity
+    guid: f9ee539bec4e88b41ba61cb30b9402a7
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

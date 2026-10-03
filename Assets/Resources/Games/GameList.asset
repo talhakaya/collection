@@ -140,3 +140,12 @@ MonoBehaviour:
     cursorHotspot: {x: 0, y: 0}
     entryScene: {fileID: 102900000, guid: 0d99b7d14d7e6484c99a6a291276a150, type: 3}
     entryScenePath: Assets/games/Ode to Cactus/scenes/road.unity
+  - gameName: Where Is He
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: f9ee539bec4e88b41ba61cb30b9402a7, type: 3}
+    entryScenePath: Assets/games/Where Is He/main.unity
