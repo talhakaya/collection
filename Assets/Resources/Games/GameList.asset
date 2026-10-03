@@ -275,3 +275,12 @@ MonoBehaviour:
     cursorHotspot: {x: 0, y: 0}
     entryScene: {fileID: 102900000, guid: be4e3d4f646c0b342bdf207bfc6fb49f, type: 3}
     entryScenePath: Assets/games/Incredible Penis/Scenes/video0.unity
+  - gameName: Milky Mike
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: 2f3e458e199a34f4689cbbe598354dbc, type: 3}
+    entryScenePath: Assets/games/Milky Mike/main.unity
