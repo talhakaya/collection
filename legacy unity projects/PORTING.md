@@ -294,3 +294,28 @@ GUI. Things it did not exercise, to check for in step 0:
   references, apart from `Resources/`.
 - A test that writes a high score leaves it in the editor's `PlayerPrefs`; delete the
   keys afterwards.
+
+## Added by Crime Factory (Unity 2019.2, text format, large)
+
+- **Copy by reference closure** when the project is big: map GUID to path from the
+  metas, start from the build scenes, the scripts and `Resources/`, and follow
+  `guid:` references through every text asset and through the `.meta` of every file
+  (model metas name their external materials). Dry-run first and look at the size per
+  top folder. Skip a `TextMesh Pro` folder whose GUIDs the collection already has.
+- **`PlayerPrefs.DeleteAll()`** must go: prefix the keys and delete them by name.
+- **`Application.streamingAssetsPath`**: put the files under
+  `Assets/StreamingAssets/<Name>/` and change the paths. Remove anything that writes
+  there at quit.
+- **Escape with a function of its own** (back to the game's menu): keep it, but ignore
+  it while Shift or the pad's Select is held, or it fires together with the
+  collection's exit chord.
+- **uGUI menus with no first selection** are mouse-only. Add navigation in the menu
+  script with the game's own actions rather than relying on `StandaloneInputModule`.
+- **Built-in lit materials**: model materials are converted to URP/Lit by the importer;
+  list what is left (`Material.shader.name` per `.mat`) and convert those by script
+  (`_MainTex`/`_Color`/`_Glossiness` to `_BaseMap`/`_BaseColor`/`_Smoothness`).
+- **Broken references that were already broken**: look the GUID up in the old project
+  before trying to repair it.
+- **Test bots must change levels the way the game does** (here: set the door's
+  `nextLevel` and `restartCounter = 0`); calling the loader from an editor callback
+  destroyed objects mid-step and threw.

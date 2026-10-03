@@ -13,6 +13,7 @@ TagManager:
   - Plane
   - Spoon
   - Bullet
+  - Climb
   layers:
   - Default
   - TransparentFX
