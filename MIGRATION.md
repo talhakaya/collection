@@ -110,3 +110,22 @@ specifically) rather than only synthetic test packages:
   `AssetDatabase.Refresh()`, which can trigger a recompile/domain reload mid-call
   and silently skip the rest of the import. Reordered so Build Settings is written
   first.
+
+## herbie
+
+The first game brought in from its raw Unity 4.5 project folder rather than a
+`.unitypackage`. The procedure is in `legacy unity projects/PORTING.md`, with the tools
+it uses in `legacy unity projects/tools/`. What broke:
+
+- Five sprites (the four pacman frames and one star) lost their references: the images
+  had been renamed in the old project, which leaves the sprite on file ID 21300002, and
+  Unity 6 drops references to that silently. Repointed by `legacy_sprite_ids.py`.
+- Interact did nothing most of the time: `GetButtonDown` is read in `OnTriggerStay2D`,
+  a physics callback, so a one-frame press usually fell between steps. The press is now
+  latched until a physics step has seen it (`Herbie.cs`).
+- The fight mini-game relied on the old `Input.GetAxis` smoothing, which the
+  collection's raw `GetAxis` does not have; eased locally in `Fight.cs`.
+- `TalhaAnimation` and `TalhaColorChanger` could index one past the end from float
+  rounding; clamped.
+- The binary Input Manager was first read with a strings scan, which dropped the
+  one-letter keys (WASD, Z). `legacy_input_axes.py` reads it properly.

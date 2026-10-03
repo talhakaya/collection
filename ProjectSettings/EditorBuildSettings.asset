@@ -47,6 +47,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/games/Garbage People/main.unity
     guid: 9fd338929497c8a47ba50a9610f50c18
+  - enabled: 1
+    path: Assets/games/Herbie/scene0.unity
+    guid: 5f284bf69857e0e46b0f6885abacfdaf
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

@@ -1,0 +1,185 @@
+# Porting a legacy Unity project into the collection
+
+How Herbie (Unity 4.5.2) was brought in straight from its project folder, written as a
+procedure for the next game. The earlier games came in as a `.unitypackage` exported
+from their old Unity version plus an Input Manager JSON (`Tools > Collection > Import
+Game Package...`); this is the route for when all there is is the old project folder.
+
+The rule throughout: the game is legacy content to keep working, not to clean up. Every
+change beyond what Unity 6 or the collection forces is marked in the code with a comment
+starting `In the collection:`.
+
+Herbie took one session. The order below is the order that worked; the pitfalls are in
+the steps where they bit.
+
+## 0. Look before touching anything
+
+Work on a branch (`feature/<name>`), from the repository root.
+
+- **Unity version and format.** Open `Assets/*.unity` in a hex/text viewer. Unity 4
+  projects are binary and carry the version near the top (`4.5.2f1`). Unity 6 read
+  Herbie's binary scene and prefabs without help. A text (`%YAML`) project is easier
+  still.
+- **Product name.** It is in `ProjectSettings/ProjectSettings.asset` (strings scan). Use
+  it as the game name: it becomes the folder, the namespace (`Games.<Name>`, spaces
+  removed), the action map name and the GameList entry, and all four must match.
+- **Read every script.** They are short. Note: which input axes and buttons are used and
+  how; `Application.Quit` / `LoadLevel`; `Resources.Load` names; statics that assume a
+  fresh process; anything reading input inside physics callbacks.
+- **Tags, layers, physics.** Strings-scan `TagManager.asset` for custom tags and layers
+  (Herbie had none; a game that has them needs them added to the project, or its code
+  changed). Note the gravity the game sets or expects.
+- **Clashes.** Check that none of the game's `.meta` GUIDs exist in `Assets/` already,
+  and that no file directly under its `Resources/` shares a name with one in another
+  game's `Resources/`.
+
+## 1. Copy the assets in, with their meta files
+
+Copy `legacy unity projects/<game>/Assets/*` to `Assets/games/<Name>/`.
+
+- **The `.meta` files are hidden files.** Copy with `-Force` (PowerShell) or they stay
+  behind, every GUID changes, and every reference in every scene and prefab breaks.
+  Count files before and after. Clear the hidden attribute afterwards.
+- Move everything directly under `Resources/` into `Resources/<Name>/` (files and their
+  metas together), so load names cannot collide across games.
+
+Do not let Unity see the folder yet.
+
+## 2. Scripts
+
+    python "legacy unity projects/tools/legacy_scripts.py" "Assets/games/<Name>" "<Name>"
+
+It rewrites legacy `Input` calls to `TaloketoInputManager`, the component shortcuts
+Unity 5 removed (`rigidbody2D`, `collider2D`, `camera`, ...) to `GetComponent<>()`,
+`Application.LoadLevel(0)` to a reload of the active scene, and wraps everything in
+`namespace Games.<Name>`. Script GUIDs are untouched, so component bindings survive.
+It prints what it changed and a `BY HAND:` list. By hand:
+
+- **Quitting.** An Escape-quit is deleted (the collection has its own exit: Start+Select
+  or Shift+Escape). Any other `Application.Quit()` becomes
+  `GlobalInputManager.ReturnToMainMenu()`.
+- **`Resources.Load("x")`** becomes `Resources.Load("<Name>/x")`.
+- **Axis compared with exactly 1 or -1** (`GetAxisRaw("Horizontal") == 1`) becomes
+  `> 0.5f` / `< -0.5f`: a stick rarely reads exactly 1.
+- **`Input.GetAxis` smoothing.** The collection's `GetAxis` is the raw value. Where the
+  game relied on the old easing (Herbie's fight slides him sideways), ease it locally
+  with the Input Manager's own numbers from step 3 (`Fight.cs` has a ten-line `smooth`).
+- **Button presses read in physics callbacks.** `GetButtonDown` inside
+  `OnTriggerStay2D`/`OnCollisionStay2D`/`FixedUpdate` misses presses, because a press
+  lasts one frame and physics runs at 50 Hz: about one in six at 60 fps, most at 144.
+  Latch the press in `Update` and hold it until one physics step has seen it
+  (`Herbie.cs`: `interactDown`/`interactSeen`). Also set the body's `sleepMode` to
+  `NeverSleep`, since a sleeping body gets no `OnTriggerStay2D`.
+- **Statics.** In the collection the process outlives the game, so statics a game left
+  set (a mini-game flag, a timer, a tint) are still set at its next start. Reset them in
+  the game's first `Awake`.
+- **Float index maths** like `FloorToInt((time % (period * n)) / period)` can land on
+  `n`. Clamp it. (It was a latent bug; it surfaces as an exception that pauses the
+  editor.)
+
+## 3. Input map
+
+    python "legacy unity projects/tools/legacy_input_axes.py" "legacy unity projects/<game>/ProjectSettings/InputManager.asset"
+
+prints the axes the game was written against, with alternates and smoothing values. (A
+plain strings scan of that binary file drops one-letter keys, which is how WASD and Z
+were nearly lost for Herbie.)
+
+Add a map named `<Name>` to `Assets/Resources/Input/CollectionInput.inputactions`, one
+action per legacy axis, same names:
+
+- two-key axes: `Value`/`Axis` action, a `1DAxis` composite per key pair (main and alt);
+- buttons: `Button` action, one binding per key;
+- then the gamepad, which the originals never had: left stick and d-pad on the movement
+  axes, `buttonSouth` on the main action, `start` on a menu/confirm action. Leave debug
+  cheats on the keyboard only. Leave out `Quit`.
+
+Edit the JSON with a script that appends to it (`json.load` with `OrderedDict`, keep the
+file's line endings), not by hand; check `git diff --stat` shows insertions only.
+
+## 4. Let Unity import, then re-save as text
+
+Refresh/compile in the editor and fix compile errors until the console is clean. Then:
+
+- Open the game's scene and check: no missing scripts, and the main object's public
+  fields are all assigned.
+- `AssetDatabase.ForceReserializeAssets(<every asset path under the folder>,
+  ForceReserializeAssetsOptions.ReserializeAssetsAndMetadata)` rewrites the binary
+  scene, prefabs and metas in the current text format. Do this with another scene open.
+- Add the scene to Build Settings, and an entry to `Assets/Resources/Games/GameList.asset`
+  (`gameName`, `entryScene`/`entryScenePath`, the game's gravity, `enableMouseEmulation`
+  only for a mouse-only game).
+
+Commit and push here: a checkpoint that compiles and opens.
+
+## 5. Repair what the import dropped silently
+
+    python "legacy unity projects/tools/legacy_sprite_ids.py" "legacy unity projects/<game>/Assets" "Assets/games/<Name>"
+    python "legacy unity projects/tools/legacy_sprite_ids.py" "legacy unity projects/<game>/Assets" "Assets/games/<Name>" --apply
+
+Images that were renamed in the old project have their sprite on file ID 21300002
+instead of 21300000. Unity 6 drops references to them without any error: the object just
+has no picture (Herbie's pacman and one star). The tool finds them in the legacy metas
+and repoints the references.
+
+- Editing the open scene's file makes Unity show a modal "modified externally" dialog
+  that blocks everything, including MCP calls. Have another scene open, or click Reload.
+- Then scan every component in the scene and in every prefab for broken references: a
+  `SerializedProperty` of type `ObjectReference` whose `objectReferenceValue` is null but
+  whose `objectReferenceInstanceIDValue` is not zero. Zero broken is the bar. Sprites
+  were the only kind Herbie lost; audio clips, fonts, prefab links and script bindings
+  all survived.
+
+## 6. Play it through
+
+Set `DISABLESTEAMWORKS` first. Being loadable is not being playable: every real bug in
+Herbie was found by playing, none by inspection.
+
+- Drive it with a virtual gamepad (`InputSystem.AddDevice<Gamepad>` +
+  `QueueStateEvent`) from an `EditorApplication.update` hook that steps through a list
+  ("go to X", "tap", "wait", "screenshot"), logging to a file. Screenshots with
+  `ScreenCapture.CaptureScreenshot`. A virtual keyboard or mouse only works while the
+  editor window is focused.
+- Cover: the start screen, moving around, every interaction, every mini-game or
+  sub-scene, every ending, the restart, and going back to the collection's menu and in
+  again (`GlobalInputManager.ReturnToMainMenu()`, then load the scene).
+- Check the keyboard bindings as well as the pad.
+- The editor runs unfocused at hundreds of frames a second, which exposes
+  frame-rate-dependent code. That is useful, not noise: a 144 Hz monitor has the same
+  effect on players.
+- Any exception pauses the editor ("Error Pause") and stalls the bot; read the console
+  when a run stops making progress.
+- Shortcuts are fine for reaching late states (setting a timer forward, moving the
+  player onto a pickup), but say which ones were taken.
+
+## 7. Finish
+
+- On-screen prompts in text objects: name the gamepad's button while a pad is the device
+  in use (Herbie's `Menu.cs`). Prompts drawn into the art are left alone and reported.
+- Remove the virtual devices, clear the dynamic TMP font assets
+  (`ClearFontAssetData(true)`, never `git checkout` them), reopen the main menu scene.
+- Commit, push, give the review link. Report what was tested, what shortcuts the test
+  took, every decision made on the owner's behalf, and anything that looked off but was
+  left as imported.
+- Add the game's entry to `MIGRATION.md`.
+
+## What to expect from other games
+
+Herbie was a kind case: one scene, 2D, no custom layers or tags, no plugins, no legacy
+GUI. Things it did not exercise, to check for in step 0:
+
+- `OnGUI`, `GUIText`, `GUITexture` (removed in Unity 2019): need rebuilding with UI or
+  TextMesh.
+- Custom tags, layers, sorting layers and the 2D collision matrix: live in project
+  settings, not in the game's folder.
+- Several scenes: `Application.LoadLevel(n)` / `LoadLevel("name")` must become scene
+  paths, as in Space Artist.
+- Shaders written for the built-in pipeline: the project is URP. (`Sprites/Default` and
+  the legacy text shader worked; in a custom sprite shader the renderer's colour arrives
+  as `_RendererColor`, not in the vertices.)
+- Mouse-driven games: `enableMouseEmulation` in GameList, and `TaloketoInputManager`'s
+  mouse calls.
+- Plugins, `PlayerPrefs` keys shared between games, legacy particle systems and
+  animations.
+- The project's colour space is Linear; old projects were Gamma, so semi-transparent
+  blends come out lighter (`Tools > Color Space` switches it for a comparison).
