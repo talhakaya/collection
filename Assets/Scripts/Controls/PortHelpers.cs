@@ -36,6 +36,46 @@ namespace Collection.Controls
 			SceneManager.sceneLoaded += handler;
 		}
 
+		/// <summary>
+		/// For games that depended on their old project's layer collision matrix. Makes the
+		/// given layer pairs (a0, b0, a1, b1, ...) ignore each other, in 2D or 3D physics,
+		/// and optionally sets the 3D gravity; everything is put back when a scene outside
+		/// the game's folder loads. Call it from the game's first Awake; calling it again
+		/// while it is in force does nothing.
+		/// </summary>
+		public static void PhysicsWithinGame(GameObject owner, bool twoD, int[] ignoredPairs, Vector3? gravity3D = null)
+		{
+			if (physicsInForce) return;
+			physicsInForce = true;
+			string folder = GameFolder(owner.scene.path);
+			bool[] before = new bool[ignoredPairs.Length / 2];
+			for (int i = 0; i < before.Length; i++)
+			{
+				int a = ignoredPairs[i * 2], b = ignoredPairs[i * 2 + 1];
+				before[i] = twoD ? Physics2D.GetIgnoreLayerCollision(a, b) : Physics.GetIgnoreLayerCollision(a, b);
+				if (twoD) Physics2D.IgnoreLayerCollision(a, b, true); else Physics.IgnoreLayerCollision(a, b, true);
+			}
+			Vector3 gravityBefore = Physics.gravity;
+			if (gravity3D.HasValue) Physics.gravity = gravity3D.Value;
+
+			UnityEngine.Events.UnityAction<Scene, LoadSceneMode> handler = null;
+			handler = (scene, mode) =>
+			{
+				if (folder != "" && scene.path.StartsWith(folder)) return;
+				SceneManager.sceneLoaded -= handler;
+				physicsInForce = false;
+				for (int i = 0; i < before.Length; i++)
+				{
+					int a = ignoredPairs[i * 2], b = ignoredPairs[i * 2 + 1];
+					if (twoD) Physics2D.IgnoreLayerCollision(a, b, before[i]); else Physics.IgnoreLayerCollision(a, b, before[i]);
+				}
+				if (gravity3D.HasValue) Physics.gravity = gravityBefore;
+			};
+			SceneManager.sceneLoaded += handler;
+		}
+
+		static bool physicsInForce;
+
 		static string GameFolder(string scenePath)
 		{
 			// "Assets/games/<Name>/..." -> "Assets/games/<Name>/"

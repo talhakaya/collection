@@ -419,3 +419,21 @@ MonoBehaviour:
     cursorHotspot: {x: 0, y: 0}
     entryScene: {fileID: 102900000, guid: 261176bca7038ba458714d81a641d2c4, type: 3}
     entryScenePath: Assets/games/Screens/main.unity
+  - gameName: Devil May Cry
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: 8535e1c518d84a508a0646691342ae54, type: 3}
+    entryScenePath: Assets/games/Devil May Cry/Scenes/Main.unity
+  - gameName: FarCryBaby
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: f0d531bc7d87d4b4693159632e1d7f3d, type: 3}
+    entryScenePath: Assets/games/FarCryBaby/Scenes/Main.unity

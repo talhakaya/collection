@@ -629,3 +629,25 @@ Four project folders, ported with `tools/legacy_port.py`.
   keeps its saved values; the outlines are missing and the picture is mostly dark.
   The rigid-body first-person controller reads the collection's input (map copied
   from Wall Stains); five Standard materials are URP/Lit.
+
+## devil may cry, farcrybaby
+
+Two Unity 2019 projects, already URP and text format. Only what the scenes reference
+was copied. Both used `namespace Game2`; they are `Games.DevilMayCry` and
+`Games.FarCryBaby` now.
+
+- **Devil May Cry** (`devil-may-cry`, product name "DevilMayCry"): a side-view brawler
+  prototype with bone-animated sprites, three enemy types and a Cinemachine camera.
+  It read the old Input Manager; the map has `Jump` (Z, A), `Attack0` (X, X button),
+  `Attack1` (C, Y), `Dodge` (S, B or RB), `Mode` (left Ctrl, LB or RT) and the arrows /
+  left stick / d-pad. The 2D layer collision matrix (41 ignored pairs) is applied while
+  the game runs; `NameToLayer` calls are layer indices; its `Background` sorting layer
+  is mapped to the collection's; time scale is reset on leaving.
+- **FarCryBaby** (`farcrybaby`, product name "New Unity Project"): a third-person 3D
+  stealth prototype (free-look camera, map view, enemies, hiding in grass). It already
+  used the new Input System with its own actions asset (keyboard, mouse and gamepad);
+  that is kept as it was and switched off when the game is left. The 3D layer collision
+  matrix (38 pairs) and gravity (-25) are applied while it runs. `Main.unity` is the
+  GameList entry; `Logo.unity` is kept, without its Post Processing v2 component (the
+  package is not in the collection). Two loop variables named `renderer` that the
+  converter had rewritten were put back.
