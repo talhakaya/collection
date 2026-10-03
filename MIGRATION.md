@@ -612,3 +612,20 @@ Four project folders, ported with `tools/legacy_port.py`.
   X, right trigger) kicks. `OnCollisionExit2D` remembers which colliders counted as
   ground instead of reading contact points; `fixedAngle` is `freezeRotation`. The
   screen effect is the shader written for The Parasite.
+
+## seizure, screens
+
+- **Seizure** (`seizure`, Unity 2020.3, already URP, text format): a face and a circle
+  moved around over a feedback of 64 copies of the last frames. Only what the two
+  scenes reference was copied (16 MB of 60: most of the rest is a 3D character pack of
+  which twelve files are used). `main.unity` is the GameList entry; `main2.unity` is
+  kept. DOTween was used for two 0.2-second turns; they are done in `Player.LateUpdate`
+  and the plugin was not copied. `Attack` is Z, A or X. Three Standard materials of the
+  character pack are URP/Lit.
+- **Screens** (`screens`, Unity 2018.4): a first-person walk among mirror cameras that
+  render into textures. **It runs but does not look as it did:** every camera had the
+  Standard Assets `EdgeDetection` image effect, which works through `OnRenderImage`
+  (never called under URP) and has no URP counterpart. The component is a stub that
+  keeps its saved values; the outlines are missing and the picture is mostly dark.
+  The rigid-body first-person controller reads the collection's input (map copied
+  from Wall Stains); five Standard materials are URP/Lit.

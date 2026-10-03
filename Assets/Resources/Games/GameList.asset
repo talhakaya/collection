@@ -401,3 +401,21 @@ MonoBehaviour:
     cursorHotspot: {x: 0, y: 0}
     entryScene: {fileID: 102900000, guid: 9cf4c4d122da41f9bf9eecceed01c9ef, type: 3}
     entryScenePath: Assets/games/But You Are A Horse/test.unity
+  - gameName: Seizure
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: 3e0c19e4c838ddc4390b59111df21fe7, type: 3}
+    entryScenePath: Assets/games/Seizure/main.unity
+  - gameName: Screens
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: 261176bca7038ba458714d81a641d2c4, type: 3}
+    entryScenePath: Assets/games/Screens/main.unity
