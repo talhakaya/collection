@@ -336,3 +336,22 @@ GUI. Things it did not exercise, to check for in step 0:
   `Physics.gravity` sets it at start and puts it back on leaving.
 - **Bots in first person:** steer with the right stick by the signed angle to the
   target and push the left stick once it is under 25 degrees.
+
+## Added by The Parasite (Unity 5.0, mouse game with a screen effect)
+
+- **GUID clashes** happen between games that grew out of one another. Give the incoming
+  asset a new GUID in its meta; for a script, replace the old GUID's bytes in the
+  binary scene before Unity sees it (each byte has its two hex digits swapped).
+- **`OnPostRender` / `OnRenderImage`** are never called under URP. Render the camera
+  into a `RenderTexture` and show it with a full-screen `RawImage` on an overlay canvas
+  with a low sorting order; move the per-pixel work into the image's shader. Convert to
+  gamma space in the shader when the old code did byte arithmetic. Release the texture
+  and destroy the canvas in `OnDestroy`.
+- **A prefab with missing scripts** makes `ForceReserializeAssets` log errors. Check
+  whether the scripts were already missing in the old project and whether anything
+  loads the prefab before deciding to leave it out.
+- **Mouse-only games** need no action map: `enableMouseEmulation: 1` in GameList and
+  the converter's `TaloketoInputManager.mousePosition` / `GetMouseButton` are enough.
+- **Bots on an emulated pointer:** hold the stick until the game reports the wanted
+  hover state for a few frames, then tap; do not wait for an exact position when the
+  camera moves.
