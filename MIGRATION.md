@@ -326,6 +326,22 @@ scenes (`menu`, `main`), a platformer with its own physics simulator, 84 level f
   the same button as fire; it was not carried over.
 - The level editor (L key) is still there, as in the original build.
 
+Fixed after the first play-through (2026-10-03):
+
+- **The door after the first boss led nowhere.** Git checks the level files out with
+  CRLF on Windows, and the loader split the properties on `\n` only, so a door's
+  `Next Level` read `police1\r`. That file does not exist; the load threw on every frame
+  and the game stayed on the boss screen. It hit all 23 levels whose door names its next
+  level. `LevelEditor.LoadInternal` now drops the carriage returns.
+- **A bar under every letter** (menu buttons, dialogue). Not the font atlas:
+  `Assets/TextMesh Pro/Shaders/TMP_SDF-Mobile.shader` was a copy from an older TextMesh
+  Pro (it came in with the Golfinity fix) that reads the glyph scale from `texcoord1.y`.
+  The current package puts it in `texcoord0.w`, so the scale fell to zero at the bottom
+  edge of each glyph. The file is now the one from the package (same GUID).
+  `TMP_SDF.shader` in the same folder and the whole of `TextMesh Pro/Resources/Shaders`
+  are still the older versions; they were left alone because Golfinity's fonts and six
+  ported games use them.
+
 ## to everyone i'll never meet
 
 Unity 5.1 project folder (product folder "StepIntoMyEyes", title on screen "to everyone

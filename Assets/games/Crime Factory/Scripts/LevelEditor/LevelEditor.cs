@@ -591,7 +591,10 @@ namespace Games.CrimeFactory
 	            }
 	            CreateIndestructables();
 	            if (propertiesExist) {
-	                string[] properties = levelString.Substring(levelString.IndexOf("properties") + 10).Split('\n');
+	                // In the collection: git checks the level files out with CRLF on Windows, and the
+	                // carriage return ended up in text values ("Next Level" became "police1\r", a
+	                // file that does not exist, so the door after the first boss led nowhere).
+	                string[] properties = levelString.Substring(levelString.IndexOf("properties") + 10).Replace("\r", "").Split('\n');
 	                foreach (string p in properties) {
 	                    string[] pValues = p.Split(',');
 	                    if (pValues.Length == 4) {

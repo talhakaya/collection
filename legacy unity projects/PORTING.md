@@ -319,6 +319,15 @@ GUI. Things it did not exercise, to check for in step 0:
 - **Test bots must change levels the way the game does** (here: set the door's
   `nextLevel` and `restartCounter = 0`); calling the loader from an editor callback
   destroyed objects mid-step and threw.
+- **Text data files arrive with CRLF.** Git (`core.autocrlf`) checks `.txt` files out
+  with Windows line endings, and that is what the build ships. A game that splits its
+  data on `\n` keeps a `\r` on the last value of each line; numbers still parse, names
+  do not. Strip `\r` where the file is read, and test at least one transition that takes
+  a name from the file.
+- **A bar under each TextMesh Pro glyph is an old shader, not the atlas.** Compare the
+  shader file with the one in the package's `TMP Essential Resources.unitypackage`
+  (a tar.gz): old versions read the scale from `texcoord1.y`, current ones from
+  `texcoord0.w`.
 
 ## Added by To Everyone I'll Never Meet (Unity 5.1, first person)
 
