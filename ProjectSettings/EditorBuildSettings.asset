@@ -113,6 +113,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/games/The Parasite/test.unity
     guid: e34da1590ffd42569817aae771de488a
+  - enabled: 1
+    path: Assets/games/Troubled Football/Scenes/mainScene.unity
+    guid: f6440ccbd1640824b9d8ebba97876f59
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
