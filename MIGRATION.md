@@ -691,3 +691,11 @@ drawn with the 2D Toolkit plugin (tk2d). Ported with `tools/legacy_port.py`:
 - **Materials:** three self-illuminated ones are URP/Unlit, five lit ones URP/Lit.
 - Prefab loads in field initializers load on first use; Resources are under
   `Resources/Orphan/`.
+
+Fixed after the first play-through (2026-10-03):
+
+- **Camera zoom did nothing while the dark corners still scaled.** `tk2dCamera` sets its
+  projection in `OnPreCull`, which the render pipeline never sends, so the projection was
+  only set once in `OnEnable`. `CameraScript.changeZoom` kept scaling the `Foreground`
+  vignette to the size the view should have had. `tk2dCamera` now does the same work from
+  `RenderPipelineManager.beginCameraRendering`.

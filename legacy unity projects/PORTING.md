@@ -512,3 +512,8 @@ run-time helpers (`KeepWithinGame`, `AimPoint`, `KeyDown`, `AnyKeyDown`,
   `Transparent/(Bumped) Diffuse` becomes a transparent URP/Lit.
 - **A regex that turns `GameObject x = Resources.Load(...)` fields into lazy
   properties must not match locals**; check that the compile is clean after it.
+- **`OnPreCull`, `OnPreRender`, `OnPostRender` are never sent under URP**, not only
+  `OnRenderImage`. A plugin that sets its camera up there (tk2dCamera's zoom) silently
+  keeps its first state. Call the same code from
+  `RenderPipelineManager.beginCameraRendering` / `endCameraRendering`, and grep every
+  port for these callbacks.
