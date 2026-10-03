@@ -439,3 +439,23 @@ runs a timed 90-second sequence and returns to the title. Ported by `PORTING.md`
   only; it has an unlit grey `GroundMat` now. The shade is my estimate.
 - Scene changes are by path; `TintScript.weatherColor` and the RGB-split constant are
   reset when the title starts.
+
+## azer avm
+
+Unity 4 project folder (product name "AzerAVM"), binary format, two scenes (`scene0`
+title, `scene1` match): two players bounce on a platform and push each other off.
+Ported by `PORTING.md`:
+
+- **Keyboard** as before: A/D and W for the first player, arrows and Up for the second
+  (`P1Horizontal`, `P1Jump`, `P2Horizontal`, `P2Jump` in the action map).
+- **Gamepads** are read in `PlayerScript.padInput`, not through the map, because the
+  map cannot tell two pads apart. Two pads: one each (left stick or d-pad, A). One pad:
+  shared, left stick and LB/LT for the first player, right stick and RB/RT for the
+  second.
+- **Title:** `Input.anyKeyDown` became `PlayerScript.anyKeyDown()` (any key, the mouse
+  button, or a face/shoulder/Start button). **Restart** was Return held; it is the
+  `Restart` action now (Return, gamepad Start), ignored while the exit chord is held.
+- **Bounce force** was added every frame without the frame time; it is scaled to 60
+  frames a second. `OnCollisionExit2D` no longer reads contact points (Unity 6 gives
+  none there).
+- Scene changes are by path; the Escape-quit is gone.
