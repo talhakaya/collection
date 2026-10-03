@@ -319,3 +319,20 @@ GUI. Things it did not exercise, to check for in step 0:
 - **Test bots must change levels the way the game does** (here: set the door's
   `nextLevel` and `restartCounter = 0`); calling the loader from an editor callback
   destroyed objects mid-step and threw.
+
+## Added by To Everyone I'll Never Meet (Unity 5.1, first person)
+
+- **Standard Assets scripts** already in a namespace: do not run `legacy_scripts.py`
+  over them (it turns parameters named `camera` into `GetComponent<Camera>()`). Rename
+  the namespace to the game's, and replace `CrossPlatformInputManager` with
+  `TaloketoInputManager` by hand.
+- **A `CharacterController` moved through its transform** stays where it was: set
+  `Physics.autoSyncTransforms = true` while the game runs. Have the bot log the
+  player's position at the start of each level; "always (0, y, 0)" is the sign.
+- **`DontDestroyOnLoad` objects** outlive the game. Subscribe once to
+  `SceneManager.sceneLoaded` and destroy them when the loaded scene is not the game's;
+  restore changed physics settings in the same place.
+- **3D gravity** is not covered by the GameList entry (that is 2D): a game that changes
+  `Physics.gravity` sets it at start and puts it back on leaving.
+- **Bots in first person:** steer with the right stick by the signed angle to the
+  target and push the left stick once it is under 25 degrees.

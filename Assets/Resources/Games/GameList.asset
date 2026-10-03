@@ -194,3 +194,12 @@ MonoBehaviour:
     cursorHotspot: {x: 0, y: 0}
     entryScene: {fileID: 102900000, guid: 97b15887fbbecb047b372c1f46048652, type: 3}
     entryScenePath: Assets/games/Crime Factory/Scenes/menu.unity
+  - gameName: To Everyone I'll Never Meet
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: 2b31950abb7d54a43b87805fed65518d, type: 3}
+    entryScenePath: Assets/games/To Everyone I'll Never Meet/scene1.unity
