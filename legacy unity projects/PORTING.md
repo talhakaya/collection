@@ -439,3 +439,45 @@ GUI. Things it did not exercise, to check for in step 0:
   (`<Mouse>/leftButton`, `<Mouse>/scroll/y` with `Clamp` and `Scale`).
 - **Many levels:** switch through all of them with the game's own next-level call and
   log one line each; then play one by pad.
+
+## Added by the prototype batches (25 small projects, Unity 4.5 to 2020)
+
+The tools now do most of steps 1 to 5: `tools/legacy_port.py <folder> "<Name>" <0|1>`
+copies (everything, or the list in `LIST=`), gives shared GUIDs new ones, converts the
+scripts, applies the usual edits and prints what is left to do;
+`tools/legacy_closure.py` lists what the scenes reference; `tools/legacy_addmap.py`
+adds an action map; `LegacyPortTools.Import / ConvertMaterials / Smoke / SmokeMany`
+(editor) re-save, report and play-test; `Collection.Controls.PortHelpers` has the
+run-time helpers (`KeepWithinGame`, `AimPoint`, `KeyDown`, `AnyKeyDown`,
+`ClickUiWithEmulatedPointer`, `PhysicsWithinGame`).
+
+- **Pass 1 for Unity 5.5 and later.** The converter's shortcut rewrite is wrong for
+  modern code: it turns `hit.collider` and local variables named `renderer` or
+  `camera` into `GetComponent<>()` calls. The port script puts `.collider` back;
+  after it, compare the count of `GetComponent<Renderer|Camera|...>()` per file with
+  the legacy source and restore any extra ones.
+- **A namespace cannot start with a digit** ("120 Pixels" is `Games.Pixels120`): pass
+  `NS=`.
+- **`PlayerPrefs.DeleteAll()` and `Screen.SetResolution`** appear in small projects
+  too; the port script lists them.
+- **`Resources.Load` in a field initializer of a MonoBehaviour** throws in Unity 6:
+  load on first use.
+- **`AudioListener.volume`, `Time.timeScale`** and other globals a game changes: put
+  them back in an `OnDestroy`.
+- **uGUI buttons** are not reached by the emulated pointer (the old input module reads
+  the real mouse): call `PortHelpers.ClickUiWithEmulatedPointer()` every frame.
+- **Layer collision matrix** (text projects: `m_LayerCollisionMatrix` in
+  `Physics2DSettings.asset` / `DynamicsManager.asset`, 32 little-endian rows): hand the
+  ignored pairs to `PortHelpers.PhysicsWithinGame`. `LayerMask.NameToLayer` becomes
+  the old index.
+- **Sorting layers with the same name but another unique ID** than the collection's:
+  rewrite `m_SortingLayerID` in the text scenes and prefabs.
+- **Cinemachine 2 code** compiles against Cinemachine 3 with `using Unity.Cinemachine;`
+  and a few renamed members (`brain.DefaultBlend.Time`); the old components keep
+  working in the scenes.
+- **A project that already uses the new Input System** with its own actions asset can
+  keep it; disable and dispose the actions in `OnDestroy`.
+- **Smoke tests must run on real time.** A game that reloads its scene while a button
+  is held froze a bot that timed its presses on `Time.time`.
+- **A bot's screenshot can be black because the bot walked off-screen**; look at the
+  scene before concluding that rendering is broken.
