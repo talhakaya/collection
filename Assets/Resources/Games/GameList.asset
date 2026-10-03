@@ -185,3 +185,12 @@ MonoBehaviour:
     cursorHotspot: {x: 0, y: 0}
     entryScene: {fileID: 102900000, guid: 5797a9ce61311fc47b941e36c8047757, type: 3}
     entryScenePath: Assets/games/BloodSpace/scene.unity
+  - gameName: Crime Factory
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: 97b15887fbbecb047b372c1f46048652, type: 3}
+    entryScenePath: Assets/games/Crime Factory/Scenes/menu.unity

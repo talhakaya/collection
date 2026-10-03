@@ -1,0 +1,224 @@
+fileFormatVersion: 2
+guid: 669c20f84053e7241a08f7dfd0c712e0
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Middle_Railings
+    100002: PipeA
+    100004: PipeB
+    100006: PipeBendA
+    100008: PipeBendB
+    100010: PipeBendC
+    100012: PipebendD
+    100014: PipebendE
+    100016: PipeC
+    100018: Round_Railings
+    100020: Round_Railings2
+    100022: Round_Railings_4way
+    100024: Round_TankA
+    100026: Round_TankA_Legs
+    100028: Round_TankB
+    100030: Round_TankB_Legs
+    100032: //RootNode
+    100034: RoundvalveA
+    100036: StairA
+    100038: StairB
+    100040: StairC
+    100042: SupportA
+    100044: SupportB
+    100046: SupportC
+    100048: Valve_RoundA
+    400000: Middle_Railings
+    400002: PipeA
+    400004: PipeB
+    400006: PipeBendA
+    400008: PipeBendB
+    400010: PipeBendC
+    400012: PipebendD
+    400014: PipebendE
+    400016: PipeC
+    400018: Round_Railings
+    400020: Round_Railings2
+    400022: Round_Railings_4way
+    400024: Round_TankA
+    400026: Round_TankA_Legs
+    400028: Round_TankB
+    400030: Round_TankB_Legs
+    400032: //RootNode
+    400034: RoundvalveA
+    400036: StairA
+    400038: StairB
+    400040: StairC
+    400042: SupportA
+    400044: SupportB
+    400046: SupportC
+    400048: Valve_RoundA
+    2300000: Middle_Railings
+    2300002: PipeA
+    2300004: PipeB
+    2300006: PipeBendA
+    2300008: PipeBendB
+    2300010: PipeBendC
+    2300012: PipebendD
+    2300014: PipebendE
+    2300016: PipeC
+    2300018: Round_Railings
+    2300020: Round_Railings2
+    2300022: Round_Railings_4way
+    2300024: Round_TankA
+    2300026: Round_TankA_Legs
+    2300028: Round_TankB
+    2300030: Round_TankB_Legs
+    2300032: RoundvalveA
+    2300034: StairA
+    2300036: StairB
+    2300038: StairC
+    2300040: SupportA
+    2300042: SupportB
+    2300044: SupportC
+    2300046: Valve_RoundA
+    3300000: Middle_Railings
+    3300002: PipeA
+    3300004: PipeB
+    3300006: PipeBendA
+    3300008: PipeBendB
+    3300010: PipeBendC
+    3300012: PipebendD
+    3300014: PipebendE
+    3300016: PipeC
+    3300018: Round_Railings
+    3300020: Round_Railings2
+    3300022: Round_Railings_4way
+    3300024: Round_TankA
+    3300026: Round_TankA_Legs
+    3300028: Round_TankB
+    3300030: Round_TankB_Legs
+    3300032: RoundvalveA
+    3300034: StairA
+    3300036: StairB
+    3300038: StairC
+    3300040: SupportA
+    3300042: SupportB
+    3300044: SupportC
+    3300046: Valve_RoundA
+    4300000: PipeBendC
+    4300002: PipebendD
+    4300004: PipeBendB
+    4300006: PipeBendA
+    4300008: PipeA
+    4300010: Valve_RoundA
+    4300012: PipebendE
+    4300014: StairA
+    4300016: StairB
+    4300018: SupportA
+    4300020: SupportB
+    4300022: SupportC
+    4300024: PipeB
+    4300026: PipeC
+    4300028: Round_TankA_Legs
+    4300030: Round_TankA
+    4300032: StairC
+    4300034: Round_Railings
+    4300036: RoundvalveA
+    4300038: Round_TankB_Legs
+    4300040: Round_TankB
+    4300042: Middle_Railings
+    4300044: Round_Railings2
+    4300046: Round_Railings_4way
+    11100000: //RootNode
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Round_Tank_Material
+    second: {fileID: 2100000, guid: eba8acf0e914e46408ce3d11d5a7fa01, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Stairs_Material
+    second: {fileID: 2100000, guid: 8d88f3bf653305647809447a94ee9fc4, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 0
+    importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+    previousCalculatedGlobalScale: 1
+    hasPreviousCalculatedGlobalScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 4
+    normalCalculationMode: 0
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 1
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 1
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
