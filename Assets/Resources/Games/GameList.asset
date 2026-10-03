@@ -122,3 +122,12 @@ MonoBehaviour:
     cursorHotspot: {x: 0, y: 0}
     entryScene: {fileID: 102900000, guid: 5f284bf69857e0e46b0f6885abacfdaf, type: 3}
     entryScenePath: Assets/games/Herbie/scene0.unity
+  - gameName: Lost Shader
+    description: 
+    gravity: {x: 0, y: 0}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: 4501c507ccef93f4bb5901189a686757, type: 3}
+    entryScenePath: Assets/games/Lost Shader/main.unity

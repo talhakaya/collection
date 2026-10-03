@@ -183,3 +183,29 @@ GUI. Things it did not exercise, to check for in step 0:
   animations.
 - The project's colour space is Linear; old projects were Gamma, so semi-transparent
   blends come out lighter (`Tools > Color Space` switches it for a comparison).
+
+## Added by Lost Shader (Unity 5.3)
+
+- **Script updater dialog.** The first compile can raise a modal "Script Updating
+  Consent" (for `body.velocity` and the like, which `legacy_scripts.py` only rewrites
+  after a `GetComponent`). It blocks MCP exactly like the reload dialog. Answer "Yes,
+  just for these files".
+- **Collision matrix and auto-sync.** Decode `m_LayerCollisionMatrix` at the end of the
+  old `Physics2DSettings.asset` (one 32-bit row per layer) and compare with the layers
+  the scene's colliders are on. Reproduce what matters with
+  `Physics2D.IgnoreLayerCollision` in the game's first `Awake`, restored in `OnDestroy`.
+  Do the same for `Physics2D.autoSyncTransforms = true` when the game moves bodies
+  through their transforms; the collection has it off, Unity 5 had no such switch.
+- **`lossyScale` on mirrored objects** is negative in Unity 6. A test like
+  `lossyScale.x > 0.1f` on something that flips to face left needs `Mathf.Abs`.
+- **Tint colours on legacy shaders in Linear space.** `Particles/Alpha Blended` doubles
+  `_TintColor`; 0.5 grey meant "unchanged" in Gamma and means 0.43 in Linear. Anything
+  that feeds its own output back (a camera with clear flags Depth/Nothing into a render
+  texture shown on a plane) loses its trail. Convert the tint with
+  `Mathf.LinearToGammaSpace` at start. The feedback loop itself works under URP.
+- **`Input.anyKeyDown`** has no collection equivalent; walk `Keyboard.current.allKeys`
+  and the pad's buttons (`Game.anyKeyDown` in Lost Shader).
+- **Devices the game opens** (webcam, microphone) must be stopped in `OnDestroy`.
+- **Test bots:** walking in a straight line gets stuck on scenery; place the player next
+  to the goal instead and say so. Log on state changes only. Cap the frame rate at 60
+  (`Application.targetFrameRate`) when judging per-frame effects.

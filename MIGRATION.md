@@ -129,3 +129,25 @@ it uses in `legacy unity projects/tools/`. What broke:
   rounding; clamped.
 - The binary Input Manager was first read with a strings scan, which dropped the
   one-letter keys (WASD, Z). `legacy_input_axes.py` reads it properly.
+
+## lost shader
+
+Unity 5.3 project folder (Global Game Jam 2016), ported by `PORTING.md`. What broke:
+
+- The echo over the whole screen was nearly gone. It is a camera that does not clear its
+  render texture and draws the last frame back over itself through a particle shader
+  with a grey tint of 0.5, which the shader doubles. In Linear colour space that tint
+  reads as 0.21, so every pass darkened the picture and the trail died in three frames.
+  The tint is converted at start (`CameraScript.gammaTint`), for the webcam plane too.
+- The player froze for good the first time he faced left: the "has the world grown in"
+  test reads `lossyScale.x`, negative on a mirrored transform in Unity 6. Now `Mathf.Abs`.
+- The cereal mini-game never closed if the player kept feeding the kid while it slid
+  out: `MiniGame.end()` restarted the slide on every call. It now ignores calls while
+  ending. (A bug of the original, not of the port.)
+- Two project settings the game depended on are set in `Game.Awake` and put back in
+  `OnDestroy`: Default and Water layers do not collide (the mini-games sit on Water, on
+  top of the world), and `Physics2D.autoSyncTransforms` is on, as it always was in 5.
+- `Input.anyKeyDown` became `Game.anyKeyDown`, which also counts the gamepad's buttons.
+- The webcam is stopped when the game is left; it used to stop with the application.
+- The `Spoon` tag was added to the project. The intro's audio source `state0` has no
+  clip, as in the old project. `trees.pdn` (a Paint.NET source file) was not copied.
