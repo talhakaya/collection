@@ -1,0 +1,47 @@
+using System;
+using System.Collections;
+using UnityEngine;
+
+// In the collection: a namespace of the game's own, so another game's copy of the
+// Standard Assets cannot clash with this one.
+namespace Games.ToEveryoneIllNeverMeet.Utility
+{
+    [Serializable]
+    public class LerpControlledBob
+    {
+        public float BobDuration;
+        public float BobAmount;
+
+        private float m_Offset = 0f;
+
+
+        // provides the offset that can be used
+        public float Offset()
+        {
+            return m_Offset;
+        }
+
+
+        public IEnumerator DoBobCycle()
+        {
+            // make the camera move down slightly
+            float t = 0f;
+            while (t < BobDuration)
+            {
+                m_Offset = Mathf.Lerp(0f, BobAmount, t/BobDuration);
+                t += Time.deltaTime;
+                yield return new WaitForFixedUpdate();
+            }
+
+            // make it move back to neutral
+            t = 0f;
+            while (t < BobDuration)
+            {
+                m_Offset = Mathf.Lerp(BobAmount, 0f, t/BobDuration);
+                t += Time.deltaTime;
+                yield return new WaitForFixedUpdate();
+            }
+            m_Offset = 0f;
+        }
+    }
+}

@@ -325,3 +325,37 @@ scenes (`menu`, `main`), a platformer with its own physics simulator, 84 level f
   (right trigger), `Cancel` (Escape, Start). The old Cancel also had joystick button 1,
   the same button as fire; it was not carried over.
 - The level editor (L key) is still there, as in the original build.
+
+## to everyone i'll never meet
+
+Unity 5.1 project folder (product folder "StepIntoMyEyes", title on screen "to everyone
+I'll never meet"), binary format, one scene reloaded for each of its twelve levels, 3D,
+first person. Ported by `PORTING.md`:
+
+- **Only what the scene references was copied** (108 files, 14 MB of 45): the game's own
+  scripts, sprites and two songs, and from the Standard Assets the first-person
+  controller, its mouse look, three utility classes and four footstep sounds. The rest of
+  the Standard Assets (cameras, vehicles, CrossPlatformInput, RollerBall, ThirdPerson)
+  and the unused 2D `PlatformerController.cs` stayed behind.
+- **Standard Assets scripts** are in the game's own namespaces
+  (`Games.ToEveryoneIllNeverMeet.FirstPerson` / `.Utility`) and read
+  `TaloketoInputManager` instead of `CrossPlatformInputManager`. `legacy_scripts.py`
+  must not be run over them: it rewrites parameters named `camera`.
+- **Player placement.** `Game.Awake` puts the player at a random spot through its
+  transform, and the last level lifts it the same way. With the collection's
+  `Physics.autoSyncTransforms` off the character controller ignored both, so the player
+  always started in the middle. The game switches it on and puts it back when another
+  scene loads.
+- **Music** is a `DontDestroyOnLoad` object. `Game` watches `sceneLoaded` and destroys it
+  when the scene is not the game's; the same handler puts gravity back (the last level
+  sets it to zero).
+- **Fresh start.** `LevelPass.no`, `Game.time` and the drawn sentences are reset in
+  `Game.Awake` unless the load is the game's own level change (`Game.travelling`).
+- **End.** `Application.Quit()` after the last song is a return to the collection's menu.
+  The countdown still reads "quitting in 10 ... goodbye forever".
+- **Input:** arrows/WASD, left stick (dead zone 0.19) and d-pad move; mouse and right
+  stick look; `Jump` (space, A) and `Run` (left Shift, left stick press, right trigger)
+  are bound but the scene has jump speed 0 and run speed equal to walk speed. Movement
+  is eased as the old `Input.GetAxis` did (3 per second).
+- **Ground material** converted from Standard to URP/Lit; stars stay on
+  `Unlit/Transparent`.
