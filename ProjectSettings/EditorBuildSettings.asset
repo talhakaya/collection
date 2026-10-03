@@ -173,6 +173,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/games/120 Pixels/scene0.unity
     guid: e3be14def9f67b24b969f8e0715a6bfd
+  - enabled: 1
+    path: Assets/games/Kayabros Prototype 0/main.unity
+    guid: 242a3d267143be74fa6a975079effb42
+  - enabled: 1
+    path: Assets/games/Kayabros Prototype 1/main.unity
+    guid: 957d0e72462e43c4ab97ba0351017267
+  - enabled: 1
+    path: Assets/games/Kayabros Prototype 3/lineGame.unity
+    guid: 58fa6388eab4daf469eaeef0c506ce54
+  - enabled: 1
+    path: Assets/games/Kayabros Prototype 4/main.unity
+    guid: 4eb9b57568289f44c8ab5bb4592a2ad4
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
