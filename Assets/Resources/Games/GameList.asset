@@ -293,3 +293,39 @@ MonoBehaviour:
     cursorHotspot: {x: 0, y: 0}
     entryScene: {fileID: 102900000, guid: e3be14def9f67b24b969f8e0715a6bfd, type: 3}
     entryScenePath: Assets/games/120 Pixels/scene0.unity
+  - gameName: Kayabros Prototype 0
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: 242a3d267143be74fa6a975079effb42, type: 3}
+    entryScenePath: Assets/games/Kayabros Prototype 0/main.unity
+  - gameName: Kayabros Prototype 1
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: 957d0e72462e43c4ab97ba0351017267, type: 3}
+    entryScenePath: Assets/games/Kayabros Prototype 1/main.unity
+  - gameName: Kayabros Prototype 3
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: 58fa6388eab4daf469eaeef0c506ce54, type: 3}
+    entryScenePath: Assets/games/Kayabros Prototype 3/lineGame.unity
+  - gameName: Kayabros Prototype 4
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 1
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: 4eb9b57568289f44c8ab5bb4592a2ad4, type: 3}
+    entryScenePath: Assets/games/Kayabros Prototype 4/main.unity

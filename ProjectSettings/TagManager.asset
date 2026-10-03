@@ -17,6 +17,8 @@ TagManager:
   - Ground
   - Bug
   - Drone
+  - Door
+  - Case
   layers:
   - Default
   - TransparentFX

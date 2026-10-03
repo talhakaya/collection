@@ -542,3 +542,24 @@ no goal. Ported with `tools/legacy_port.py`:
   and GameList entry are "120 Pixels", Resources under `Resources/120Pixels/`.
 - `Fast` (Space, gamepad A or right trigger) is the old "hold Space for ten times speed".
 - `Circle`'s static counter is reset from `Game.Awake`.
+
+## kayabros prototypes 0, 1, 3, 4
+
+Four small Unity 5.5/5.6 project folders (`kayaprot0`, `kayaprot1`, `kayaprot3`,
+`kayaprot4`), one scene each, none with an ending. (`kayaprot2` is Milky Mike.) Ported
+with `tools/legacy_port.py`; `UDPManager`, `Rotate3D` and `SpriteButton` are left out
+of all of them.
+
+- **Prototype 0** (7.5 MB, lit 3D view of a top-down heist: carry the case to the exit,
+  guards, a drill). Mouse-aimed; the right stick aims on a pad
+  (`PortHelpers.AimPoint`). `Fire1` left mouse / RT / X, `Fire2` Space / A, `Fire3`
+  (restart) R / Y, `Jump` Q / right mouse / B / LT. Three Standard materials are
+  URP/Lit. Its music object is kept alive only within the game
+  (`PortHelpers.KeepWithinGame`). Tag `Case` added to the project.
+- **Prototype 1** (generated town, walk and aim a laser line). `Generate` (G, Y) makes
+  a new town.
+- **Prototype 3** (`lineGame`, a vector shooter drawn with line renderers). `Fire1`
+  left Ctrl / left mouse / X / RT, `Jump` Space / A, `Reset` R / Y.
+- **Prototype 4** (circles that push each other and flee the pointer). It read touches
+  in a build and the mouse only in the editor; it reads the mouse everywhere now, with
+  the collection's pointer emulation for the pad.

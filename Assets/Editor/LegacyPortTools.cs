@@ -303,7 +303,7 @@ namespace Collection.EditorTools
 						{
 							if (t0 > 0f)
 							{
-								log("left the game by itself after " + (Time.time - t0).ToString("F1") + "s, now " + scene.path);
+								log("left the game by itself after " + (Time.unscaledTime - t0).ToString("F1") + "s, now " + scene.path);
 								step = 1;
 								leftAt = Time.realtimeSinceStartup;
 							}
@@ -311,16 +311,16 @@ namespace Collection.EditorTools
 						}
 						if (t0 < 0f)
 						{
-							t0 = Time.time;
+							t0 = Time.unscaledTime;
 							fpsStart = Time.realtimeSinceStartup;
 							frames = Time.frameCount;
 						}
 						if (scene.name != lastScene)
 						{
 							lastScene = scene.name;
-							log((Time.time - t0).ToString("F1") + "s scene " + scene.name);
+							log((Time.unscaledTime - t0).ToString("F1") + "s scene " + scene.name);
 						}
-						float t = Time.time - t0;
+						float t = Time.unscaledTime - t0;
 						var st = new GamepadState();
 						if (t > 1.5f)
 						{
@@ -390,6 +390,44 @@ namespace Collection.EditorTools
 			};
 			EditorApplication.update += tick;
 			return "smoke test started: " + logPath;
+		}
+
+		/// <summary>
+		/// Runs Smoke for several scenes one after another (play mode). scenes, tags and
+		/// seconds are parallel arrays; taps applies to all.
+		/// </summary>
+		public static string SmokeMany(string[] scenes, float[] seconds, string[] tags, bool taps)
+		{
+			if (!EditorApplication.isPlaying) return "not playing";
+			int index = 0;
+			string current = "";
+			EditorApplication.CallbackFunction driver = null;
+			driver = () =>
+			{
+				if (!EditorApplication.isPlaying)
+				{
+					EditorApplication.update -= driver;
+					return;
+				}
+				if (current != "")
+				{
+					string text = File.Exists(current) ? File.ReadAllText(current) : "";
+					if (!text.Contains("DONE scene=") && !text.Contains("DONE (bot failed)")) return;
+					current = "";
+				}
+				if (index >= scenes.Length)
+				{
+					File.WriteAllText(ShotFolder + "/smoke_all_done.txt", "ALLDONE");
+					EditorApplication.update -= driver;
+					return;
+				}
+				Smoke(scenes[index], seconds[index], tags[index], taps);
+				current = ShotFolder + "/smoke_" + tags[index] + ".txt";
+				index++;
+			};
+			if (File.Exists(ShotFolder + "/smoke_all_done.txt")) File.Delete(ShotFolder + "/smoke_all_done.txt");
+			EditorApplication.update += driver;
+			return "started " + scenes.Length + " smoke tests";
 		}
 
 		static string Describe(GameObject go)
