@@ -239,3 +239,21 @@ walked through by a static counter, ported by `PORTING.md`. No custom tags or la
 - The two animation index calculations are clamped.
 - Input map: `Horizontal`, `Vertical` (arrows/WASD, left stick, d-pad), `Jump`.
 - `UnityVS` and `Thumbs.db` were not copied.
+
+## over-eating 101
+
+Unity 4.5/4.6 project folder (`overeating-101`, product name and title "Over-Eating
+101"), one scene, ported by `PORTING.md`. No custom tags or layers, no `Resources.Load`,
+no `Shader.Find`. What changed:
+
+- `Input.GetKeyDown(KeyCode.Return)` (next rule / start the round) became a `Submit`
+  action: Enter, and the gamepad's A and Start. The game shows no prompt for it and
+  still does not.
+- The Escape-quit is gone. `Game.Awake` resets `ruleNo`, `score`, `totalScore` and the
+  clock, so the lesson starts at Rule 0 each time the game is opened.
+- The prefabs under `Resources/` moved to `Resources/OverEating101/` (they are
+  referenced by field, never loaded by name).
+- The two animation index calculations are clamped; the stick has the old 0.19 dead zone.
+- Input map: `Horizontal` (body), `Vertical` (arms), `Submit`.
+- The end screen has no way on, as in the original; the collection's exit leaves it.
+- `UnityVS` and `Thumbs.db` were not copied.
