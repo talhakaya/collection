@@ -41,9 +41,10 @@ for d,_,fs in os.walk(G):
         if 'DontDestroyOnLoad(gameObject);' in s:
             s=s.replace('DontDestroyOnLoad(gameObject);','Collection.Controls.PortHelpers.KeepWithinGame(gameObject); // In the collection: was DontDestroyOnLoad')
         s=s.replace('Input.anyKeyDown','Collection.Controls.PortHelpers.AnyKeyDown()')
+        s=re.sub(r'(void OnValidate\(\)\s*\{\s*)GetComponent<SpriteRenderer>\(\)\.color = selfColor;',r'if (GetComponent<SpriteRenderer>() != null) GetComponent<SpriteRenderer>().color = selfColor; // In the collection: null check, see PORTING.md',s)
         if s!=s0: io.open(p,'w',encoding='utf-8',newline='').write(s)
 print('files',len(files),'size %.1f MB'%(sum(os.path.getsize(os.path.join(L,f)) for f in files)/1e6))
-pat=re.compile(r'(?<![A-Za-z])Input\.[A-Za-z]+\(?[^;]{0,40}|Application\.(Quit|LoadLevel|loadedLevel)[^;]{0,30}|Resources\.Load[^;]{0,50}|PlayerPrefs\.[A-Za-z]+\("[^"]*|void OnMouse[A-Za-z]+|void OnGUI|DontDestroyOnLoad|Shader\.Find[^;]{0,40}|\.contacts\[|WebCam|Microphone|LoadScene\([^;]{0,40}|CompareTag\("[^"]*|NameToLayer\("[^"]*')
+pat=re.compile(r'(?<![A-Za-z])Input\.[A-Za-z]+\(?[^;]{0,40}|Application\.(Quit|LoadLevel|loadedLevel)[^;]{0,30}|Resources\.Load[^;]{0,50}|PlayerPrefs\.[A-Za-z]+\("[^"]*|PlayerPrefs\.DeleteAll|Screen\.SetResolution|void OnMouse[A-Za-z]+|void OnGUI|DontDestroyOnLoad|Shader\.Find[^;]{0,40}|\.contacts\[|WebCam|Microphone|LoadScene\([^;]{0,40}|CompareTag\("[^"]*|NameToLayer\("[^"]*')
 print('--- left to do:')
 for d,_,fs in os.walk(G):
     for f in sorted(fs):

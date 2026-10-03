@@ -563,3 +563,27 @@ of all of them.
 - **Prototype 4** (circles that push each other and flee the pointer). It read touches
   in a build and the mouse only in the editor; it reads the mouse everywhere now, with
   the collection's pointer emulation for the pad.
+
+## oracle, sweating in public, fuck, virtual pet
+
+Four small project folders, one scene each, ported with `tools/legacy_port.py`.
+
+- **Oracle** (`oracle`, Unity 4.6; the owner's note calls it "the Jack Stage project"):
+  a guitarist sprite and a circle behind a scan-line screen effect with four modes.
+  Not a copy of The Parasite: it is the earlier test (February 2015) that The Parasite
+  (April 2015) grew out of, sharing the shader, the material and the scene's GUID but
+  not the content. The effect is rebuilt for URP the same way (camera into a texture,
+  the per-row and per-pixel arithmetic in `PassThru.shader`). `Mode` (Space, A) cycles
+  the modes.
+- **Sweating In Public** (`sweating-in-public`, Unity 5.1): a face under 240 dither
+  squares that clear around the pointer. Pointer emulation on; no action map.
+- **Fuck** (`fuck`, Unity 5.3): a creature walks (arrows/WASD, stick, d-pad) on a black
+  screen drawn through a 160x90 render texture. `TintScript.OnValidate` has a null
+  check (it threw in the editor when `SpriteEffect` added it at run time).
+- **Virtual Pet** (`virtual-pet`, Unity 5.3, title on screen "Virtual Cat"): a chat
+  with buttons and a text field. It called `PlayerPrefs.DeleteAll()` at every start and
+  on reset; that is three `DeleteKey` calls on its own, prefixed keys now. It forced a
+  250-pixel square window; the resolution is left alone. Pointer emulation on, and the
+  emulated pointer presses its uGUI buttons through
+  `PortHelpers.ClickUiWithEmulatedPointer` (the old input module only sees the real
+  mouse). Typing the names still needs a keyboard.
