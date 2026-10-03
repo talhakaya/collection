@@ -221,3 +221,12 @@ MonoBehaviour:
     cursorHotspot: {x: 0, y: 0}
     entryScene: {fileID: 102900000, guid: f6440ccbd1640824b9d8ebba97876f59, type: 3}
     entryScenePath: Assets/games/Troubled Football/Scenes/mainScene.unity
+  - gameName: Wall Stains
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: fd053c8eca0df1143bfeacba5e791ccf, type: 3}
+    entryScenePath: Assets/games/Wall Stains/Scenes/scene0.unity

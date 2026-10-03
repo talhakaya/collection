@@ -399,3 +399,25 @@ binary format, one scene, a mouse game. Ported by `PORTING.md`:
 - **Keys** became actions: `Music` (M, gamepad Y), `Eyesore` (N, gamepad X), `Restart`
   (Space). The close button returns to the collection's menu; the Escape-quit is gone.
 - Statics are reset in `GameManager.Awake`; `Rigidbody2D.velocity` is `linearVelocity`.
+
+## wall stains
+
+Unity 5.0 project folder, binary format, one scene, first person: light seven candles,
+the wall falls open, walk out. Ported by `PORTING.md`:
+
+- Only what the scene references was copied (1.2 MB of 37). The first-person controller
+  is the one already ported for To Everyone I'll Never Meet, in this game's namespaces,
+  with the jump and landing sounds this project had switched on; the input map is a copy
+  of that game's (jump on Space / A is needed here, to get onto the table).
+- **Shared GUIDs.** The Standard Assets files have the same GUIDs in every project that
+  used them. `tools/legacy_reguid.py`
+  gave this game's copies new ones and patched them into the binary scene and prefab.
+- **Image effects.** `Bloom` and `NoiseAndGrain` worked through `OnRenderImage`, which
+  URP never calls. The two scripts are replaced (same files, so the scene's values
+  survive) by one that makes a URP volume with bloom and film grain at start. The
+  image-effect shaders and the lens flare were not copied.
+- **Materials.** Four `Standard` and five `Legacy Shaders/Diffuse` materials are URP/Lit
+  now (the diffuse ones with highlights and reflections off); the one object on Unity's
+  built-in default material has a `DefaultMat` of the game's own.
+- `Application.Quit()` at the end returns to the collection's menu; statics
+  (`LightStart.candles`, `Suicide.done`) are reset in `Game.Awake`.
