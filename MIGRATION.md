@@ -651,3 +651,27 @@ was copied. Both used `namespace Game2`; they are `Games.DevilMayCry` and
   GameList entry; `Logo.unity` is kept, without its Post Processing v2 component (the
   package is not in the collection). Two loop variables named `renderer` that the
   converter had rewritten were put back.
+
+## orphan
+
+Unity 4.5 project folder `orphan` (product name "Orphan"), binary format: a title
+screen, a beach prologue and an orphanage with dialogue and three small arcade games,
+drawn with the 2D Toolkit plugin (tk2d). Ported with `tools/legacy_port.py`:
+
+- **2D Toolkit** runtime (66 scripts, its shaders and the game's sprite collections)
+  came along; its `Editor` folders did not. It stays in the global namespace. Fixes:
+  two removed APIs, an editor-only error log, and trigger mesh colliders made convex.
+- **iTween** was not brought in; the game's three calls (move along a path with
+  easeInOutCubic, stop) go through `PathTween`.
+- **Scenes** `TitleScreen`, `Prologue` and `Orphanage` are loaded by path through the
+  game's own loading screen, which is kept alive only within the game.
+  `Day1Dream.unity` was not in the build order and was left behind.
+- **Input:** `Left`/`Right`/`Up`/`Down` (arrows, WASD, d-pad, left stick), `Fire`
+  (left Ctrl, left mouse, A or X), `Start` (Enter, keypad Enter, gamepad Start or A;
+  the title screen only listened to keypad Enter). The debug keys (T, U, B, N, M, I,
+  O, P, G) stay on the keyboard.
+- **Converter damage undone:** `OnTriggerEnter(Collider collider)` parameters had been
+  rewritten into the object's own collider in three scripts.
+- **Materials:** three self-illuminated ones are URP/Unlit, five lit ones URP/Lit.
+- Prefab loads in field initializers load on first use; Resources are under
+  `Resources/Orphan/`.

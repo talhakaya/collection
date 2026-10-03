@@ -481,3 +481,25 @@ run-time helpers (`KeepWithinGame`, `AimPoint`, `KeyDown`, `AnyKeyDown`,
   is held froze a bot that timed its presses on `Time.time`.
 - **A bot's screenshot can be black because the bot walked off-screen**; look at the
   scene before concluding that rendering is broken.
+
+## Added by Orphan (Unity 4.5, built on the 2D Toolkit plugin)
+
+- **A third-party plugin of the Unity 4 era** (tk2d: 66 runtime scripts, own shaders,
+  sprite collections) came through with little work: leave its `Editor` folders
+  behind (the sprite collections are prebuilt data), run the converter over it for the
+  component shortcuts, then take it back out of the game's namespace (its files refer
+  to each other globally, and two start with `#define`, which must stay first). Three
+  API fixes were needed (`WindowsWebPlayer`, `smoothSphereCollisions`, an editor-only
+  reflection that logs an error). Its fixed-function sprite shaders render under URP.
+- **Method parameters named `collider` or `camera`** (`OnTriggerEnter(Collider
+  collider)`) are rewritten by the converter into `GetComponent<>()`: the code still
+  compiles and silently tests the wrong object. Grep the legacy source for such
+  declarations and put the uses back.
+- **iTween** does not compile in Unity 6 (GUIText, GUITexture). When a game makes a
+  handful of calls, replace them (Orphan's `PathTween`) instead of porting it.
+- **Concave trigger mesh colliders** are an error in Unity 6 and never fire: make
+  trigger mesh colliders convex.
+- **`Legacy Shaders/Self-Illumin/VertexLit`** becomes URP/Unlit;
+  `Transparent/(Bumped) Diffuse` becomes a transparent URP/Lit.
+- **A regex that turns `GameObject x = Resources.Load(...)` fields into lazy
+  properties must not match locals**; check that the compile is clean after it.

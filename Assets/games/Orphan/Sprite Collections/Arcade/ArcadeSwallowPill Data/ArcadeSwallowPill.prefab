@@ -1,0 +1,241 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &100000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 400000}
+  - component: {fileID: 11400000}
+  m_Layer: 0
+  m_Name: ArcadeSwallowPill
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &400000
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d546f34a90531a14eaba82a43b05b86b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 3
+  materialIdsValid: 1
+  needMaterialInstance: 0
+  spriteDefinitions:
+  - name: pill
+    boundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 4, y: 2.5, z: 0}
+    untrimmedBoundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 4, y: 2.5, z: 0}
+    texelSize: {x: 0.25, y: 0.25}
+    positions:
+    - {x: -2, y: -1.25, z: 0}
+    - {x: 2, y: -1.25, z: 0}
+    - {x: -2, y: 1.25, z: 0}
+    - {x: 2, y: 1.25, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.7031328, y: 0.00000390625}
+    - {x: 0.8281172, y: 0.00000390625}
+    - {x: 0.7031328, y: 0.039058592}
+    - {x: 0.8281172, y: 0.039058592}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: 54d254a87b01bdd4fac6c06728fe4d58, type: 2}
+    materialId: 0
+    sourceTextureGUID: 4b691823589a7254cb8a8d848536d56e
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 0
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: head1
+    boundsData:
+    - {x: -9.150001, y: 13.5, z: 0}
+    - {x: 18.300001, y: 27, z: 0}
+    untrimmedBoundsData:
+    - {x: -15, y: 13.5, z: 0}
+    - {x: 30, y: 27, z: 0}
+    texelSize: {x: 0.3, y: 0.3}
+    positions:
+    - {x: -18.300001, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    - {x: -18.300001, y: 27, z: 0}
+    - {x: 0, y: 27, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.0000078125, y: 0.2890664}
+    - {x: 0.0000078125, y: 0.5273398}
+    - {x: 0.7031172, y: 0.2890664}
+    - {x: 0.7031172, y: 0.5273398}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: 54d254a87b01bdd4fac6c06728fe4d58, type: 2}
+    materialId: 0
+    sourceTextureGUID: 407040c0012c5f34da38d87f15413016
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 1
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: head2
+    boundsData:
+    - {x: -11.1, y: -13.5, z: 0}
+    - {x: 22.2, y: 27, z: 0}
+    untrimmedBoundsData:
+    - {x: -15, y: -13.5, z: 0}
+    - {x: 30, y: 27, z: 0}
+    texelSize: {x: 0.3, y: 0.3}
+    positions:
+    - {x: -22.2, y: -27, z: 0}
+    - {x: 0, y: -27, z: 0}
+    - {x: -22.2, y: 0, z: 0}
+    - {x: 0, y: 0, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.0000078125, y: 0.00000390625}
+    - {x: 0.0000078125, y: 0.2890586}
+    - {x: 0.7031172, y: 0.00000390625}
+    - {x: 0.7031172, y: 0.2890586}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: 54d254a87b01bdd4fac6c06728fe4d58, type: 2}
+    materialId: 0
+    sourceTextureGUID: 46ddb76408fd63b4ab1b323d05725637
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 1
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: waterDrop
+    boundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 1, y: 1, z: 0}
+    untrimmedBoundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 1, y: 1, z: 0}
+    texelSize: {x: 0.1, y: 0.1}
+    positions:
+    - {x: -0.5, y: -0.5, z: 0}
+    - {x: 0.5, y: -0.5, z: 0}
+    - {x: -0.5, y: 0.5, z: 0}
+    - {x: 0.5, y: 0.5, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.8281328, y: 0.00000390625}
+    - {x: 0.9062422, y: 0.00000390625}
+    - {x: 0.8281328, y: 0.039058592}
+    - {x: 0.9062422, y: 0.039058592}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: 54d254a87b01bdd4fac6c06728fe4d58, type: 2}
+    materialId: 0
+    sourceTextureGUID: f842a1c8f06c31249a54592b5e8dc65e
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 0
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  premultipliedAlpha: 0
+  material: {fileID: 0}
+  materials:
+  - {fileID: 2100000, guid: 54d254a87b01bdd4fac6c06728fe4d58, type: 2}
+  textures:
+  - {fileID: 2800000, guid: 13e8a8af942e7dd45b49b0cc3d0e45d1, type: 3}
+  pngTextures: []
+  materialPngTextureId: 
+  textureFilterMode: 1
+  textureMipMaps: 0
+  allowMultipleAtlases: 0
+  spriteCollectionGUID: db130db3eaddc074a879343fb51dc7a1
+  spriteCollectionName: ArcadeSwallowPill
+  assetName: 
+  loadable: 0
+  invOrthoSize: 2
+  halfTargetHeight: 10
+  buildKey: 574671701
+  dataGuid: 52ee10c1855edec41a3c9323499e7d26
+  managedSpriteCollection: 0
+  hasPlatformData: 0
+  spriteCollectionPlatforms: []
+  spriteCollectionPlatformGUIDs: []

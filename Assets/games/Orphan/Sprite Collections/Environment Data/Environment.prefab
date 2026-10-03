@@ -1,0 +1,1665 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &100000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 400000}
+  - component: {fileID: 11400000}
+  m_Layer: 0
+  m_Name: Environment
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &400000
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d546f34a90531a14eaba82a43b05b86b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 3
+  materialIdsValid: 1
+  needMaterialInstance: 0
+  spriteDefinitions:
+  - name: lineBlue
+    boundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 6, y: 0.4, z: 0}
+    untrimmedBoundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 6, y: 0.8, z: 0}
+    texelSize: {x: 0.05, y: 0.05}
+    positions:
+    - {x: -3, y: -0.2, z: 0}
+    - {x: 3, y: -0.2, z: 0}
+    - {x: -3, y: 0.2, z: 0}
+    - {x: 3, y: 0.2, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.98730564, y: 0.13476661}
+    - {x: 0.98730564, y: 0.25195214}
+    - {x: 0.99511623, y: 0.13476661}
+    - {x: 0.99511623, y: 0.25195214}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: 39e8c84318e9f514c9bb019149c2546f, type: 2}
+    materialId: 0
+    sourceTextureGUID: a6bceaa177f2ca14d80dc386fc712ef2
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 1
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: bgTriangleGreen
+    boundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 1.6, y: 1.6, z: 0}
+    untrimmedBoundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 1.6, y: 1.6, z: 0}
+    texelSize: {x: 0.05, y: 0.05}
+    positions:
+    - {x: -0.8, y: -0.8, z: 0}
+    - {x: 0.8, y: -0.8, z: 0}
+    - {x: -0.8, y: 0.8, z: 0}
+    - {x: 0.8, y: 0.8, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.9570322, y: 0.4003916}
+    - {x: 0.9882803, y: 0.4003916}
+    - {x: 0.9570322, y: 0.43163964}
+    - {x: 0.9882803, y: 0.43163964}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: 39e8c84318e9f514c9bb019149c2546f, type: 2}
+    materialId: 0
+    sourceTextureGUID: 41d379849e9835245be75cd7d65daa14
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 0
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: bgTriangleBlue
+    boundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 1.6, y: 1.6, z: 0}
+    untrimmedBoundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 1.6, y: 1.6, z: 0}
+    texelSize: {x: 0.05, y: 0.05}
+    positions:
+    - {x: -0.8, y: -0.8, z: 0}
+    - {x: 0.8, y: -0.8, z: 0}
+    - {x: -0.8, y: 0.8, z: 0}
+    - {x: 0.8, y: 0.8, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.9570322, y: 0.43554786}
+    - {x: 0.9882803, y: 0.43554786}
+    - {x: 0.9570322, y: 0.4667959}
+    - {x: 0.9882803, y: 0.4667959}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: 39e8c84318e9f514c9bb019149c2546f, type: 2}
+    materialId: 0
+    sourceTextureGUID: d1d35fe405bf11b4d8edae2255ffbf7a
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 0
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: RedSquare
+    boundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 1.6, y: 1.6, z: 0}
+    untrimmedBoundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 1.6, y: 1.6, z: 0}
+    texelSize: {x: 0.05, y: 0.05}
+    positions:
+    - {x: -0.8, y: -0.8, z: 0}
+    - {x: 0.8, y: -0.8, z: 0}
+    - {x: -0.8, y: 0.8, z: 0}
+    - {x: 0.8, y: 0.8, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.9570322, y: 0.4707041}
+    - {x: 0.9882803, y: 0.4707041}
+    - {x: 0.9570322, y: 0.5019522}
+    - {x: 0.9882803, y: 0.5019522}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: 39e8c84318e9f514c9bb019149c2546f, type: 2}
+    materialId: 0
+    sourceTextureGUID: 97b570682181b3d4e89321150b0467d1
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 0
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: bgTriangleRed
+    boundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 1.6, y: 1.6, z: 0}
+    untrimmedBoundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 1.6, y: 1.6, z: 0}
+    texelSize: {x: 0.05, y: 0.05}
+    positions:
+    - {x: -0.8, y: -0.8, z: 0}
+    - {x: 0.8, y: -0.8, z: 0}
+    - {x: -0.8, y: 0.8, z: 0}
+    - {x: 0.8, y: 0.8, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.9570322, y: 0.5058603}
+    - {x: 0.9882803, y: 0.5058603}
+    - {x: 0.9570322, y: 0.5371084}
+    - {x: 0.9882803, y: 0.5371084}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: 39e8c84318e9f514c9bb019149c2546f, type: 2}
+    materialId: 0
+    sourceTextureGUID: 3983848a6c446154bad141faf6d0976d
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 0
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: 01
+    boundsData:
+    - {x: 0, y: 0.07500005, z: 0}
+    - {x: 30, y: 4.65, z: 0}
+    untrimmedBoundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 30, y: 5, z: 0}
+    texelSize: {x: 0.05, y: 0.05}
+    positions:
+    - {x: -15, y: -2.25, z: 0}
+    - {x: 15, y: -2.25, z: 0}
+    - {x: -15, y: 2.4, z: 0}
+    - {x: 15, y: 2.4, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.0019541015, y: 0.0019541015}
+    - {x: 0.5878897, y: 0.0019541015}
+    - {x: 0.0019541015, y: 0.09277246}
+    - {x: 0.5878897, y: 0.09277246}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: 39e8c84318e9f514c9bb019149c2546f, type: 2}
+    materialId: 0
+    sourceTextureGUID: 3a80fd60df3e35f4d955608a7ccf0586
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 0
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: 10
+    boundsData:
+    - {x: 0.17500019, y: 0.07500005, z: 0}
+    - {x: 29.65, y: 4.25, z: 0}
+    untrimmedBoundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 30, y: 5, z: 0}
+    texelSize: {x: 0.05, y: 0.05}
+    positions:
+    - {x: -14.65, y: -2.05, z: 0}
+    - {x: 15, y: -2.05, z: 0}
+    - {x: -14.65, y: 2.2, z: 0}
+    - {x: 15, y: 2.2, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.0019541015, y: 0.7255869}
+    - {x: 0.58105373, y: 0.7255869}
+    - {x: 0.0019541015, y: 0.8085928}
+    - {x: 0.58105373, y: 0.8085928}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: 39e8c84318e9f514c9bb019149c2546f, type: 2}
+    materialId: 0
+    sourceTextureGUID: a415d831fd3938742bb0ab33e03a3e02
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 0
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: 08
+    boundsData:
+    - {x: 0, y: 0.100000024, z: 0}
+    - {x: 30, y: 4.3, z: 0}
+    untrimmedBoundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 30, y: 5, z: 0}
+    texelSize: {x: 0.05, y: 0.05}
+    positions:
+    - {x: -15, y: -2.05, z: 0}
+    - {x: 15, y: -2.05, z: 0}
+    - {x: -15, y: 2.25, z: 0}
+    - {x: 15, y: 2.25, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.78125095, y: 0.0019541015}
+    - {x: 0.78125095, y: 0.5878897}
+    - {x: 0.8652334, y: 0.0019541015}
+    - {x: 0.8652334, y: 0.5878897}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: 39e8c84318e9f514c9bb019149c2546f, type: 2}
+    materialId: 0
+    sourceTextureGUID: 2e48be3116b75a3428221d0ec1595579
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 1
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: 06
+    boundsData:
+    - {x: 0, y: -0.099999905, z: 0}
+    - {x: 30, y: 4.3, z: 0}
+    untrimmedBoundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 30, y: 5, z: 0}
+    texelSize: {x: 0.05, y: 0.05}
+    positions:
+    - {x: -15, y: -2.25, z: 0}
+    - {x: 15, y: -2.25, z: 0}
+    - {x: -15, y: 2.0500002, z: 0}
+    - {x: 15, y: 2.0500002, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.8691416, y: 0.0019541015}
+    - {x: 0.8691416, y: 0.5878897}
+    - {x: 0.95312405, y: 0.0019541015}
+    - {x: 0.95312405, y: 0.5878897}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: 39e8c84318e9f514c9bb019149c2546f, type: 2}
+    materialId: 0
+    sourceTextureGUID: dc9517d109e251a468712f03f52e374f
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 1
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: 02
+    boundsData:
+    - {x: 0, y: 0.07500005, z: 0}
+    - {x: 30, y: 4.65, z: 0}
+    untrimmedBoundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 30, y: 5, z: 0}
+    texelSize: {x: 0.05, y: 0.05}
+    positions:
+    - {x: -15, y: -2.25, z: 0}
+    - {x: 15, y: -2.25, z: 0}
+    - {x: -15, y: 2.4, z: 0}
+    - {x: 15, y: 2.4, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.5917978, y: 0.0019541015}
+    - {x: 0.5917978, y: 0.5878897}
+    - {x: 0.68261623, y: 0.0019541015}
+    - {x: 0.68261623, y: 0.5878897}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: 39e8c84318e9f514c9bb019149c2546f, type: 2}
+    materialId: 0
+    sourceTextureGUID: 690f5cc4b82020e4a80f23d3285b3a36
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 1
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: 12
+    boundsData:
+    - {x: -0.17499971, y: -0.07499993, z: 0}
+    - {x: 29.650002, y: 4.25, z: 0}
+    untrimmedBoundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 30, y: 5, z: 0}
+    texelSize: {x: 0.05, y: 0.05}
+    positions:
+    - {x: -15, y: -2.2, z: 0}
+    - {x: -11.8, y: -2.2, z: 0}
+    - {x: -15, y: 0.6999999, z: 0}
+    - {x: -11.8, y: 0.6999999, z: 0}
+    - {x: -15, y: 0.6999999, z: 0}
+    - {x: -12.75, y: 0.6999999, z: 0}
+    - {x: -15, y: 1.8000001, z: 0}
+    - {x: -12.75, y: 1.8000001, z: 0}
+    - {x: -11.8, y: -2.15, z: 0}
+    - {x: -8.599999, y: -2.15, z: 0}
+    - {x: -11.8, y: 0.6999999, z: 0}
+    - {x: -8.599999, y: 0.6999999, z: 0}
+    - {x: -11, y: 0.6999999, z: 0}
+    - {x: -8.599999, y: 0.6999999, z: 0}
+    - {x: -11, y: 1.3499999, z: 0}
+    - {x: -8.599999, y: 1.3499999, z: 0}
+    - {x: -8.599999, y: -2, z: 0}
+    - {x: -5.4, y: -2, z: 0}
+    - {x: -8.599999, y: 0.6999999, z: 0}
+    - {x: -5.4, y: 0.6999999, z: 0}
+    - {x: -8.599999, y: 0.6999999, z: 0}
+    - {x: -5.4, y: 0.6999999, z: 0}
+    - {x: -8.599999, y: 1.85, z: 0}
+    - {x: -5.4, y: 1.85, z: 0}
+    - {x: -5.4, y: -1.0500001, z: 0}
+    - {x: -2.1999998, y: -1.0500001, z: 0}
+    - {x: -5.4, y: 0.6999999, z: 0}
+    - {x: -2.1999998, y: 0.6999999, z: 0}
+    - {x: -5.4, y: 0.6999999, z: 0}
+    - {x: -2.1999998, y: 0.6999999, z: 0}
+    - {x: -5.4, y: 1.85, z: 0}
+    - {x: -2.1999998, y: 1.85, z: 0}
+    - {x: -2.1999998, y: -1.4, z: 0}
+    - {x: 1.0000008, y: -1.4, z: 0}
+    - {x: -2.1999998, y: 0.6999999, z: 0}
+    - {x: 1.0000008, y: 0.6999999, z: 0}
+    - {x: -2.1999998, y: 0.6999999, z: 0}
+    - {x: 1.0000008, y: 0.6999999, z: 0}
+    - {x: -2.1999998, y: 1.9499999, z: 0}
+    - {x: 1.0000008, y: 1.9499999, z: 0}
+    - {x: 1.0000008, y: -1.75, z: 0}
+    - {x: 4.2, y: -1.75, z: 0}
+    - {x: 1.0000008, y: 0.6999999, z: 0}
+    - {x: 4.2, y: 0.6999999, z: 0}
+    - {x: 1.0000008, y: 0.6999999, z: 0}
+    - {x: 3.2000005, y: 0.6999999, z: 0}
+    - {x: 1.0000008, y: 1.45, z: 0}
+    - {x: 3.2000005, y: 1.45, z: 0}
+    - {x: 4.2, y: -1.95, z: 0}
+    - {x: 7.4, y: -1.95, z: 0}
+    - {x: 4.2, y: 0.5000001, z: 0}
+    - {x: 7.4, y: 0.5000001, z: 0}
+    - {x: 7.4, y: -1.5999999, z: 0}
+    - {x: 10.6, y: -1.5999999, z: 0}
+    - {x: 7.4, y: 0.6999999, z: 0}
+    - {x: 10.6, y: 0.6999999, z: 0}
+    - {x: 9.3, y: 0.6999999, z: 0}
+    - {x: 10.6, y: 0.6999999, z: 0}
+    - {x: 9.3, y: 1.8000001, z: 0}
+    - {x: 10.6, y: 1.8000001, z: 0}
+    - {x: 10.6, y: -1.75, z: 0}
+    - {x: 13.799999, y: -1.75, z: 0}
+    - {x: 10.6, y: 0.6999999, z: 0}
+    - {x: 13.799999, y: 0.6999999, z: 0}
+    - {x: 10.6, y: 0.6999999, z: 0}
+    - {x: 13.799999, y: 0.6999999, z: 0}
+    - {x: 10.6, y: 2.0500002, z: 0}
+    - {x: 13.799999, y: 2.0500002, z: 0}
+    - {x: 13.799999, y: -1.5999999, z: 0}
+    - {x: 14.650001, y: -1.5999999, z: 0}
+    - {x: 13.799999, y: 0.6999999, z: 0}
+    - {x: 14.650001, y: 0.6999999, z: 0}
+    - {x: 13.799999, y: 0.6999999, z: 0}
+    - {x: 14.450001, y: 0.6999999, z: 0}
+    - {x: 13.799999, y: 1.1000001, z: 0}
+    - {x: 14.450001, y: 1.1000001, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.8964853, y: 0.5917978}
+    - {x: 0.8964853, y: 0.6542959}
+    - {x: 0.95312405, y: 0.5917978}
+    - {x: 0.95312405, y: 0.6542959}
+    - {x: 0.9570322, y: 0.5410166}
+    - {x: 0.9570322, y: 0.58496}
+    - {x: 0.9785147, y: 0.5410166}
+    - {x: 0.9785147, y: 0.58496}
+    - {x: 0.5917978, y: 0.94238377}
+    - {x: 0.6542959, y: 0.94238377}
+    - {x: 0.5917978, y: 0.9980459}
+    - {x: 0.6542959, y: 0.9980459}
+    - {x: 0.9853525, y: 0.25586036}
+    - {x: 0.9853525, y: 0.3027334}
+    - {x: 0.9980459, y: 0.25586036}
+    - {x: 0.9980459, y: 0.3027334}
+    - {x: 0.0019541015, y: 0.2705088}
+    - {x: 0.0019541015, y: 0.33300683}
+    - {x: 0.054686524, y: 0.2705088}
+    - {x: 0.054686524, y: 0.33300683}
+    - {x: 0.9570322, y: 0.2675791}
+    - {x: 0.9570322, y: 0.33007714}
+    - {x: 0.97949123, y: 0.2675791}
+    - {x: 0.97949123, y: 0.33007714}
+    - {x: 0.9570322, y: 0.06836035}
+    - {x: 0.9570322, y: 0.13085839}
+    - {x: 0.99121, y: 0.06836035}
+    - {x: 0.99121, y: 0.13085839}
+    - {x: 0.9570322, y: 0.33398536}
+    - {x: 0.9570322, y: 0.3964834}
+    - {x: 0.97949123, y: 0.33398536}
+    - {x: 0.97949123, y: 0.3964834}
+    - {x: 0.9570322, y: 0.0019541015}
+    - {x: 0.9570322, y: 0.06445215}
+    - {x: 0.9980459, y: 0.0019541015}
+    - {x: 0.9980459, y: 0.06445215}
+    - {x: 0.9570322, y: 0.20117286}
+    - {x: 0.9570322, y: 0.2636709}
+    - {x: 0.98144436, y: 0.20117286}
+    - {x: 0.98144436, y: 0.2636709}
+    - {x: 0.0019541015, y: 0.9492197}
+    - {x: 0.06445215, y: 0.9492197}
+    - {x: 0.0019541015, y: 0.99706936}
+    - {x: 0.06445215, y: 0.99706936}
+    - {x: 0.9833994, y: 0.3066416}
+    - {x: 0.9833994, y: 0.3496084}
+    - {x: 0.9980459, y: 0.3066416}
+    - {x: 0.9980459, y: 0.3496084}
+    - {x: 0.06836035, y: 0.9492197}
+    - {x: 0.13085839, y: 0.9492197}
+    - {x: 0.06836035, y: 0.99706936}
+    - {x: 0.13085839, y: 0.99706936}
+    - {x: 0.0019541015, y: 0.81250095}
+    - {x: 0.06445215, y: 0.81250095}
+    - {x: 0.0019541015, y: 0.8574209}
+    - {x: 0.06445215, y: 0.8574209}
+    - {x: 0.0019541015, y: 0.5917978}
+    - {x: 0.0019541015, y: 0.61718655}
+    - {x: 0.023436524, y: 0.5917978}
+    - {x: 0.023436524, y: 0.61718655}
+    - {x: 0.13476661, y: 0.9492197}
+    - {x: 0.19726464, y: 0.9492197}
+    - {x: 0.13476661, y: 0.99706936}
+    - {x: 0.19726464, y: 0.99706936}
+    - {x: 0.9570322, y: 0.13476661}
+    - {x: 0.9570322, y: 0.19726464}
+    - {x: 0.9833975, y: 0.13476661}
+    - {x: 0.9833975, y: 0.19726464}
+    - {x: 0.9570322, y: 0.58886814}
+    - {x: 0.97363186, y: 0.58886814}
+    - {x: 0.9570322, y: 0.6337881}
+    - {x: 0.97363186, y: 0.6337881}
+    - {x: 0.9833994, y: 0.38086036}
+    - {x: 0.9960928, y: 0.38086036}
+    - {x: 0.9833994, y: 0.3886709}
+    - {x: 0.9960928, y: 0.3886709}
+    indices: 000000000300000001000000020000000300000000000000040000000700000005000000060000000700000004000000080000000b000000090000000a0000000b000000080000000c0000000f0000000d0000000e0000000f0000000c000000100000001300000011000000120000001300000010000000140000001700000015000000160000001700000014000000180000001b000000190000001a0000001b000000180000001c0000001f0000001d0000001e0000001f0000001c000000200000002300000021000000220000002300000020000000240000002700000025000000260000002700000024000000280000002b000000290000002a0000002b000000280000002c0000002f0000002d0000002e0000002f0000002c000000300000003300000031000000320000003300000030000000340000003700000035000000360000003700000034000000380000003b000000390000003a0000003b000000380000003c0000003f0000003d0000003e0000003f0000003c000000400000004300000041000000420000004300000040000000440000004700000045000000460000004700000044000000480000004b000000490000004a0000004b00000048000000
+    material: {fileID: 2100000, guid: 39e8c84318e9f514c9bb019149c2546f, type: 2}
+    materialId: 0
+    sourceTextureGUID: 4fa1c466747c8594f9a9906bfc2f0c10
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 0
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: 05
+    boundsData:
+    - {x: 0, y: -0.099999905, z: 0}
+    - {x: 30, y: 4.3, z: 0}
+    untrimmedBoundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 30, y: 5, z: 0}
+    texelSize: {x: 0.05, y: 0.05}
+    positions:
+    - {x: -15, y: -2.25, z: 0}
+    - {x: 15, y: -2.25, z: 0}
+    - {x: -15, y: 2.0500002, z: 0}
+    - {x: 15, y: 2.0500002, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.0019541015, y: 0.63769627}
+    - {x: 0.5878897, y: 0.63769627}
+    - {x: 0.0019541015, y: 0.72167873}
+    - {x: 0.5878897, y: 0.72167873}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: 39e8c84318e9f514c9bb019149c2546f, type: 2}
+    materialId: 0
+    sourceTextureGUID: ef6683a6f471a07408ea0895c9a4d778
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 0
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: 04
+    boundsData:
+    - {x: 0, y: -0.07500005, z: 0}
+    - {x: 30, y: 4.65, z: 0}
+    untrimmedBoundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 30, y: 5, z: 0}
+    texelSize: {x: 0.05, y: 0.05}
+    positions:
+    - {x: -15, y: -2.4, z: 0}
+    - {x: 15, y: -2.4, z: 0}
+    - {x: -15, y: 2.25, z: 0}
+    - {x: 15, y: 2.25, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.6865244, y: 0.0019541015}
+    - {x: 0.6865244, y: 0.5878897}
+    - {x: 0.7773428, y: 0.0019541015}
+    - {x: 0.7773428, y: 0.5878897}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: 39e8c84318e9f514c9bb019149c2546f, type: 2}
+    materialId: 0
+    sourceTextureGUID: d56a38b83cfe4c54095c9d7a347c465f
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 1
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: 07
+    boundsData:
+    - {x: 0, y: 0.100000024, z: 0}
+    - {x: 30, y: 4.3, z: 0}
+    untrimmedBoundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 30, y: 5, z: 0}
+    texelSize: {x: 0.05, y: 0.05}
+    positions:
+    - {x: -15, y: -2.05, z: 0}
+    - {x: 15, y: -2.05, z: 0}
+    - {x: -15, y: 2.25, z: 0}
+    - {x: 15, y: 2.25, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.0019541015, y: 0.8613291}
+    - {x: 0.5878897, y: 0.8613291}
+    - {x: 0.0019541015, y: 0.94531155}
+    - {x: 0.5878897, y: 0.94531155}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: 39e8c84318e9f514c9bb019149c2546f, type: 2}
+    materialId: 0
+    sourceTextureGUID: f87448d855065804891c0bf87bafe09c
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 0
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: 03
+    boundsData:
+    - {x: 0, y: -0.07500005, z: 0}
+    - {x: 30, y: 4.65, z: 0}
+    untrimmedBoundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 30, y: 5, z: 0}
+    texelSize: {x: 0.05, y: 0.05}
+    positions:
+    - {x: -15, y: -2.4, z: 0}
+    - {x: 15, y: -2.4, z: 0}
+    - {x: -15, y: 2.25, z: 0}
+    - {x: 15, y: 2.25, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.6865244, y: 0.0019541015}
+    - {x: 0.6865244, y: 0.5878897}
+    - {x: 0.7773428, y: 0.0019541015}
+    - {x: 0.7773428, y: 0.5878897}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: 39e8c84318e9f514c9bb019149c2546f, type: 2}
+    materialId: 0
+    sourceTextureGUID: 77579d39d13624e4bae8dbb2909c45f3
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 1
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: 11
+    boundsData:
+    - {x: 0.17500019, y: -0.07499993, z: 0}
+    - {x: 29.65, y: 4.25, z: 0}
+    untrimmedBoundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 30, y: 5, z: 0}
+    texelSize: {x: 0.05, y: 0.05}
+    positions:
+    - {x: -14.65, y: -2.2, z: 0}
+    - {x: 15, y: -2.2, z: 0}
+    - {x: -14.65, y: 2.0500002, z: 0}
+    - {x: 15, y: 2.0500002, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.0019541015, y: 0.09668066}
+    - {x: 0.58105373, y: 0.09668066}
+    - {x: 0.0019541015, y: 0.17968652}
+    - {x: 0.58105373, y: 0.17968652}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: 39e8c84318e9f514c9bb019149c2546f, type: 2}
+    materialId: 0
+    sourceTextureGUID: c1dc5fdcefa6bd5408750204ed9d010a
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 0
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: 09
+    boundsData:
+    - {x: -0.17499971, y: 0.07500005, z: 0}
+    - {x: 29.650002, y: 4.25, z: 0}
+    untrimmedBoundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 30, y: 5, z: 0}
+    texelSize: {x: 0.05, y: 0.05}
+    positions:
+    - {x: -15, y: -2.05, z: 0}
+    - {x: 14.650001, y: -2.05, z: 0}
+    - {x: -15, y: 2.2, z: 0}
+    - {x: 14.650001, y: 2.2, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.0019541015, y: 0.18359473}
+    - {x: 0.58105373, y: 0.18359473}
+    - {x: 0.0019541015, y: 0.26660058}
+    - {x: 0.58105373, y: 0.26660058}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: 39e8c84318e9f514c9bb019149c2546f, type: 2}
+    materialId: 0
+    sourceTextureGUID: 72a67eaf668ce7c4ea688ec2b3f0e08d
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 0
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: shadow
+    boundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 1.2, y: 0.6, z: 0}
+    untrimmedBoundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 1.2, y: 0.6, z: 0}
+    texelSize: {x: 0.05, y: 0.05}
+    positions:
+    - {x: -0.6, y: -0.3, z: 0}
+    - {x: 0.6, y: -0.3, z: 0}
+    - {x: -0.6, y: 0.3, z: 0}
+    - {x: 0.6, y: 0.3, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.9833994, y: 0.3535166}
+    - {x: 0.9833994, y: 0.37695214}
+    - {x: 0.99511623, y: 0.3535166}
+    - {x: 0.99511623, y: 0.37695214}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: 39e8c84318e9f514c9bb019149c2546f, type: 2}
+    materialId: 0
+    sourceTextureGUID: 765289094162bf54eab00df17474348d
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 1
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: 
+    boundsData:
+    - {x: 1.5500001, y: -1.5500001, z: 0}
+    - {x: 3.2, y: 3.2, z: 0}
+    untrimmedBoundsData:
+    - {x: 1.5500001, y: -1.5500001, z: 0}
+    - {x: 3.2, y: 3.2, z: 0}
+    texelSize: {x: 0.05, y: 0.05}
+    positions:
+    - {x: -0.05, y: -3.15, z: 0}
+    - {x: 3.15, y: -3.15, z: 0}
+    - {x: -0.05, y: 0.049999952, z: 0}
+    - {x: 3.15, y: 0.049999952, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.99511814, y: 0.06836035}
+    - {x: 0.99706936, y: 0.06836035}
+    - {x: 0.99511814, y: 0.070311524}
+    - {x: 0.99706936, y: 0.070311524}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: 39e8c84318e9f514c9bb019149c2546f, type: 2}
+    materialId: 0
+    sourceTextureGUID: 
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 0
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: room
+    boundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 55, y: 35, z: 0}
+    untrimmedBoundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 55, y: 35, z: 0}
+    texelSize: {x: 0.05, y: 0.05}
+    positions:
+    - {x: -27.5, y: -17.5, z: 0}
+    - {x: -22.5, y: -17.5, z: 0}
+    - {x: -27.5, y: -12.5, z: 0}
+    - {x: -22.5, y: -12.5, z: 0}
+    - {x: -27.5, y: -12.5, z: 0}
+    - {x: -22.5, y: -12.5, z: 0}
+    - {x: -27.5, y: -7.4999995, z: 0}
+    - {x: -22.5, y: -7.4999995, z: 0}
+    - {x: -27.5, y: -7.4999995, z: 0}
+    - {x: -22.5, y: -7.4999995, z: 0}
+    - {x: -27.5, y: -2.4999998, z: 0}
+    - {x: -22.5, y: -2.4999998, z: 0}
+    - {x: -27.5, y: -2.4999998, z: 0}
+    - {x: -22.5, y: -2.4999998, z: 0}
+    - {x: -27.5, y: 2.500001, z: 0}
+    - {x: -22.5, y: 2.500001, z: 0}
+    - {x: -27.5, y: 2.500001, z: 0}
+    - {x: -22.5, y: 2.500001, z: 0}
+    - {x: -27.5, y: 7.5000005, z: 0}
+    - {x: -22.5, y: 7.5000005, z: 0}
+    - {x: -27.5, y: 7.5000005, z: 0}
+    - {x: -22.5, y: 7.5000005, z: 0}
+    - {x: -27.5, y: 12.5, z: 0}
+    - {x: -22.5, y: 12.5, z: 0}
+    - {x: -27.5, y: 12.5, z: 0}
+    - {x: -22.5, y: 12.5, z: 0}
+    - {x: -27.5, y: 17.5, z: 0}
+    - {x: -22.5, y: 17.5, z: 0}
+    - {x: -22.5, y: -17.5, z: 0}
+    - {x: -17.5, y: -17.5, z: 0}
+    - {x: -22.5, y: -12.5, z: 0}
+    - {x: -17.5, y: -12.5, z: 0}
+    - {x: -22.5, y: -12.5, z: 0}
+    - {x: -17.5, y: -12.5, z: 0}
+    - {x: -22.5, y: -7.4999995, z: 0}
+    - {x: -17.5, y: -7.4999995, z: 0}
+    - {x: -22.5, y: -7.4999995, z: 0}
+    - {x: -17.5, y: -7.4999995, z: 0}
+    - {x: -22.5, y: -2.4999998, z: 0}
+    - {x: -17.5, y: -2.4999998, z: 0}
+    - {x: -22.5, y: -2.4999998, z: 0}
+    - {x: -17.5, y: -2.4999998, z: 0}
+    - {x: -22.5, y: 2.500001, z: 0}
+    - {x: -17.5, y: 2.500001, z: 0}
+    - {x: -22.5, y: 2.500001, z: 0}
+    - {x: -17.5, y: 2.500001, z: 0}
+    - {x: -22.5, y: 7.5000005, z: 0}
+    - {x: -17.5, y: 7.5000005, z: 0}
+    - {x: -22.5, y: 7.5000005, z: 0}
+    - {x: -17.5, y: 7.5000005, z: 0}
+    - {x: -22.5, y: 12.5, z: 0}
+    - {x: -17.5, y: 12.5, z: 0}
+    - {x: -22.5, y: 12.5, z: 0}
+    - {x: -17.5, y: 12.5, z: 0}
+    - {x: -22.5, y: 17.5, z: 0}
+    - {x: -17.5, y: 17.5, z: 0}
+    - {x: -17.5, y: -17.5, z: 0}
+    - {x: -12.5, y: -17.5, z: 0}
+    - {x: -17.5, y: -12.5, z: 0}
+    - {x: -12.5, y: -12.5, z: 0}
+    - {x: -17.5, y: -12.5, z: 0}
+    - {x: -12.5, y: -12.5, z: 0}
+    - {x: -17.5, y: -7.4999995, z: 0}
+    - {x: -12.5, y: -7.4999995, z: 0}
+    - {x: -17.5, y: -7.4999995, z: 0}
+    - {x: -12.5, y: -7.4999995, z: 0}
+    - {x: -17.5, y: -2.4999998, z: 0}
+    - {x: -12.5, y: -2.4999998, z: 0}
+    - {x: -17.5, y: -2.4999998, z: 0}
+    - {x: -12.5, y: -2.4999998, z: 0}
+    - {x: -17.5, y: 2.500001, z: 0}
+    - {x: -12.5, y: 2.500001, z: 0}
+    - {x: -17.5, y: 2.500001, z: 0}
+    - {x: -12.5, y: 2.500001, z: 0}
+    - {x: -17.5, y: 7.5000005, z: 0}
+    - {x: -12.5, y: 7.5000005, z: 0}
+    - {x: -17.5, y: 7.5000005, z: 0}
+    - {x: -12.5, y: 7.5000005, z: 0}
+    - {x: -17.5, y: 12.5, z: 0}
+    - {x: -12.5, y: 12.5, z: 0}
+    - {x: -17.5, y: 12.5, z: 0}
+    - {x: -12.5, y: 12.5, z: 0}
+    - {x: -17.5, y: 17.5, z: 0}
+    - {x: -12.5, y: 17.5, z: 0}
+    - {x: -12.5, y: -17.5, z: 0}
+    - {x: -7.4999995, y: -17.5, z: 0}
+    - {x: -12.5, y: -12.5, z: 0}
+    - {x: -7.4999995, y: -12.5, z: 0}
+    - {x: -12.5, y: -12.5, z: 0}
+    - {x: -7.4999995, y: -12.5, z: 0}
+    - {x: -12.5, y: -7.4999995, z: 0}
+    - {x: -7.4999995, y: -7.4999995, z: 0}
+    - {x: -12.5, y: -7.4999995, z: 0}
+    - {x: -7.4999995, y: -7.4999995, z: 0}
+    - {x: -12.5, y: -2.4999998, z: 0}
+    - {x: -7.4999995, y: -2.4999998, z: 0}
+    - {x: -12.5, y: -2.4999998, z: 0}
+    - {x: -7.4999995, y: -2.4999998, z: 0}
+    - {x: -12.5, y: 2.500001, z: 0}
+    - {x: -7.4999995, y: 2.500001, z: 0}
+    - {x: -12.5, y: 2.500001, z: 0}
+    - {x: -7.4999995, y: 2.500001, z: 0}
+    - {x: -12.5, y: 7.5000005, z: 0}
+    - {x: -7.4999995, y: 7.5000005, z: 0}
+    - {x: -12.5, y: 7.5000005, z: 0}
+    - {x: -7.4999995, y: 7.5000005, z: 0}
+    - {x: -12.5, y: 12.5, z: 0}
+    - {x: -7.4999995, y: 12.5, z: 0}
+    - {x: -12.5, y: 12.5, z: 0}
+    - {x: -7.4999995, y: 12.5, z: 0}
+    - {x: -12.5, y: 17.5, z: 0}
+    - {x: -7.4999995, y: 17.5, z: 0}
+    - {x: -7.4999995, y: -17.5, z: 0}
+    - {x: -2.4999993, y: -17.5, z: 0}
+    - {x: -7.4999995, y: -12.5, z: 0}
+    - {x: -2.4999993, y: -12.5, z: 0}
+    - {x: -7.4999995, y: -12.5, z: 0}
+    - {x: -2.4999993, y: -12.5, z: 0}
+    - {x: -7.4999995, y: -7.4999995, z: 0}
+    - {x: -2.4999993, y: -7.4999995, z: 0}
+    - {x: -7.4999995, y: -7.4999995, z: 0}
+    - {x: -2.4999993, y: -7.4999995, z: 0}
+    - {x: -7.4999995, y: -2.4999998, z: 0}
+    - {x: -2.4999993, y: -2.4999998, z: 0}
+    - {x: -7.4999995, y: -2.4999998, z: 0}
+    - {x: -2.4999993, y: -2.4999998, z: 0}
+    - {x: -7.4999995, y: 2.500001, z: 0}
+    - {x: -2.4999993, y: 2.500001, z: 0}
+    - {x: -7.4999995, y: 2.500001, z: 0}
+    - {x: -2.4999993, y: 2.500001, z: 0}
+    - {x: -7.4999995, y: 7.5000005, z: 0}
+    - {x: -2.4999993, y: 7.5000005, z: 0}
+    - {x: -7.4999995, y: 7.5000005, z: 0}
+    - {x: -2.4999993, y: 7.5000005, z: 0}
+    - {x: -7.4999995, y: 12.5, z: 0}
+    - {x: -2.4999993, y: 12.5, z: 0}
+    - {x: -7.4999995, y: 12.5, z: 0}
+    - {x: -2.4999993, y: 12.5, z: 0}
+    - {x: -7.4999995, y: 17.5, z: 0}
+    - {x: -2.4999993, y: 17.5, z: 0}
+    - {x: -2.4999993, y: -17.5, z: 0}
+    - {x: 2.500001, y: -17.5, z: 0}
+    - {x: -2.4999993, y: -12.5, z: 0}
+    - {x: 2.500001, y: -12.5, z: 0}
+    - {x: -2.4999993, y: -12.5, z: 0}
+    - {x: 2.500001, y: -12.5, z: 0}
+    - {x: -2.4999993, y: -7.4999995, z: 0}
+    - {x: 2.500001, y: -7.4999995, z: 0}
+    - {x: -2.4999993, y: -7.4999995, z: 0}
+    - {x: 2.500001, y: -7.4999995, z: 0}
+    - {x: -2.4999993, y: -2.4999998, z: 0}
+    - {x: 2.500001, y: -2.4999998, z: 0}
+    - {x: -2.4999993, y: -2.4999998, z: 0}
+    - {x: 2.500001, y: -2.4999998, z: 0}
+    - {x: -2.4999993, y: 2.500001, z: 0}
+    - {x: 2.500001, y: 2.500001, z: 0}
+    - {x: -2.4999993, y: 2.500001, z: 0}
+    - {x: 2.500001, y: 2.500001, z: 0}
+    - {x: -2.4999993, y: 7.5000005, z: 0}
+    - {x: 2.500001, y: 7.5000005, z: 0}
+    - {x: -2.4999993, y: 7.5000005, z: 0}
+    - {x: 2.500001, y: 7.5000005, z: 0}
+    - {x: -2.4999993, y: 12.5, z: 0}
+    - {x: 2.500001, y: 12.5, z: 0}
+    - {x: -2.4999993, y: 12.5, z: 0}
+    - {x: 2.500001, y: 12.5, z: 0}
+    - {x: -2.4999993, y: 17.5, z: 0}
+    - {x: 2.500001, y: 17.5, z: 0}
+    - {x: 2.500001, y: -17.5, z: 0}
+    - {x: 7.4999995, y: -17.5, z: 0}
+    - {x: 2.500001, y: -12.5, z: 0}
+    - {x: 7.4999995, y: -12.5, z: 0}
+    - {x: 2.500001, y: -12.5, z: 0}
+    - {x: 7.4999995, y: -12.5, z: 0}
+    - {x: 2.500001, y: -7.4999995, z: 0}
+    - {x: 7.4999995, y: -7.4999995, z: 0}
+    - {x: 2.500001, y: -7.4999995, z: 0}
+    - {x: 7.4999995, y: -7.4999995, z: 0}
+    - {x: 2.500001, y: -2.4999998, z: 0}
+    - {x: 7.4999995, y: -2.4999998, z: 0}
+    - {x: 2.500001, y: -2.4999998, z: 0}
+    - {x: 7.4999995, y: -2.4999998, z: 0}
+    - {x: 2.500001, y: 2.500001, z: 0}
+    - {x: 7.4999995, y: 2.500001, z: 0}
+    - {x: 2.500001, y: 2.500001, z: 0}
+    - {x: 7.4999995, y: 2.500001, z: 0}
+    - {x: 2.500001, y: 7.5000005, z: 0}
+    - {x: 7.4999995, y: 7.5000005, z: 0}
+    - {x: 2.500001, y: 7.5000005, z: 0}
+    - {x: 7.4999995, y: 7.5000005, z: 0}
+    - {x: 2.500001, y: 12.5, z: 0}
+    - {x: 7.4999995, y: 12.5, z: 0}
+    - {x: 2.500001, y: 12.5, z: 0}
+    - {x: 7.4999995, y: 12.5, z: 0}
+    - {x: 2.500001, y: 17.5, z: 0}
+    - {x: 7.4999995, y: 17.5, z: 0}
+    - {x: 7.4999995, y: -17.5, z: 0}
+    - {x: 12.500001, y: -17.5, z: 0}
+    - {x: 7.4999995, y: -12.5, z: 0}
+    - {x: 12.500001, y: -12.5, z: 0}
+    - {x: 7.4999995, y: -12.5, z: 0}
+    - {x: 12.500001, y: -12.5, z: 0}
+    - {x: 7.4999995, y: -7.4999995, z: 0}
+    - {x: 12.500001, y: -7.4999995, z: 0}
+    - {x: 7.4999995, y: -7.4999995, z: 0}
+    - {x: 12.500001, y: -7.4999995, z: 0}
+    - {x: 7.4999995, y: -2.4999998, z: 0}
+    - {x: 12.500001, y: -2.4999998, z: 0}
+    - {x: 7.4999995, y: -2.4999998, z: 0}
+    - {x: 12.500001, y: -2.4999998, z: 0}
+    - {x: 7.4999995, y: 2.500001, z: 0}
+    - {x: 12.500001, y: 2.500001, z: 0}
+    - {x: 7.4999995, y: 2.500001, z: 0}
+    - {x: 12.500001, y: 2.500001, z: 0}
+    - {x: 7.4999995, y: 7.5000005, z: 0}
+    - {x: 12.500001, y: 7.5000005, z: 0}
+    - {x: 7.4999995, y: 7.5000005, z: 0}
+    - {x: 12.500001, y: 7.5000005, z: 0}
+    - {x: 7.4999995, y: 12.5, z: 0}
+    - {x: 12.500001, y: 12.5, z: 0}
+    - {x: 7.4999995, y: 12.5, z: 0}
+    - {x: 12.500001, y: 12.5, z: 0}
+    - {x: 7.4999995, y: 17.5, z: 0}
+    - {x: 12.500001, y: 17.5, z: 0}
+    - {x: 12.500001, y: -17.5, z: 0}
+    - {x: 17.5, y: -17.5, z: 0}
+    - {x: 12.500001, y: -12.5, z: 0}
+    - {x: 17.5, y: -12.5, z: 0}
+    - {x: 12.500001, y: -12.5, z: 0}
+    - {x: 17.5, y: -12.5, z: 0}
+    - {x: 12.500001, y: -7.4999995, z: 0}
+    - {x: 17.5, y: -7.4999995, z: 0}
+    - {x: 12.500001, y: -7.4999995, z: 0}
+    - {x: 17.5, y: -7.4999995, z: 0}
+    - {x: 12.500001, y: -2.4999998, z: 0}
+    - {x: 17.5, y: -2.4999998, z: 0}
+    - {x: 12.500001, y: -2.4999998, z: 0}
+    - {x: 17.5, y: -2.4999998, z: 0}
+    - {x: 12.500001, y: 2.500001, z: 0}
+    - {x: 17.5, y: 2.500001, z: 0}
+    - {x: 12.500001, y: 2.500001, z: 0}
+    - {x: 17.5, y: 2.500001, z: 0}
+    - {x: 12.500001, y: 7.5000005, z: 0}
+    - {x: 17.5, y: 7.5000005, z: 0}
+    - {x: 12.500001, y: 7.5000005, z: 0}
+    - {x: 17.5, y: 7.5000005, z: 0}
+    - {x: 12.500001, y: 12.5, z: 0}
+    - {x: 17.5, y: 12.5, z: 0}
+    - {x: 12.500001, y: 12.5, z: 0}
+    - {x: 17.5, y: 12.5, z: 0}
+    - {x: 12.500001, y: 17.5, z: 0}
+    - {x: 17.5, y: 17.5, z: 0}
+    - {x: 17.5, y: -17.5, z: 0}
+    - {x: 22.500002, y: -17.5, z: 0}
+    - {x: 17.5, y: -12.5, z: 0}
+    - {x: 22.500002, y: -12.5, z: 0}
+    - {x: 17.5, y: -12.5, z: 0}
+    - {x: 22.500002, y: -12.5, z: 0}
+    - {x: 17.5, y: -7.4999995, z: 0}
+    - {x: 22.500002, y: -7.4999995, z: 0}
+    - {x: 17.5, y: -7.4999995, z: 0}
+    - {x: 22.500002, y: -7.4999995, z: 0}
+    - {x: 17.5, y: -2.4999998, z: 0}
+    - {x: 22.500002, y: -2.4999998, z: 0}
+    - {x: 17.5, y: -2.4999998, z: 0}
+    - {x: 22.500002, y: -2.4999998, z: 0}
+    - {x: 17.5, y: 2.500001, z: 0}
+    - {x: 22.500002, y: 2.500001, z: 0}
+    - {x: 17.5, y: 2.500001, z: 0}
+    - {x: 22.500002, y: 2.500001, z: 0}
+    - {x: 17.5, y: 7.5000005, z: 0}
+    - {x: 22.500002, y: 7.5000005, z: 0}
+    - {x: 17.5, y: 7.5000005, z: 0}
+    - {x: 22.500002, y: 7.5000005, z: 0}
+    - {x: 17.5, y: 12.5, z: 0}
+    - {x: 22.500002, y: 12.5, z: 0}
+    - {x: 17.5, y: 12.5, z: 0}
+    - {x: 22.500002, y: 12.5, z: 0}
+    - {x: 17.5, y: 17.5, z: 0}
+    - {x: 22.500002, y: 17.5, z: 0}
+    - {x: 22.500002, y: -17.5, z: 0}
+    - {x: 27.5, y: -17.5, z: 0}
+    - {x: 22.500002, y: -12.5, z: 0}
+    - {x: 27.5, y: -12.5, z: 0}
+    - {x: 22.500002, y: -12.5, z: 0}
+    - {x: 27.5, y: -12.5, z: 0}
+    - {x: 22.500002, y: -7.4999995, z: 0}
+    - {x: 27.5, y: -7.4999995, z: 0}
+    - {x: 22.500002, y: -7.4999995, z: 0}
+    - {x: 27.5, y: -7.4999995, z: 0}
+    - {x: 22.500002, y: -2.4999998, z: 0}
+    - {x: 27.5, y: -2.4999998, z: 0}
+    - {x: 22.500002, y: -2.4999998, z: 0}
+    - {x: 27.5, y: -2.4999998, z: 0}
+    - {x: 22.500002, y: 2.500001, z: 0}
+    - {x: 27.5, y: 2.500001, z: 0}
+    - {x: 22.500002, y: 2.500001, z: 0}
+    - {x: 27.5, y: 2.500001, z: 0}
+    - {x: 22.500002, y: 7.5000005, z: 0}
+    - {x: 27.5, y: 7.5000005, z: 0}
+    - {x: 22.500002, y: 7.5000005, z: 0}
+    - {x: 27.5, y: 7.5000005, z: 0}
+    - {x: 22.500002, y: 12.5, z: 0}
+    - {x: 27.5, y: 12.5, z: 0}
+    - {x: 22.500002, y: 12.5, z: 0}
+    - {x: 27.5, y: 12.5, z: 0}
+    - {x: 22.500002, y: 17.5, z: 0}
+    - {x: 27.5, y: 17.5, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.5917978, y: 0.63769627}
+    - {x: 0.6894522, y: 0.63769627}
+    - {x: 0.5917978, y: 0.7353506}
+    - {x: 0.6894522, y: 0.7353506}
+    - {x: 0.6933603, y: 0.5917978}
+    - {x: 0.7910147, y: 0.5917978}
+    - {x: 0.6933603, y: 0.6894522}
+    - {x: 0.7910147, y: 0.6894522}
+    - {x: 0.6933603, y: 0.5917978}
+    - {x: 0.7910147, y: 0.5917978}
+    - {x: 0.6933603, y: 0.6894522}
+    - {x: 0.7910147, y: 0.6894522}
+    - {x: 0.6933603, y: 0.5917978}
+    - {x: 0.7910147, y: 0.5917978}
+    - {x: 0.6933603, y: 0.6894522}
+    - {x: 0.7910147, y: 0.6894522}
+    - {x: 0.6933603, y: 0.5917978}
+    - {x: 0.7910147, y: 0.5917978}
+    - {x: 0.6933603, y: 0.6894522}
+    - {x: 0.7910147, y: 0.6894522}
+    - {x: 0.6933603, y: 0.5917978}
+    - {x: 0.7910147, y: 0.5917978}
+    - {x: 0.6933603, y: 0.6894522}
+    - {x: 0.7910147, y: 0.6894522}
+    - {x: 0.7949228, y: 0.5917978}
+    - {x: 0.8925772, y: 0.5917978}
+    - {x: 0.7949228, y: 0.6894522}
+    - {x: 0.8925772, y: 0.6894522}
+    - {x: 0.8964853, y: 0.6582041}
+    - {x: 0.9941397, y: 0.6582041}
+    - {x: 0.8964853, y: 0.7558584}
+    - {x: 0.9941397, y: 0.7558584}
+    - {x: 0.6933603, y: 0.6933603}
+    - {x: 0.7910147, y: 0.6933603}
+    - {x: 0.6933603, y: 0.7910147}
+    - {x: 0.7910147, y: 0.7910147}
+    - {x: 0.7949228, y: 0.6933603}
+    - {x: 0.8925772, y: 0.6933603}
+    - {x: 0.7949228, y: 0.7910147}
+    - {x: 0.8925772, y: 0.7910147}
+    - {x: 0.6933603, y: 0.6933603}
+    - {x: 0.7910147, y: 0.6933603}
+    - {x: 0.6933603, y: 0.7910147}
+    - {x: 0.7910147, y: 0.7910147}
+    - {x: 0.7949228, y: 0.6933603}
+    - {x: 0.8925772, y: 0.6933603}
+    - {x: 0.7949228, y: 0.7910147}
+    - {x: 0.8925772, y: 0.7910147}
+    - {x: 0.6933603, y: 0.6933603}
+    - {x: 0.7910147, y: 0.6933603}
+    - {x: 0.6933603, y: 0.7910147}
+    - {x: 0.7910147, y: 0.7910147}
+    - {x: 0.8964853, y: 0.7597666}
+    - {x: 0.9941397, y: 0.7597666}
+    - {x: 0.8964853, y: 0.8574209}
+    - {x: 0.9941397, y: 0.8574209}
+    - {x: 0.8964853, y: 0.6582041}
+    - {x: 0.9941397, y: 0.6582041}
+    - {x: 0.8964853, y: 0.7558584}
+    - {x: 0.9941397, y: 0.7558584}
+    - {x: 0.7949228, y: 0.6933603}
+    - {x: 0.8925772, y: 0.6933603}
+    - {x: 0.7949228, y: 0.7910147}
+    - {x: 0.8925772, y: 0.7910147}
+    - {x: 0.5917978, y: 0.73925877}
+    - {x: 0.6894522, y: 0.73925877}
+    - {x: 0.5917978, y: 0.8369131}
+    - {x: 0.6894522, y: 0.8369131}
+    - {x: 0.6933603, y: 0.7949228}
+    - {x: 0.7910147, y: 0.7949228}
+    - {x: 0.6933603, y: 0.8925772}
+    - {x: 0.7910147, y: 0.8925772}
+    - {x: 0.5917978, y: 0.73925877}
+    - {x: 0.6894522, y: 0.73925877}
+    - {x: 0.5917978, y: 0.8369131}
+    - {x: 0.6894522, y: 0.8369131}
+    - {x: 0.7949228, y: 0.6933603}
+    - {x: 0.8925772, y: 0.6933603}
+    - {x: 0.7949228, y: 0.7910147}
+    - {x: 0.8925772, y: 0.7910147}
+    - {x: 0.8964853, y: 0.7597666}
+    - {x: 0.9941397, y: 0.7597666}
+    - {x: 0.8964853, y: 0.8574209}
+    - {x: 0.9941397, y: 0.8574209}
+    - {x: 0.8964853, y: 0.6582041}
+    - {x: 0.9941397, y: 0.6582041}
+    - {x: 0.8964853, y: 0.7558584}
+    - {x: 0.9941397, y: 0.7558584}
+    - {x: 0.6933603, y: 0.6933603}
+    - {x: 0.7910147, y: 0.6933603}
+    - {x: 0.6933603, y: 0.7910147}
+    - {x: 0.7910147, y: 0.7910147}
+    - {x: 0.6933603, y: 0.7949228}
+    - {x: 0.7910147, y: 0.7949228}
+    - {x: 0.6933603, y: 0.8925772}
+    - {x: 0.7910147, y: 0.8925772}
+    - {x: 0.5917978, y: 0.84082127}
+    - {x: 0.6894522, y: 0.84082127}
+    - {x: 0.5917978, y: 0.9384756}
+    - {x: 0.6894522, y: 0.9384756}
+    - {x: 0.6933603, y: 0.7949228}
+    - {x: 0.7910147, y: 0.7949228}
+    - {x: 0.6933603, y: 0.8925772}
+    - {x: 0.7910147, y: 0.8925772}
+    - {x: 0.6933603, y: 0.6933603}
+    - {x: 0.7910147, y: 0.6933603}
+    - {x: 0.6933603, y: 0.7910147}
+    - {x: 0.7910147, y: 0.7910147}
+    - {x: 0.8964853, y: 0.7597666}
+    - {x: 0.9941397, y: 0.7597666}
+    - {x: 0.8964853, y: 0.8574209}
+    - {x: 0.9941397, y: 0.8574209}
+    - {x: 0.8964853, y: 0.6582041}
+    - {x: 0.9941397, y: 0.6582041}
+    - {x: 0.8964853, y: 0.7558584}
+    - {x: 0.9941397, y: 0.7558584}
+    - {x: 0.7949228, y: 0.6933603}
+    - {x: 0.8925772, y: 0.6933603}
+    - {x: 0.7949228, y: 0.7910147}
+    - {x: 0.8925772, y: 0.7910147}
+    - {x: 0.5917978, y: 0.73925877}
+    - {x: 0.6894522, y: 0.73925877}
+    - {x: 0.5917978, y: 0.8369131}
+    - {x: 0.6894522, y: 0.8369131}
+    - {x: 0.7949228, y: 0.7949228}
+    - {x: 0.8925772, y: 0.7949228}
+    - {x: 0.7949228, y: 0.8925772}
+    - {x: 0.8925772, y: 0.8925772}
+    - {x: 0.5917978, y: 0.73925877}
+    - {x: 0.6894522, y: 0.73925877}
+    - {x: 0.5917978, y: 0.8369131}
+    - {x: 0.6894522, y: 0.8369131}
+    - {x: 0.7949228, y: 0.6933603}
+    - {x: 0.8925772, y: 0.6933603}
+    - {x: 0.7949228, y: 0.7910147}
+    - {x: 0.8925772, y: 0.7910147}
+    - {x: 0.8964853, y: 0.7597666}
+    - {x: 0.9941397, y: 0.7597666}
+    - {x: 0.8964853, y: 0.8574209}
+    - {x: 0.9941397, y: 0.8574209}
+    - {x: 0.8964853, y: 0.6582041}
+    - {x: 0.9941397, y: 0.6582041}
+    - {x: 0.8964853, y: 0.7558584}
+    - {x: 0.9941397, y: 0.7558584}
+    - {x: 0.6933603, y: 0.6933603}
+    - {x: 0.7910147, y: 0.6933603}
+    - {x: 0.6933603, y: 0.7910147}
+    - {x: 0.7910147, y: 0.7910147}
+    - {x: 0.6933603, y: 0.7949228}
+    - {x: 0.7910147, y: 0.7949228}
+    - {x: 0.6933603, y: 0.8925772}
+    - {x: 0.7910147, y: 0.8925772}
+    - {x: 0.5917978, y: 0.84082127}
+    - {x: 0.6894522, y: 0.84082127}
+    - {x: 0.5917978, y: 0.9384756}
+    - {x: 0.6894522, y: 0.9384756}
+    - {x: 0.6933603, y: 0.7949228}
+    - {x: 0.7910147, y: 0.7949228}
+    - {x: 0.6933603, y: 0.8925772}
+    - {x: 0.7910147, y: 0.8925772}
+    - {x: 0.6933603, y: 0.6933603}
+    - {x: 0.7910147, y: 0.6933603}
+    - {x: 0.6933603, y: 0.7910147}
+    - {x: 0.7910147, y: 0.7910147}
+    - {x: 0.8964853, y: 0.7597666}
+    - {x: 0.9941397, y: 0.7597666}
+    - {x: 0.8964853, y: 0.8574209}
+    - {x: 0.9941397, y: 0.8574209}
+    - {x: 0.8964853, y: 0.6582041}
+    - {x: 0.9941397, y: 0.6582041}
+    - {x: 0.8964853, y: 0.7558584}
+    - {x: 0.9941397, y: 0.7558584}
+    - {x: 0.7949228, y: 0.6933603}
+    - {x: 0.8925772, y: 0.6933603}
+    - {x: 0.7949228, y: 0.7910147}
+    - {x: 0.8925772, y: 0.7910147}
+    - {x: 0.5917978, y: 0.73925877}
+    - {x: 0.6894522, y: 0.73925877}
+    - {x: 0.5917978, y: 0.8369131}
+    - {x: 0.6894522, y: 0.8369131}
+    - {x: 0.7949228, y: 0.7949228}
+    - {x: 0.8925772, y: 0.7949228}
+    - {x: 0.7949228, y: 0.8925772}
+    - {x: 0.8925772, y: 0.8925772}
+    - {x: 0.5917978, y: 0.73925877}
+    - {x: 0.6894522, y: 0.73925877}
+    - {x: 0.5917978, y: 0.8369131}
+    - {x: 0.6894522, y: 0.8369131}
+    - {x: 0.7949228, y: 0.6933603}
+    - {x: 0.8925772, y: 0.6933603}
+    - {x: 0.7949228, y: 0.7910147}
+    - {x: 0.8925772, y: 0.7910147}
+    - {x: 0.8964853, y: 0.7597666}
+    - {x: 0.9941397, y: 0.7597666}
+    - {x: 0.8964853, y: 0.8574209}
+    - {x: 0.9941397, y: 0.8574209}
+    - {x: 0.8964853, y: 0.6582041}
+    - {x: 0.9941397, y: 0.6582041}
+    - {x: 0.8964853, y: 0.7558584}
+    - {x: 0.9941397, y: 0.7558584}
+    - {x: 0.6933603, y: 0.6933603}
+    - {x: 0.7910147, y: 0.6933603}
+    - {x: 0.6933603, y: 0.7910147}
+    - {x: 0.7910147, y: 0.7910147}
+    - {x: 0.6933603, y: 0.7949228}
+    - {x: 0.7910147, y: 0.7949228}
+    - {x: 0.6933603, y: 0.8925772}
+    - {x: 0.7910147, y: 0.8925772}
+    - {x: 0.5917978, y: 0.84082127}
+    - {x: 0.6894522, y: 0.84082127}
+    - {x: 0.5917978, y: 0.9384756}
+    - {x: 0.6894522, y: 0.9384756}
+    - {x: 0.6933603, y: 0.7949228}
+    - {x: 0.7910147, y: 0.7949228}
+    - {x: 0.6933603, y: 0.8925772}
+    - {x: 0.7910147, y: 0.8925772}
+    - {x: 0.6933603, y: 0.6933603}
+    - {x: 0.7910147, y: 0.6933603}
+    - {x: 0.6933603, y: 0.7910147}
+    - {x: 0.7910147, y: 0.7910147}
+    - {x: 0.8964853, y: 0.7597666}
+    - {x: 0.9941397, y: 0.7597666}
+    - {x: 0.8964853, y: 0.8574209}
+    - {x: 0.9941397, y: 0.8574209}
+    - {x: 0.8964853, y: 0.6582041}
+    - {x: 0.9941397, y: 0.6582041}
+    - {x: 0.8964853, y: 0.7558584}
+    - {x: 0.9941397, y: 0.7558584}
+    - {x: 0.7949228, y: 0.6933603}
+    - {x: 0.8925772, y: 0.6933603}
+    - {x: 0.7949228, y: 0.7910147}
+    - {x: 0.8925772, y: 0.7910147}
+    - {x: 0.5917978, y: 0.73925877}
+    - {x: 0.6894522, y: 0.73925877}
+    - {x: 0.5917978, y: 0.8369131}
+    - {x: 0.6894522, y: 0.8369131}
+    - {x: 0.6933603, y: 0.7949228}
+    - {x: 0.7910147, y: 0.7949228}
+    - {x: 0.6933603, y: 0.8925772}
+    - {x: 0.7910147, y: 0.8925772}
+    - {x: 0.5917978, y: 0.73925877}
+    - {x: 0.6894522, y: 0.73925877}
+    - {x: 0.5917978, y: 0.8369131}
+    - {x: 0.6894522, y: 0.8369131}
+    - {x: 0.7949228, y: 0.6933603}
+    - {x: 0.8925772, y: 0.6933603}
+    - {x: 0.7949228, y: 0.7910147}
+    - {x: 0.8925772, y: 0.7910147}
+    - {x: 0.8964853, y: 0.7597666}
+    - {x: 0.9941397, y: 0.7597666}
+    - {x: 0.8964853, y: 0.8574209}
+    - {x: 0.9941397, y: 0.8574209}
+    - {x: 0.8964853, y: 0.6582041}
+    - {x: 0.9941397, y: 0.6582041}
+    - {x: 0.8964853, y: 0.7558584}
+    - {x: 0.9941397, y: 0.7558584}
+    - {x: 0.6933603, y: 0.6933603}
+    - {x: 0.7910147, y: 0.6933603}
+    - {x: 0.6933603, y: 0.7910147}
+    - {x: 0.7910147, y: 0.7910147}
+    - {x: 0.7949228, y: 0.6933603}
+    - {x: 0.8925772, y: 0.6933603}
+    - {x: 0.7949228, y: 0.7910147}
+    - {x: 0.8925772, y: 0.7910147}
+    - {x: 0.6933603, y: 0.6933603}
+    - {x: 0.7910147, y: 0.6933603}
+    - {x: 0.6933603, y: 0.7910147}
+    - {x: 0.7910147, y: 0.7910147}
+    - {x: 0.7949228, y: 0.6933603}
+    - {x: 0.8925772, y: 0.6933603}
+    - {x: 0.7949228, y: 0.7910147}
+    - {x: 0.8925772, y: 0.7910147}
+    - {x: 0.6933603, y: 0.6933603}
+    - {x: 0.7910147, y: 0.6933603}
+    - {x: 0.6933603, y: 0.7910147}
+    - {x: 0.7910147, y: 0.7910147}
+    - {x: 0.8964853, y: 0.7597666}
+    - {x: 0.9941397, y: 0.7597666}
+    - {x: 0.8964853, y: 0.8574209}
+    - {x: 0.9941397, y: 0.8574209}
+    - {x: 0.8964853, y: 0.8613291}
+    - {x: 0.9941397, y: 0.8613291}
+    - {x: 0.8964853, y: 0.9589834}
+    - {x: 0.9941397, y: 0.9589834}
+    - {x: 0.6933603, y: 0.8964853}
+    - {x: 0.7910147, y: 0.8964853}
+    - {x: 0.6933603, y: 0.9941397}
+    - {x: 0.7910147, y: 0.9941397}
+    - {x: 0.6933603, y: 0.8964853}
+    - {x: 0.7910147, y: 0.8964853}
+    - {x: 0.6933603, y: 0.9941397}
+    - {x: 0.7910147, y: 0.9941397}
+    - {x: 0.6933603, y: 0.8964853}
+    - {x: 0.7910147, y: 0.8964853}
+    - {x: 0.6933603, y: 0.9941397}
+    - {x: 0.7910147, y: 0.9941397}
+    - {x: 0.6933603, y: 0.8964853}
+    - {x: 0.7910147, y: 0.8964853}
+    - {x: 0.6933603, y: 0.9941397}
+    - {x: 0.7910147, y: 0.9941397}
+    - {x: 0.6933603, y: 0.8964853}
+    - {x: 0.7910147, y: 0.8964853}
+    - {x: 0.6933603, y: 0.9941397}
+    - {x: 0.7910147, y: 0.9941397}
+    - {x: 0.7949228, y: 0.8964853}
+    - {x: 0.8925772, y: 0.8964853}
+    - {x: 0.7949228, y: 0.9941397}
+    - {x: 0.8925772, y: 0.9941397}
+    indices: 000000000300000001000000020000000300000000000000040000000700000005000000060000000700000004000000080000000b000000090000000a0000000b000000080000000c0000000f0000000d0000000e0000000f0000000c000000100000001300000011000000120000001300000010000000140000001700000015000000160000001700000014000000180000001b000000190000001a0000001b000000180000001c0000001f0000001d0000001e0000001f0000001c000000200000002300000021000000220000002300000020000000240000002700000025000000260000002700000024000000280000002b000000290000002a0000002b000000280000002c0000002f0000002d0000002e0000002f0000002c000000300000003300000031000000320000003300000030000000340000003700000035000000360000003700000034000000380000003b000000390000003a0000003b000000380000003c0000003f0000003d0000003e0000003f0000003c000000400000004300000041000000420000004300000040000000440000004700000045000000460000004700000044000000480000004b000000490000004a0000004b000000480000004c0000004f0000004d0000004e0000004f0000004c000000500000005300000051000000520000005300000050000000540000005700000055000000560000005700000054000000580000005b000000590000005a0000005b000000580000005c0000005f0000005d0000005e0000005f0000005c000000600000006300000061000000620000006300000060000000640000006700000065000000660000006700000064000000680000006b000000690000006a0000006b000000680000006c0000006f0000006d0000006e0000006f0000006c000000700000007300000071000000720000007300000070000000740000007700000075000000760000007700000074000000780000007b000000790000007a0000007b000000780000007c0000007f0000007d0000007e0000007f0000007c000000800000008300000081000000820000008300000080000000840000008700000085000000860000008700000084000000880000008b000000890000008a0000008b000000880000008c0000008f0000008d0000008e0000008f0000008c000000900000009300000091000000920000009300000090000000940000009700000095000000960000009700000094000000980000009b000000990000009a0000009b000000980000009c0000009f0000009d0000009e0000009f0000009c000000a0000000a3000000a1000000a2000000a3000000a0000000a4000000a7000000a5000000a6000000a7000000a4000000a8000000ab000000a9000000aa000000ab000000a8000000ac000000af000000ad000000ae000000af000000ac000000b0000000b3000000b1000000b2000000b3000000b0000000b4000000b7000000b5000000b6000000b7000000b4000000b8000000bb000000b9000000ba000000bb000000b8000000bc000000bf000000bd000000be000000bf000000bc000000c0000000c3000000c1000000c2000000c3000000c0000000c4000000c7000000c5000000c6000000c7000000c4000000c8000000cb000000c9000000ca000000cb000000c8000000cc000000cf000000cd000000ce000000cf000000cc000000d0000000d3000000d1000000d2000000d3000000d0000000d4000000d7000000d5000000d6000000d7000000d4000000d8000000db000000d9000000da000000db000000d8000000dc000000df000000dd000000de000000df000000dc000000e0000000e3000000e1000000e2000000e3000000e0000000e4000000e7000000e5000000e6000000e7000000e4000000e8000000eb000000e9000000ea000000eb000000e8000000ec000000ef000000ed000000ee000000ef000000ec000000f0000000f3000000f1000000f2000000f3000000f0000000f4000000f7000000f5000000f6000000f7000000f4000000f8000000fb000000f9000000fa000000fb000000f8000000fc000000ff000000fd000000fe000000ff000000fc000000000100000301000001010000020100000301000000010000040100000701000005010000060100000701000004010000080100000b010000090100000a0100000b010000080100000c0100000f0100000d0100000e0100000f0100000c010000100100001301000011010000120100001301000010010000140100001701000015010000160100001701000014010000180100001b010000190100001a0100001b010000180100001c0100001f0100001d0100001e0100001f0100001c010000200100002301000021010000220100002301000020010000240100002701000025010000260100002701000024010000280100002b010000290100002a0100002b010000280100002c0100002f0100002d0100002e0100002f0100002c010000300100003301000031010000320100003301000030010000
+    material: {fileID: 2100000, guid: 39e8c84318e9f514c9bb019149c2546f, type: 2}
+    materialId: 0
+    sourceTextureGUID: 087070f56d8d626439a0e14dbb311810
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 0
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  premultipliedAlpha: 0
+  material: {fileID: 0}
+  materials:
+  - {fileID: 2100000, guid: 39e8c84318e9f514c9bb019149c2546f, type: 2}
+  textures:
+  - {fileID: 2800000, guid: 49b8564dfae2b6444aaa8f9fd02f932d, type: 3}
+  pngTextures: []
+  materialPngTextureId: 
+  textureFilterMode: 1
+  textureMipMaps: 0
+  allowMultipleAtlases: 0
+  spriteCollectionGUID: d1dc096657ca6c643867a99d4a9d3924
+  spriteCollectionName: Environment
+  assetName: 
+  loadable: 0
+  invOrthoSize: 2
+  halfTargetHeight: 10
+  buildKey: 2013039833
+  dataGuid: 457e80ce2c97f484ca0107ebf35eb810
+  managedSpriteCollection: 0
+  hasPlatformData: 0
+  spriteCollectionPlatforms: []
+  spriteCollectionPlatformGUIDs: []

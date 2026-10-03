@@ -1,0 +1,455 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41cb500cf0f58e74f9a52a8af931edde, type: 3}
+  m_Name: -tk2d
+  m_EditorClassIdentifier: 
+  version: 4
+  spriteAnimationIndex:
+  - assetGUID: 18a39674a9b14f54b97497254e83b349
+    dataGUID: 
+    managed: 0
+    loadable: 0
+  - assetGUID: 68cc4da10d501f9439d1507a1a2c46c1
+    dataGUID: 
+    managed: 0
+    loadable: 0
+  - assetGUID: eba2002e1b52e457f811082cb3edaa4d
+    dataGUID: 
+    managed: 0
+    loadable: 0
+  - assetGUID: 0b8434610c9cfde47b2915b0cf0709f7
+    dataGUID: 
+    managed: 0
+    loadable: 0
+  - assetGUID: a77e0570588ac084e97612d9e7acf3e7
+    dataGUID: 
+    managed: 0
+    loadable: 0
+  fontIndex:
+  - assetGUID: 063b15d80dbb4604d890600a64c79cf8
+    dataGUID: e7a6b09a73c6b2b4f8060096ddbd3b5e
+    managed: 0
+    loadable: 0
+  - assetGUID: 5b9fac241be038041b70ac7e84cd6151
+    dataGUID: 3082bbcb45b417041963b6b8562266c1
+    managed: 0
+    loadable: 0
+  - assetGUID: db60ffa92fa16ea478fc7ad4f595a0e6
+    dataGUID: 44e006873ca04f741b2ac3ba5dec92ad
+    managed: 0
+    loadable: 0
+  - assetGUID: 696edcc0ae48b72449b2be1a439a7afb
+    dataGUID: fb1b97eccf6db514999d1605baf017e5
+    managed: 0
+    loadable: 0
+  spriteCollectionIndex:
+  - name: Player
+    spriteCollectionGUID: 4331d11e10fc2bb4d9c2c307abd5288f
+    spriteCollectionDataGUID: c7877697091f36c47b5bb01403774d03
+    spriteNames:
+    - first
+    - idle01
+    - idle03
+    - idle00
+    - idle02
+    - turnDown00
+    - walkDown02
+    - walkDown01
+    - walkDown03
+    - walkDown00
+    - walkDown04
+    - walkDown07
+    - walkDown06
+    - walkDown05
+    spriteTextureGUIDs:
+    - 2d2e53b99e6a6d44aa88207e0b0c9707
+    - 7d91a7d4ee852cf43b79dfbd1f54a89e
+    - 5bdb7cdc716a11348b320f806696e51e
+    - f3f7141ec85be514587dfb55563271bd
+    - 38567a7eb8c56af46993bdf11a4b82a0
+    - e03cf6c195d8deb4b82c07a45d7f867f
+    - 00c78d792c9b66949b14f37824b33e7e
+    - 10984c4c101d089468cab882b22ba5ed
+    - 7b321fdd32a19d34d8e321975e33910c
+    - b77b06d59837f674cb888f09dda26e53
+    - 09eb304346d78cb48a3e8c32940da1a2
+    - 009aac95f9653b240b0916f4ff362d2b
+    - c922353394f0a6641bb4315001e5c4cf
+    - ccabce59fc3a65c489cabd7d70168f83
+    spriteTextureTimeStamps:
+    - 1379189091.16526
+    - 1382822705.79519
+    - 1382822691.75538
+    - 1382822695.5246
+    - 1382822685.71504
+    - 1382823247.88719
+    - 1382828304.88444
+    - 1382825424.37868
+    - 1382825786.91142
+    - 1382825034.32837
+    - 1382826216.98701
+    - 1382924905.95086
+    - 1382827335.51699
+    - 1382827214.9901
+    managedSpriteCollection: 0
+    loadable: 0
+    assetName: 
+    version: 3
+  - name: Environment
+    spriteCollectionGUID: d1dc096657ca6c643867a99d4a9d3924
+    spriteCollectionDataGUID: 457e80ce2c97f484ca0107ebf35eb810
+    spriteNames:
+    - lineBlue
+    - bgTriangleGreen
+    - bgTriangleBlue
+    - RedSquare
+    - bgTriangleRed
+    - 01
+    - 10
+    - 08
+    - 06
+    - 02
+    - 12
+    - 05
+    - 04
+    - 07
+    - 03
+    - 11
+    - 09
+    - shadow
+    - 
+    - room
+    spriteTextureGUIDs:
+    - a6bceaa177f2ca14d80dc386fc712ef2
+    - 41d379849e9835245be75cd7d65daa14
+    - d1d35fe405bf11b4d8edae2255ffbf7a
+    - 97b570682181b3d4e89321150b0467d1
+    - 3983848a6c446154bad141faf6d0976d
+    - 3a80fd60df3e35f4d955608a7ccf0586
+    - a415d831fd3938742bb0ab33e03a3e02
+    - 2e48be3116b75a3428221d0ec1595579
+    - dc9517d109e251a468712f03f52e374f
+    - 690f5cc4b82020e4a80f23d3285b3a36
+    - 4fa1c466747c8594f9a9906bfc2f0c10
+    - ef6683a6f471a07408ea0895c9a4d778
+    - d56a38b83cfe4c54095c9d7a347c465f
+    - f87448d855065804891c0bf87bafe09c
+    - 77579d39d13624e4bae8dbb2909c45f3
+    - c1dc5fdcefa6bd5408750204ed9d010a
+    - 72a67eaf668ce7c4ea688ec2b3f0e08d
+    - 765289094162bf54eab00df17474348d
+    - 
+    - 087070f56d8d626439a0e14dbb311810
+    spriteTextureTimeStamps:
+    - 1382925472.70428
+    - 1378825493.15777
+    - 1378825465.40218
+    - 1378923894.68363
+    - 1378825422.25472
+    - 1378744299.11758
+    - 1378731162.9039
+    - 1378734801.03554
+    - 1378734691.31737
+    - 1378744307.85359
+    - 1378731651.89286
+    - 1378734673.32535
+    - 1378744324.79522
+    - 1378734790.32075
+    - 1378744318.83601
+    - 1378731174.72157
+    - 1378731094.94201
+    - 1383869449.69766
+    - 0
+    - 1384361528.13303
+    managedSpriteCollection: 0
+    loadable: 0
+    assetName: 
+    version: 3
+  - name: Arcade
+    spriteCollectionGUID: 7e85f99afcf7b57478599ccb7af576f4
+    spriteCollectionDataGUID: 378757f5f94c05842902b271c50d20bc
+    spriteNames:
+    - spikeBig
+    - spikeSmall
+    - whiteDot
+    - whiteDotWithoutCollider
+    - idle
+    spriteTextureGUIDs:
+    - e5ad5a0b0fc4d0546a9f692411299578
+    - ec0505f7d3cf3aa4186493491fc8f9c7
+    - 9933ce5ac33387941b59358f64b66ba4
+    - 9933ce5ac33387941b59358f64b66ba4
+    - 805df62b82b1a954e89a402c29ef19b8
+    spriteTextureTimeStamps:
+    - 1380719116.29522
+    - 1380719107.52372
+    - 1391193492.11027
+    - 1391193492.11027
+    - 1379603578.72571
+    managedSpriteCollection: 0
+    loadable: 0
+    assetName: 
+    version: 3
+  - name: OldMan
+    spriteCollectionGUID: 4afeb4ae887b0c74581b79f6fbd66841
+    spriteCollectionDataGUID: 43be65221e296584dba6aaa016c9098d
+    spriteNames:
+    - old man
+    spriteTextureGUIDs:
+    - 4637eaf414a9d2648bc983448b15660c
+    spriteTextureTimeStamps:
+    - 1385052085.05378
+    managedSpriteCollection: 0
+    loadable: 0
+    assetName: 
+    version: 3
+  - name: UI
+    spriteCollectionGUID: e078d0f3b9c7f614d9ce4b96d5041aa9
+    spriteCollectionDataGUID: c084528a1d09a8243917ec552b241645
+    spriteNames:
+    - foreground
+    - glitch1
+    - glitch2
+    - glitch4
+    - glitch3
+    - glitch0
+    spriteTextureGUIDs:
+    - 6367eae97dbb95847837eb3c9d5509d1
+    - 0325626b48fb61548842dd256de92d5a
+    - 07b0175cae14b144a9c791c03a474c12
+    - 128ebf67ae62bbf419992394bd37c3e5
+    - 40378491ba4881f41bcb23310a9103fb
+    - 8eed7bc3961d21441aab85aae8a495a0
+    spriteTextureTimeStamps:
+    - 1376426348.53262
+    - 1392133175.60429
+    - 1392133225.97518
+    - 1392133303.21259
+    - 1392133266.32148
+    - 1392133130.2957
+    managedSpriteCollection: 0
+    loadable: 0
+    assetName: 
+    version: 3
+  - name: Rooms
+    spriteCollectionGUID: 1d52ecc1604aef4469f80125d16d7631
+    spriteCollectionDataGUID: 860bdb8e44213364c9ba21da5c522316
+    spriteNames:
+    - Room1WallFrame
+    - Room1WallUp
+    - Room1Ground
+    - Room1WallDown
+    - WallDownWithDoor
+    spriteTextureGUIDs:
+    - 87db9fc1a95178d40bc738b1c02cdf56
+    - b14db1b3c635f884ba485d84144cac97
+    - b3ebdbf9472d6f64c9e9ad939a2bf460
+    - d1108eaf3355b8147ba09047829a3a40
+    - 97929d2b027e0124eb05528531977ead
+    spriteTextureTimeStamps:
+    - 1388854624.23091
+    - 1388080852.31701
+    - 1391000659.03493
+    - 1388854488.9577
+    - 1388854500.82272
+    managedSpriteCollection: 0
+    loadable: 0
+    assetName: 
+    version: 3
+  - name: ArcadeSwallowPill
+    spriteCollectionGUID: db130db3eaddc074a879343fb51dc7a1
+    spriteCollectionDataGUID: 52ee10c1855edec41a3c9323499e7d26
+    spriteNames:
+    - pill
+    - head1
+    - head2
+    - waterDrop
+    spriteTextureGUIDs:
+    - 4b691823589a7254cb8a8d848536d56e
+    - 407040c0012c5f34da38d87f15413016
+    - 46ddb76408fd63b4ab1b323d05725637
+    - f842a1c8f06c31249a54592b5e8dc65e
+    spriteTextureTimeStamps:
+    - 1391204941.19332
+    - 1391210829.81613
+    - 1391210843.3499
+    - 1391213907.59117
+    managedSpriteCollection: 0
+    loadable: 0
+    assetName: 
+    version: 3
+  - name: ArcadeCrying
+    spriteCollectionGUID: 32b43227c540e8545844a71ba0dc584e
+    spriteCollectionDataGUID: 0fb2c3b98c0650d45b5f92fc62fa1aa9
+    spriteNames:
+    - eye
+    - eyebrow
+    - head
+    - tear
+    - tissue
+    - 
+    - tissue2
+    - tissueDone
+    - tissue4
+    - tissue3
+    spriteTextureGUIDs:
+    - 0c300fcfb616ba84d813115bdef7a552
+    - 5058a5c54f5b4ef458173ce6d153f5d8
+    - 9fffcc2dc67bd43439e64cacbb55021a
+    - fb62ddfd9cc462146a458264e895eaf7
+    - a464b6aac698b9f4d9e7ce95a5d7abcc
+    - 
+    - da8d4047153725448b8f356e7aa275cd
+    - 4b24996f834702d43a6eadd799678808
+    - a4ab0da6473f9234cb5c49fe1408c7f0
+    - cfb3ec12d4cb4fe489ca044691cd4a0f
+    spriteTextureTimeStamps:
+    - 1391264826.13163
+    - 1391264835.28815
+    - 1391278589.06783
+    - 1391264847.44385
+    - 1391292027.00843
+    - 0
+    - 1391347734.96733
+    - 1391347725.8198
+    - 1391347867.21589
+    - 1391347814.36787
+    managedSpriteCollection: 0
+    loadable: 0
+    assetName: 
+    version: 3
+  - name: OrphanageProps
+    spriteCollectionGUID: b402a2c3b9e07b749bb029bad813e52b
+    spriteCollectionDataGUID: 6997c67b367b02b428d628d517c81b5a
+    spriteNames:
+    - bed
+    - bed3
+    - bed2
+    - bed1
+    - bed6
+    - bed5
+    - bed4
+    - bedHome
+    spriteTextureGUIDs:
+    - b9603203158df854591138311871cbbd
+    - 0286b7bc19eb16941b2fac0ece9286b0
+    - 33e3804b8fdc80d4196e242b8283f23d
+    - c41b46b3b96081140aa17c215a82c4ea
+    - 82c8c9d0d68708d4c89b6cfe635dd2fd
+    - 8e4a593481883c541b5be426a59ffdce
+    - d5e8f2e993105f147a3f7a712ee4d37c
+    - f330c5eece9525b448de30d20cb1430c
+    spriteTextureTimeStamps:
+    - 1391971656.70167
+    - 1391971779.80071
+    - 1391971746.4648
+    - 1391971693.02675
+    - 1391971884.5367
+    - 1391971848.73065
+    - 1391971815.44975
+    - 1391971957.36287
+    managedSpriteCollection: 0
+    loadable: 0
+    assetName: 
+    version: 3
+  - name: BeachStuff
+    spriteCollectionGUID: 441ad3b37a5392e4491ef2e16825f3ae
+    spriteCollectionDataGUID: 8d7bda703f5bda042abab1cd6beb08f3
+    spriteNames:
+    - wave
+    - sand
+    - whiteGradient
+    spriteTextureGUIDs:
+    - 373ba07c3e712774185b8c021b0e62ec
+    - 80ebc7a0ef3789f48909ea0a7457e6b4
+    - 9623beef550ab424886a7ef8b27da67d
+    spriteTextureTimeStamps:
+    - 1392070165.71783
+    - 1392073827.85829
+    - 1392158921.96471
+    managedSpriteCollection: 0
+    loadable: 0
+    assetName: 
+    version: 3
+  - name: ChildRoom
+    spriteCollectionGUID: 5cd278e80bfaf5a42ac7624c8b8e3eaf
+    spriteCollectionDataGUID: 30f6877077d5cf84e9e17e0105992a0c
+    spriteNames:
+    - parkeFloor
+    spriteTextureGUIDs:
+    - e5d87031c772ac34ba5de36b52a155f6
+    spriteTextureTimeStamps:
+    - 1392227020.18299
+    managedSpriteCollection: 0
+    loadable: 0
+    assetName: 
+    version: 3
+  - name: Props
+    spriteCollectionGUID: 6cd67abe7edf43a4b9a1a31c21b46676
+    spriteCollectionDataGUID: e892953da67a048468fccfd2393ba059
+    spriteNames:
+    - wardrobe
+    - wardrobeHome
+    - chair
+    - table
+    - tv
+    spriteTextureGUIDs:
+    - 629944a2f0b3c424db9fbb8c4911127b
+    - feeff9274b5793e46b63f85e2e64480a
+    - 6fa4abd2c33352f4ab274dfe8790d68e
+    - 4235ac1b997e88b46ace369b3dcb67d4
+    - e4ea5ac87f8810a4886757593322c1d0
+    spriteTextureTimeStamps:
+    - 1391976746.00676
+    - 1392216742.88816
+    - 1392231035.76367
+    - 1392237740.91418
+    - 1392240767.52629
+    managedSpriteCollection: 0
+    loadable: 0
+    assetName: 
+    version: 3
+  - name: RoomChildHome
+    spriteCollectionGUID: 40a2d42632238894f83baf62bb8ae49f
+    spriteCollectionDataGUID: 8012e202e6da8b441954ecab7c176fff
+    spriteNames:
+    - WallUp
+    - WallDown
+    - WallFrame
+    - WallDownWithDoor
+    spriteTextureGUIDs:
+    - 6dd854beb4eb08b4482a91a047ea3166
+    - 9fd0122bf21df434faeee918f5081c77
+    - c6e33fe715ada654585b84e9683ec307
+    - f5baa26a4e70bfe4dae238a84cb0d39e
+    spriteTextureTimeStamps:
+    - 1392226949.36794
+    - 1392226855.63558
+    - 1392226926.30662
+    - 1392226877.18281
+    managedSpriteCollection: 0
+    loadable: 0
+    assetName: 
+    version: 3
+  - name: Spaceship
+    spriteCollectionGUID: b80d3f2215f4ed34aa4ddae78b463516
+    spriteCollectionDataGUID: b667c06449ea5634dbd7e43730cb18d9
+    spriteNames:
+    - rocketship
+    spriteTextureGUIDs:
+    - e50e993dc93ee5542980be2c2a7ab725
+    spriteTextureTimeStamps:
+    - 1392245564.55266
+    managedSpriteCollection: 0
+    loadable: 0
+    assetName: 
+    version: 3

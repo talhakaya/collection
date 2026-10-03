@@ -1,0 +1,199 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &100000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 400000}
+  - component: {fileID: 11400000}
+  m_Layer: 0
+  m_Name: BeachStuff
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &400000
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d546f34a90531a14eaba82a43b05b86b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 3
+  materialIdsValid: 1
+  needMaterialInstance: 0
+  spriteDefinitions:
+  - name: wave
+    boundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 10, y: 6, z: 0}
+    untrimmedBoundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 10, y: 6, z: 0}
+    texelSize: {x: 0.05, y: 0.05}
+    positions:
+    - {x: -5, y: -3, z: 0}
+    - {x: 5, y: -3, z: 0}
+    - {x: -5, y: 3, z: 0}
+    - {x: 5, y: 3, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.000001953125, y: 0.58398634}
+    - {x: 0.000001953125, y: 0.9746074}
+    - {x: 0.23437305, y: 0.58398634}
+    - {x: 0.23437305, y: 0.9746074}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: 8bacd1bf30b06a948a370c88001ad1e5, type: 2}
+    materialId: 0
+    sourceTextureGUID: 373ba07c3e712774185b8c021b0e62ec
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 1
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: sand
+    boundsData:
+    - {x: 0.025000095, y: -0.025000095, z: 0}
+    - {x: 19.95, y: 14.95, z: 0}
+    untrimmedBoundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 20, y: 15, z: 0}
+    texelSize: {x: 0.05, y: 0.05}
+    positions:
+    - {x: -9.95, y: -7.5, z: 0}
+    - {x: 10, y: -7.5, z: 0}
+    - {x: -9.95, y: 7.45, z: 0}
+    - {x: 10, y: 7.45, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.000001953125, y: 0.000001953125}
+    - {x: 0.7792949, y: 0.000001953125}
+    - {x: 0.000001953125, y: 0.5839824}
+    - {x: 0.7792949, y: 0.5839824}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: 8bacd1bf30b06a948a370c88001ad1e5, type: 2}
+    materialId: 0
+    sourceTextureGUID: 80ebc7a0ef3789f48909ea0a7457e6b4
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 0
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: whiteGradient
+    boundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 20, y: 0.1, z: 0}
+    untrimmedBoundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 20, y: 0.1, z: 0}
+    texelSize: {x: 0.05, y: 0.05}
+    positions:
+    - {x: -10, y: -0.05, z: 0}
+    - {x: 10, y: -0.05, z: 0}
+    - {x: -10, y: 0.05, z: 0}
+    - {x: 10, y: 0.05, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.77929884, y: 0.000001953125}
+    - {x: 0.77929884, y: 0.78124803}
+    - {x: 0.78320116, y: 0.000001953125}
+    - {x: 0.78320116, y: 0.78124803}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: 8bacd1bf30b06a948a370c88001ad1e5, type: 2}
+    materialId: 0
+    sourceTextureGUID: 9623beef550ab424886a7ef8b27da67d
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 1
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  premultipliedAlpha: 0
+  material: {fileID: 0}
+  materials:
+  - {fileID: 2100000, guid: 8bacd1bf30b06a948a370c88001ad1e5, type: 2}
+  textures:
+  - {fileID: 2800000, guid: d00abcdd1a6ab78428410b631d8bcd4f, type: 3}
+  pngTextures: []
+  materialPngTextureId: 
+  textureFilterMode: 1
+  textureMipMaps: 0
+  allowMultipleAtlases: 0
+  spriteCollectionGUID: 441ad3b37a5392e4491ef2e16825f3ae
+  spriteCollectionName: BeachStuff
+  assetName: 
+  loadable: 0
+  invOrthoSize: 2
+  halfTargetHeight: 10
+  buildKey: 1170166922
+  dataGuid: 8d7bda703f5bda042abab1cd6beb08f3
+  managedSpriteCollection: 0
+  hasPlatformData: 0
+  spriteCollectionPlatforms: []
+  spriteCollectionPlatformGUIDs: []
