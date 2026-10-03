@@ -437,3 +437,12 @@ MonoBehaviour:
     cursorHotspot: {x: 0, y: 0}
     entryScene: {fileID: 102900000, guid: f0d531bc7d87d4b4693159632e1d7f3d, type: 3}
     entryScenePath: Assets/games/FarCryBaby/Scenes/Main.unity
+  - gameName: Orphan
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: 81c77cbfd596d33459fb5629cf1fa863, type: 3}
+    entryScenePath: Assets/games/Orphan/Scenes/TitleScreen.unity

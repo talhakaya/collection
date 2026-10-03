@@ -1,0 +1,291 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &100000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 400000}
+  - component: {fileID: 11400000}
+  m_Layer: 0
+  m_Name: Arcade
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &400000
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d546f34a90531a14eaba82a43b05b86b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 3
+  materialIdsValid: 1
+  needMaterialInstance: 0
+  spriteDefinitions:
+  - name: spikeBig
+    boundsData:
+    - {x: 0.25, y: -0.25, z: 0}
+    - {x: 4.5, y: 4.5, z: 0}
+    untrimmedBoundsData:
+    - {x: 0.25, y: -0.25, z: 0}
+    - {x: 4.5, y: 4.5, z: 0}
+    texelSize: {x: 0.5, y: 0.5}
+    positions:
+    - {x: -2, y: -2.5, z: 0}
+    - {x: 2.5, y: -2.5, z: 0}
+    - {x: -2, y: 2, z: 0}
+    - {x: 2.5, y: 2, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.0000625, y: 0.0000625}
+    - {x: 0.5624375, y: 0.0000625}
+    - {x: 0.0000625, y: 0.5624375}
+    - {x: 0.5624375, y: 0.5624375}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: c7c8d942cea09fc4289f69879a7b29b4, type: 2}
+    materialId: 0
+    sourceTextureGUID: e5ad5a0b0fc4d0546a9f692411299578
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 0
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 2
+    customColliders: []
+    colliderVertices:
+    - {x: 0.25, y: -0.25, z: 0}
+    - {x: 1.25, y: 1.25, z: 0.1}
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: spikeSmall
+    boundsData:
+    - {x: 0.25, y: -0.25, z: 0}
+    - {x: 3.5, y: 3.5, z: 0}
+    untrimmedBoundsData:
+    - {x: 0.25, y: -0.25, z: 0}
+    - {x: 3.5, y: 3.5, z: 0}
+    texelSize: {x: 0.5, y: 0.5}
+    positions:
+    - {x: -1.5, y: -2, z: 0}
+    - {x: 2, y: -2, z: 0}
+    - {x: -1.5, y: 1.5, z: 0}
+    - {x: 2, y: 1.5, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.0000625, y: 0.5625625}
+    - {x: 0.4374375, y: 0.5625625}
+    - {x: 0.0000625, y: 0.9999375}
+    - {x: 0.4374375, y: 0.9999375}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: c7c8d942cea09fc4289f69879a7b29b4, type: 2}
+    materialId: 0
+    sourceTextureGUID: ec0505f7d3cf3aa4186493491fc8f9c7
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 0
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 2
+    customColliders: []
+    colliderVertices:
+    - {x: 0.25, y: -0.25, z: 0}
+    - {x: 0.75, y: 0.75, z: 0.1}
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: whiteDot
+    boundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 0.1, y: 0.1, z: 0}
+    untrimmedBoundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 0.1, y: 0.1, z: 0}
+    texelSize: {x: 0.05, y: 0.05}
+    positions:
+    - {x: -0.05, y: -0.05, z: 0}
+    - {x: 0.05, y: -0.05, z: 0}
+    - {x: -0.05, y: 0.05, z: 0}
+    - {x: 0.05, y: 0.05, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.8750625, y: 0.0000625}
+    - {x: 0.9999375, y: 0.0000625}
+    - {x: 0.8750625, y: 0.1249375}
+    - {x: 0.9999375, y: 0.1249375}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: c7c8d942cea09fc4289f69879a7b29b4, type: 2}
+    materialId: 0
+    sourceTextureGUID: 9933ce5ac33387941b59358f64b66ba4
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 0
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 2
+    customColliders: []
+    colliderVertices:
+    - {x: 0, y: 0, z: 0}
+    - {x: 0.05, y: 0.05, z: 0.1}
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: whiteDotWithoutCollider
+    boundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 0.1, y: 0.1, z: 0}
+    untrimmedBoundsData:
+    - {x: 0, y: 0, z: 0}
+    - {x: 0.1, y: 0.1, z: 0}
+    texelSize: {x: 0.05, y: 0.05}
+    positions:
+    - {x: -0.05, y: -0.05, z: 0}
+    - {x: 0.05, y: -0.05, z: 0}
+    - {x: -0.05, y: 0.05, z: 0}
+    - {x: 0.05, y: 0.05, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.8750625, y: 0.0000625}
+    - {x: 0.9999375, y: 0.0000625}
+    - {x: 0.8750625, y: 0.1249375}
+    - {x: 0.9999375, y: 0.1249375}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: c7c8d942cea09fc4289f69879a7b29b4, type: 2}
+    materialId: 0
+    sourceTextureGUID: 9933ce5ac33387941b59358f64b66ba4
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 0
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 0
+    customColliders: []
+    colliderVertices: []
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  - name: idle
+    boundsData:
+    - {x: 0.25, y: -0.25, z: 0}
+    - {x: 3.5, y: 3.5, z: 0}
+    untrimmedBoundsData:
+    - {x: 0.25, y: -0.25, z: 0}
+    - {x: 3.5, y: 3.5, z: 0}
+    texelSize: {x: 0.5, y: 0.5}
+    positions:
+    - {x: -1.5, y: -2, z: 0}
+    - {x: 2, y: -2, z: 0}
+    - {x: -1.5, y: 1.5, z: 0}
+    - {x: 2, y: 1.5, z: 0}
+    normals: []
+    tangents: []
+    uvs:
+    - {x: 0.4375625, y: 0.5625625}
+    - {x: 0.8749375, y: 0.5625625}
+    - {x: 0.4375625, y: 0.9999375}
+    - {x: 0.8749375, y: 0.9999375}
+    indices: 000000000300000001000000020000000300000000000000
+    material: {fileID: 2100000, guid: c7c8d942cea09fc4289f69879a7b29b4, type: 2}
+    materialId: 0
+    sourceTextureGUID: 805df62b82b1a954e89a402c29ef19b8
+    extractRegion: 0
+    regionX: 0
+    regionY: 0
+    regionW: 0
+    regionH: 0
+    flipped: 0
+    complexGeometry: 0
+    physicsEngine: 0
+    colliderType: 2
+    customColliders: []
+    colliderVertices:
+    - {x: 0.25, y: -0.25, z: 0}
+    - {x: 0.75, y: 0.75, z: 0.1}
+    colliderIndicesFwd: 
+    colliderIndicesBack: 
+    colliderConvex: 0
+    colliderSmoothSphereCollisions: 0
+    polygonCollider2D: []
+    edgeCollider2D: []
+    attachPoints: []
+  premultipliedAlpha: 0
+  material: {fileID: 0}
+  materials:
+  - {fileID: 2100000, guid: c7c8d942cea09fc4289f69879a7b29b4, type: 2}
+  textures:
+  - {fileID: 2800000, guid: 3a9debc3f5473a147a6adf53abbdac01, type: 3}
+  pngTextures: []
+  materialPngTextureId: 
+  textureFilterMode: 1
+  textureMipMaps: 0
+  allowMultipleAtlases: 0
+  spriteCollectionGUID: 7e85f99afcf7b57478599ccb7af576f4
+  spriteCollectionName: Arcade
+  assetName: 
+  loadable: 0
+  invOrthoSize: 2
+  halfTargetHeight: 10
+  buildKey: 919723285
+  dataGuid: 378757f5f94c05842902b271c50d20bc
+  managedSpriteCollection: 0
+  hasPlatformData: 0
+  spriteCollectionPlatforms: []
+  spriteCollectionPlatformGUIDs: []

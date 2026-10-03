@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: 32ce89e68524fe54cbc3ad85d2330464
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - loadingScreen: {fileID: 100000, guid: c0fa71c7a2d037848814d34a9f480525, type: 2}
+  - arcadeGame: {fileID: 100000, guid: 5bfb6d269e4c60c4f8e614822ced2d87, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
