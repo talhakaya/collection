@@ -239,3 +239,12 @@ MonoBehaviour:
     cursorHotspot: {x: 0, y: 0}
     entryScene: {fileID: 102900000, guid: 14b8e5fc011cc3b41bc883f006d596e6, type: 3}
     entryScenePath: Assets/games/Childhood Nightmare/first.unity
+  - gameName: Azer AVM
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: 0e705967e0dcccd43b71fba0cd377010, type: 3}
+    entryScenePath: Assets/games/Azer AVM/scene0.unity

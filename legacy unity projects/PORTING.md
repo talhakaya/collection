@@ -392,3 +392,13 @@ GUI. Things it did not exercise, to check for in step 0:
   by path.
 - **A renderer on `Default-Diffuse` with no light in the scene** showed albedo times
   ambient; an unlit material in that shade is the closest thing.
+
+## Added by Azer AVM (Unity 4, two players)
+
+- **Two players on gamepads:** an action map binds `<Gamepad>` to every pad at once.
+  Keep the keyboard in the map and read `Gamepad.all[n]` in the player script, one pad
+  per player, falling back to the two halves of one pad when only one is connected.
+- **File names with non-ASCII letters** (Turkish Ä±) broke the closure listing on the
+  Windows console encoding and silently shortened the copy list; write the list as
+  UTF-8 and compare the copied count with the scene's needs before importing.
+- **Test with two virtual pads**, then remove one mid-run to test the shared scheme.
