@@ -9,7 +9,7 @@ namespace Games.Golfinity
 	    public delegate void OnLanguageChangeHandler();
 
 	    static Local() {
-	        TextAsset textAsset = Resources.Load("localization") as TextAsset;
+	        TextAsset textAsset = Resources.Load("Golfinity/localization") as TextAsset; // in the collection: its own Resources subfolder
 	        ParseLocalizationData(textAsset.text);
 	    }
 

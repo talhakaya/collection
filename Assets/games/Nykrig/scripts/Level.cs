@@ -18,7 +18,7 @@ namespace Games.Nykrig
 	            //        DestroyImmediate(child.gameObject);
 	            //    }
 	            //}
-	            GameObject wallPrefab = Resources.Load("Wall") as GameObject;
+	            GameObject wallPrefab = Resources.Load("Nykrig/Wall") as GameObject; // in the collection: its own Resources subfolder
 	            GameObject w0 = Instantiate(wallPrefab, transform) as GameObject;
 	            GameObject w1 = Instantiate(wallPrefab, transform) as GameObject;
 	            GameObject w2 = Instantiate(wallPrefab, transform) as GameObject;
