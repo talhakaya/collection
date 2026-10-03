@@ -15,6 +15,7 @@ for d,_,fs in os.walk(os.path.join(L,'Assets')):
         rel=os.path.relpath(os.path.join(d,f),L).replace(os.sep,'/')
         if re.search(EXC,rel) or (extra and re.search(extra,rel)): continue
         files.append(rel)
+if os.environ.get('LIST'): files=[l.strip() for l in io.open(os.environ['LIST'],encoding='utf-8') if l.strip()]
 io.open(os.path.join(S,'list.txt'),'w',encoding='utf-8').write('\n'.join(files)+'\n')
 def run(*a):
     r=subprocess.run(list(a),capture_output=True,text=True,encoding='utf-8',errors='replace'); return (r.stdout+r.stderr).strip()

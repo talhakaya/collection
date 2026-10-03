@@ -212,6 +212,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/games/But You Are A Horse/test.unity
     guid: 9cf4c4d122da41f9bf9eecceed01c9ef
+  - enabled: 1
+    path: Assets/games/Seizure/main.unity
+    guid: 3e0c19e4c838ddc4390b59111df21fe7
+  - enabled: 1
+    path: Assets/games/Seizure/main2.unity
+    guid: 5d4aca9ef4a0c7445a781719ac6e9c29
+  - enabled: 1
+    path: Assets/games/Screens/main.unity
+    guid: 261176bca7038ba458714d81a641d2c4
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
