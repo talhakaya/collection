@@ -365,3 +365,19 @@ GUI. Things it did not exercise, to check for in step 0:
   by hand before the first import or the script updater asks.
 - **Bot button presses must be timed in game time** (hold for 0.15 s), not counted in
   `EditorApplication.update` ticks, which run several times per frame.
+
+## Added by Wall Stains (Unity 5.0, first person, image effects)
+
+- **Standard Assets share GUIDs across projects.** After copying, give every `.meta`
+  GUID that already exists elsewhere under `Assets/` a new one and replace it in the
+  game's binary scenes and prefabs (nibble-swapped bytes) and text files, before Unity
+  sees the folder. Reuse the already ported controller scripts under the new GUIDs.
+- **`legacy_scripts.py` rewrites `other.collider`** on a `Collision` parameter to
+  `other.GetComponent<Collider>()`, which does not compile; put it back.
+- **Standard Assets image effects** (`Bloom`, `NoiseAndGrain`, ...): replace the script
+  in place with a small component that keeps the serialized field names and builds a
+  URP `Volume` at start; switch `renderPostProcessing` on for the camera.
+- **`Legacy Shaders/Diffuse`** has no URP pass either: URP/Lit with smoothness 0 and
+  highlights off. Save each material with `AssetDatabase.SaveAssetIfDirty` right away;
+  a conversion followed by opening a scene was lost once.
+- **Check the first screenshot for magenta** before judging anything else.
