@@ -80,6 +80,21 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/games/Casket Fucker/scene0.unity
     guid: 13ce2a6a060a5d249a45a533c02f5357
+  - enabled: 1
+    path: Assets/games/Let's Never Do That Again/Scenes/scene0.unity
+    guid: deb10bc9cf412f8469cf53f236230ef5
+  - enabled: 1
+    path: Assets/games/Let's Never Do That Again/Scenes/scene1.unity
+    guid: 3a3cd610d76756c47ac19029799131fb
+  - enabled: 1
+    path: Assets/games/Let's Never Do That Again/Scenes/scene1.5.unity
+    guid: f737327a5b43f894db100d7c73501bb7
+  - enabled: 1
+    path: Assets/games/Let's Never Do That Again/Scenes/scene2.unity
+    guid: 3dffe7c0f1d774c48b06b5c5e7b6cfed
+  - enabled: 1
+    path: Assets/games/Let's Never Do That Again/Scenes/scene3.unity
+    guid: bef101cedd9193f4cb36ca2c344bb2be
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

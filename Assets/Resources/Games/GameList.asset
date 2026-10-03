@@ -158,3 +158,12 @@ MonoBehaviour:
     cursorHotspot: {x: 0, y: 0}
     entryScene: {fileID: 102900000, guid: 13ce2a6a060a5d249a45a533c02f5357, type: 3}
     entryScenePath: Assets/games/Casket Fucker/scene0.unity
+  - gameName: Let's Never Do That Again
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: deb10bc9cf412f8469cf53f236230ef5, type: 3}
+    entryScenePath: Assets/games/Let's Never Do That Again/Scenes/scene0.unity
