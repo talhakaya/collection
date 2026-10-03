@@ -37,6 +37,9 @@ namespace Games.OdeToCactus
 	            Score.score = 0;
 	        }
 	        travelling = false;
+
+	        // In the collection: lights the 3D scenes as Unity 4 did, see LegacyLighting.cs.
+	        gameObject.AddComponent<LegacyLighting>();
 		}
 
 		void Update ()

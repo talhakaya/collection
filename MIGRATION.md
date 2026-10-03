@@ -151,3 +151,29 @@ Unity 5.3 project folder (Global Game Jam 2016), ported by `PORTING.md`. What br
 - The webcam is stopped when the game is left; it used to stop with the application.
 - The `Spoon` tag was added to the project. The intro's audio source `state0` has no
   clip, as in the old project. `trees.pdn` (a Paint.NET source file) was not copied.
+
+## ode to cactus
+
+Unity 4.6 project folder ("CloneJamCactus"), seven scenes, ported by `PORTING.md`.
+What broke:
+
+- The three lit 3D scenes (road, mondo, norr) drew solid magenta: the built-in
+  `Diffuse` shaders do not exist under URP. They are drawn by
+  `collection/LegacyDiffuse.shader`, which redoes Unity 4's lighting arithmetic (Lambert
+  in gamma values, lights doubled, the old falloff) on light data uploaded by
+  `collection/LegacyLighting.cs`, added to each scene by `Game.Awake`. `road.mat` and
+  `tutorial.mat` use it, and the 25 renderers in mondo and norr that used the built-in
+  `Default-Diffuse` material now use `collection/LegacyDiffuse.mat`. All lights are
+  per-pixel now; Unity 4 did four per pixel and the rest per vertex.
+- The first-person controller was UnityScript (`CharacterMotor.js`,
+  `FPSInputController.js`), which Unity 6 does not compile. Both are translated line
+  for line to C# under the same GUIDs and field names, so the scene's tuning survived.
+- `Man.cs` threw on leaving a collision (`contacts[0]` of an ended collision is empty in
+  Unity 6), which also broke its ground count. Ground colliders are remembered on enter.
+- `Application.LoadLevel("name")` became scene paths, and the scene counter, clock and
+  score start again whenever a scene is reached other than through `Game.nextLevel`.
+- Input: W/Up to jump became `Up` (plus A on a pad), Z/Space became `Fire`, Return became
+  `Submit` (Start on a pad). Mouse look kept, with the right stick added in `MouseLook`.
+- `Screen.showCursor = false` became `GlobalInputManager.HideGameCursor()`.
+- Not copied: the UnityVS plugin, `Thumbs.db`, `.pdn` sources, and the unused parts of
+  Standard Assets (third-person controller, prototype character).

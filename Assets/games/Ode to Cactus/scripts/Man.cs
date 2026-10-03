@@ -40,7 +40,7 @@ namespace Games.OdeToCactus
 	            speedV = GetComponent<Rigidbody2D>().linearVelocity.y;
 	            speedV -= Game.dt * 19.87f;
 
-	            if (TaloketoInputManager.GetButton("Up"))
+	            if (TaloketoInputManager.GetButton("Up")) // In the collection: was W or the up arrow
 	            {
 	                if (onGround > 0)
 	                {
@@ -136,6 +136,7 @@ namespace Games.OdeToCactus
 	        if (other.contacts[0].point.y < transform.position.y + 0.5f)
 	        {
 	            onGround++;
+	            grounds.Add(other.collider);
 
 	            if (!norr2 && transform.position.y < -189f && !fallPlayed)
 	            {
@@ -145,9 +146,13 @@ namespace Games.OdeToCactus
 	        }
 	    }
 
+	    // In the collection: a collision that has ended has no contact points left in Unity 6
+	    // (contacts[0] threw), so which colliders counted as ground is remembered on entering.
+	    private System.Collections.Generic.HashSet<Collider2D> grounds = new System.Collections.Generic.HashSet<Collider2D>();
+
 	    void OnCollisionExit2D(Collision2D other)
 	    {
-	        if (other.contacts[0].point.y < transform.position.y + 0.5f)
+	        if (grounds.Remove(other.collider))
 	        {
 	            onGround--;
 	            if (onGround < 0)
