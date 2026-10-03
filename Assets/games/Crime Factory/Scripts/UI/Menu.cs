@@ -36,7 +36,51 @@ namespace Games.CrimeFactory
 	#endif
 	    }
 
+	    // In the collection: the menu could only be clicked with the mouse. Up and down now move
+	    // a "> " marker over the visible buttons, and Jump (Z, gamepad A) or Enter presses the
+	    // marked one. The marker stays hidden until a key or the pad is used, so with the mouse
+	    // the menu looks as it did.
+	    private TextMeshProUGUI[] navButtons;
+	    private string[] navLabels;
+	    private int navIndex = -1;
+	    private float navVerticalOld;
+
+	    private void UpdateNavigation() {
+	        if (navButtons == null) {
+	            navButtons = new TextMeshProUGUI[] { textStart, textContinue, textNewGame, textCredits, textQuit };
+	            navLabels = new string[navButtons.Length];
+	            for (int i = 0; i < navButtons.Length; i++) navLabels[i] = navButtons[i].text;
+	        }
+	        float vertical = TaloketoInputManager.GetAxisRaw("Vertical");
+	        int move = 0;
+	        if (vertical > 0.5f && navVerticalOld <= 0.5f) move = -1;
+	        if (vertical < -0.5f && navVerticalOld >= -0.5f) move = 1;
+	        navVerticalOld = vertical;
+	        var keyboard = UnityEngine.InputSystem.Keyboard.current;
+	        bool confirm = TaloketoInputManager.GetButtonDown("Jump")
+	            || (keyboard != null && (keyboard.enterKey.wasPressedThisFrame || keyboard.numpadEnterKey.wasPressedThisFrame));
+	        if (areCreditsPlaying || !creditObjects[0].activeInHierarchy) return;
+	        if (navIndex < 0) {
+	            if (move == 0 && !confirm) return;
+	            navIndex = 0;
+	            while (!navButtons[navIndex].gameObject.activeSelf) navIndex++;
+	            move = 0;
+	            confirm = false;
+	        }
+	        while (move != 0) {
+	            navIndex = (navIndex + move + navButtons.Length) % navButtons.Length;
+	            if (navButtons[navIndex].gameObject.activeSelf) move = 0;
+	        }
+	        for (int i = 0; i < navButtons.Length; i++) {
+	            navButtons[i].text = (i == navIndex ? "> " : "") + navLabels[i];
+	        }
+	        if (confirm) {
+	            navButtons[navIndex].GetComponent<UnityEngine.UI.Button>().onClick.Invoke();
+	        }
+	    }
+
 	    private void Update() {
+	        UpdateNavigation();
 	        if (Platformer.CancelPressed()) {
 	            GlobalInputManager.ReturnToMainMenu(); // In the collection: was Application.Quit().
 	        }

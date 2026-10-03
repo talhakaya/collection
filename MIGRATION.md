@@ -288,3 +288,40 @@ What changed:
   were fixed by hand; `legacy_scripts.py` only rewrites the ones used with a dot.
 - Not copied: `UnityVS`-style leftovers, `Thumbs.db`, `PNG.rar`, and 37 images and sounds
   that no scene or prefab references (older art, two unused music tracks).
+
+## crime factory
+
+Unity 2019.2 project folder (product name "Crime Factory"), text format, two build
+scenes (`menu`, `main`), a platformer with its own physics simulator, 84 level files and
+3D backdrops. Ported by `PORTING.md`, with these differences from the Unity 4 games:
+
+- **Only what is referenced was copied.** Starting from the two build scenes, the
+  scripts and `Resources/` (without the `mk` variant), GUID references were followed
+  through scenes, prefabs, materials and model metas: 378 files, 219 MB of the 290.
+  Left out: DOTween (no script uses it), the project's own TextMesh Pro folder (the
+  collection's has the same GUIDs), the `mk` dev scene and prefab set, unused asset-store
+  packs, Standard Assets. 183 MB of what came in is the seven WAV music tracks.
+- **Levels** moved from `StreamingAssets/Levels` to `StreamingAssets/CrimeFactory/Levels`
+  (the first game to use StreamingAssets); `temp.txt` was not copied, and the
+  `OnApplicationQuit` that wrote it is disabled.
+- **Saves.** `PlayerPrefs.DeleteAll()` in "Start From Beginning" would have wiped every
+  game's saves. The five keys are prefixed `CrimeFactory.` and deleted one by one.
+- **Scenes** load by path. `Application.Quit` (menu Quit, Escape in the menu) returns
+  to the collection's menu. Escape or Start in a level goes to the game's menu, unless
+  Shift or Select is held (the collection's own exit chord).
+- **Menu.** It could only be clicked with the mouse. `Menu.UpdateNavigation` adds
+  up/down with a "> " marker and Jump/Enter to press, shown only once a key or the pad is
+  used.
+- **Controller detection** (`Platformer.isUsingController`, which swaps the tutorial
+  signs) read `KeyCode.JoystickButton0-3`; it now compares the last-used device.
+- **Materials.** Unity converted the 43 model materials to URP/Lit on import. The six
+  others on built-in lit shaders (three Standard, three Legacy Diffuse variants) were
+  converted by an editor script. `GrabPassInvert` is on an object that is never switched
+  on and was left alone. 66 material slots inside three asset-store prefabs point at
+  materials the old project no longer had; the backdrop prefabs override them.
+- The tag `Climb` was added to the project.
+- Input map: `Horizontal`, `Vertical` (arrows/WASD, stick with the old 0.5 dead zone,
+  d-pad), `Jump` (Z, A), `Fire1` (X, B), `Fire2` (C, X), `Back` (R, Y), `FireAxis`
+  (right trigger), `Cancel` (Escape, Start). The old Cancel also had joystick button 1,
+  the same button as fire; it was not carried over.
+- The level editor (L key) is still there, as in the original build.
