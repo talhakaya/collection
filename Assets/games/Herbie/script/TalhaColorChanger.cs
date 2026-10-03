@@ -37,6 +37,11 @@ namespace Games.Herbie
 			{
 				ratio = 1f - (Game.time % period) / period;
 				i = Mathf.FloorToInt((Game.time % (period * colors.Length)) / period);
+				// In the collection: rounding can land the division exactly on colors.Length.
+				if (i >= colors.Length)
+				{
+					i = colors.Length - 1;
+				}
 				if (i == colors.Length - 1)
 				{
 					tint.selfColor = new Color(colors[i].r * ratio + colors[0].r * (1f - ratio), colors[i].g * ratio + colors[0].g * (1f - ratio), colors[i].b * ratio + colors[0].b * (1f - ratio), tint.selfColor.a);

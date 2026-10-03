@@ -19,6 +19,11 @@ namespace Games.Herbie
 		void Update ()
 		{
 			i = Mathf.FloorToInt((Game.time % (period * sprites.Length)) / period);
+			// In the collection: rounding can land the division exactly on sprites.Length.
+			if (i >= sprites.Length)
+			{
+				i = sprites.Length - 1;
+			}
 			spriteRenderer.sprite = sprites[i];
 		}
 	}

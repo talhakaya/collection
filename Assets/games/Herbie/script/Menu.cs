@@ -16,9 +16,40 @@ namespace Games.Herbie
 		{
 			Game.miniGame = gameObject;
 			Game.isThereMiniGame = true;
+
+			foreach (TextMesh mesh in GetComponentsInChildren<TextMesh>(true))
+			{
+				if (mesh.text == KeyboardPrompt)
+				{
+					prompts.Add(mesh);
+				}
+			}
+		}
+
+		// In the collection: the "Press Enter" line names the gamepad's button while a
+		// gamepad is the device in use. (The tutorial and "Enter to Restart" are drawn into
+		// the art and stay as they are.)
+		private const string KeyboardPrompt = "Press Enter";
+		private const string GamepadPrompt = "Press A";
+		private readonly System.Collections.Generic.List<TextMesh> prompts = new System.Collections.Generic.List<TextMesh>();
+
+		private static bool usingGamepad()
+		{
+			var pad = UnityEngine.InputSystem.Gamepad.current;
+			var keyboard = UnityEngine.InputSystem.Keyboard.current;
+			return pad != null && (keyboard == null || pad.lastUpdateTime > keyboard.lastUpdateTime);
 		}
 
 		void Update () {
+			string prompt = usingGamepad() ? GamepadPrompt : KeyboardPrompt;
+			foreach (TextMesh mesh in prompts)
+			{
+				if (mesh.text != prompt)
+				{
+					mesh.text = prompt;
+				}
+			}
+
 			float ratio = (Game.time % (period * 2)) / period;
 			float ratio2 = (ratio + 0.5f) % 2f;
 			float scaleX = 1f;

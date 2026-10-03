@@ -33,10 +33,44 @@ namespace Games.Herbie
 			tint.selfColor = Game.color1;
 			walkLines = lines.walk;
 			idleLines = lines.idle;
+
+			// In the collection: a body at rest goes to sleep and stops getting
+			// OnTriggerStay2D, which is where every interaction is read.
+			GetComponent<Rigidbody2D>().sleepMode = RigidbodySleepMode2D.NeverSleep;
+		}
+
+		// In the collection: the Interact press, held until one physics step has seen it.
+		// The game reads the press in OnTriggerStay2D, which runs on physics steps (50 a
+		// second), while a press lasts one rendered frame. At 60 frames a second about one
+		// press in six fell between steps and was lost; on a faster screen most would be.
+		private bool interactDown;
+		private bool interactSeen;
+
+		void FixedUpdate ()
+		{
+			if (interactSeen)
+			{
+				interactDown = false;
+				interactSeen = false;
+			}
+			else if (interactDown)
+			{
+				interactSeen = true;
+			}
+		}
+
+		void OnDisable ()
+		{
+			interactDown = false;
+			interactSeen = false;
 		}
 
 		void Update ()
 		{
+			if (TaloketoInputManager.GetButtonDown("Interact"))
+			{
+				interactDown = true;
+			}
 			bool walking = false;
 			if (TaloketoInputManager.GetAxisRaw("Horizontal") != 0f)
 			{
@@ -209,7 +243,7 @@ namespace Games.Herbie
 			}
 			else if (other.name == "Casette")
 			{
-				if (TaloketoInputManager.GetButtonDown("Interact"))
+				if (interactDown)
 				{
 					other.GetComponent<Casette>().done = true;
 					other.enabled = false;
@@ -221,7 +255,7 @@ namespace Games.Herbie
 			}
 			else if (other.name == "Drug")
 			{
-				if (TaloketoInputManager.GetButtonDown("Interact"))
+				if (interactDown)
 				{
 					other.GetComponent<Casette>().done = true;
 					other.enabled = false;
@@ -233,7 +267,7 @@ namespace Games.Herbie
 			}
 			else if (other.name == "Mother")
 			{
-				if (TaloketoInputManager.GetButtonDown("Interact"))
+				if (interactDown)
 				{
 					if (TalhaTexting.iGet(other.gameObject) == 6)
 					{
@@ -248,7 +282,7 @@ namespace Games.Herbie
 			}
 			else if (other.name == "Grave")
 			{
-				if (TaloketoInputManager.GetButtonDown("Interact"))
+				if (interactDown)
 				{
 					Game.startMiniGame("end1");
 					Game.instance.music.Play();
@@ -256,7 +290,7 @@ namespace Games.Herbie
 			}
 			else if (other.name == "Whore")
 			{
-				if (TaloketoInputManager.GetButtonDown("Interact"))
+				if (interactDown)
 				{
 					if (coke.activeSelf)
 					{
@@ -279,14 +313,14 @@ namespace Games.Herbie
 					TalhaTexting.next(whore);
 					talkSound(2f);
 				}
-				if (holdingWhore && TaloketoInputManager.GetButtonDown("Interact"))
+				if (holdingWhore && interactDown)
 				{
 					Game.startMiniGame("sex");
 				}
 			}
 			else if (other.name == "Muscle")
 			{
-				if (TaloketoInputManager.GetButtonDown("Interact"))
+				if (interactDown)
 				{
 					if (!Game.muscleBeaten && TalhaTexting.iGet(other.gameObject) == 0)
 					{
@@ -299,7 +333,7 @@ namespace Games.Herbie
 			}
 			else if (other.name == "Pacman")
 			{
-				if (TaloketoInputManager.GetButtonDown("Interact"))
+				if (interactDown)
 				{
 					Game.startMiniGame("pacman");
 				}

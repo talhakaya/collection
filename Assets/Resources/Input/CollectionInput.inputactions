@@ -5216,6 +5216,39 @@
                     "isPartOfComposite": true
                 },
                 {
+                    "name": "1DAxis",
+                    "id": "a52864ef-891c-4147-912a-4b066a161567",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Horizontal",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Negative",
+                    "id": "96f5d22a-e93e-4c75-871b-86ce84ffd225",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Horizontal",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Positive",
+                    "id": "017bd72d-d14c-46db-8165-5e5477f9bcdc",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Horizontal",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
                     "name": "",
                     "id": "82ce0a9a-e911-4e5a-83b2-16257cb18bc3",
                     "path": "<Gamepad>/leftStick/x",
@@ -5293,6 +5326,39 @@
                     "isPartOfComposite": true
                 },
                 {
+                    "name": "1DAxis",
+                    "id": "688b9dd4-17b5-45e8-bc6d-666bebb7cdf1",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Vertical",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Negative",
+                    "id": "898860a3-2a2b-4d87-a150-7b5fee87785a",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Vertical",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Positive",
+                    "id": "d82c7724-1bdf-43a4-85ea-ca0207de1a08",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Vertical",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
                     "name": "",
                     "id": "b33cc026-e9d2-4d10-9adc-5c827c2cf203",
                     "path": "<Gamepad>/leftStick/y",
@@ -5340,6 +5406,17 @@
                     "name": "",
                     "id": "d6a0f827-e991-4497-ba81-1bdc5c198a1b",
                     "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "328b1101-e459-4553-9b26-5094ebf0558a",
+                    "path": "<Keyboard>/z",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
