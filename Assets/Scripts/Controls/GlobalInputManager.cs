@@ -61,6 +61,7 @@ namespace Collection.Controls
 		// cursor is drawn at all - see UpdateActiveDevice.
 		private bool mouseEverUsed;
 
+		private Canvas cursorCanvas;
 		private RectTransform cursorRect;
 		private Image cursorImage;
 		private Sprite defaultCursorSprite;
@@ -331,6 +332,10 @@ namespace Collection.Controls
 			if (cursorImage.enabled != visible)
 			{
 				cursorImage.enabled = visible;
+				if (visible)
+				{
+					ResortCursorCanvas();
+				}
 			}
 
 			if (!visible)
@@ -340,6 +345,24 @@ namespace Collection.Controls
 
 			cursorRect.sizeDelta = cursorBaseSize * (Screen.height / CursorReferenceHeight);
 			cursorRect.anchoredPosition = screenPosition;
+		}
+
+		/// <summary>
+		/// Makes Unity sort the cursor's canvas above the others again. Its order is the
+		/// highest there is, but Unity can keep drawing it under an overlay canvas a game
+		/// creates later (the full-screen picture of the Flash, Flixel and Phaser ports) until
+		/// the order is changed - set to the same value, nothing happens. So it is nudged off
+		/// and back.
+		/// </summary>
+		private void ResortCursorCanvas()
+		{
+			if (cursorCanvas == null)
+			{
+				return;
+			}
+
+			cursorCanvas.sortingOrder = short.MaxValue - 1;
+			cursorCanvas.sortingOrder = short.MaxValue;
 		}
 
 		/// Whether a gamepad is the thing actually moving the pointer right now, not just
@@ -404,6 +427,7 @@ namespace Collection.Controls
 			Canvas canvas = canvasGo.GetComponent<Canvas>();
 			canvas.renderMode = RenderMode.ScreenSpaceOverlay;
 			canvas.sortingOrder = short.MaxValue;
+			cursorCanvas = canvas;
 
 			var cursorGo = new GameObject("Cursor", typeof(RectTransform), typeof(Image));
 			cursorGo.transform.SetParent(canvasGo.transform, false);

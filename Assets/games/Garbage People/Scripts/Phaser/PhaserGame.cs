@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Collection.Controls;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Games.GarbagePeople
 {
@@ -179,8 +180,8 @@ namespace Games.GarbagePeople
 	/// update, in Phaser's order. The game counts frames for its hit rate, so it runs on
 	/// steps rather than on Unity's frame rate.
 	///
-	/// The art is drawn at full resolution and smooth: the camera draws straight to the
-	/// screen, as large as the 16:9 picture fits, with bars where it does not.
+	/// The art is drawn at full resolution and smooth, as large as the 16:9 picture fits on
+	/// the screen, with bars where it does not.
 	/// </summary>
 	public class PhaserGame : MonoBehaviour
 	{
@@ -195,6 +196,9 @@ namespace Games.GarbagePeople
 		private readonly Dictionary<string, Scene> scenes = new Dictionary<string, Scene>();
 		private Scene active;
 		private UnityEngine.Camera unityCamera;
+		private RenderTexture target;
+		private RawImage screen;
+		private RectTransform screenRect;
 		private Transform displayRoot;
 		private Transform audioRoot;
 		private double accumulator;
@@ -228,7 +232,9 @@ namespace Games.GarbagePeople
 		{
 			instance = this;
 			SpriteAnimations.Defined.Clear();
-			GlobalInputManager.HideGameCursor();
+			// The collection's cursor, shown while the mouse is in use as in the browser; the
+			// game draws no pointer of its own.
+			GlobalInputManager.ClearGameCursor();
 
 			displayRoot = new UnityEngine.GameObject("Display").transform;
 			displayRoot.SetParent(transform, false);
@@ -246,6 +252,16 @@ namespace Games.GarbagePeople
 			unityCamera.nearClipPlane = 0.1f;
 			unityCamera.farClipPlane = 100f;
 			unityCamera.depth = 10;
+
+			var canvasObject = new UnityEngine.GameObject("Screen", typeof(Canvas));
+			canvasObject.transform.SetParent(transform, false);
+			canvasObject.GetComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
+			var imageObject = new UnityEngine.GameObject("Picture", typeof(RectTransform), typeof(RawImage));
+			imageObject.transform.SetParent(canvasObject.transform, false);
+			screen = imageObject.GetComponent<RawImage>();
+			screen.raycastTarget = false;
+			screenRect = (RectTransform)imageObject.transform;
+			screenRect.anchorMin = screenRect.anchorMax = screenRect.pivot = new Vector2(0.5f, 0.5f);
 
 			foreach (Scene s in sceneList)
 			{
@@ -323,24 +339,59 @@ namespace Games.GarbagePeople
 			}
 		}
 
-		/// The 16:9 picture, as large as fits, centred.
+		/// <summary>
+		/// The 16:9 picture, as large as fits, centred: the camera draws into a texture of
+		/// that many screen pixels, shown on a full-screen canvas over the scene's camera,
+		/// which clears the bars.
+		///
+		/// Not straight to the screen: drawn that way, after the scene's camera, it covered
+		/// the collection's cursor, which Unity draws with the first camera.
+		/// </summary>
 		private void fitViewport()
 		{
 			float aspect = (float)WIDTH / HEIGHT;
-			float windowAspect = (float)Screen.width / Screen.height;
-			Rect rect = windowAspect > aspect
-				? new Rect((1f - aspect / windowAspect) / 2f, 0f, aspect / windowAspect, 1f)
-				: new Rect(0f, (1f - windowAspect / aspect) / 2f, 1f, windowAspect / aspect);
-			if (unityCamera.rect != rect)
+			int width = Screen.width;
+			int height = Screen.height;
+			if ((float)width / height > aspect)
 			{
-				unityCamera.rect = rect;
+				width = Mathf.RoundToInt(height * aspect);
 			}
+			else
+			{
+				height = Mathf.RoundToInt(width / aspect);
+			}
+
+			width = Mathf.Max(1, width);
+			height = Mathf.Max(1, height);
+			if (target != null && target.width == width && target.height == height)
+			{
+				return;
+			}
+
+			unityCamera.targetTexture = null;
+			if (target != null)
+			{
+				target.Release();
+				Destroy(target);
+			}
+
+			target = new RenderTexture(width, height, 0, RenderTextureFormat.ARGB32);
+			target.Create();
+			unityCamera.targetTexture = target;
+			screen.texture = target;
+			screenRect.sizeDelta = new Vector2(width, height);
 		}
 
 		private void OnDestroy()
 		{
 			Sound.StopAll();
 			SpriteAnimations.Defined.Clear();
+			if (target != null)
+			{
+				target.Release();
+				Destroy(target);
+			}
+
 			if (instance == this)
 			{
 				instance = null;
