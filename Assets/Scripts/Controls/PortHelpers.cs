@@ -86,6 +86,41 @@ namespace Collection.Controls
 			get { return aimingWithStick; }
 		}
 
+		static readonly System.Collections.Generic.List<UnityEngine.EventSystems.RaycastResult> uiHits = new System.Collections.Generic.List<UnityEngine.EventSystems.RaycastResult>();
+
+		/// <summary>
+		/// For games with uGUI buttons and the collection's pointer emulation. The games'
+		/// StandaloneInputModule only knows the real mouse, so a click of the emulated
+		/// pointer never reaches their buttons. Call this once per frame: when the emulated
+		/// pointer clicks, the Button under it is pressed, or the InputField under it gets
+		/// the keyboard focus. Does nothing while the real mouse is in use.
+		/// </summary>
+		public static void ClickUiWithEmulatedPointer()
+		{
+			if (!GlobalInputManager.MouseEmulationActive || !GlobalInputManager.GetMouseButtonDown(0)) return;
+			UnityEngine.EventSystems.EventSystem system = UnityEngine.EventSystems.EventSystem.current;
+			if (system == null) return;
+			var data = new UnityEngine.EventSystems.PointerEventData(system);
+			data.position = GlobalInputManager.EmulatedMousePosition;
+			uiHits.Clear();
+			system.RaycastAll(data, uiHits);
+			foreach (UnityEngine.EventSystems.RaycastResult hit in uiHits)
+			{
+				var button = hit.gameObject.GetComponentInParent<UnityEngine.UI.Button>();
+				if (button != null && button.isActiveAndEnabled && button.interactable)
+				{
+					button.onClick.Invoke();
+					return;
+				}
+				var field = hit.gameObject.GetComponentInParent<UnityEngine.UI.InputField>();
+				if (field != null && field.isActiveAndEnabled && field.interactable)
+				{
+					field.ActivateInputField();
+					return;
+				}
+			}
+		}
+
 		/// <summary>A key that stays on the keyboard only (debug keys, cheats).</summary>
 		public static bool KeyDown(Key key)
 		{

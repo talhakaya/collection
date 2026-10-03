@@ -185,6 +185,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/games/Kayabros Prototype 4/main.unity
     guid: 4eb9b57568289f44c8ab5bb4592a2ad4
+  - enabled: 1
+    path: Assets/games/Oracle/test.unity
+    guid: f9fabaccb4094154ab69ab30427b1806
+  - enabled: 1
+    path: Assets/games/Sweating In Public/scene0.unity
+    guid: 65c688aae2053ab47a73e56c5e39340a
+  - enabled: 1
+    path: Assets/games/Fuck/main.unity
+    guid: 0ab4bfca15e131e478fcdaee337d03c6
+  - enabled: 1
+    path: Assets/games/Virtual Pet/main.unity
+    guid: 293bb4ae384f59e48aa4b165ebea12da
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

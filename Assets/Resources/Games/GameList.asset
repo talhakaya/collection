@@ -329,3 +329,39 @@ MonoBehaviour:
     cursorHotspot: {x: 0, y: 0}
     entryScene: {fileID: 102900000, guid: 4eb9b57568289f44c8ab5bb4592a2ad4, type: 3}
     entryScenePath: Assets/games/Kayabros Prototype 4/main.unity
+  - gameName: Oracle
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: f9fabaccb4094154ab69ab30427b1806, type: 3}
+    entryScenePath: Assets/games/Oracle/test.unity
+  - gameName: Sweating In Public
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 1
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: 65c688aae2053ab47a73e56c5e39340a, type: 3}
+    entryScenePath: Assets/games/Sweating In Public/scene0.unity
+  - gameName: Fuck
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 0
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: 0ab4bfca15e131e478fcdaee337d03c6, type: 3}
+    entryScenePath: Assets/games/Fuck/main.unity
+  - gameName: Virtual Pet
+    description: 
+    gravity: {x: 0, y: -9.81}
+    enableMouseEmulation: 1
+    mouseEmulationSpeed: 1000
+    cursorTexture: {fileID: 0}
+    cursorHotspot: {x: 0, y: 0}
+    entryScene: {fileID: 102900000, guid: 293bb4ae384f59e48aa4b165ebea12da, type: 3}
+    entryScenePath: Assets/games/Virtual Pet/main.unity
