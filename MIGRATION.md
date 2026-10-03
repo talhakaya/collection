@@ -473,3 +473,18 @@ Ported by `PORTING.md`:
   stop with the application.
 - The Escape-quit is gone; `Game.time` starts over in `Awake`. No action map, no mouse
   emulation: there is nothing to press.
+
+## hello fractals
+
+Unity 4 project folder `hello fractals` (product name "HelloFractals"), binary format,
+one scene: a 160 by 90 grid of sprites coloured by a random quadratic in x, y and time.
+Ported by `PORTING.md`:
+
+- **Keys became actions**, each with a gamepad button: `New` (Space, A; the mouse
+  button still works too), `Fast` (Return, right trigger, held), `BlackWhite` (left
+  Ctrl, Y), and the held function keys `FunctionQ` (Q, X), `FunctionW` (W, B),
+  `FunctionE` (E), `FunctionR` (R, LB), `FunctionT` (T, RB).
+- **The function keys are read once per frame** in `Game.Update`. Each of the 14400
+  rectangles used to ask for five keys itself every frame.
+- Statics (`time`, `trigon`, `blackWhite`) start over in `Game.Awake`; the Escape-quit
+  is gone.
