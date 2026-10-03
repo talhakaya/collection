@@ -197,6 +197,21 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/games/Virtual Pet/main.unity
     guid: 293bb4ae384f59e48aa4b165ebea12da
+  - enabled: 1
+    path: Assets/games/Gridsplosion/scene0.unity
+    guid: ce5f58a4bbb61a045817cb2506e8e584
+  - enabled: 1
+    path: Assets/games/Slime Fight/Scenes/scene1.unity
+    guid: a2a0b8bee9c60f94792c26d39712c64b
+  - enabled: 1
+    path: Assets/games/GGJ2015/scene0.unity
+    guid: 84b4d8a61244d5b4d8bdec74aec62e99
+  - enabled: 1
+    path: Assets/games/But You Are A Horse/scene0.unity
+    guid: 4c4ddb023179f7d4196cce20d1e62ea0
+  - enabled: 1
+    path: Assets/games/But You Are A Horse/test.unity
+    guid: 9cf4c4d122da41f9bf9eecceed01c9ef
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
