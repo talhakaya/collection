@@ -284,6 +284,21 @@ public class tk2dCamera : MonoBehaviour
 		if (allCameras.IndexOf(this) == -1) {
 			allCameras.Add(this);
 		}
+
+		// In the collection: the render pipeline never sends OnPreCull, so the projection was
+		// only set once in OnEnable and ZoomFactor changes did nothing. Its event does the same job.
+		UnityEngine.Rendering.RenderPipelineManager.beginCameraRendering -= OnBeginCameraRendering;
+		UnityEngine.Rendering.RenderPipelineManager.beginCameraRendering += OnBeginCameraRendering;
+	}
+
+	void OnDisable() {
+		UnityEngine.Rendering.RenderPipelineManager.beginCameraRendering -= OnBeginCameraRendering;
+	}
+
+	void OnBeginCameraRendering(UnityEngine.Rendering.ScriptableRenderContext context, Camera cam) {
+		if (cam == UnityCamera) {
+			OnPreCull();
+		}
 	}
 
 	void OnDestroy() {
