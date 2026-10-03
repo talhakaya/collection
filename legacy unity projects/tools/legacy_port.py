@@ -20,7 +20,7 @@ def run(*a):
     r=subprocess.run(list(a),capture_output=True,text=True,encoding='utf-8',errors='replace'); return (r.stdout+r.stderr).strip()
 print(run('python',os.path.join(S,'legacy_copy.py'),L,G,res,os.path.join(S,'list.txt')).split('\n')[-1])
 print(run('python','legacy unity projects/tools/legacy_reguid.py',G).split('\n')[-1])
-out=run('python','legacy unity projects/tools/legacy_scripts.py',G,re.sub(r"[^A-Za-z0-9 ]","",name))
+out=run('python','legacy unity projects/tools/legacy_scripts.py',G,os.environ.get('NS') or re.sub(r"[^A-Za-z0-9 ]","",name))
 print('\n'.join(l for l in out.split('\n') if 'BY HAND' in l or 'declared' in l)[:1500])
 ESC=re.compile(r'[ \t]*if \((?:Input|TaloketoInputManager)\.GetKey(?:Down)?\(KeyCode\.Escape\)\)\s*\{\s*Application\.Quit\s*\(\);\s*\}[ \t]*\r?\n')
 for d,_,fs in os.walk(G):
