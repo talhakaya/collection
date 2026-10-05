@@ -34,12 +34,19 @@ namespace Games.Golfinity
 		private RectTransform owner;
 		private string lastGlyph;
 		private int lastPadId = -1;
+		private GamepadKind lastPadKind;
+		private bool animated;
+		private bool lastBlink;
 		private readonly Vector3[] corners = new Vector3[4];
 
 		private void Awake()
 		{
 			text = GetComponent<TextMeshProUGUI>();
 			self = (RectTransform)transform;
+
+			// In the collection: the prompt is the collection's glyph for the button rather
+			// than its letter in the game's font, in the grey of the buttons' icons.
+			text.spriteAsset = InputPrompts.SpriteAsset();
 
 			ButtonExtended button = GetComponentInParent<ButtonExtended>(true);
 			if (button != null)
@@ -123,17 +130,21 @@ namespace Games.Golfinity
 				return;
 			}
 
-			// Resolving a binding to its display string allocates, so it is done only when the
-			// pad actually changes rather than every frame for every prompt.
+			// Resolving a binding to its glyph allocates, so it is done only when the pad
+			// actually changes (or an animated glyph is due to swap) rather than every frame
+			// for every prompt.
 			Gamepad pad = Gamepad.current;
 			int padId = pad != null ? pad.deviceId : 0;
-			if (padId == lastPadId && lastGlyph != null)
+			bool blink = InputPrompts.Blink;
+			if (padId == lastPadId && InputPrompts.PadKind == lastPadKind && lastGlyph != null && !(animated && blink != lastBlink))
 			{
 				return;
 			}
 
 			lastPadId = padId;
-			string glyph = GolfinityGamepad.GamepadGlyph(actionName);
+			lastPadKind = InputPrompts.PadKind;
+			lastBlink = blink;
+			string glyph = GolfinityGamepad.GamepadGlyph(actionName, out animated);
 			if (glyph != lastGlyph)
 			{
 				lastGlyph = glyph;

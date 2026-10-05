@@ -110,40 +110,41 @@ namespace Games.Golfinity
 
 		/// A gamepad being connected doesn't mean it's the thing driving the game right now - it
 		/// might just be sitting there while the player uses mouse/keyboard, and the prompts
-		/// would be lying. Compares each device's own InputSystem timestamp for its last actual
-		/// input event, so whichever was touched most recently wins.
+		/// would be lying.
+		///
+		/// In the collection: the collection decides which device the player is using, for
+		/// every game's prompts and for the cursor (InputPrompts). This compared the devices'
+		/// timestamps itself.
 		private void UpdateActiveDevice()
 		{
-			Gamepad pad = Gamepad.current;
-			if (pad == null)
-			{
-				usingGamepad = false;
-				return;
-			}
-
-			double pointerTime = 0.0;
-			if (Mouse.current != null) pointerTime = System.Math.Max(pointerTime, Mouse.current.lastUpdateTime);
-			if (Keyboard.current != null) pointerTime = System.Math.Max(pointerTime, Keyboard.current.lastUpdateTime);
-
-			if (pad.lastUpdateTime > pointerTime) usingGamepad = true;
-			else if (pointerTime > pad.lastUpdateTime) usingGamepad = false;
-			// Equal (neither touched yet this session) - keep whatever it already was.
+			usingGamepad = InputPrompts.RawScheme == InputScheme.Gamepad;
 		}
 
 		/// Refreshes the labels: hidden unless the player is actively driving with a pad right
 		/// now, and re-read from the binding so a rebind shows up. Only writes when the string
 		/// actually changes - assigning TMP.text every frame forces a mesh rebuild.
-		/// The pad button bound to an action, as a short display string ("X", "Y", "B").
-		public static string GamepadGlyph(string actionName)
+		/// The pad button bound to an action, as text for a prompt: the collection's glyph for
+		/// it on the pad in use (a TextMesh Pro sprite tag, for a text whose sprite asset is
+		/// InputPrompts.SpriteAsset), or its short name ("X", "Y") if the sheet has none.
+		/// animated says the glyph is one that swaps sprites, so the text is to be fetched
+		/// again whenever InputPrompts.Blink flips.
+		public static string GamepadGlyph(string actionName, out bool animated)
 		{
+			animated = false;
 			InputAction action = TaloketoInputManager.GetAction(actionName);
 			if (action == null) return "";
 
 			for (int i = 0; i < action.bindings.Count; i++)
 			{
-				InputBinding binding = action.bindings[i];
-				if (binding.path != null && binding.path.StartsWith("<Gamepad>"))
+				string path = action.bindings[i].effectivePath;
+				if (path != null && path.StartsWith("<Gamepad>"))
 				{
+					if (InputPrompts.TryGetGlyph(path, InputPrompts.PadKind, out InputGlyph glyph))
+					{
+						animated = glyph.Animated;
+						return "<size=120%><sprite name=\"" + glyph.Current + "\" color=#404040></size>";
+					}
+
 					return action.GetBindingDisplayString(i);
 				}
 			}
