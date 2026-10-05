@@ -14,6 +14,9 @@ namespace Collection.Story
     //   character rides up on whatever ground comes up under its feet. The television, which stands in the sea,
     //   goes down with the sea.
     //
+    //   As the land comes up the light turns to the desert's: the sun goes yellow and the desert's own look (a
+    //   post-processing volume: colour grading, contrast, bloom) comes in over the sea's.
+    //
     //   End (when the conversation is over): back to the follow camera, on land.
     //
     // It happens once in a save slot (its NPCTrigger is onlyOnce). For a game in which it has happened,
@@ -45,13 +48,34 @@ namespace Collection.Story
         [Tooltip("How far the sea sinks (m).")]
         public float seaDrop = 0.85f;
 
+        [Header("The desert's light")]
+        public Light sun;
+        [Tooltip("The sun's colour once the land is up.")]
+        public Color sunColour = new Color(1f, 0.84f, 0.5f);
+        [Tooltip("The desert's look, a global volume over the scene's own. Its weight goes from 0 to 1 as the land comes up.")]
+        public UnityEngine.Rendering.Volume desertLook;
+
         static readonly int TiltShiftDisabledId = Shader.PropertyToID("_TiltShiftDisabled");
 
         readonly List<Vector3> places = new List<Vector3>();
         Coroutine rising;
+        Color sunBefore;
+
+        // How far the light is the desert's: 0 the sea's, 1 the desert's.
+        void SetDesert(float amount)
+        {
+            if (sun != null)
+                sun.color = Color.Lerp(sunBefore, sunColour, amount);
+            if (desertLook != null)
+                desertLook.weight = amount;
+        }
 
         void Awake()
         {
+            if (sun != null)
+                sunBefore = sun.color;
+            SetDesert(0f);
+
             // Where the land belongs, before anything moves it.
             foreach (GameObject part in world)
                 places.Add(part != null ? part.transform.position : Vector3.zero);
@@ -85,6 +109,7 @@ namespace Collection.Story
             SetHeight(water, water.position.y - seaDrop);
             SetHeight(floor, floor.position.y - seaDrop);
             SetHeight(television, television.position.y - seaDrop);
+            SetDesert(1f);
         }
 
         // The ground at a place: the higher of the sea's floor and the land, if the land is there.
@@ -133,6 +158,7 @@ namespace Collection.Story
                     if (world[i] != null)
                         world[i].transform.position = places[i] + Vector3.down * (landDepth * (1f - eased));
 
+                SetDesert(eased);
                 float drop = seaDrop * eased;
                 SetHeight(water, waterStart - drop);
                 SetHeight(floor, floorStart - drop);

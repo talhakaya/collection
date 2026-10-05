@@ -2091,7 +2091,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4283226623
   m_fontColor: {r: 1, g: 0.85, b: 0.3, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -2104,7 +2104,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -3344,6 +3344,55 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 416219778}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &421654520
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 421654522}
+  - component: {fileID: 421654521}
+  m_Layer: 0
+  m_Name: Desert Look
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &421654521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 421654520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsGlobal: 1
+  priority: 1
+  blendDistance: 0
+  weight: 0
+  sharedProfile: {fileID: 11400000, guid: 3df8edd15171d6e4cb86e7f278ecb9ad, type: 2}
+--- !u!4 &421654522
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 421654520}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &434892773
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4674,6 +4723,7 @@ MonoBehaviour:
   televisionTrigger: {fileID: 912867076}
   television: {fileID: 1137044733}
   televisionAppearsAfter: 1
+  televisionFadeTime: 3
   allArtifactsTrigger: {fileID: 1779693307}
   artifacts:
   - {fileID: 1626706175}
@@ -8265,6 +8315,9 @@ MonoBehaviour:
   water: {fileID: 1767114987}
   floor: {fileID: 1706522789}
   seaDrop: 0.85
+  sun: {fileID: 410087040}
+  sunColour: {r: 1, g: 0.92, b: 0.72, a: 1}
+  desertLook: {fileID: 421654521}
 --- !u!4 &1137044736
 Transform:
   m_ObjectHideFlags: 0
@@ -9926,6 +9979,7 @@ MonoBehaviour:
   hipHeight: 0.38
   fallChance: 0.2
   fallWindow: {x: 0.25, y: 0.75}
+  fallCarry: 0.55
 --- !u!1 &1500000011
 GameObject:
   m_ObjectHideFlags: 0
@@ -13731,3 +13785,4 @@ SceneRoots:
   - {fileID: 648929598}
   - {fileID: 675054525}
   - {fileID: 1795467328}
+  - {fileID: 421654522}
