@@ -14,30 +14,36 @@ namespace Games.BloodSpace
 			// so it is told to stop while this game draws its own.
 			GlobalInputManager.HideGameCursor();
 			spriteRenderer = GetComponent<SpriteRenderer> ();
-			if (PlayerPrefs.GetInt ("BloodSpace.mouseMode", 0) == 0)
-			{
-				Game.mouseMode = false;
-			}
-			else
-			{
-				Game.mouseMode = true;
-			}
+			Game.mouseMode = false;
+		}
+
+		// In the collection: the M key that switched mouse control on and off is gone. The
+		// ship follows the mouse from the moment the mouse is moved, and goes back
+		// to the keys or the gamepad from the moment one of those steers it.
+		private const float MouseMoveToTakeOver = 2f;
+
+		private static bool steeredByKeysOrPad()
+		{
+			return TaloketoInputManager.GetAxis("Horizontal0") != 0f || TaloketoInputManager.GetAxis("Vertical0") != 0f
+				|| Mathf.Abs(TaloketoInputManager.GetAxis("Horizontal1")) > 0.3f || Mathf.Abs(TaloketoInputManager.GetAxis("Vertical1")) > 0.3f;
+		}
+
+		private static bool mouseUsed()
+		{
+			UnityEngine.InputSystem.Mouse mouse = UnityEngine.InputSystem.Mouse.current;
+			return mouse != null && mouse.delta.ReadValue().sqrMagnitude > MouseMoveToTakeOver * MouseMoveToTakeOver;
 		}
 
 		void Update ()
 		{
 			transform.position = MousePosition.get ();
-			if (TaloketoInputManager.GetButtonDown("MouseOnOff"))
+			if (steeredByKeysOrPad())
 			{
-				Game.mouseMode = !Game.mouseMode;
-				if (Game.mouseMode)
-				{
-					PlayerPrefs.SetInt("BloodSpace.mouseMode", 1);
-				}
-				else
-				{
-					PlayerPrefs.SetInt("BloodSpace.mouseMode", 0);
-				}
+				Game.mouseMode = false;
+			}
+			else if (mouseUsed())
+			{
+				Game.mouseMode = true;
 			}
 
 			float alpha = 1f;

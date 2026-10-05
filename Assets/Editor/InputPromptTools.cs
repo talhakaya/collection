@@ -203,16 +203,37 @@ namespace Collection.EditorTools
 		/// </summary>
 		public static InputPromptText AddPromptOverSprite(SpriteRenderer sprite, string template, Vector2 position, float keyHeight, bool shadowed, Color tint)
 		{
+			Vector3 world = sprite.transform.position + sprite.transform.rotation * new Vector3(position.x, position.y, 0f);
+			InputPromptText prompt = AddPrompt(sprite.transform, world, template, keyHeight, shadowed, sprite.color * tint);
+
+			TextMeshPro tmp = prompt.GetComponent<TextMeshPro>();
+			tmp.sortingLayerID = sprite.sortingLayerID;
+			tmp.sortingOrder = sprite.sortingOrder + 1;
+
+			prompt.colourFrom = sprite;
+			prompt.colourTint = tint;
+			EditorUtility.SetDirty(sprite);
+			return prompt;
+		}
+
+		/// <summary>
+		/// A prompt as a child of any object, with its middle at a world position: a
+		/// TextMesh Pro text with an InputPromptText. It moves, shows and is destroyed with
+		/// the parent, at the same size whatever the parent's scale. keyHeight is how tall a
+		/// key cap comes out, in world units.
+		/// </summary>
+		public static InputPromptText AddPrompt(Transform parent, Vector3 worldPosition, string template, float keyHeight, bool shadowed, Color color)
+		{
 			// A key cap is 74 of the sheet's pixels, drawn at font size / 68 per pixel, and a
 			// 3D text's units are a tenth of its font size.
 			const float KeyHeightPerFontSize = 74f / 68f * 0.1f;
 
 			var go = new GameObject("prompt");
-			go.layer = sprite.gameObject.layer;
-			go.transform.SetParent(sprite.transform, false);
-			Vector3 scale = sprite.transform.lossyScale;
+			go.layer = parent.gameObject.layer;
+			go.transform.SetParent(parent, false);
+			Vector3 scale = parent.lossyScale;
 			go.transform.localScale = new Vector3(1f / scale.x, 1f / scale.y, 1f);
-			go.transform.localPosition = new Vector3(position.x / scale.x, position.y / scale.y, 0f);
+			go.transform.position = worldPosition;
 
 			TextMeshPro tmp = go.AddComponent<TextMeshPro>();
 			tmp.rectTransform.sizeDelta = Vector2.zero;
@@ -220,17 +241,13 @@ namespace Collection.EditorTools
 			tmp.textWrappingMode = TextWrappingModes.NoWrap;
 			tmp.overflowMode = TextOverflowModes.Overflow;
 			tmp.fontSize = keyHeight / KeyHeightPerFontSize;
-			tmp.color = sprite.color * tint;
-			tmp.sortingLayerID = sprite.sortingLayerID;
-			tmp.sortingOrder = sprite.sortingOrder + 1;
+			tmp.color = color;
 			tmp.text = template;
 
 			InputPromptText prompt = go.AddComponent<InputPromptText>();
 			prompt.template = template;
 			prompt.shadowed = shadowed;
-			prompt.colourFrom = sprite;
-			prompt.colourTint = tint;
-			EditorUtility.SetDirty(sprite);
+			EditorUtility.SetDirty(parent.gameObject);
 			return prompt;
 		}
 
