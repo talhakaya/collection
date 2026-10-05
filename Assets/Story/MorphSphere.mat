@@ -34,12 +34,18 @@ Material:
     m_Ints: []
     m_Floats:
     - _Back: 1
-    - _Down: 1
-    - _Front: 1
+    - _Down: 0.536
+    - _Front: 0.89
     - _Left: 1
-    - _Right: 1
+    - _Right: 0.648
+    - _ScanlineCount: 56
+    - _ScanlineSpeed: 1.5
+    - _Scanlines: 0.45
+    - _ScreenPixels: 56
     - _Seam: 0.02
-    - _Up: 1
+    - _Static: 0.18
+    - _StaticSize: 112
+    - _Up: 0.395
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
