@@ -25,6 +25,10 @@ namespace Collection.Controls
 		public class Entry
 		{
 			public string gameName;
+
+			[Tooltip("Leaves the game out of the main menu's list of games. Off for every game unless ticked. The game's scenes and files are still part of the build; this only takes away the way in.")]
+			public bool hidden;
+
 			[TextArea] public string description;
 			public Vector2 gravity;
 

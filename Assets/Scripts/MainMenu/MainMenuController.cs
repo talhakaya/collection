@@ -286,6 +286,13 @@ namespace Collection.MainMenu
 						continue;
 					}
 
+					// Hidden games are left out. They are in seenFolders by now, so the safety
+					// net below does not bring them back.
+					if (entry.hidden)
+					{
+						continue;
+					}
+
 					string scenePath = !string.IsNullOrEmpty(entry.entryScenePath)
 						? entry.entryScenePath
 						: FindFirstRegisteredScene(entry.gameName);
