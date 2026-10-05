@@ -115,6 +115,14 @@ namespace Collection.EditorTools
 				asset.material = material;
 			}
 
+			// The project has two shaders of this name; Shader.Find gives an old copy under
+			// TextMesh Pro/Resources that lacks properties the text components set.
+			Shader current = AssetDatabase.LoadAssetAtPath<Shader>("Assets/TextMesh Pro/Shaders/TMP_Sprite.shader");
+			if (current != null)
+			{
+				material.shader = current;
+			}
+
 			material.SetTexture(ShaderUtilities.ID_MainTex, texture);
 
 			asset.UpdateLookupTables();
