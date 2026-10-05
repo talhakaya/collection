@@ -34,6 +34,26 @@ God: and for that, the sea needs to go.
 <<cutscene land>>
 ===
 
+title: DesertHardBit
+---
+God: Play game
+===
+
+title: DesertGlue
+---
+God: Play game
+===
+
+title: DesertStick
+---
+God: Play game
+===
+
+title: TVArtifacts
+---
+God: (placeholder: you have the stick, the hard bit and the glue. the next cutscene goes here)
+===
+
 title: GreeterFirst
 ---
 Greeter: Oh. Hello.

@@ -96,7 +96,9 @@ namespace Collection.UI
 			screen = new MenuScreen { title = "Paused" };
 			screen.Button("Continue", Resume);
 			screen.Button("Settings", SettingsScreen.Open);
-			screen.Button("Exit to main menu", () =>
+			// A game started from inside the story is left for the story (ReturnToMainMenu
+			// sees to that).
+			screen.Button(Collection.Story.StoryGames.Playing ? "Back to the story" : "Exit to main menu", () =>
 			{
 				Resume();
 				GlobalInputManager.ReturnToMainMenu();

@@ -21,6 +21,28 @@ namespace Collection.Controls
 			return FromScenePath(scenePath) != null || scenePath == StoryScenePath;
 		}
 
+		/// The scene a game starts in: the one its GameList entry names, or else the first of
+		/// its scenes in the build. Null when there is none.
+		public static string EntryScenePath(string gameName)
+		{
+			GameList list = UnityEngine.Resources.Load<GameList>("Games/GameList");
+			if (list != null && list.TryGetEntry(gameName, out GameList.Entry entry) && !string.IsNullOrEmpty(entry.entryScenePath))
+			{
+				return entry.entryScenePath;
+			}
+
+			for (int i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings; i++)
+			{
+				string path = UnityEngine.SceneManagement.SceneUtility.GetScenePathByBuildIndex(i);
+				if (string.Equals(FromScenePath(path), gameName, System.StringComparison.OrdinalIgnoreCase))
+				{
+					return path;
+				}
+			}
+
+			return null;
+		}
+
 		public static string FromScenePath(string scenePath)
 		{
 			if (string.IsNullOrEmpty(scenePath) || !scenePath.StartsWith(GamesRootFolder))

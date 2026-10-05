@@ -141,9 +141,17 @@ namespace Collection.Controls
 		/// to know which build index the menu is.
 		///
 		/// A no-op when the menu is already what's loaded.
+		///
+		/// A game that was started from inside the story goes back to the story instead,
+		/// with nothing won (see StoryGames).
 		/// </summary>
 		public static void ReturnToMainMenu()
 		{
+			if (Collection.Story.StoryGames.Leave())
+			{
+				return;
+			}
+
 			if (SceneManager.GetActiveScene().buildIndex == MainMenuBuildIndex)
 			{
 				return;

@@ -21,7 +21,8 @@ namespace Collection.Story
     // The black is a quad drawn at the very back of the picture, after everything else (the Blackout shader): it
     // covers the sky and the water, which do not mark how far away they are, and leaves the character, who does.
     //
-    // Not saved yet: this happens every time the scene starts.
+    // It happens once in a save slot (its NPCTrigger is onlyOnce). StoryDirector calls Begin when it has not
+    // happened yet, and Skip when it has: the sea as the intro leaves it, with no black and no cameras.
     public class IntroSequence : MonoBehaviour
     {
         public Transform player;
@@ -68,11 +69,6 @@ namespace Collection.Story
         bool slowBlend;
         float feetHeight;
 
-        void Start()
-        {
-            Begin();
-        }
-
         void OnDestroy()
         {
             Shader.SetGlobalFloat(TiltShiftDisabledId, 0f);
@@ -80,13 +76,7 @@ namespace Collection.Story
 
         public void Begin()
         {
-            foreach (GameObject part in world)
-                if (part != null)
-                    part.SetActive(false);
-            if (sea != null)
-                sea.SetActive(true);
-
-            feetHeight = player.GetComponentInChildren<CharacterAppearance>().transform.position.y;
+            ShowSea();
             SetWaterHeight(-WaterUnderFeet);
 
             SetBlack(1f);
@@ -101,6 +91,30 @@ namespace Collection.Story
                 seaCamera.SetActive(false);
             }
             introCamera.SetActive(true);
+        }
+
+        // The sea as it is after the intro, for a game that had its intro before. To be called with the character
+        // where it stands in the scene, before anything moves it.
+        public void Skip()
+        {
+            ShowSea();
+            SetWaterHeight(waterDepth);
+            blackout.gameObject.SetActive(false);
+            introCamera.SetActive(false);
+            if (seaCamera != null)
+                seaCamera.SetActive(false);
+        }
+
+        // The land off, the sea on, the sun turned for it.
+        void ShowSea()
+        {
+            foreach (GameObject part in world)
+                if (part != null)
+                    part.SetActive(false);
+            if (sea != null)
+                sea.SetActive(true);
+
+            feetHeight = player.GetComponentInChildren<CharacterAppearance>().transform.position.y;
 
             // The sun beyond the character as the sea camera sees it, a little to one side: light on the water
             // between the two.

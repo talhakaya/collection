@@ -38,7 +38,12 @@ namespace Games.SpaceArtist
 	                lastTimer += Game.dt;
 	                if (lastTimer > 1f)
 	                {
-	                    SceneManager.LoadScene("Assets/games/Space Artist/menu.unity");
+	                    // In the collection: this is the game's end, which in the story mode is
+	                    // what wins its artifact.
+	                    if (!Collection.Story.StoryGames.Finish())
+	                    {
+	                        SceneManager.LoadScene("Assets/games/Space Artist/menu.unity");
+	                    }
 	                }
 	            }
 	            float a = rendererr.material.GetColor("_BaseColor").a;

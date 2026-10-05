@@ -16,7 +16,8 @@ namespace Collection.Story
     //
     //   End (when the conversation is over): back to the follow camera, on land.
     //
-    // Not saved yet: after the intro, this happens every time.
+    // It happens once in a save slot (its NPCTrigger is onlyOnce). For a game in which it has happened,
+    // StoryDirector calls Skip: the land up and the sea down, as RaiseLand leaves them.
     public class TelevisionEncounter : MonoBehaviour
     {
         public Transform player;
@@ -68,6 +69,30 @@ namespace Collection.Story
             // A plain wide shot: the blur at the top and bottom of the screen would be across the television.
             Shader.SetGlobalFloat(TiltShiftDisabledId, 1f);
             wideCamera.SetActive(true);
+        }
+
+        // The land and the sea as they are after RaiseLand. To be called after IntroSequence.Skip, which puts the
+        // sea where it is before.
+        public void Skip()
+        {
+            for (int i = 0; i < world.Count; i++)
+            {
+                if (world[i] == null)
+                    continue;
+                world[i].transform.position = places[i];
+                world[i].SetActive(true);
+            }
+            SetHeight(water, water.position.y - seaDrop);
+            SetHeight(floor, floor.position.y - seaDrop);
+            SetHeight(television, television.position.y - seaDrop);
+        }
+
+        // The ground at a place: the higher of the sea's floor and the land, if the land is there.
+        public float GroundHeight(Vector3 at)
+        {
+            float floorTop = floor.position.y + floor.GetComponent<BoxCollider>().size.y * 0.5f * floor.lossyScale.y;
+            bool land = terrain != null && terrain.gameObject.activeInHierarchy;
+            return land ? Mathf.Max(floorTop, LandHeight(at)) : floorTop;
         }
 
         // For a Cutscene's onStart.
