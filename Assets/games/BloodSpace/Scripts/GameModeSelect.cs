@@ -11,11 +11,11 @@ namespace Games.BloodSpace
 		private float period = 0.1f;
 		void Start ()
 		{
-			if (PlayerPrefs.GetInt("BloodSpace.GameMode", 0) == 0)
+			if (Collection.Saving.SaveManager.Slot.bloodSpace.gameMode == 0)
 			{
 				Game.mode = GameMode.Normal;
 			}
-			else if (PlayerPrefs.GetInt("BloodSpace.GameMode", 0) == 1)
+			else if (Collection.Saving.SaveManager.Slot.bloodSpace.gameMode == 1)
 			{
 				Game.mode = GameMode.Hardcore;
 			}
@@ -36,12 +36,12 @@ namespace Games.BloodSpace
 				if (Game.mode == GameMode.Normal)
 				{
 					Game.mode = GameMode.Hardcore;
-					PlayerPrefs.SetInt("BloodSpace.GameMode", 1);
+					Collection.Saving.SaveManager.Slot.bloodSpace.gameMode = 1; Collection.Saving.SaveManager.MarkDirty();
 				}
 				else if (Game.mode == GameMode.Hardcore)
 				{
 					Game.mode = GameMode.Normal;
-					PlayerPrefs.SetInt("BloodSpace.GameMode", 0);
+					Collection.Saving.SaveManager.Slot.bloodSpace.gameMode = 0; Collection.Saving.SaveManager.MarkDirty();
 				}
 			}
 

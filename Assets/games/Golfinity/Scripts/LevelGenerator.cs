@@ -506,17 +506,33 @@ namespace Games.Golfinity
 	    {
 	        // auto-unlock if you've already played a level after
 	        if (Game.GetUnbeatenLastHole() > lockIndex * numLevelsPerColor + 1) return 0;
-	        return PlayerPrefs.GetInt($"lock{lockIndex}", GetNumGoldTotalToUnlock(lockIndex));
+	        return SavedGoldToUnlock(lockIndex);
+	    }
+
+	    // In the collection: the gold still owed on a lock is in the save file, a list by lock
+	    // index, where -1 means nothing has been paid yet.
+	    private int SavedGoldToUnlock(int lockIndex)
+	    {
+	        var locks = Collection.Saving.SaveManager.Slot.golfinity.locks;
+	        return lockIndex < locks.Count && locks[lockIndex] >= 0 ? locks[lockIndex] : GetNumGoldTotalToUnlock(lockIndex);
+	    }
+
+	    private void SaveGoldToUnlock(int lockIndex, int numGoldLeft)
+	    {
+	        var locks = Collection.Saving.SaveManager.Slot.golfinity.locks;
+	        while (locks.Count <= lockIndex) locks.Add(-1);
+	        locks[lockIndex] = numGoldLeft;
+	        Collection.Saving.SaveManager.MarkDirty();
 	    }
 
 	    public bool PayGoldToUnlock(int lockIndex)
 	    {
-	        int numGoldLeft = PlayerPrefs.GetInt($"lock{lockIndex}", GetNumGoldTotalToUnlock(lockIndex));
+	        int numGoldLeft = SavedGoldToUnlock(lockIndex);
 	        if (numGoldLeft == 0 || Game.gold == 0) return false;
 	        numGoldLeft--;
 	        Game.gold--;
-	        PlayerPrefs.SetInt($"lock{lockIndex}", numGoldLeft);
-	        PlayerPrefs.SetInt("gold", Game.gold);
+	        SaveGoldToUnlock(lockIndex, numGoldLeft);
+	        Collection.Saving.SaveManager.Slot.golfinity.gold = Game.gold; Collection.Saving.SaveManager.MarkDirty();
 	        return true;
 	    }
 	}

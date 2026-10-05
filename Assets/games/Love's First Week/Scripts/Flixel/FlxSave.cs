@@ -14,71 +14,40 @@ namespace Games.LovesFirstWeek
 	/// </summary>
 	public class FlxSave
 	{
-		private const string Prefix = "LovesFirstWeek.";
 
 		/// Every property is null until it has been set, as an unset SharedObject property is.
+		///
+		/// In the collection: these were PlayerPrefs keys. They are the game's part of the
+		/// collection's save file now, where -1 and the empty string stand for "not set".
 		public class Data
 		{
-			private readonly string prefix;
-
-			internal Data(string prefix)
+			private static Collection.Saving.LovesFirstWeekSave Saved
 			{
-				this.prefix = prefix;
+				get { return Collection.Saving.SaveManager.Slot.lovesFirstWeek; }
 			}
 
 			public int? level
 			{
-				get { return PlayerPrefs.HasKey(prefix + "level") ? PlayerPrefs.GetInt(prefix + "level") : (int?)null; }
-				set { setInt("level", value); }
+				get { return Saved.level >= 0 ? Saved.level : (int?)null; }
+				set { Saved.level = value ?? -1; Collection.Saving.SaveManager.MarkDirty(); }
 			}
 
 			public string lang
 			{
-				get { return PlayerPrefs.HasKey(prefix + "lang") ? PlayerPrefs.GetString(prefix + "lang") : null; }
-				set
-				{
-					if (value == null)
-					{
-						PlayerPrefs.DeleteKey(prefix + "lang");
-					}
-					else
-					{
-						PlayerPrefs.SetString(prefix + "lang", value);
-					}
-
-					PlayerPrefs.Save();
-				}
+				get { return Saved.lang != "" ? Saved.lang : null; }
+				set { Saved.lang = value ?? ""; Collection.Saving.SaveManager.MarkDirty(); }
 			}
 
 			public bool? dialog
 			{
-				get { return getBool("dialog"); }
-				set { setInt("dialog", value == null ? (int?)null : (value.Value ? 1 : 0)); }
+				get { return Saved.dialog >= 0 ? Saved.dialog != 0 : (bool?)null; }
+				set { Saved.dialog = value == null ? -1 : (value.Value ? 1 : 0); Collection.Saving.SaveManager.MarkDirty(); }
 			}
 
 			public bool? is1p
 			{
-				get { return getBool("is1p"); }
-				set { setInt("is1p", value == null ? (int?)null : (value.Value ? 1 : 0)); }
-			}
-
-			private bool? getBool(string key)
-			{
-				return PlayerPrefs.HasKey(prefix + key) ? PlayerPrefs.GetInt(prefix + key) != 0 : (bool?)null;
-			}
-
-			private void setInt(string key, int? value)
-			{
-				if (value == null)
-				{
-					PlayerPrefs.DeleteKey(prefix + key);
-				}
-				else
-				{
-					PlayerPrefs.SetInt(prefix + key, value.Value);
-				}
-
-				PlayerPrefs.Save();
+				get { return Saved.is1p >= 0 ? Saved.is1p != 0 : (bool?)null; }
+				set { Saved.is1p = value == null ? -1 : (value.Value ? 1 : 0); Collection.Saving.SaveManager.MarkDirty(); }
 			}
 		}
 
@@ -88,13 +57,12 @@ namespace Games.LovesFirstWeek
 		public bool bind(string Name)
 		{
 			name = Name;
-			data = new Data(Prefix + Name + ".");
+			data = new Data();
 			return true;
 		}
 
 		public bool flush()
 		{
-			PlayerPrefs.Save();
 			return true;
 		}
 

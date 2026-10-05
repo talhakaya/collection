@@ -551,3 +551,24 @@ first. What each kind of prompt needs:
   play mode; `Force(null, null)` goes back to following the player.
 - After redrawing or adding a glyph in `Assets/Textures/Input`, run
   `Collection > Build Input Glyph Assets`.
+
+## Saves (the collection's one save file)
+
+Nothing is kept in `PlayerPrefs`. Everything a game keeps between sessions is its own typed
+class in `SaveSlotData` (`Assets/Scripts/Saving/SaveData.cs`), written with the rest to
+`save.json` by `SaveManager`.
+
+- Give the game a `[Serializable]` class there (`NykrigSave { public int score; }`) and a
+  field for it in `SaveSlotData`, initialised with `new`.
+- In the game, read and write `Collection.Saving.SaveManager.Slot.<game>.<field>` and call
+  `SaveManager.MarkDirty()` after a change. The file is written once at the end of that
+  frame; there is no need to call anything like `PlayerPrefs.Save()`.
+- `JsonUtility` writes the file: no dictionaries, no nullable types. Use a list, and a
+  value such as -1 or the empty string for "not set" (see `LovesFirstWeekSave`).
+- `Slot` is the story slot being played, or the free-play area for a game started from
+  "Just the games". `SaveManager.IsStoryMode` tells a game which. A game's scene played
+  straight from the editor uses the first story slot.
+- A game's "wipe my save" replaces its own part (`Slot.crimeFactory = new CrimeFactorySave()`),
+  never the slot.
+- Play time (`timePlayed`) is counted by `SaveManager` only in a game's scene, with time
+  running and the collection's pause off.

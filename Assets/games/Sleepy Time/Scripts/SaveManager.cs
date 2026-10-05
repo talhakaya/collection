@@ -14,8 +14,6 @@ namespace Games.SleepyTime
 	/// </summary>
 	public class SaveManager
 	{
-		private const string Prefix = "SleepyTime.";
-
 		public static SaveManager instance;
 		public static bool playedBefore = false;
 
@@ -23,7 +21,7 @@ namespace Games.SleepyTime
 		{
 			instance = this;
 
-			playedBefore = PlayerPrefs.HasKey(Prefix + "playedBefore");
+			playedBefore = Data.playedBefore;
 			if (!playedBefore)
 			{
 				_save();
@@ -44,22 +42,30 @@ namespace Games.SleepyTime
 			instance._load();
 		}
 
+		// In the collection: the scores were PlayerPrefs keys. They are the game's part of the
+		// collection's save file now.
+		private static Collection.Saving.SleepyTimeSave Data
+		{
+			get { return Collection.Saving.SaveManager.Slot.sleepyTime; }
+		}
+
 		public void _save()
 		{
-			PlayerPrefs.SetInt(Prefix + "playedBefore", 1);
+			Data.playedBefore = true;
+			Data.scores.Clear();
 			for (int i = 0; i < 6; i++)
 			{
-				PlayerPrefs.SetInt(Prefix + "scores" + i, SceneManager.scores[i]);
+				Data.scores.Add(SceneManager.scores[i]);
 			}
 
-			PlayerPrefs.Save();
+			Collection.Saving.SaveManager.MarkDirty();
 		}
 
 		public void _load()
 		{
 			for (int i = 0; i < 6; i++)
 			{
-				SceneManager.scores[i] = PlayerPrefs.GetInt(Prefix + "scores" + i, 0);
+				SceneManager.scores[i] = i < Data.scores.Count ? Data.scores[i] : 0;
 			}
 		}
 	}

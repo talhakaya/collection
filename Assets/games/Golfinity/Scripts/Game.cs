@@ -70,36 +70,40 @@ namespace Games.Golfinity
 	    public GameObject backButton;
 	    private bool logoShown;
 
+	    /// In the collection: writes the stars to the save file.
+	    public static void SaveStars()
+	    {
+	        Collection.Saving.SaveManager.Slot.golfinity.stars = new List<string>(stars);
+	        Collection.Saving.SaveManager.MarkDirty();
+	    }
+
 	    void Awake ()
 		{
 	        Application.targetFrameRate = 60;
 	        instance = this;
 	        shadowVector = Vector3.down + Vector3.left;
-	        noOfStrokes = PlayerPrefs.GetInt("noOfStrokes", 0);
-	        gold = PlayerPrefs.GetInt("gold", 0);
+	        noOfStrokes = Collection.Saving.SaveManager.Slot.golfinity.noOfStrokes;
+	        gold = Collection.Saving.SaveManager.Slot.golfinity.gold;
+	        // In the collection: everything the game keeps is its part of the collection's save
+	        // file (SaveManager.Slot.golfinity) rather than PlayerPrefs keys.
 	        stars = new List<string>();
-	        int starsIndex = 0;
-	        while (PlayerPrefs.GetString($"stars_{starsIndex}", "") != "")
+	        foreach (string saved in Collection.Saving.SaveManager.Slot.golfinity.stars)
 	        {
-	            stars.Add(PlayerPrefs.GetString($"stars_{starsIndex}", ""));
-	            starsIndex++;
+	            if (saved == "") break;
+	            stars.Add(saved);
 	        }
 	        if (stars.Count == 0) stars.Add("");
 
 	        audioSource = GetComponent<AudioSource>();
 	        time = 0f;
 	        cameraMoveDeltaPos = Vector2.zero;
-	        int outlineDefault = 1;
-	#if !UNITY_EDITOR && UNITY_ANDROID
-	        outlineDefault = 0;
-	#endif
-	        OutlineSprite.isOn = (PlayerPrefs.GetInt("OutlineSprite.isOn", outlineDefault) == 1);
-	        Game.reverseShooting = (PlayerPrefs.GetInt("Game.reverseShooting", 1) == 1);
-	        Game.holesOnWalls = (PlayerPrefs.GetInt("Game.holesOnWalls", 1) == 1);
-	        Game.soundOn = (PlayerPrefs.GetInt("Game.soundOn", 1) == 1);
-	        Game.musicOn = (PlayerPrefs.GetInt("Game.musicOn", 1) == 1);
-	        Game.terrainEffectOn = (PlayerPrefs.GetInt("Game.terrainEffectOn", 1) == 1);
-	        Game.circleHoleEffectOn = (PlayerPrefs.GetInt("Game.circleHoleEffectOn", 1) == 1);
+	        OutlineSprite.isOn = Collection.Saving.SaveManager.Slot.golfinity.outlineOn;
+	        Game.reverseShooting = Collection.Saving.SaveManager.Slot.golfinity.reverseShooting;
+	        Game.holesOnWalls = Collection.Saving.SaveManager.Slot.golfinity.holesOnWalls;
+	        Game.soundOn = Collection.Saving.SaveManager.Slot.golfinity.soundOn;
+	        Game.musicOn = Collection.Saving.SaveManager.Slot.golfinity.musicOn;
+	        Game.terrainEffectOn = Collection.Saving.SaveManager.Slot.golfinity.terrainEffectOn;
+	        Game.circleHoleEffectOn = Collection.Saving.SaveManager.Slot.golfinity.circleHoleEffectOn;
 	        Game.removedAds = true;
 	        switch (Application.systemLanguage)
 	        {
@@ -140,7 +144,7 @@ namespace Games.Golfinity
 	                lang = Lang.EN;
 	                break;
 	        }
-	        lang = (Lang) PlayerPrefs.GetInt("Game.lang", (int)lang);
+	        if (Collection.Saving.SaveManager.Slot.golfinity.lang >= 0) lang = (Lang)Collection.Saving.SaveManager.Slot.golfinity.lang;
 	        Local.SetLanguage(lang);
 	        cam = Camera.main;
 		}
@@ -431,7 +435,6 @@ namespace Games.Golfinity
 	            OpenLevel(holeNo);
 	        }
 
-	        PlayerPrefs.Save();
 	    }
 
 	    public static void SendAnalytics(string eventName)
@@ -474,10 +477,7 @@ namespace Games.Golfinity
 	                stars[starsIndex] = stars[starsIndex].Substring(0, charIndex) + (char)('0' + numStars) + stars[starsIndex].Substring(charIndex + 1);
 	            }
 	        }
-	        for (int i = 0, len = stars.Count; i < len; i++)
-	        {
-	            PlayerPrefs.SetString($"stars_{i}", stars[i]);
-	        }
+	        SaveStars();
 	        return true;
 	    }
 

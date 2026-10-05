@@ -23,11 +23,11 @@ namespace Games.Nykrig
 	    void OnEnable () {
 	        textScore0.text = "SCORE\n" + Game.score;
 	        textScore1.text = textScore0.text;
-	        int highScore = PlayerPrefs.GetInt("score", 0);
+	        int highScore = Collection.Saving.SaveManager.Slot.nykrig.score;
 	        if (Game.score > highScore) {
 	            newHighScore.SetActive(true);
 	            textHighscore0.text = "";
-	            PlayerPrefs.SetInt("score", Game.score);
+	            Collection.Saving.SaveManager.Slot.nykrig.score = Game.score; Collection.Saving.SaveManager.MarkDirty();
 	        }
 	        else {
 	            newHighScore.SetActive(false);

@@ -37,10 +37,9 @@ namespace Games.Golfinity
 	    {
 	        base.Show();
 	        SetButtonStates();
-	        if (PlayerPrefs.GetInt("accessedUpgradePopup", 0) == 0)
+	        if (!Collection.Saving.SaveManager.Slot.golfinity.accessedUpgradePopup)
 	        {
-	            PlayerPrefs.SetInt("accessedUpgradePopup", 1);
-	            PlayerPrefs.Save();
+	            Collection.Saving.SaveManager.Slot.golfinity.accessedUpgradePopup = true; Collection.Saving.SaveManager.MarkDirty();
 	            Game.SendAnalytics("accessedUpgradePopup");
 	        }
 	    }
@@ -114,12 +113,12 @@ namespace Games.Golfinity
 	        //    {
 	        //        case 0:
 	        //            Game.unlock0Enabled = !Game.unlock0Enabled;
-	        //            PlayerPrefs.SetInt("Game.unlock0Enabled", Game.unlock0Enabled ? 1 : 0);
+	        //            Collection.Saving.SaveManager.Slot.golfinity.unlock0Enabled = Game.unlock0Enabled; Collection.Saving.SaveManager.MarkDirty();
 	        //            Game.SendAnalytics("unlock0Enabled");
 	        //            break;
 	        //        case 1:
 	        //            Game.unlock1Enabled = !Game.unlock1Enabled;
-	        //            PlayerPrefs.SetInt("Game.unlock1Enabled", Game.unlock1Enabled ? 1 : 0);
+	        //            Collection.Saving.SaveManager.Slot.golfinity.unlock1Enabled = Game.unlock1Enabled; Collection.Saving.SaveManager.MarkDirty();
 	        //            Game.SendAnalytics("unlock1Enabled");
 	        //            break;
 	        //        default:
@@ -129,17 +128,17 @@ namespace Games.Golfinity
 	        //else
 	        //{
 	        //    Game.gold -= upgradeCosts[index];
-	        //    PlayerPrefs.SetInt("gold", Game.gold);
+	        //    Collection.Saving.SaveManager.Slot.golfinity.gold = Game.gold; Collection.Saving.SaveManager.MarkDirty();
 	        //    switch (index)
 	        //    {
 	        //        case 0:
 	        //            Game.unlock0Bought = true;
-	        //            PlayerPrefs.SetInt("Game.unlock0Bought", 1);
+	        //            Collection.Saving.SaveManager.Slot.golfinity.unlock0Bought = true; Collection.Saving.SaveManager.MarkDirty();
 	        //            PlayerPrefs.Save();
 	        //            break;
 	        //        case 1:
 	        //            Game.unlock1Bought = true;
-	        //            PlayerPrefs.SetInt("Game.unlock1Bought", 1);
+	        //            Collection.Saving.SaveManager.Slot.golfinity.unlock1Bought = true; Collection.Saving.SaveManager.MarkDirty();
 	        //            PlayerPrefs.Save();
 	        //            break;
 	        //        default:

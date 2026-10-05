@@ -18,7 +18,7 @@ namespace Games.Nykrig
 		    for (int i = 0, len = enableObjects.Length; i < len; i++) {
 	            enableObjects[i].SetActive(false);
 	        }
-	        int score = PlayerPrefs.GetInt("score", 0);
+	        int score = Collection.Saving.SaveManager.Slot.nykrig.score;
 	        if (score == 0) {
 	            textHighscore0.text = "";
 	        }

@@ -1,0 +1,163 @@
+using System;
+using System.Collections.Generic;
+
+namespace Collection.Saving
+{
+	/// <summary>
+	/// Everything the collection keeps between sessions, written as one JSON file
+	/// (see SaveManager). Three story slots, a separate area for games started from
+	/// "Just the games", and the settings, which belong to the player rather than to a slot.
+	/// </summary>
+	[Serializable]
+	public class SaveData
+	{
+		public const int SlotCount = 3;
+
+		public int version = 1;
+		public List<SaveSlotData> slots = new List<SaveSlotData>();
+
+		/// What games started from "Just the games" save into. Never shown as a slot.
+		public SaveSlotData freePlay = new SaveSlotData();
+
+		public Settings settings = new Settings();
+	}
+
+	[Serializable]
+	public class Settings
+	{
+		public float masterVolume = 1f;
+		public float musicVolume = 1f;
+		public bool fullscreen = true;
+
+		/// Zero means the display's own resolution.
+		public int resolutionWidth;
+		public int resolutionHeight;
+	}
+
+	/// <summary>
+	/// One playthrough: how long it has been played, and each game's own save. A game reads
+	/// and writes its part through SaveManager.Slot and calls SaveManager.MarkDirty() after
+	/// changing it.
+	///
+	/// A game that keeps nothing between sessions has no part here.
+	/// </summary>
+	[Serializable]
+	public class SaveSlotData
+	{
+		/// False for a slot nobody has started a game in.
+		public bool started;
+
+		/// Seconds spent in games with time running: menus and the pause screen do not count.
+		public float timePlayed;
+
+		/// timePlayed as it was when the slot was last written, so "last saved" can be told
+		/// in the same time.
+		public float timePlayedAtLastSave;
+
+		public BloodSpaceSave bloodSpace = new BloodSpaceSave();
+		public CrimeFactorySave crimeFactory = new CrimeFactorySave();
+		public GolfinitySave golfinity = new GolfinitySave();
+		public LovesFirstWeekSave lovesFirstWeek = new LovesFirstWeekSave();
+		public NykrigSave nykrig = new NykrigSave();
+		public OdeToPixelDaysSave odeToPixelDays = new OdeToPixelDaysSave();
+		public PenisClonerSave penisCloner = new PenisClonerSave();
+		public SleepyTimeSave sleepyTime = new SleepyTimeSave();
+		public VirtualPetSave virtualPet = new VirtualPetSave();
+	}
+
+	[Serializable]
+	public class BloodSpaceSave
+	{
+		public int won;
+		public int gameMode;
+		public int highscore;
+		public bool musicOn = true;
+	}
+
+	[Serializable]
+	public class CrimeFactorySave
+	{
+		/// Empty until a level has been reached: there is nothing to continue.
+		public string lastLevel = "";
+		public int money;
+		public int fireRateUpgrades;
+		public int shields;
+		public int bombs;
+	}
+
+	[Serializable]
+	public class GolfinitySave
+	{
+		public int noOfStrokes;
+		public int gold;
+
+		/// Stars per hole, a digit a hole, in strings of a fixed number of holes.
+		public List<string> stars = new List<string>();
+
+		/// Gold still owed on each lock, by lock index. -1: nothing paid yet.
+		public List<int> locks = new List<int>();
+
+		public bool accessedUpgradePopup;
+		public bool unlock0Enabled;
+		public bool unlock1Enabled;
+		public bool unlock0Bought;
+		public bool unlock1Bought;
+
+		// The game's own options.
+		public bool outlineOn = true;
+		public bool reverseShooting = true;
+		public bool holesOnWalls = true;
+		public bool soundOn = true;
+		public bool musicOn = true;
+		public bool terrainEffectOn = true;
+		public bool circleHoleEffectOn = true;
+
+		/// The game's Lang value. -1: not chosen, follow the system language.
+		public int lang = -1;
+	}
+
+	/// The game kept these in a Flash shared object, where a property that was never set is
+	/// absent; -1 and the empty string stand for that here.
+	[Serializable]
+	public class LovesFirstWeekSave
+	{
+		public int level = -1;
+		public string lang = "";
+		public int dialog = -1;
+		public int is1p = -1;
+	}
+
+	[Serializable]
+	public class NykrigSave
+	{
+		public int score;
+	}
+
+	[Serializable]
+	public class OdeToPixelDaysSave
+	{
+		/// -1 until a game has been started.
+		public int level = -1;
+	}
+
+	[Serializable]
+	public class PenisClonerSave
+	{
+		public int level;
+	}
+
+	[Serializable]
+	public class SleepyTimeSave
+	{
+		public bool playedBefore;
+		public List<int> scores = new List<int>();
+	}
+
+	[Serializable]
+	public class VirtualPetSave
+	{
+		public bool hasSave;
+		public string playerName = "";
+		public string petName = "";
+	}
+}

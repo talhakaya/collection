@@ -10,14 +10,14 @@ namespace Games.BloodSpace
 		void Start ()
 		{
 			textBlood = GetComponent<TextBlood> ();
-			textBlood.text = ": " + PlayerPrefs.GetInt ("BloodSpace.highscore", 0);
+			textBlood.text = ": " + Collection.Saving.SaveManager.Slot.bloodSpace.highscore;
 		}
 
 		void Update ()
 		{
-			if (Game.score > PlayerPrefs.GetInt ("BloodSpace.highscore", 0))
+			if (Game.score > Collection.Saving.SaveManager.Slot.bloodSpace.highscore)
 			{
-				PlayerPrefs.SetInt("BloodSpace.highscore", Game.score);
+				Collection.Saving.SaveManager.Slot.bloodSpace.highscore = Game.score; Collection.Saving.SaveManager.MarkDirty();
 				textBlood.text = ": " + Game.score;
 			}
 		}

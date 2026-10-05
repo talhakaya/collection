@@ -13,7 +13,7 @@ namespace Games.VirtualPet
 
 		void Start ()
 	    {
-		    if (PlayerPrefs.GetInt("VirtualPet.hasSave", 0) == 0)
+		    if (!Collection.Saving.SaveManager.Slot.virtualPet.hasSave)
 	        {
 	            continueButton.GetComponentInChildren<Text>().text = "start";
 	            resetButton.GetComponentInChildren<Text>().text = "reset";
@@ -39,7 +39,7 @@ namespace Games.VirtualPet
 	            game[i].SetActive(true);
 	        }
 	        gameObject.SetActive(false);
-	        PlayerPrefs.SetInt("VirtualPet.hasSave", 1);
+	        Collection.Saving.SaveManager.Slot.virtualPet.hasSave = true; Collection.Saving.SaveManager.MarkDirty();
 	    }
 
 	    public void pressReset()
@@ -86,9 +86,9 @@ namespace Games.VirtualPet
 	            resetButton.GetComponentInChildren<Text>().text = "reset";
 	            resetButton.interactable = false;
 	            // In the collection: was PlayerPrefs.DeleteAll(); only this game's keys go.
-	            PlayerPrefs.DeleteKey("VirtualPet.hasSave");
-	            PlayerPrefs.DeleteKey("VirtualPet.playerName");
-	            PlayerPrefs.DeleteKey("VirtualPet.petName");
+	            Collection.Saving.SaveManager.Slot.virtualPet.hasSave = false; Collection.Saving.SaveManager.MarkDirty();
+	            Collection.Saving.SaveManager.Slot.virtualPet.playerName = ""; Collection.Saving.SaveManager.MarkDirty();
+	            Collection.Saving.SaveManager.Slot.virtualPet.petName = ""; Collection.Saving.SaveManager.MarkDirty();
 	        }
 	        resetButtonCounter++;
 	    }

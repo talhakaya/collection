@@ -195,7 +195,13 @@ namespace Collection.MainMenu
 			}
 
 			Button button = buttonObject.GetComponent<Button>();
-			button.onClick.AddListener(() => SceneManager.LoadScene(scenePath));
+			button.onClick.AddListener(() =>
+			{
+				// The list is "Just the games": what is played from here saves into the
+				// free-play area, not into a story slot.
+				Collection.Saving.SaveManager.PlayFree();
+				SceneManager.LoadScene(scenePath);
+			});
 
 			return buttonObject;
 		}

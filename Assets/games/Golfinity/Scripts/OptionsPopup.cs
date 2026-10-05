@@ -50,7 +50,7 @@ namespace Games.Golfinity
 	        Game.reverseShooting = !Game.reverseShooting;
 	        buttonReverseShooting.text.text = string.Format("{0} {1}", Local.Get("reverse"), Game.reverseShooting ? Local.Get("on") : Local.Get("off"));
 	        buttonReverseShooting.icon.enabled = Game.reverseShooting;
-	        PlayerPrefs.SetInt("Game.reverseShooting", Game.reverseShooting ? 1 : 0);
+	        Collection.Saving.SaveManager.Slot.golfinity.reverseShooting = Game.reverseShooting; Collection.Saving.SaveManager.MarkDirty();
 	    }
 
 	    public void OnClickHolesOnWalls()
@@ -58,7 +58,7 @@ namespace Games.Golfinity
 	        Game.holesOnWalls = !Game.holesOnWalls;
 	        buttonHolesOnWalls.text.text = string.Format("{0} {1}", Local.Get("sideholes"), Game.holesOnWalls ? Local.Get("on") : Local.Get("off"));
 	        buttonHolesOnWalls.icon.enabled = Game.holesOnWalls;
-	        PlayerPrefs.SetInt("Game.holesOnWalls", Game.holesOnWalls ? 1 : 0);
+	        Collection.Saving.SaveManager.Slot.golfinity.holesOnWalls = Game.holesOnWalls; Collection.Saving.SaveManager.MarkDirty();
 	    }
 
 	    public void OnClickSound()
@@ -72,7 +72,7 @@ namespace Games.Golfinity
 	        //else {
 	        //    buttonSound.GetComponent<AudioSource>().Stop();
 	        //}
-	        PlayerPrefs.SetInt("Game.soundOn", Game.soundOn ? 1 : 0);
+	        Collection.Saving.SaveManager.Slot.golfinity.soundOn = Game.soundOn; Collection.Saving.SaveManager.MarkDirty();
 	    }
 
 	    public void OnClickMusic()
@@ -91,7 +91,7 @@ namespace Games.Golfinity
 	        }
 	        buttonMusic.text.text = string.Format("{0} {1}", Local.Get("music"), Game.musicOn ? Local.Get("on") : Local.Get("off"));
 	        buttonMusic.icon.enabled = Game.musicOn;
-	        PlayerPrefs.SetInt("Game.musicOn", Game.musicOn ? 1 : 0);
+	        Collection.Saving.SaveManager.Slot.golfinity.musicOn = Game.musicOn; Collection.Saving.SaveManager.MarkDirty();
 	    }
 
 	    public void OnClickOutlines()
@@ -100,7 +100,7 @@ namespace Games.Golfinity
 	        GameEvents.OnOutlineOnOff?.Invoke();
 	        buttonOutlines.text.text = string.Format("{0} {1}", Local.Get("outlines"), OutlineSprite.isOn ? Local.Get("on") : Local.Get("off"));
 	        buttonOutlines.icon.enabled = OutlineSprite.isOn;
-	        PlayerPrefs.SetInt("OutlineSprite.isOn", OutlineSprite.isOn ? 1 : 0);
+	        Collection.Saving.SaveManager.Slot.golfinity.outlineOn = OutlineSprite.isOn; Collection.Saving.SaveManager.MarkDirty();
 	    }
 
 	    public void OnClickTerrainEffect()
@@ -108,7 +108,7 @@ namespace Games.Golfinity
 	        Game.terrainEffectOn = !Game.terrainEffectOn;
 	        buttonTerrainEffect.text.text = string.Format("{0} {1}", Local.Get("terraineffect"), Game.terrainEffectOn ? Local.Get("on") : Local.Get("off"));
 	        buttonTerrainEffect.icon.enabled = Game.terrainEffectOn;
-	        PlayerPrefs.SetInt("Game.terrainEffectOn", Game.terrainEffectOn ? 1 : 0);
+	        Collection.Saving.SaveManager.Slot.golfinity.terrainEffectOn = Game.terrainEffectOn; Collection.Saving.SaveManager.MarkDirty();
 	    }
 
 	    public void OnClickCircleHoleEffect()
@@ -116,19 +116,18 @@ namespace Games.Golfinity
 	        Game.circleHoleEffectOn = !Game.circleHoleEffectOn;
 	        buttonCircleHoleEffect.text.text = string.Format("{0} {1}", Local.Get("circleeffect"), Game.circleHoleEffectOn ? Local.Get("on") : Local.Get("off"));
 	        buttonCircleHoleEffect.icon.enabled = Game.circleHoleEffectOn;
-	        PlayerPrefs.SetInt("Game.circleHoleEffectOn", Game.circleHoleEffectOn ? 1 : 0);
+	        Collection.Saving.SaveManager.Slot.golfinity.circleHoleEffectOn = Game.circleHoleEffectOn; Collection.Saving.SaveManager.MarkDirty();
 	    }
 
 	    public void OnClickLanguage()
 	    {
 	        Game.lang = (Lang)(((int)Game.lang + 1) % (Enum.GetValues(typeof(Lang)).Length));
 	        Local.SetLanguage(Game.lang);
-	        PlayerPrefs.SetInt("Game.lang", (int)Game.lang);
+	        Collection.Saving.SaveManager.Slot.golfinity.lang = (int)Game.lang; Collection.Saving.SaveManager.MarkDirty();
 	    }
 
 	    public void OnClickBack()
 	    {
-	        PlayerPrefs.Save();
 	        Hide();
 	    }
 	}

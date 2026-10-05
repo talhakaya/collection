@@ -25,9 +25,9 @@ namespace Games.VirtualPet
 	    {
 	        // In the collection: this was PlayerPrefs.DeleteAll(), which would wipe every game's
 	        // saves. Only this game's own keys are cleared (it always started fresh).
-	        PlayerPrefs.DeleteKey("VirtualPet.hasSave");
-	        PlayerPrefs.DeleteKey("VirtualPet.playerName");
-	        PlayerPrefs.DeleteKey("VirtualPet.petName");
+	        Collection.Saving.SaveManager.Slot.virtualPet.hasSave = false; Collection.Saving.SaveManager.MarkDirty();
+	        Collection.Saving.SaveManager.Slot.virtualPet.playerName = ""; Collection.Saving.SaveManager.MarkDirty();
+	        Collection.Saving.SaveManager.Slot.virtualPet.petName = ""; Collection.Saving.SaveManager.MarkDirty();
 	        focusStatus = true;
 	        // In the collection: the game ran in its own small square window (250 pixels, resizable,
 	        // kept square). Inside the collection the resolution is left alone.
