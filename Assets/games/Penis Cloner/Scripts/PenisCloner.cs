@@ -225,6 +225,7 @@ namespace Games.PenisCloner
 		private const string ActionHint = "....to action.....................";
 		private const string UndoHint = "....to undo,....to restart........";
 		private const string ContinueHint = "............to continue...........";
+		private const string BlankLine = "..................................";
 		private const string MoveToken = "{<Keyboard>/upArrow|<Keyboard>/downArrow|<Keyboard>/leftArrow|<Keyboard>/rightArrow|<Gamepad>/dpad}";
 
 		// Where each glyph goes, in character cells from the top-left of the text screen.
@@ -240,7 +241,7 @@ namespace Games.PenisCloner
 		private readonly List<InputPromptOverlay.Label> promptLabels = new List<InputPromptOverlay.Label>();
 		private InputPromptOverlay prompts;
 
-		private void addPromptSpot(float column, float row, string token, float keyHeight = 0.9f)
+		private void addPromptSpot(float column, float row, string token, float keyHeight = 1.1f)
 		{
 			promptSpots.Add(new PromptSpot { column = column, row = row, token = token, keyHeight = keyHeight });
 		}
@@ -594,14 +595,18 @@ namespace Games.PenisCloner
 			}
 
 			titleImage = (string[])template.Clone();
-			titleImage[9] = MoveHint;
+			// A line apart rather than on three lines running, as the engine had them: the
+			// glyphs are taller than its letters and would touch.
+			titleImage[8] = MoveHint;
+			titleImage[9] = BlankLine;
 			titleImage[10] = ActionHint;
-			titleImage[11] = UndoHint;
+			titleImage[11] = BlankLine;
+			titleImage[12] = UndoHint;
 			promptSpots.Clear();
-			addPromptSpot(2f, 9.6f, MoveToken, 1.1f);
+			addPromptSpot(2f, 8.6f, MoveToken, 1.5f);
 			addPromptSpot(2f, 10.6f, "{ACTION}");
-			addPromptSpot(2f, 11.6f, "{UNDO}");
-			addPromptSpot(14f, 11.6f, "{RESTART}");
+			addPromptSpot(2f, 12.6f, "{UNDO}");
+			addPromptSpot(14f, 12.6f, "{RESTART}");
 
 			for (int i = 0; i < titleImage.Length; i++)
 			{
