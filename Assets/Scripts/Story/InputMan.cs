@@ -15,9 +15,16 @@ namespace Collection.Story
         [Tooltip("A toggled sprint (gamepad L3) switches off when the move input drops below this.")]
         public float sprintToggleStopThreshold = 0.2f;
 
-        public Vector2 move => Blocked ? Vector2.zero : moveAction.ReadValue<Vector2>();
+        // While a conversation is up (talking, set by DialogueMan) the character stands still: the same keys and
+        // stick choose between dialogue options instead (navigate).
+        [HideInInspector] public bool talking;
+
+        public Vector2 move => Blocked || talking ? Vector2.zero : moveAction.ReadValue<Vector2>();
+        public Vector2 navigate => Blocked ? Vector2.zero : moveAction.ReadValue<Vector2>();
         // Hold Left Shift, RB or RT, or click the left stick (L3) to toggle sprint on until you stop moving.
-        public bool sprint => !Blocked && (sprintAction.IsPressed() || sprintToggled);
+        public bool sprint => !Blocked && !talking && (sprintAction.IsPressed() || sprintToggled);
+        // E, Enter, Space or the pad's bottom button: talks to someone, moves a conversation on, picks an option.
+        public bool interactPressed => !Blocked && interactAction.WasPressedThisFrame();
         // -1..1: turns the character in the character creator (gamepad right stick; the mouse drags instead).
         public float rotate => Blocked ? 0f : rotateAction.ReadValue<float>();
 
@@ -28,6 +35,7 @@ namespace Collection.Story
         InputAction sprintAction;
         InputAction sprintToggleAction;
         InputAction rotateAction;
+        InputAction interactAction;
         bool sprintToggled;
 
         void Awake()
@@ -45,6 +53,7 @@ namespace Collection.Story
             sprintAction = map.FindAction("Sprint");
             sprintToggleAction = map.FindAction("SprintToggle");
             rotateAction = map.FindAction("Rotate");
+            interactAction = map.FindAction("Interact");
         }
 
         void OnEnable()

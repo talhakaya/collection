@@ -1,0 +1,28 @@
+title: GreeterFirst
+---
+Greeter: Oh. Hello.
+Greeter: That's a big round head you've got there.
+Greeter: Is it... on purpose?
+-> It's a television.
+    Greeter: Televisions have corners. Yours doesn't have a single one.
+    Greeter: I'm not judging. I'm just saying.
+-> I don't know yet.
+    Greeter: Fair. Most of us don't.
+-> ...
+    Greeter: Not a talker. That's all right.
+Greeter: Anyway. Welcome to the field. There's a cave over there, if you like caves.
+===
+
+title: GreeterAgain
+---
+Greeter: Still round, I see.
+-> Still round.
+    Greeter: Good. Consistency matters.
+-> Working on it.
+    Greeter: Take your time.
+===
+
+title: GreeterLater
+---
+Greeter: I've said everything I know.
+===

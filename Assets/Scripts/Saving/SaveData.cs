@@ -86,6 +86,14 @@ namespace Collection.Saving
 		/// front, back), each from 0, a flat cube side, to 1, the sphere. A new game starts
 		/// with the sphere.
 		public List<float> headSides = new List<float> { 1f, 1f, 1f, 1f, 1f, 1f };
+
+		/// Conversations that happen only once and have happened, by their Yarn node's name.
+		public List<string> conversations = new List<string>();
+
+		/// Things remembered from conversations (a choice the player made), as a name and a
+		/// value. See StoryMemory.
+		public List<string> memoryKeys = new List<string>();
+		public List<string> memoryValues = new List<string>();
 	}
 
 	[Serializable]

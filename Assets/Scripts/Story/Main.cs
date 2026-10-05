@@ -13,6 +13,7 @@ namespace Collection.Story
         public new CameraMan camera;
         public InputMan input;
         public CharacterMan character;
+        public DialogueMan dialogue;
 
         void Awake()
         {
