@@ -29,8 +29,8 @@ namespace Games.LetsNeverDoThatAgain
 	        }
 	        else if (sceneCount == 3)
 	        {
-	            // In the collection: the line names the gamepad's button while a gamepad is the device in use.
-	            Textt.updateText(usingGamepad() ? "A to jump" : "W to jump");
+	            // In the collection: was "W to jump". The key is a prompt, drawn for the device in use.
+	            Textt.updateText("{<Keyboard>/w|<Gamepad>/buttonSouth} to jump");
 	        }
 	        else if (sceneCount == 4)
 	        {
@@ -87,13 +87,6 @@ namespace Games.LetsNeverDoThatAgain
 	            }
 
 	        }
-	    }
-
-	    private static bool usingGamepad()
-	    {
-	        var pad = UnityEngine.InputSystem.Gamepad.current;
-	        var keyboard = UnityEngine.InputSystem.Keyboard.current;
-	        return pad != null && (keyboard == null || pad.lastUpdateTime > keyboard.lastUpdateTime);
 	    }
 
 	    void nextLevel()

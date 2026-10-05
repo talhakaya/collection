@@ -49,34 +49,9 @@ namespace Games.WhereIsHe
 		    WorldWander.currentRoom = null;
 		}
 
-		// In the collection: the two prompts in the text objects name what works here. Enter
-		// still starts the game, and so does A on a gamepad; ESC no longer quits, the
-		// collection's own exit does.
-		private Text[] prompts;
-		private string[] promptTexts;
-		private int promptDevice = -1;
-
-		void updatePrompts ()
-		{
-		    UnityEngine.InputSystem.Gamepad pad = UnityEngine.InputSystem.Gamepad.current;
-		    UnityEngine.InputSystem.Keyboard keyboard = UnityEngine.InputSystem.Keyboard.current;
-		    int device = (pad != null && (keyboard == null || pad.lastUpdateTime > keyboard.lastUpdateTime)) ? 1 : 0;
-		    if (device == promptDevice) return;
-		    promptDevice = device;
-		    if (prompts == null)
-		    {
-		        prompts = Resources.FindObjectsOfTypeAll<Text>();
-		        promptTexts = new string[prompts.Length];
-		        for (int i = 0; i < prompts.Length; i++) promptTexts[i] = prompts[i].text;
-		    }
-		    for (int i = 0; i < prompts.Length; i++)
-		    {
-		        if (prompts[i] == null || !prompts[i].gameObject.scene.IsValid() || !promptTexts[i].Contains("Press E")) continue;
-		        prompts[i].text = promptTexts[i]
-		            .Replace("Press Enter", device == 1 ? "Press A" : "Press Enter")
-		            .Replace("Press ESC to quit", device == 1 ? "Press Start+Select to quit" : "Press Shift+ESC to quit");
-		    }
-		}
+		// In the collection: the prompts in the title and end texts and the key pictures of the
+		// first rooms are the collection's own glyphs (InputPromptText on those objects), which
+		// follow the device in use. ESC no longer quits, the collection's own exit does.
 
 		void Start ()
 		{
@@ -98,7 +73,6 @@ namespace Games.WhereIsHe
 
 		void Update ()
 		{
-		    updatePrompts();
 	        if (!started)
 	        {
 	            if (TaloketoInputManager.GetButtonDown("Submit"))

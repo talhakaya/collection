@@ -8,7 +8,9 @@ namespace Games.LetsNeverDoThatAgain
 
 	    public static Textt instance;
 	    public string text;
-	    public Text textObject;
+	    // In the collection: a TextMesh Pro text (it was a UI Text), so that the {tokens} in the
+	    // lines - button prompts, see InputPrompts - can be drawn as the collection's glyphs.
+	    public TMPro.TMP_Text textObject;
 	    private float period = 1f;
 
 	    void Awake()
@@ -18,12 +20,12 @@ namespace Games.LetsNeverDoThatAgain
 
 		void Start ()
 	    {
-	        textObject.text = text;
+	        showText();
 		}
 
 		void Update ()
 	    {
-	        textObject.text = text;
+	        showText();
 	        if (period > 0f)
 	        {
 	            period -= Game.dt;
@@ -47,6 +49,27 @@ namespace Games.LetsNeverDoThatAgain
 	            textObject.color = new Color(textObject.color.r, textObject.color.g, textObject.color.b, 0f);
 	        }
 		}
+
+	    private string shownFor;
+	    private bool animatedPrompt;
+	    private bool shownBlink;
+
+	    // In the collection: formatted only when the line or the device changes, or when a
+	    // prompt that swaps sprites is due to swap.
+	    private void showText()
+	    {
+	        bool blink = Collection.Controls.InputPrompts.Blink;
+	        string key = text + "|" + Collection.Controls.InputPrompts.Scheme + "|" + Collection.Controls.InputPrompts.PadKind;
+	        if (key == shownFor && !(animatedPrompt && blink != shownBlink))
+	        {
+	            return;
+	        }
+
+	        shownFor = key;
+	        shownBlink = blink;
+	        textObject.spriteAsset = Collection.Controls.InputPrompts.SpriteAsset();
+	        textObject.text = Collection.Controls.InputPrompts.Format(text, out animatedPrompt);
+	    }
 
 	    public static void updateText(string text)
 	    {

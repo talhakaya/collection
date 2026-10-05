@@ -366,55 +366,48 @@ namespace Collection.Controls
 		}
 
 		/// Whether a gamepad is the thing actually moving the pointer right now, not just
-		/// whether one happens to be connected. Compares each device's own InputSystem
-		/// timestamp for its last actual input event, so whichever was touched most recently
-		/// wins - same idea as GolfinityGamepad's shortcut-prompt visibility.
-		///
-		/// The exception is before the mouse has been used at all: then a connected gamepad
-		/// wins outright. On a pad-first machine (a Steam Deck, a console-style setup) that is
-		/// what keeps the cursor off the screen from the very first frame, instead of leaving
-		/// it up until the first pad input. The timestamps can't be trusted for this - devices
-		/// report an initial state when they are added, so which one looks "most recent" at
-		/// startup is down to the order they happened to arrive in, not to anything the player
-		/// did.
+		/// whether one happens to be connected. InputPrompts decides which device the player
+		/// is using, for the button prompts as well as for this, so the two never disagree.
 		private void UpdateActiveDevice()
 		{
-			// Tracked whether or not a gamepad is connected: it also decides when the mouse's
-			// cursor first appears.
-			Mouse mouse = Mouse.current;
-			if (!mouseEverUsed && mouse != null && MouseShowsActivity(mouse))
-			{
-				mouseEverUsed = true;
-			}
+			InputPrompts.Tick();
 
-			Gamepad pad = Gamepad.current;
-			if (pad == null)
-			{
-				usingGamepadForMouse = false;
-				return;
-			}
-
-			if (!mouseEverUsed)
-			{
-				usingGamepadForMouse = true;
-				return;
-			}
-
-			double mouseTime = mouse != null ? mouse.lastUpdateTime : 0.0;
-			if (pad.lastUpdateTime > mouseTime) usingGamepadForMouse = true;
-			else if (mouseTime > pad.lastUpdateTime) usingGamepadForMouse = false;
-			// Equal - keep whatever it already was.
+			// Also decides when the mouse's cursor first appears.
+			mouseEverUsed = InputPrompts.MouseEverUsed;
+			usingGamepadForMouse = InputPrompts.RawScheme == InputScheme.Gamepad;
 		}
 
-		/// Real use of the mouse this frame - movement, a button or the wheel - as opposed to
-		/// the device merely having reported a state.
-		private static bool MouseShowsActivity(Mouse mouse)
+		/// Whether the current game has its mouse moved and clicked by a gamepad.
+		public static bool MouseEmulationEnabled => instance != null && instance.mouseEmulationEnabled;
+
+		/// <summary>
+		/// The gamepad control that stands in for a mouse control while a pad is emulating the
+		/// mouse ("&lt;Mouse&gt;/leftButton" gives the pad button that clicks), for prompts.
+		/// Null when nothing does.
+		/// </summary>
+		public static string EmulatingGamepadPath(string mousePath)
 		{
-			return mouse.delta.ReadValue() != Vector2.zero
-				|| mouse.scroll.ReadValue() != Vector2.zero
-				|| mouse.leftButton.isPressed
-				|| mouse.rightButton.isPressed
-				|| mouse.middleButton.isPressed;
+			if (instance == null) return null;
+
+			InputAction action;
+			switch (mousePath)
+			{
+				case "<Mouse>/leftButton": action = instance.mouseLeftClickAction; break;
+				case "<Mouse>/rightButton": action = instance.mouseRightClickAction; break;
+				case "<Mouse>/position":
+				case "<Mouse>/delta": action = instance.mouseMoveAction; break;
+				default: return null;
+			}
+
+			if (action == null) return null;
+
+			foreach (InputBinding binding in action.bindings)
+			{
+				string path = binding.effectivePath;
+				if (!string.IsNullOrEmpty(path) && path.StartsWith("<Gamepad>")) return path;
+			}
+
+			return null;
 		}
 
 		/// Positioned in raw screen pixels (anchored at the bottom-left, no CanvasScaler) so a

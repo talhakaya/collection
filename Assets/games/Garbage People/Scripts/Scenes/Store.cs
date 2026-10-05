@@ -54,7 +54,7 @@ namespace Games.GarbagePeople
 
 			if (moneyAmount >= attackTimePrice || moneyAmount >= movementSpeedPrice)
 			{
-				text.setText("Cash to spend: " + moneyAmount + "$\n\nMovement speed: Level " + movementSpeedLevel + "\nPress " + Prompt("Z", "X") + " to upgrade for " + movementSpeedPrice + "$\n\nHit rate: Level " + attackTimeLevel + "\nPress " + Prompt("X", "Y") + " to upgrade for " + attackTimePrice + "$\n\n");
+				text.setText("Cash to spend: " + moneyAmount + "$\n\nMovement speed: Level " + movementSpeedLevel + "\nPress {Z} to upgrade for " + movementSpeedPrice + "$\n\nHit rate: Level " + attackTimeLevel + "\nPress {X} to upgrade for " + attackTimePrice + "$\n\n");
 				if (PhaserInput.JustDown(zButton) && moneyAmount >= movementSpeedPrice)
 				{
 					moneyAmount -= movementSpeedPrice;

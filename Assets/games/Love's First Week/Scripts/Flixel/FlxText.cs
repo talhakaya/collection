@@ -146,9 +146,23 @@ namespace Games.LovesFirstWeek
 				tmp.font = fontAsset;
 			}
 
-			if (tmp.text != _text)
+			// In the collection: {tokens} in the text are button prompts, drawn as the
+			// collection's glyphs (see InputPrompts). Text without any is left exactly as it
+			// was, rich text off.
+			string shown = _text;
+			if (shown.IndexOf('{') >= 0)
 			{
-				tmp.text = _text;
+				shown = Collection.Controls.InputPrompts.Format(shown, out _);
+				if (!tmp.richText)
+				{
+					tmp.richText = true;
+					tmp.spriteAsset = Collection.Controls.InputPrompts.SpriteAsset();
+				}
+			}
+
+			if (tmp.text != shown)
+			{
+				tmp.text = shown;
 			}
 
 			float fontSize = (float)_size;

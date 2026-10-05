@@ -37,8 +37,10 @@ namespace Games.LovesFirstWeek
 			level.loadMap(FlxTilemap.arrayToCSV(data, levelwidth), Tile, 32, 32, FlxTilemap.AUTO);
 			ondekiler.add(level);
 			ondekiler.add(naz = new Naz(true, 50, 162));
-			enOndekiler.add(new FlxSprite(16, 200, img1));
-			enOndekiler.add(new FlxSprite(64, 200, img2));
+			// In the collection: the pictures of keys that stood here are prompts in the
+			// collection's glyphs, drawn by texts (see FlxText).
+			enOndekiler.add(new FlxText(14, 195, 60, "{<Keyboard>/upArrow|<Keyboard>/downArrow|<Keyboard>/leftArrow|<Keyboard>/rightArrow}").setFormat(null, 24));
+			enOndekiler.add(new FlxText(62, 195, 60, "{<Keyboard>/w|<Keyboard>/a|<Keyboard>/s|<Keyboard>/d}").setFormat(null, 24));
 			taslar.add(new Tas(208, 164));
 			bulut(15);
 			sarmasik(30, 2, 16, 100);

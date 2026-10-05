@@ -39,11 +39,11 @@ namespace Games.GarbagePeople
 
 			if (isGameFinished)
 			{
-				text = add.text(440, 500, "THANKS FOR PLAYING!!\n\nGame by Talha Kaya\n@taloketo\n\n" + Prompt("Space", "A") + " to restart", new TextStyle { align = "center" }).setFont("32px Arial Black").setFill("#ffffff").setShadow(2, 2, "#944149", 2);
+				text = add.text(440, 500, "THANKS FOR PLAYING!!\n\nGame by Talha Kaya\n@taloketo\n\n{SPACE} to restart", new TextStyle { align = "center" }).setFont("32px Arial Black").setFill("#ffffff").setShadow(2, 2, "#944149", 2);
 			}
 			else
 			{
-				text = add.text(450, 530, "Game by Talha Kaya\n@taloketo\n\n" + Prompt("Space", "A") + " to begin", new TextStyle { align = "center" }).setFont("32px Arial Black").setFill("#ffffff").setShadow(2, 2, "#944149", 2);
+				text = add.text(450, 530, "Game by Talha Kaya\n@taloketo\n\n{SPACE} to begin", new TextStyle { align = "center" }).setFont("32px Arial Black").setFill("#ffffff").setShadow(2, 2, "#944149", 2);
 			}
 
 			spacebar = input.keyboard.addKey(KeyCodes.SPACE);

@@ -424,6 +424,20 @@ namespace Games.GarbagePeople
 
 		private void place(TextMeshPro tmp, int order, Camera camera, double offsetX, double offsetY, Color color)
 		{
+			// In the collection: {tokens} in the text are button prompts, drawn as the
+			// collection's glyphs (see InputPrompts). Text without any is left exactly as it
+			// was, rich text off.
+			string text = this.text;
+			if (text.IndexOf('{') >= 0)
+			{
+				text = Collection.Controls.InputPrompts.Format(text, out _);
+				if (!tmp.richText)
+				{
+					tmp.richText = true;
+					tmp.spriteAsset = Collection.Controls.InputPrompts.SpriteAsset();
+				}
+			}
+
 			if (tmp.text != text)
 			{
 				tmp.text = text;

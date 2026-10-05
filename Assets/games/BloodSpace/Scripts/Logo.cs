@@ -30,32 +30,21 @@ namespace Games.BloodSpace
 			Game.PrefabInit ();
 
 			// In the collection: the line read "F4 for fullscreen, ENTER to begin". F4 is gone (the
-			// collection has its own display settings) and the gamepad's button is named while a
-			// gamepad is the device in use.
-			foreach (TextMesh mesh in FindObjectsByType<TextMesh>(FindObjectsSortMode.None))
+			// collection has its own display settings), and ENTER is the collection's glyph for
+			// the device in use: a prompt object under the text, which flickers with it below.
+			foreach (TextMesh mesh in textsToFlip)
 			{
-				if (mesh.text.Contains("ENTER to begin"))
+				if (mesh != null && beginPrompt == null)
 				{
-					beginText = mesh;
+					beginPrompt = mesh.GetComponentInChildren<TMPro.TMP_Text>(true);
 				}
 			}
 		}
 
-		private TextMesh beginText;
-
-		private static bool usingGamepad()
-		{
-			var pad = UnityEngine.InputSystem.Gamepad.current;
-			var keyboard = UnityEngine.InputSystem.Keyboard.current;
-			return pad != null && (keyboard == null || pad.lastUpdateTime > keyboard.lastUpdateTime);
-		}
+		private TMPro.TMP_Text beginPrompt;
 
 		void Update ()
 		{
-			if (beginText != null)
-			{
-				beginText.text = usingGamepad() ? "A to begin" : "ENTER to begin";
-			}
 			Color random = new Color(Random.Range (0f, 1f), Random.Range (0f, 1f), Random.Range (0f, 1f));
 			tint.selfColor = random;
 			SpriteEffect.blurConst = Random.Range (0f, 1f);
@@ -65,6 +54,7 @@ namespace Games.BloodSpace
 			for (int i = 0; i < textsToFlip.Length; i++)
 			{
 				textsToFlip[i].color = random;
+				if (beginPrompt != null) beginPrompt.color = random;
 			}
 
 			if (TaloketoInputManager.GetButtonDown("Select0") || TaloketoInputManager.GetButtonDown("Select1"))

@@ -295,17 +295,7 @@ namespace Games.OdeToPixelDays
 				}
 			}
 
-			if (FlxG.keys.justPressed("M"))
-			{
-				if (FlxG.volume > 0)
-				{
-					FlxG.volume = 0;
-				}
-				else
-				{
-					FlxG.volume = 1;
-				}
-			}
+			// In the collection: the M key that muted the game is gone.
 
 			// Left out on purpose: the source adds a logoButton here, the sponsor's logo in
 			// the corner of every level, linking to their site.

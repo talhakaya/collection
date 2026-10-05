@@ -225,7 +225,7 @@ namespace Games.GarbagePeople
 					// over the last, and only destroys the last. Identical text in the same
 					// place looks the same as one; here it is one, made once and kept up to
 					// date, rather than sixty more objects for every second spent waiting.
-					string prompt = "Press " + Prompt("SPACE", "A") + " to hit";
+					string prompt = "Press {SPACE} to hit";
 					if (scene.text1 == null || scene.text1.destroyed)
 					{
 						scene.text1 = scene.add.text(player.x, player.y - 250, prompt, new TextStyle { align = "center" }).setFont("32px Arial Black").setFill("#ffffff").setShadow(2, 2, "#888888", 2);
@@ -270,7 +270,7 @@ namespace Games.GarbagePeople
 		private void bathroom1Event0()
 		{
 			canAnimatePlayer = true;
-			text0 = add.text(player.x - 250, player.y - 250, "Press DIRECTION BUTTONS to move", new TextStyle { align = "center" }).setFont("32px Arial Black").setFill("#ffffff").setShadow(2, 2, "#888888", 2);
+			text0 = add.text(player.x - 250, player.y - 250, "Press {<Keyboard>/upArrow|<Keyboard>/downArrow|<Keyboard>/leftArrow|<Keyboard>/rightArrow|<Gamepad>/leftStick} to move", new TextStyle { align = "center" }).setFont("32px Arial Black").setFill("#ffffff").setShadow(2, 2, "#888888", 2);
 		}
 
 		private void bathroom1Event1()

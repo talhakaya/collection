@@ -211,13 +211,8 @@ namespace Games.GarbagePeople
 			return System.Math.Min(600, movementSpeedBase + movementSpeedLevel * movementSpeedLevelInc);
 		}
 
-		/// <summary>
-		/// Not in the game: the name of a key in an on-screen prompt, or of the gamepad
-		/// button that stands in for it while a pad is being used.
-		/// </summary>
-		public static string Prompt(string keyboard, string gamepad)
-		{
-			return PhaserInput.usingGamepad ? gamepad : keyboard;
-		}
+		// In the collection: the buttons named in on-screen text are {tokens} in the
+		// strings ("Press {SPACE} to hit"), which Text draws as the collection's glyphs for
+		// the device in use. The game named the keys in words.
 	}
 }

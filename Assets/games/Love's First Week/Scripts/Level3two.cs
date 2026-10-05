@@ -38,8 +38,10 @@ namespace Games.LovesFirstWeek
 			ondekiler.add(level);
 			ondekiler.add(talha = new Naz(false, 64, 130 + 64));
 			ondekiler.add(naz = new Naz(true, 256, 130 + 64));
-			ondekiler.add(new FlxSprite(48, 228, img2));
-			ondekiler.add(new FlxSprite(240, 228, img1));
+			// In the collection: the pictures of keys that stood here are prompts in the
+			// collection's glyphs, drawn by texts (see FlxText).
+			ondekiler.add(new FlxText(46, 223, 60, "{<Keyboard>/w|<Keyboard>/a|<Keyboard>/s|<Keyboard>/d}").setFormat(null, 24));
+			ondekiler.add(new FlxText(238, 223, 60, "{<Keyboard>/upArrow|<Keyboard>/downArrow|<Keyboard>/leftArrow|<Keyboard>/rightArrow}").setFormat(null, 24));
 			bulut(15);
 			sarmasik(12, 3, 0, 68 + 64);
 			agac("0", 100, 100);

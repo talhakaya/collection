@@ -517,3 +517,37 @@ run-time helpers (`KeepWithinGame`, `AimPoint`, `KeyDown`, `AnyKeyDown`,
   keeps its first state. Call the same code from
   `RenderPipelineManager.beginCameraRendering` / `endCameraRendering`, and grep every
   port for these callbacks.
+
+## Button prompts (the collection's shared glyphs)
+
+Every prompt a game shows ("Press Enter", a picture of a key) is drawn with the collection's
+own glyphs and follows the device the player is using: keyboard and mouse, or a pad, and
+which make of pad. The code is `Assets/Scripts/Controls/InputPrompts.cs`; read its summary
+first. What each kind of prompt needs:
+
+- **A prompt names what it is for, not a button.** In text it is a token: `{Jump}` is an
+  action of the game's map, `{<Keyboard>/enter|<Gamepad>/buttonSouth}` names controls. Use
+  the action when its first binding per device is the one to show; name the controls when it
+  is not (an action bound to both Start and A shows Start).
+- **Text with a prompt in it** has to be TextMesh Pro. `InputPromptTools.Convert` (editor)
+  turns a legacy UI Text or 3D TextMesh into one in place and makes the font asset; put
+  `InputPromptText` on it with the template. Measured on Where Is He, the converted text has
+  the same width and line height at the same font size. Leave a game's other texts alone.
+- **A sprite that is only a picture of a button**: `InputPromptTools.ReplaceSpriteWithPrompt`
+  empties the sprite and adds the prompt as a child, which follows the old object's
+  movement, tint and visibility. If a script on the object sets the sprite every frame
+  (Crime Factory's TutorialSign), take that script off.
+- **A prompt drawn into a larger picture**: erase it from the picture and put a prompt where
+  it was.
+- **A game that renders into a small texture** (the Flash, Flixel and Phaser ports): a glyph
+  inside that picture would be a few pixels, so prompts go over it at the window's
+  resolution with `InputPromptOverlay`. Ode to Pixel Days' `FlxPrompt` and the five lines in
+  its `FlxGame` are the pattern.
+- **A font asset made by code gets the wrong shader.** The project has two shaders named
+  `TextMeshPro/Mobile/Distance Field`; `Shader.Find` gives the old one under
+  `TextMesh Pro/Resources`, which lacks `_CullMode` (an error every frame) and draws a bar
+  under glyphs. `InputPromptTools.FontAssetFor` assigns the current one by path.
+- **Looking at a prompt for a pad you do not own**: `InputPrompts.Force(scheme, kind)` in
+  play mode; `Force(null, null)` goes back to following the player.
+- After redrawing or adding a glyph in `Assets/Textures/Input`, run
+  `Collection > Build Input Glyph Assets`.
