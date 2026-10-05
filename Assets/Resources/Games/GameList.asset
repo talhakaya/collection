@@ -33,7 +33,7 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
-    aspect: 1
+    aspect: 0
     musicClips: []
     soundClips: []
     entryScene: {fileID: 102900000, guid: 8f872d0d88cbd1748a0c6147230de4db, type: 3}
@@ -104,7 +104,7 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
-    aspect: 0
+    aspect: 1
     musicClips: []
     soundClips: []
     entryScene: {fileID: 102900000, guid: 9f033cdb041b9e1488d8aaec479fbabd, type: 3}
@@ -188,7 +188,7 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
-    aspect: 0
+    aspect: 2
     musicClips: []
     soundClips:
     - static
@@ -201,7 +201,7 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
-    aspect: 0
+    aspect: 2
     musicClips: []
     soundClips: []
     entryScene: {fileID: 102900000, guid: f9ee539bec4e88b41ba61cb30b9402a7, type: 3}
@@ -249,7 +249,7 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
-    aspect: 0
+    aspect: 2
     musicClips: []
     soundClips: []
     entryScene: {fileID: 102900000, guid: 5797a9ce61311fc47b941e36c8047757, type: 3}
@@ -273,7 +273,7 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
-    aspect: 0
+    aspect: 2
     musicClips: []
     soundClips: []
     entryScene: {fileID: 102900000, guid: 2b31950abb7d54a43b87805fed65518d, type: 3}

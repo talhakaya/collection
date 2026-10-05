@@ -123,7 +123,8 @@ namespace Collection.UI
 			float seconds = SaveManager.SecondsSinceGameSaved;
 			if (seconds < 0f)
 			{
-				return "Nothing saved yet in this game (started " + Ago(SaveManager.SecondsInGame) + ").";
+				// Nothing saved since the game was started: nothing to say.
+				return "";
 			}
 
 			return "Last saved " + Ago(seconds) + ".";

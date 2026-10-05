@@ -50,7 +50,7 @@ namespace Games.Orphan
 
 		void Start ()
 		{
-			lang = Language.Tur;
+			lang = Language.Eng; // In the collection: was Language.Tur. English only for now; the Turkish lines are all still here.
 			Cursor.SetCursor(cursorTexture, cursorSpot, cursorMode);
 		}
 

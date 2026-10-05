@@ -78,7 +78,9 @@ namespace Games.LovesFirstWeek
 				enOndekiler.add(new FlxSprite((455 - 120) / 2.0, 184, img3));
 			}
 
-			enOndekiler.add(new FlxSprite((455 - 120) / 2.0, 204, img4));
+			// In the collection: the picture of the sound keys stood here, and under the
+			// title's buttons the choice of language ("Language / Dil", Turkce, English). Sound
+			// is the collection's settings screen and the game is English only for now.
 			// Changed for the collection: the title at 60% of the source's size (60, with
 			// the second line at y 50), which was too big.
 			oyun = new FlxText(0, 0, 455, "");
@@ -87,10 +89,6 @@ namespace Games.LovesFirstWeek
 			oyun2 = new FlxText(0, 30, 455, "");
 			oyun2.setFormat("NES", 36, 4281017343, "center", 2);
 			add(oyun2);
-			enOndekiler.add(new FlxText(193, 212, 100, "Language / Dil"));
-			FlxButton turkceButton = enOndekiler.add(new FlxButton(150, 224, "Turkce", turkce));
-			FlxButton englishButton = enOndekiler.add(new FlxButton(232, 224, "English", english));
-
 			// Left out on purpose: the sponsor's "More Games" button, at (455 - 80) / 2, 183.
 			if (save.data.level == null)
 			{
@@ -98,7 +96,7 @@ namespace Games.LovesFirstWeek
 				FlxButton twoPlayers = enOndekiler.add(playButton = new FlxButton((455 - 80) / 2.0, 141, "2 Player Game", twoPlayerNewGame));
 
 				// Not in the source: see State1.focusOn.
-				focusOn(onePlayer, twoPlayers, turkceButton, englishButton);
+				focusOn(onePlayer, twoPlayers);
 			}
 			else
 			{
@@ -107,7 +105,7 @@ namespace Games.LovesFirstWeek
 				FlxButton continueGame = enOndekiler.add(new FlxButton((455 - 80) / 2.0, 162, "Continue Game", nextLevel2));
 
 				// Not in the source: see State1.focusOn.
-				focusOn(onePlayer, twoPlayers, continueGame, turkceButton, englishButton);
+				focusOn(onePlayer, twoPlayers, continueGame);
 			}
 
 			credits = new FlxText(180, 244, 455, "Made by Talha Kaya");
@@ -133,16 +131,6 @@ namespace Games.LovesFirstWeek
 				oyun2.text = "First Week";
 				credits.text = "Made by Talha Kaya";
 			}
-		}
-
-		private void turkce()
-		{
-			save.data.lang = "tur";
-		}
-
-		private void english()
-		{
-			save.data.lang = "eng";
 		}
 
 		public void onePlayerNewGame()

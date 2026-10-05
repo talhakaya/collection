@@ -35,9 +35,10 @@ namespace Collection.Saving
 		private static int storySlot = -1;
 		private static bool dirty;
 
-		// When the game being played was entered and when it last saved, in real time.
+		// When the game being played last saved, on a clock that runs in real time but
+		// stands still while the collection has the game paused.
 		private static string currentGame;
-		private static float gameEnteredAt;
+		private static float unpausedClock;
 		private static float gameSavedAt = -1f;
 
 		public static SaveData Data
@@ -114,7 +115,7 @@ namespace Collection.Saving
 		public static void MarkDirty()
 		{
 			dirty = true;
-			gameSavedAt = Time.realtimeSinceStartup;
+			gameSavedAt = unpausedClock;
 		}
 
 		/// The same for Settings, which are not a game's progress: "last saved" does not move.
@@ -124,11 +125,9 @@ namespace Collection.Saving
 		}
 
 		/// Seconds since the game being played last saved anything, for the pause screen.
-		/// Negative when it has saved nothing since it was started.
-		public static float SecondsSinceGameSaved => gameSavedAt < 0f ? -1f : Time.realtimeSinceStartup - gameSavedAt;
-
-		/// Seconds since the game being played was started from the menu.
-		public static float SecondsInGame => Time.realtimeSinceStartup - gameEnteredAt;
+		/// Time spent paused does not count. Negative when it has saved nothing since it was
+		/// started.
+		public static float SecondsSinceGameSaved => gameSavedAt < 0f ? -1f : unpausedClock - gameSavedAt;
 
 		public static void Load()
 		{
@@ -187,7 +186,6 @@ namespace Collection.Saving
 			{
 				SceneManager.sceneLoaded += OnSceneLoaded;
 				currentGame = GameContext.FromScenePath(SceneManager.GetActiveScene().path);
-				gameEnteredAt = Time.realtimeSinceStartup;
 			}
 
 			private void OnDestroy()
@@ -203,7 +201,6 @@ namespace Collection.Saving
 				if (game != currentGame)
 				{
 					currentGame = game;
-					gameEnteredAt = Time.realtimeSinceStartup;
 					gameSavedAt = -1f;
 				}
 
@@ -216,6 +213,11 @@ namespace Collection.Saving
 
 			private void Update()
 			{
+				if (!Paused)
+				{
+					unpausedClock += Time.unscaledDeltaTime;
+				}
+
 				// Only time spent playing: in a game's scene, not paused, time running.
 				if (!Paused && Time.timeScale > 0f && GameContext.FromScenePath(SceneManager.GetActiveScene().path) != null)
 				{

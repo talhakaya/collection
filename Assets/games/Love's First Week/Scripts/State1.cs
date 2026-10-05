@@ -101,13 +101,8 @@ namespace Games.LovesFirstWeek
 		private FlxSprite menuBack;
 		private FlxButton menuContinue;
 		private FlxButton menuRestart;
-		private FlxButton menuMute;
 		private FlxButton menuMain;
 		private FlxSprite menuFullscreen;
-		private FlxSprite menuSound;
-		private FlxText menuLanguage;
-		private FlxButton menuTurkce;
-		private FlxButton menuEnglish;
 		private FlxSprite menuWASD;
 		private FlxSprite menuDirs;
 		private FlxSprite menuR;
@@ -125,10 +120,12 @@ namespace Games.LovesFirstWeek
 		public override void create()
 		{
 			FlxSprite stripe = null;
-			FlxButton menuButton = null;
 			save = new FlxSave();
 			save.bind("0");
-			if (save.data.lang == null)
+			// In the collection: English only for now. The game's own choice of language is
+			// gone from its menus (a language would be a setting of the whole collection), so
+			// whatever was saved, it is English; the Turkish text is all still here.
+			if (save.data.lang != "eng")
 			{
 				save.data.lang = "eng";
 			}
@@ -256,11 +253,9 @@ namespace Games.LovesFirstWeek
 			FlxG.resetCameras(new FlxCamera(0, 0, FlxG.width, FlxG.height));
 			FlxG.camera.setBounds(0, 0, levelwidth * 32, levelheight * 32, true);
 			FlxG.camera.follow(camera, FlxCamera.STYLE_LOCKON);
-			if (isMenuButton)
-			{
-				enOndekiler.add(menuButton = new FlxButton(455 - 80, 0, "Menu", menuButtonClick));
-				menuButton.scrollFactor.x = menuButton.scrollFactor.y = 0;
-			}
+			// In the collection: the "Menu" button that stood in the corner of every level is
+			// not added - it could not be clicked while playing. The menu it opened is still
+			// on Backspace (see updateMenuKeys).
 
 
 			// Left out on purpose: the two logoButtons the source adds here - the sponsor's
@@ -347,8 +342,10 @@ namespace Games.LovesFirstWeek
 				menuBack.alpha = 0.4;
 				enOndekiler.add(menuContinue = new FlxButton((455 - 80) / 2.0, 40 - sub, "Continue", menuButtonClick));
 				enOndekiler.add(menuRestart = new FlxButton((455 - 80) / 2.0, 64 - sub, "Restart", resetState));
-				enOndekiler.add(menuMute = new FlxButton((455 - 80) / 2.0, 88 - sub, "Mute On/Off", muteOnOff));
-				enOndekiler.add(menuMain = new FlxButton((455 - 80) / 2.0, 112 - sub, "Main Menu", mainMenu));
+				// In the collection: "Mute On/Off" stood between these two, and under them the
+				// picture of the sound keys and the choice of language. Sound is the collection's
+				// settings screen now and the game is English only, so they are not added.
+				enOndekiler.add(menuMain = new FlxButton((455 - 80) / 2.0, 88 - sub, "Main Menu", mainMenu));
 
 				// Left out on purpose: the sponsor's "More Games" button, last in the column
 				// at 136 - sub.
@@ -358,28 +355,10 @@ namespace Games.LovesFirstWeek
 					menuFullscreen.scrollFactor.x = menuFullscreen.scrollFactor.y = 0;
 				}
 
-				enOndekiler.add(menuSound = new FlxSprite((455 - 120) / 2.0, 142, img4));
-				enOndekiler.add(menuLanguage = new FlxText((455 - 120) / 2.0, 160, 130, "Language / Dil:"));
-				if (save.data.lang == "tur")
-				{
-					menuLanguage.text = "Language / Dil: Turkce";
-				}
-				else
-				{
-					menuLanguage.text = "Language / Dil: English";
-				}
-
-				enOndekiler.add(menuTurkce = new FlxButton(150, 172, "Turkce", turkce));
-				enOndekiler.add(menuEnglish = new FlxButton(232, 172, "English", english));
 				menuBack.scrollFactor.x = menuBack.scrollFactor.y = 0;
 				menuContinue.scrollFactor.x = menuContinue.scrollFactor.y = 0;
-				menuEnglish.scrollFactor.x = menuEnglish.scrollFactor.y = 0;
-				menuLanguage.scrollFactor.x = menuLanguage.scrollFactor.y = 0;
-				menuMute.scrollFactor.x = menuMute.scrollFactor.y = 0;
 				menuMain.scrollFactor.x = menuMain.scrollFactor.y = 0;
 				menuRestart.scrollFactor.x = menuRestart.scrollFactor.y = 0;
-				menuSound.scrollFactor.x = menuSound.scrollFactor.y = 0;
-				menuTurkce.scrollFactor.x = menuTurkce.scrollFactor.y = 0;
 				// In the collection: the four pictures of keys that stood here (WASD, the
 				// arrows, R and the space bar) are prompts in the collection's glyphs, drawn by
 				// the texts. The two cluster pictures are texts of their own; the R and space
@@ -398,7 +377,7 @@ namespace Games.LovesFirstWeek
 				menuSpace.scrollFactor.x = menuSpace.scrollFactor.y = 0;
 				menuRText.scrollFactor.x = menuRText.scrollFactor.y = 0;
 				menuSpaceText.scrollFactor.x = menuSpaceText.scrollFactor.y = 0;
-				focusOn(menuContinue, menuRestart, menuMute, menuMain, menuTurkce, menuEnglish);
+				focusOn(menuContinue, menuRestart, menuMain);
 			}
 			else
 			{
@@ -407,55 +386,18 @@ namespace Games.LovesFirstWeek
 				menuBack.kill();
 				menuContinue.kill();
 				menuRestart.kill();
-				menuMute.kill();
 				menuMain.kill();
 				if (isFullscreenAvailable)
 				{
 					menuFullscreen.kill();
 				}
 
-				menuSound.kill();
-				menuLanguage.kill();
-				menuTurkce.kill();
-				menuEnglish.kill();
 				menuWASD.kill();
 				menuDirs.kill();
 				menuR.kill();
 				menuSpace.kill();
 				menuRText.kill();
 				menuSpaceText.kill();
-			}
-		}
-
-		private void turkce()
-		{
-			if (isMenuOn)
-			{
-				menuLanguage.text = "Language / Dil: Turkce";
-			}
-
-			save.data.lang = "tur";
-		}
-
-		private void english()
-		{
-			if (isMenuOn)
-			{
-				menuLanguage.text = "Language / Dil: English";
-			}
-
-			save.data.lang = "eng";
-		}
-
-		public void muteOnOff()
-		{
-			if (FlxG.volume > 0)
-			{
-				FlxG.volume = 0;
-			}
-			else
-			{
-				FlxG.volume = 0.5;
 			}
 		}
 
@@ -470,18 +412,6 @@ namespace Games.LovesFirstWeek
 			int j = 0;
 			updateMenuKeys();
 			base.update();
-			if (isMenuOn)
-			{
-				if (save.data.lang == "tur")
-				{
-					menuLanguage.text = "Language / Dil: Turkce";
-				}
-				else
-				{
-					menuLanguage.text = "Language / Dil: English";
-				}
-			}
-
 			naz.kapida = false;
 			FlxG.overlap<SoyutTekme, Tas>(tasaTekmeler, taslar, overlapTekme);
 			FlxG.collide(ondekiler);
