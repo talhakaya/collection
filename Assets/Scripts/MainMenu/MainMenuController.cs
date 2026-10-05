@@ -14,8 +14,7 @@ namespace Collection.MainMenu
 	/// story slots are screens of the collection's menus (Menus), drawn over this scene;
 	/// what is in the scene itself is the list of games.
 	///
-	/// Placeholder: the story mode is not made yet, so choosing a slot leads to the same
-	/// list of games, played into that slot.
+	/// Choosing a story slot loads the story scene, played into that slot.
 	/// </summary>
 	public class MainMenuController : MonoBehaviour
 	{
@@ -115,9 +114,7 @@ namespace Collection.MainMenu
 			Menus.CloseAll();
 			if (titleLabel != null)
 			{
-				titleLabel.text = SaveManager.IsStoryMode
-					? "Story mode, slot " + (SaveManager.StorySlotIndex + 1) + " (placeholder)"
-					: "Just the games";
+				titleLabel.text = "Just the games";
 			}
 		}
 
@@ -187,7 +184,10 @@ namespace Collection.MainMenu
 				SaveManager.Save();
 			}
 
-			ShowList();
+			// Leaving the story comes back to the first screen, not to the list of games.
+			inList = false;
+			Menus.CloseAll();
+			SceneManager.LoadScene(GameContext.StoryScenePath);
 		}
 
 		private static string PlayTime(float seconds)
