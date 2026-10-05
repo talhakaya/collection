@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -9,6 +10,10 @@ namespace Collection.Story
 {
     // What Yarn's lines and options are shown with: a name, a line, and a list of options. A line stays until
     // Interact is pressed; an option is chosen with up and down and Interact, or with the mouse.
+    //
+    // Who is speaking decides how a line looks (speakerStyles): most speak in the box at the bottom with their name;
+    // a speaker listed as centred - "God" - is bare text in the middle of the screen, with or without a name. One
+    // line can go against its speaker with a tag in the script: #centre or #box at the end of the line.
     //
     // It tells the conversation's NPCTrigger when each line starts and ends and which option was picked, which is
     // where anything that should happen in the scene is hooked up.
@@ -25,8 +30,33 @@ namespace Collection.Story
         public List<TextMeshProUGUI> textOptions;
         public GameObject lineMenu;
         public GameObject optionsMenu;
+
+        [Header("Lines in the middle of the screen")]
+        public GameObject centreMenu;
+        public TextMeshProUGUI textCentre;
+        [Tooltip("Optional: the same words, drawn dark behind the centred text so it reads over anything.")]
+        public TextMeshProUGUI textCentreShadow;
+        public TextMeshProUGUI textCentreName;
+        [Tooltip("Where the options menu goes, in the canvas's units above the bottom of the screen: its bottom edge when the options follow a line in the box...")]
+        public float optionsBottomForBox = 312f;
+        [Tooltip("...and its top edge when they follow a centred line.")]
+        public float optionsTopForCentre = 430f;
+
+        [Serializable]
+        public class SpeakerStyle
+        {
+            [Tooltip("The speaker's name as written in the Yarn script, before the colon.")]
+            public string speaker;
+            public bool centred = true;
+            public bool showName;
+        }
+
+        [Tooltip("Speakers whose lines are not shown the usual way (in the box, with the name).")]
+        public List<SpeakerStyle> speakerStyles = new List<SpeakerStyle> { new SpeakerStyle { speaker = "God" } };
         [Tooltip("Shown on the line's panel once the line can be moved on.")]
         public GameObject continueHint;
+        [Tooltip("The same for a line in the middle of the screen.")]
+        public GameObject centreContinueHint;
 
         [Tooltip("Space between two options (in the canvas's units).")]
         public float optionGap = 10f;
@@ -45,11 +75,48 @@ namespace Collection.Story
 
         int selectedOption;
         int verticalHeld;
+        bool lastLineCentred;
 
         void Awake()
         {
             lineMenu.SetActive(false);
             optionsMenu.SetActive(false);
+            if (centreMenu != null)
+                centreMenu.SetActive(false);
+        }
+
+        // How a line is shown: by its speaker, unless the line itself is tagged #centre (or #center) or #box.
+        void StyleFor(LocalizedLine line, out bool centred, out bool showName)
+        {
+            centred = false;
+            showName = true;
+            string speaker = line.CharacterName;
+            if (!string.IsNullOrEmpty(speaker))
+            {
+                foreach (SpeakerStyle style in speakerStyles)
+                {
+                    if (style.speaker == speaker)
+                    {
+                        centred = style.centred;
+                        showName = style.showName;
+                        break;
+                    }
+                }
+            }
+
+            if (line.Metadata != null)
+            {
+                foreach (string tag in line.Metadata)
+                {
+                    if (tag == "centre" || tag == "center")
+                        centred = true;
+                    else if (tag == "box")
+                        centred = false;
+                }
+            }
+
+            if (centreMenu == null)
+                centred = false;
         }
 
         public override YarnTask OnDialogueStartedAsync()
@@ -67,6 +134,8 @@ namespace Collection.Story
             if (shouldLog) Debug.Log($"{name} DialogueComplete", this);
             lineMenu.SetActive(false);
             optionsMenu.SetActive(false);
+            if (centreMenu != null)
+                centreMenu.SetActive(false);
             isActive = false;
             NPCTrigger trigger = currentNpcTrigger;
             currentNpcTrigger = null;
@@ -82,15 +151,33 @@ namespace Collection.Story
             if (currentNpcTrigger != null)
                 currentNpcTrigger.OnLineStart();
 
-            optionsMenu.SetActive(false);
-            lineMenu.SetActive(true);
-            textName.text = line.CharacterName ?? "";
             string text = line.TextWithoutCharacterName.Text;
             text = text.Replace("<br>", "\n");
             text = text.Replace("<c>", ":");
-            textLine.text = text;
-            if (continueHint != null)
-                continueHint.SetActive(false);
+
+            StyleFor(line, out bool centred, out bool showName);
+            lastLineCentred = centred;
+            string speaker = showName ? line.CharacterName ?? "" : "";
+            optionsMenu.SetActive(false);
+            lineMenu.SetActive(!centred);
+            if (centreMenu != null)
+                centreMenu.SetActive(centred);
+            if (centred)
+            {
+                textCentre.text = text;
+                if (textCentreShadow != null)
+                    textCentreShadow.text = text;
+                if (textCentreName != null)
+                    textCentreName.text = speaker;
+            }
+            else
+            {
+                textName.text = speaker;
+                textLine.text = text;
+            }
+            GameObject hint = centred && centreContinueHint != null ? centreContinueHint : continueHint;
+            if (hint != null)
+                hint.SetActive(false);
 
             float ready = Time.unscaledTime + InputDelay;
             while (this != null && !token.NextContentToken.IsCancellationRequested)
@@ -98,16 +185,16 @@ namespace Collection.Story
                 await YarnTask.Yield();
                 if (Time.unscaledTime < ready)
                     continue;
-                if (continueHint != null && !continueHint.activeSelf)
-                    continueHint.SetActive(true);
+                if (hint != null && !hint.activeSelf)
+                    hint.SetActive(true);
                 if (Main.inst.input.interactPressed || Clicked())
                     break;
             }
 
             if (this == null)
                 return;
-            if (continueHint != null)
-                continueHint.SetActive(false);
+            if (hint != null)
+                hint.SetActive(false);
             if (currentNpcTrigger != null)
                 currentNpcTrigger.OnLineEnd();
         }
@@ -121,6 +208,14 @@ namespace Collection.Story
             int count = Mathf.Min(dialogueOptions.Length, textOptions.Count);
             if (dialogueOptions.Length > textOptions.Count)
                 Debug.LogWarning($"{name}: {dialogueOptions.Length} options, but only {textOptions.Count} places to show them.", this);
+            // Under a centred line the options hang below the text; otherwise they sit on the box.
+            var menu = (RectTransform)optionsMenu.transform;
+            float rowHeight = ((RectTransform)textOptions[0].transform.parent).sizeDelta.y;
+            float stackHeight = count * rowHeight + (count - 1) * optionGap;
+            Vector2 menuPosition = menu.anchoredPosition;
+            menuPosition.y = lastLineCentred ? optionsTopForCentre - stackHeight : optionsBottomForBox;
+            menu.anchoredPosition = menuPosition;
+
             for (int i = 0; i < textOptions.Count; i++)
             {
                 var row = (RectTransform)textOptions[i].transform.parent;

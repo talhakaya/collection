@@ -57,7 +57,14 @@ namespace Collection.Story
                 return;
             }
             if (playOnAwake)
-                TryStartDialogue();
+                StartCoroutine(StartOnceEverythingHasStarted());
+        }
+
+        // A frame later, so that the dialogue runner and everything else in the scene has had its own Start.
+        System.Collections.IEnumerator StartOnceEverythingHasStarted()
+        {
+            yield return null;
+            TryStartDialogue();
         }
 
         void OnDisable()
