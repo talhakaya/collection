@@ -133,7 +133,10 @@ namespace Collection.Story
                 bodies[i].maxAngularVelocity = 120f;
                 bodies[i].solverIterations = 16;
                 bodies[i].solverVelocityIterations = 4;
+                // Standing where it was put, and going with whatever moves it there (the land coming up), until
+                // it is first ridden.
                 bodies[i].isKinematic = true;
+                bodies[i].interpolation = RigidbodyInterpolation.None;
             }
 
             // The parts do not get in one another's way.
@@ -205,6 +208,7 @@ namespace Collection.Story
             {
                 Rigidbody body = bodies[i];
                 body.isKinematic = false;
+                body.interpolation = RigidbodyInterpolation.Interpolate;
                 Vector3 at = place + facing * restPlaces[i];
                 Quaternion turn = facing * restTurns[i];
                 body.transform.SetPositionAndRotation(at, turn);

@@ -9,7 +9,10 @@ namespace Collection.Story
     //
     //   the artifacts not won yet, once they are there to be won (the land is up);
     //
-    //   the giant television, when it has been waiting to be found in the sea for `televisionAfter` seconds.
+    //   the giant television, when it has been waiting to be found in the sea for `televisionAfter` seconds,
+    //   and again once every artifact is won and it has something new to say;
+    //
+    //   the bicycle, while nobody is riding it.
     //
     // "Out of the picture" is about where it is, not about what is in front of it: something behind a hill but
     // within the screen's edges counts as seen.
@@ -23,8 +26,14 @@ namespace Collection.Story
         [Tooltip("The height on the television that is pointed to, and that counts as seeing it (m above its base).")]
         public float televisionHeight = 10f;
 
+        [Tooltip("Pointed to while it is not being ridden. Empty: none.")]
+        public Bicycle bicycle;
+
         [Header("Look")]
+        [Tooltip("The arrows to the artifacts, to the television, and to the bicycle.")]
         public Color colour = new Color(1f, 0.95f, 0.8f, 0.95f);
+        public Color televisionColour = new Color(0.75f, 0.9f, 1f, 0.95f);
+        public Color bicycleColour = new Color(1f, 0.45f, 0.4f, 0.95f);
         [Tooltip("The arrow's size, and how far in from the screen's edge it sits (canvas units).")]
         public float size = 56f;
         public float inset = 70f;
@@ -33,6 +42,7 @@ namespace Collection.Story
 
         readonly List<Image> arrows = new List<Image>();
         readonly List<Vector3> targets = new List<Vector3>();
+        readonly List<Color> colours = new List<Color>();
         RectTransform area;
         Sprite shape;
         float televisionWaited;
@@ -46,6 +56,7 @@ namespace Collection.Story
         void LateUpdate()
         {
             targets.Clear();
+            colours.Clear();
             Camera view = Camera.main;
             bool quiet = view == null || Main.inst.dialogue.IsTalking() || Collection.Controls.TaloketoInputManager.Blocked;
 
@@ -53,19 +64,26 @@ namespace Collection.Story
             {
                 foreach (Artifact artifact in director.artifacts)
                     if (artifact != null && artifact.isActiveAndEnabled && !artifact.Won)
-                        targets.Add(artifact.transform.position);
+                        Add(artifact.transform.position, colour);
 
                 // The television: there, and not met yet.
                 NPCTrigger meeting = director.televisionTrigger;
                 bool waiting = meeting != null && meeting.isActiveAndEnabled && director.television.activeInHierarchy;
                 televisionWaited = waiting ? televisionWaited + Time.deltaTime : 0f;
-                if (waiting && televisionWaited >= televisionAfter)
-                    targets.Add(director.television.transform.position + Vector3.up * televisionHeight);
+                // And when it has something new to say: that trigger is only switched on then, and off once said.
+                NPCTrigger again = director.allArtifactsTrigger;
+                bool calling = again != null && again.isActiveAndEnabled && director.television.activeInHierarchy;
+                if ((waiting && televisionWaited >= televisionAfter) || calling)
+                    Add(director.television.transform.position + Vector3.up * televisionHeight, televisionColour);
+
+                if (bicycle != null && bicycle.isActiveAndEnabled && !bicycle.Ridden)
+                    Add(bicycle.frame.position + Vector3.up * 0.6f, bicycleColour);
             }
 
             int shown = 0;
-            foreach (Vector3 target in targets)
+            for (int t = 0; t < targets.Count; t++)
             {
+                Vector3 target = targets[t];
                 Vector3 at = view.WorldToViewportPoint(target);
                 bool seen = at.z > 0f && at.x > edge && at.x < 1f - edge && at.y > edge && at.y < 1f - edge;
                 if (seen)
@@ -86,6 +104,7 @@ namespace Collection.Story
                 float scale = Mathf.Min(reach.x / Mathf.Max(0.0001f, Mathf.Abs(way.x)), reach.y / Mathf.Max(0.0001f, Mathf.Abs(way.y)));
 
                 Image arrow = Arrow(shown++);
+                arrow.color = colours[t];
                 RectTransform rect = arrow.rectTransform;
                 rect.anchoredPosition = way * scale;
                 rect.localRotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(way.y, way.x) * Mathf.Rad2Deg - 90f);
@@ -95,6 +114,12 @@ namespace Collection.Story
 
             for (int i = 0; i < arrows.Count; i++)
                 arrows[i].enabled = i < shown;
+        }
+
+        void Add(Vector3 target, Color arrowColour)
+        {
+            targets.Add(target);
+            colours.Add(arrowColour);
         }
 
         Image Arrow(int index)

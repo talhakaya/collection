@@ -1766,6 +1766,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4220849562451372498, guid: a8e89c036dc1df141b472e7bdaafd7f6, type: 3}
   m_PrefabInstance: {fileID: 164677910}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &164677912 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6095623766518495933, guid: a8e89c036dc1df141b472e7bdaafd7f6, type: 3}
+  m_PrefabInstance: {fileID: 164677910}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 164677911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04cdc18cadbdd62468acd4da72c2cf56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &179779677
 GameObject:
   m_ObjectHideFlags: 0
@@ -4240,7 +4251,10 @@ MonoBehaviour:
   director: {fileID: 675054524}
   televisionAfter: 30
   televisionHeight: 10
+  bicycle: {fileID: 164677912}
   colour: {r: 1, g: 0.95, b: 0.8, a: 0.95}
+  televisionColour: {r: 0.75, g: 0.9, b: 1, a: 0.95}
+  bicycleColour: {r: 1, g: 0.45, b: 0.4, a: 0.95}
   size: 56
   inset: 70
   edge: 0.04
