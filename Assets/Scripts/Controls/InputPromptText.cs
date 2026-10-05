@@ -20,6 +20,9 @@ namespace Collection.Controls
 		[Tooltip("Use the glyphs with a black drop shadow, for text over a busy picture.")]
 		public bool shadowed;
 
+		[Tooltip("Optional. The text takes this renderer's colour every frame - for a prompt that replaces part of a sprite which the game's own scripts tint or fade.")]
+		public SpriteRenderer colourFrom;
+
 		private TMP_Text text;
 		private bool animated;
 		private bool lastBlink;
@@ -53,6 +56,11 @@ namespace Collection.Controls
 
 		private void Update()
 		{
+			if (colourFrom != null && text.color != colourFrom.color)
+			{
+				text.color = colourFrom.color;
+			}
+
 			if (animated && InputPrompts.Blink != lastBlink)
 			{
 				Refresh();
