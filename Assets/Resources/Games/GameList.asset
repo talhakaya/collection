@@ -538,7 +538,7 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
-    aspect: 0
+    aspect: 2
     musicClips: []
     soundClips: []
     entryScene: {fileID: 102900000, guid: 9cf4c4d122da41f9bf9eecceed01c9ef, type: 3}
