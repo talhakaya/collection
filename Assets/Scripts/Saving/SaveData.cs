@@ -96,6 +96,15 @@ namespace Collection.Saving
 		public List<string> memoryKeys = new List<string>();
 		public List<string> memoryValues = new List<string>();
 
+		/// The level the story is at, counted from 0 (see GameContext.StoryLevelScenes).
+		public int level;
+
+		/// Coins, from chests and barrels.
+		public int coins;
+
+		/// Things that are used up for good, by their ids: chests opened, barrels broken.
+		public List<string> spent = new List<string>();
+
 		/// The artifacts won so far, by their ids, in the order they were won: the order
 		/// they follow the character in.
 		public List<string> artifacts = new List<string>();

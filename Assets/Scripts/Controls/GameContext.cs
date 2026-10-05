@@ -11,14 +11,37 @@ namespace Collection.Controls
 	{
 		public const string GamesRootFolder = "Assets/games/";
 
-		/// The story mode's scene. Not a game of the collection, but played like one: it can
-		/// be paused and its time counts as play time.
-		public const string StoryScenePath = "Assets/Scenes/story.unity";
+		/// The story mode's scenes, one for each of its levels, in the order they are played.
+		/// Not games of the collection, but played like one: they can be paused and their time
+		/// counts as play time. A level whose scene is not in the build yet is not reachable
+		/// (see StoryLevels).
+		public static readonly string[] StoryLevelScenes =
+		{
+			"Assets/Scenes/story.unity",
+			"Assets/Scenes/story grassy field.unity",
+			"Assets/Scenes/story ocean.unity",
+			"Assets/Scenes/story mountain.unity",
+			"Assets/Scenes/story glitch land.unity",
+		};
+
+		public static readonly string[] StoryLevelNames =
+		{
+			"Desert",
+			"Grassy field",
+			"Ocean",
+			"Mountain",
+			"Glitch land",
+		};
+
+		public static bool IsStory(string scenePath)
+		{
+			return System.Array.IndexOf(StoryLevelScenes, scenePath) >= 0;
+		}
 
 		/// Whether a scene is one that is played - a game's, or the story's - rather than a menu.
 		public static bool IsPlayed(string scenePath)
 		{
-			return FromScenePath(scenePath) != null || scenePath == StoryScenePath;
+			return FromScenePath(scenePath) != null || IsStory(scenePath);
 		}
 
 		/// The scene a game starts in: the one its GameList entry names, or else the first of

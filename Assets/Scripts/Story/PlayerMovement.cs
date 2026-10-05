@@ -36,6 +36,14 @@ namespace Collection.Story
         Vector3 horizontalVelocity;
         float verticalVelocity;
 
+        // The speed along the ground it is walking at. Set by whatever moves the character in its place for a while
+        // (the roll), so that it carries on from there and not from where it was before.
+        public Vector3 Velocity
+        {
+            get { return horizontalVelocity; }
+            set { horizontalVelocity = new Vector3(value.x, 0f, value.z); verticalVelocity = 0f; }
+        }
+
         void Awake()
         {
             controller = GetComponent<CharacterController>();

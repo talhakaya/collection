@@ -110,7 +110,7 @@ namespace Collection.Story
             gathered = false;
             JustWon = null;
             SaveManager.Save();
-            SceneManager.LoadScene(scene);
+            LoadingScreen.Load(scene);
         }
 
         // For a game to call where it gives its artifact. `after` is how long that moment stays on the screen
@@ -213,7 +213,7 @@ namespace Collection.Story
 
             // Whatever speed the game left time running at.
             Time.timeScale = 1f;
-            SceneManager.LoadScene(GameContext.StoryScenePath);
+            StoryLevels.Load();
         }
 
         class Runner : MonoBehaviour
