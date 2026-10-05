@@ -33,11 +33,18 @@ namespace Collection.Story
         [Tooltip("The character's body, for where the ground under it is. Empty: the head never changes size.")]
         public CharacterController body;
         [Tooltip("The size it shrinks to, as a part of its own.")]
-        [Range(0.1f, 1f)] public float smallest = 0.3f;
+        [Range(0.1f, 1f)] public float smallest = 0.55f;
         [Tooltip("Head bone heights above the ground (m): at the first and below it is at its smallest, at the second and above its full size.")]
         public Vector2 shrinkHeights = new Vector2(0.45f, 1.15f);
         [Tooltip("How quickly it changes size. Higher is quicker.")]
         public float shrinkSpeed = 14f;
+
+        // Set by whatever wants the head its own size whatever the height: the ragdoll, which with a small head
+        // does not look like the same character.
+        [HideInInspector] public bool keepFullSize;
+
+        // The head's radius at its full size, as a sphere (m).
+        public float FullRadius => fullScale.x * (transform.parent != null ? Mathf.Abs(transform.parent.lossyScale.x) : 1f);
 
         MorphSphere sphere;
         Vector3 fullScale;
@@ -70,7 +77,8 @@ namespace Collection.Story
             {
                 float ground = body.transform.position.y + body.center.y - body.height * 0.5f;
                 float height = transform.parent.position.y - ground;
-                float wanted = Mathf.Lerp(smallest, 1f, Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(shrinkHeights.x, shrinkHeights.y, height)));
+                float wanted = keepFullSize ? 1f
+                    : Mathf.Lerp(smallest, 1f, Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(shrinkHeights.x, shrinkHeights.y, height)));
                 size = Mathf.Lerp(size, wanted, 1f - Mathf.Exp(-shrinkSpeed * Time.deltaTime));
                 transform.localScale = fullScale * size;
             }

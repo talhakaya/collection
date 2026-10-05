@@ -28,6 +28,8 @@ namespace Collection.Story
         public Transform mouth;
         [Tooltip("Seconds between one coin and the next.")]
         public float coinsApart = 0.06f;
+        [Tooltip("The face the character makes as the lid opens.")]
+        public string emote = "smile";
 
         bool opened;
 
@@ -69,6 +71,10 @@ namespace Collection.Story
             if (view != null)
                 view.SetActive(true);
             yield return new WaitForSeconds(viewTime);
+
+            ScreenFace face = FindFirstObjectByType<ScreenFace>();
+            if (face != null && !string.IsNullOrEmpty(emote))
+                face.Show(emote);
 
             // Up past where it stops and back a little, like a lid thrown open.
             for (float t = 0f; t < lidTime; t += Time.deltaTime)

@@ -60,6 +60,26 @@ namespace Collection.Story
         readonly List<Vector3> places = new List<Vector3>();
         Coroutine rising;
         Color sunBefore;
+        bool landUp;
+        Collider floorCollider;
+
+        // The sea's floor reaches under the land too, a little under the sea, and whatever of the land goes
+        // deeper than that (the cave) would end on it. So once the land is up, the floor is only there while the
+        // character is off the land's edge, in the sea.
+        void Update()
+        {
+            if (!landUp || terrain == null)
+                return;
+            if (floorCollider == null)
+                floorCollider = floor.GetComponent<Collider>();
+            Vector3 corner = terrain.transform.position;
+            Vector3 size = terrain.terrainData.size;
+            Vector3 at = player.position;
+            const float edge = 1f;
+            bool overLand = at.x > corner.x + edge && at.x < corner.x + size.x - edge
+                && at.z > corner.z + edge && at.z < corner.z + size.z - edge;
+            floorCollider.enabled = !overLand;
+        }
 
         // How far the light is the desert's: 0 the sea's, 1 the desert's.
         void SetDesert(float amount)
@@ -110,6 +130,7 @@ namespace Collection.Story
             SetHeight(floor, floor.position.y - seaDrop);
             SetHeight(television, television.position.y - seaDrop);
             SetDesert(1f);
+            landUp = true;
         }
 
         // The ground at a place: the higher of the sea's floor and the land, if the land is there.
@@ -175,6 +196,7 @@ namespace Collection.Story
 
             controller.enabled = true;
             movement.enabled = true;
+            landUp = true;
             rising = null;
         }
 

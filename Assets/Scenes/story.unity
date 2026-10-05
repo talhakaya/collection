@@ -5574,9 +5574,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   neckGap: 0.02
   body: {fileID: 1500000005}
-  smallest: 0.3
+  smallest: 0.55
   shrinkHeights: {x: 0.45, y: 1.15}
   shrinkSpeed: 14
+  keepFullSize: 0
 --- !u!1001 &760671927
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9954,8 +9955,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1193603254}
-  downFor: 0.4
+  downFor: 5
   getUpTime: 0.6
+  emote: scared
   ground:
     serializedVersion: 2
     m_Bits: 1

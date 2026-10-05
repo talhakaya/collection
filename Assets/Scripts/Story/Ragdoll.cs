@@ -10,6 +10,9 @@ namespace Collection.Story
     //   the character has. The character's own object keeps up with the hips along the ground, so the camera and
     //   everything else that follows the character follows the fall.
     //
+    //   Down, the television head keeps its full size (it has a collider that size, so it lies on the ground and
+    //   not in it) and shows `emote`.
+    //
     //   Getting up: after `downFor` seconds, on moving or pressing something. The Animator takes over again and
     //   the body goes from where it lay to the animated pose over `getUpTime` seconds. (There is no getting-up
     //   animation; the body simply rights itself.)
@@ -21,9 +24,11 @@ namespace Collection.Story
     {
         public Animator animator;
         [Tooltip("Seconds on the ground before it can get up.")]
-        public float downFor = 0.4f;
+        public float downFor = 5f;
         [Tooltip("Seconds from lying to standing.")]
         public float getUpTime = 0.6f;
+        [Tooltip("The face shown while down.")]
+        public string emote = "scared";
         [Tooltip("What the body lands on.")]
         public LayerMask ground = 1;
 
@@ -51,6 +56,8 @@ namespace Collection.Story
         float rising;
         Quaternion[] animated;
         PhysicsMaterial rough;
+        TelevisionHead head;
+        ScreenFace face;
 
         void Awake()
         {
@@ -59,6 +66,8 @@ namespace Collection.Story
             roll = GetComponent<PlayerRoll>();
             model = animator.transform;
             hips = animator.GetBoneTransform(HumanBodyBones.Hips);
+            head = GetComponentInChildren<TelevisionHead>();
+            face = GetComponentInChildren<ScreenFace>();
         }
 
         // `modelPlace` and `modelFacing`: where the model belongs under the character when standing, for a fall
@@ -75,6 +84,11 @@ namespace Collection.Story
             Down = true;
             downTime = 0f;
             rising = 0f;
+
+            if (head != null)
+                head.keepFullSize = true;
+            if (face != null && !string.IsNullOrEmpty(emote))
+                face.Show(emote, true);
 
             animator.enabled = false;
             movement.enabled = false;
@@ -136,6 +150,8 @@ namespace Collection.Story
             if (roll != null)
                 roll.enabled = true;
             rising = getUpTime;
+            if (face != null)
+                face.ShowIdle();
         }
 
         void LateUpdate()
@@ -155,7 +171,11 @@ namespace Collection.Story
             }
 
             if (rising <= 0f)
+            {
+                if (head != null)
+                    head.keepFullSize = false;
                 return;
+            }
 
             // From where each part lay to where the Animator has it this frame. The animated places are read
             // first, all of them, because moving a part moves the parts under it.
@@ -218,6 +238,12 @@ namespace Collection.Story
                 var ball = bone.gameObject.AddComponent<SphereCollider>();
                 ball.radius = radius / scale;
                 ball.center = bone.InverseTransformVector(Vector3.up * radius * 0.6f);
+                // The head is the television: a ball the size it is (a sphere of radius 1, scaled), where it is.
+                if (head != null && head.transform.parent == bone)
+                {
+                    ball.radius = head.FullRadius / scale;
+                    ball.center = head.transform.localPosition;
+                }
                 collider = ball;
             }
             else
