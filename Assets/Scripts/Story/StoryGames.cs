@@ -79,6 +79,8 @@ namespace Collection.Story
                 text += "\nYear: " + entry.year;
             if (entry != null && entry.artifactMinutes > 0)
                 text += "\nPlay time for artifact: " + entry.artifactMinutes + (entry.artifactMinutes == 1 ? " minute" : " minutes");
+            if (entry != null && !string.IsNullOrWhiteSpace(entry.description))
+                text += "\n\n" + entry.description.Trim();
 
             var screen = new MenuScreen { title = "Enter the game?" };
             screen.body = () => text;

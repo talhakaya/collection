@@ -587,6 +587,16 @@ namespace Collection.UI
 				BuildRow(screen.items[i], total * 0.5f - RowHeight * 0.5f - i * (RowHeight + RowGap));
 			}
 
+			// The rows sit in the middle of the screen, and the text over them starts at a fixed
+			// height: when it is long (a game's description) they move down to stay clear of it.
+			SetText(bodyText, screen.body != null ? screen.body() : "");
+			bodyText.ForceMeshUpdate();
+			// Heights from the middle of the 1080-high canvas: the text's top is 220 from the
+			// canvas's top, and the rows' own middle is 60 under the canvas's.
+			float bodyBottom = 540f - 220f - (string.IsNullOrEmpty(bodyText.text) ? 0f : bodyText.preferredHeight);
+			float down = Mathf.Max(0f, -60f + total * 0.5f - (bodyBottom - 40f));
+			rows.anchoredPosition = new Vector2(0f, -60f - down);
+
 			if (screen.selected < 0 || screen.selected >= count || !screen.items[screen.selected].Selectable)
 			{
 				screen.selected = 0;
