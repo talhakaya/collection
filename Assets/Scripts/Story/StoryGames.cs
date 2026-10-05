@@ -38,6 +38,9 @@ namespace Collection.Story
 
         public static bool Playing => reward != null && SaveManager.IsStoryMode;
 
+        // The game being played has given its artifact, and is being played on.
+        public static bool Gathered => gathered;
+
         // The artifact won by the game just come back from, for the story scene to make something of as it starts.
         // Null once the scene has taken it.
         public static string JustWon { get; private set; }

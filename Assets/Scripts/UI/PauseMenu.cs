@@ -97,8 +97,10 @@ namespace Collection.UI
 			screen.Button("Continue", Resume);
 			screen.Button("Settings", SettingsScreen.Open);
 			// A game started from inside the story is left for the story (ReturnToMainMenu
-			// sees to that).
-			screen.Button(Collection.Story.StoryGames.Playing ? "Back to the story" : "Exit to main menu", () =>
+			// sees to that): without its artifact, unless it has given it already.
+			string leave = !Collection.Story.StoryGames.Playing ? "Exit to main menu"
+				: Collection.Story.StoryGames.Gathered ? "Back to the story" : "Abandon the artifact for now";
+			screen.Button(leave, () =>
 			{
 				Resume();
 				GlobalInputManager.ReturnToMainMenu();

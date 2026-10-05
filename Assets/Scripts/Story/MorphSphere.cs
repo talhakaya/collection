@@ -47,6 +47,17 @@ namespace Collection.Story
 		private static readonly int DownId = Shader.PropertyToID("_Down");
 		private static readonly int FrontId = Shader.PropertyToID("_Front");
 		private static readonly int BackId = Shader.PropertyToID("_Back");
+		private static readonly int VisibleId = Shader.PropertyToID("_Visible");
+
+		/// How much of the shape is there, from 0 (nothing) to 1 (all of it): for appearing
+		/// and disappearing. In between it is a scatter of its pixels.
+		public float Visible
+		{
+			get { return visible; }
+			set { visible = Mathf.Clamp01(value); Apply(); }
+		}
+
+		private float visible = 1f;
 
 		// Each side's outward direction and which way is up on it.
 		private static readonly Vector3[] Normals = { Vector3.right, Vector3.left, Vector3.up, Vector3.down, Vector3.forward, Vector3.back };
@@ -147,6 +158,7 @@ namespace Collection.Story
 			block.SetFloat(DownId, down);
 			block.SetFloat(FrontId, front);
 			block.SetFloat(BackId, back);
+			block.SetFloat(VisibleId, visible);
 			meshRenderer.SetPropertyBlock(block);
 		}
 

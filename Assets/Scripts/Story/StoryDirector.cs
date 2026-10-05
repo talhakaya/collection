@@ -35,6 +35,8 @@ namespace Collection.Story
         public GameObject television;
         [Tooltip("Seconds after the intro's end before the television is there: until the view is back above the character and only the television's reflection can be in it.")]
         public float televisionAppearsAfter = 1f;
+        [Tooltip("Seconds the television takes to appear.")]
+        public float televisionFadeTime = 3f;
         [Tooltip("What the television says once every artifact is won. Switched on only then.")]
         public NPCTrigger allArtifactsTrigger;
         public List<Artifact> artifacts = new List<Artifact>();
@@ -81,7 +83,20 @@ namespace Collection.Story
         IEnumerator ShowTelevision()
         {
             yield return new WaitForSeconds(televisionAppearsAfter);
+
+            // Not all at once: its reflection is in the picture, and would jump into it.
+            MorphSphere[] shapes = television.GetComponentsInChildren<MorphSphere>(true);
+            foreach (MorphSphere shape in shapes)
+                shape.Visible = 0f;
             television.SetActive(true);
+            for (float t = 0f; t < televisionFadeTime; t += Time.deltaTime)
+            {
+                foreach (MorphSphere shape in shapes)
+                    shape.Visible = Mathf.SmoothStep(0f, 1f, t / televisionFadeTime);
+                yield return null;
+            }
+            foreach (MorphSphere shape in shapes)
+                shape.Visible = 1f;
         }
 
         // Once the scene has started and the artifact has had a moment to come over.
