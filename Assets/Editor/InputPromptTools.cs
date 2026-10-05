@@ -130,7 +130,8 @@ namespace Collection.EditorTools
 			GameObject go = old.gameObject;
 			string text = old.text;
 			Font font = old.font;
-			float size = (old.fontSize > 0 ? old.fontSize : 13) * old.characterSize;
+			// Font size 0 means the size the font file was imported at.
+			float size = (old.fontSize > 0 ? old.fontSize : (font != null ? font.fontSize : 13)) * old.characterSize;
 			FontStyle style = old.fontStyle;
 			Color color = old.color;
 			TextAnchor anchor = old.anchor;
@@ -139,6 +140,8 @@ namespace Collection.EditorTools
 			bool richText = old.richText;
 
 			MeshRenderer renderer = go.GetComponent<MeshRenderer>();
+			bool upright = go.transform.rotation == Quaternion.identity;
+			float oldWidth = renderer != null && upright ? renderer.bounds.size.x : 0f;
 			int sortingLayer = renderer != null ? renderer.sortingLayerID : 0;
 			int sortingOrder = renderer != null ? renderer.sortingOrder : 0;
 
@@ -161,6 +164,16 @@ namespace Collection.EditorTools
 			tmp.sortingLayerID = sortingLayer;
 			tmp.sortingOrder = sortingOrder;
 			tmp.text = text;
+
+			// The two kinds of text do not agree on what a font size means for every font, so
+			// the new one is sized to come out as wide as the old one was.
+			tmp.ForceMeshUpdate();
+			float newWidth = tmp.renderer.bounds.size.x;
+			if (oldWidth > 0f && newWidth > 0f)
+			{
+				tmp.fontSize = size * oldWidth / newWidth;
+			}
+
 			EditorUtility.SetDirty(go);
 			return tmp;
 		}
@@ -175,17 +188,31 @@ namespace Collection.EditorTools
 		/// </summary>
 		public static InputPromptText ReplaceSpriteWithPrompt(SpriteRenderer sprite, string template, float keyHeight, bool shadowed)
 		{
+			sprite.sprite = null;
+			return AddPromptOverSprite(sprite, template, Vector2.zero, keyHeight, shadowed, Color.white);
+		}
+
+		/// <summary>
+		/// For a picture with a button drawn somewhere in it, once that has been erased from
+		/// the image: puts the prompt there, as a TextMesh Pro child of the sprite with an
+		/// InputPromptText. It moves and shows with the sprite and takes its colour times
+		/// tint, so black gives black glyphs that still fade with the sprite.
+		///
+		/// position is where the prompt's middle goes, in world units from the sprite's
+		/// object; keyHeight is how tall a key cap comes out, in world units.
+		/// </summary>
+		public static InputPromptText AddPromptOverSprite(SpriteRenderer sprite, string template, Vector2 position, float keyHeight, bool shadowed, Color tint)
+		{
 			// A key cap is 74 of the sheet's pixels, drawn at font size / 68 per pixel, and a
 			// 3D text's units are a tenth of its font size.
 			const float KeyHeightPerFontSize = 74f / 68f * 0.1f;
-
-			sprite.sprite = null;
 
 			var go = new GameObject("prompt");
 			go.layer = sprite.gameObject.layer;
 			go.transform.SetParent(sprite.transform, false);
 			Vector3 scale = sprite.transform.lossyScale;
 			go.transform.localScale = new Vector3(1f / scale.x, 1f / scale.y, 1f);
+			go.transform.localPosition = new Vector3(position.x / scale.x, position.y / scale.y, 0f);
 
 			TextMeshPro tmp = go.AddComponent<TextMeshPro>();
 			tmp.rectTransform.sizeDelta = Vector2.zero;
@@ -193,15 +220,16 @@ namespace Collection.EditorTools
 			tmp.textWrappingMode = TextWrappingModes.NoWrap;
 			tmp.overflowMode = TextOverflowModes.Overflow;
 			tmp.fontSize = keyHeight / KeyHeightPerFontSize;
-			tmp.color = sprite.color;
+			tmp.color = sprite.color * tint;
 			tmp.sortingLayerID = sprite.sortingLayerID;
-			tmp.sortingOrder = sprite.sortingOrder;
+			tmp.sortingOrder = sprite.sortingOrder + 1;
 			tmp.text = template;
 
 			InputPromptText prompt = go.AddComponent<InputPromptText>();
 			prompt.template = template;
 			prompt.shadowed = shadowed;
 			prompt.colourFrom = sprite;
+			prompt.colourTint = tint;
 			EditorUtility.SetDirty(sprite);
 			return prompt;
 		}

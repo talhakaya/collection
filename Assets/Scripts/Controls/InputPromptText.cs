@@ -23,6 +23,9 @@ namespace Collection.Controls
 		[Tooltip("Optional. The text takes this renderer's colour every frame - for a prompt that replaces part of a sprite which the game's own scripts tint or fade.")]
 		public SpriteRenderer colourFrom;
 
+		[Tooltip("With a colour source: multiplied into its colour. Black gives black glyphs that still fade with a white-tinted sprite.")]
+		public Color colourTint = Color.white;
+
 		private TMP_Text text;
 		private bool animated;
 		private bool lastBlink;
@@ -56,9 +59,13 @@ namespace Collection.Controls
 
 		private void Update()
 		{
-			if (colourFrom != null && text.color != colourFrom.color)
+			if (colourFrom != null)
 			{
-				text.color = colourFrom.color;
+				Color colour = colourFrom.color * colourTint;
+				if (text.color != colour)
+				{
+					text.color = colour;
+				}
 			}
 
 			if (animated && InputPrompts.Blink != lastBlink)
