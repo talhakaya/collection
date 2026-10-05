@@ -111,12 +111,8 @@ namespace Games.OdeToPixelDays
 				add(buttons[buttons.Count - 1]);
 			}
 
-			// Left out on purpose: the sponsor's "More Games" button at YBUTTON + 44. The two
-			// below it, at + 66 and + 88 in the source, close the gap.
-			buttons.Add(new FlxButton(120, YBUTTON + 44, "Soundtrack", goToMyURL2));
-			add(buttons[buttons.Count - 1]);
-			buttons.Add(new FlxButton(120, YBUTTON + 66, "Extras", goToMyURL3));
-			add(buttons[buttons.Count - 1]);
+			// Left out on purpose: the three buttons below these that opened web pages - the
+			// sponsor's "More Games", "Soundtrack" and "Extras".
 			selected = 0;
 			// In the collection: the "Press M At Any Time To Mute" line that stood here is gone,
 			// with the key.
@@ -124,16 +120,6 @@ namespace Games.OdeToPixelDays
 			beyaz.makeGraphic(320, 240, 4294967295);
 			beyaz.alpha = 0;
 			add(beyaz);
-		}
-
-		public void goToMyURL2()
-		{
-			UnityEngine.Application.OpenURL("http://talhakaya.bandcamp.com/album/ode-to-pixel-days-soundtrack");
-		}
-
-		public void goToMyURL3()
-		{
-			UnityEngine.Application.OpenURL("http://talhadevlog.blogspot.com/2013/02/ode-to-pixel-days-extras.html");
 		}
 
 		public void newGame()
