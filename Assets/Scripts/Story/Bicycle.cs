@@ -1,0 +1,430 @@
+using UnityEngine;
+
+namespace Collection.Story
+{
+    // A bicycle to ride.
+    //
+    // It is four rigid bodies held together by hinges: the frame; the fork, which turns in the frame (the
+    // steering); the front wheel, which spins in the fork; the back wheel, which spins in the frame and is the
+    // one that is driven. The wheels roll on the ground by their own friction, so the bicycle goes where its
+    // front wheel points and leans, skids and bounces as the ground has it. What is not left to the physics is
+    // staying up: while someone is riding, the frame is turned about its own length toward upright (leaned into
+    // the bend it is taking), which is the rider's balance.
+    //
+    // Riding. The controls are the walking ones: the stick says which way to go, as seen by the camera, not
+    // "left" and "right" of the bicycle. The handlebars turn toward that way, more sharply the slower the
+    // bicycle is going, and the bicycle comes round as it rolls. Speed: slow while it has far to turn (it brakes
+    // for a sharp change of mind), and faster and faster the longer it is kept going the same way. Roll (Space, pad B) gets off.
+    //
+    // Getting on (the NPCTrigger on the frame, onActivate -> Mount): the bicycle stands up where it is, facing
+    // the way the character faces, and the character is sat on it. The character's own movement is switched off;
+    // it is put on the saddle every frame and posed there, in code, over whatever its Animator plays: bent
+    // forward, arms out to the handlebars, legs going round with the pedals at the bicycle's speed.
+    //
+    // Crashing: hitting something hard, or going over too far, throws the rider off as a ragdoll (Ragdoll) and
+    // sends the bicycle flying.
+    //
+    // Until it is first ridden it stands where it was put, not simulated.
+    public class Bicycle : MonoBehaviour
+    {
+        [Header("Parts")]
+        public Rigidbody frame;
+        public Rigidbody fork;
+        public Rigidbody frontWheel;
+        public Rigidbody backWheel;
+        [Tooltip("The fork's hinge in the frame.")]
+        public HingeJoint steering;
+        [Tooltip("The back wheel's hinge in the frame.")]
+        public HingeJoint drive;
+        [Tooltip("Where the rider's hips go.")]
+        public Transform saddle;
+        [Tooltip("Turned with the pedalling.")]
+        public Transform crank;
+        [Tooltip("Stands in for the rider's body while riding, so that it is the rider that hits things.")]
+        public Collider riderBody;
+        [Tooltip("The trigger for getting on.")]
+        public NPCTrigger mount;
+        public float wheelRadius = 0.34f;
+
+        [Header("Steering")]
+        [Tooltip("The furthest the handlebars turn (degrees).")]
+        public float steerSlow = 42f;
+        [Tooltip("The hardest bend it takes (m/s² sideways): the faster it goes, the less the handlebars turn, to keep within this. More, and it skids round.")]
+        public float grip = 6.5f;
+        [Tooltip("How much of the angle to the way wanted the handlebars take.")]
+        public float steerSharpness = 0.6f;
+        [Tooltip("How much the handlebars come back for the frame's own turning (degrees per degree/s).")]
+        public float steerEasing = 0.22f;
+        [Tooltip("A turn of the frame itself toward the way wanted (degrees/s² at a right angle off), so that it comes round even from standing.")]
+        public float turnHelp = 140f;
+        [Tooltip("The speed by which that help is gone (m/s).")]
+        public float turnHelpBelow = 4f;
+
+        [Header("Speed (m/s)")]
+        [Tooltip("While it has far to turn.")]
+        public float turningSpeed = 2.5f;
+        [Tooltip("Going straight: at first, and after `buildTime` seconds of going the same way.")]
+        public float startSpeed = 4.5f;
+        public float topSpeed = 13f;
+        public float buildTime = 6f;
+        [Tooltip("Degrees off the way wanted within which it counts as going the same way, and beyond which as turning.")]
+        public float straightWithin = 18f;
+        public float turningBeyond = 70f;
+        [Tooltip("How hard the back wheel is driven.")]
+        public float driveForce = 90f;
+
+        [Header("Balance")]
+        public float balance = 140f;
+        public float balanceDamping = 18f;
+        [Tooltip("The most it leans into a bend (degrees).")]
+        public float mostLean = 28f;
+
+        [Header("Crashing")]
+        [Tooltip("Hitting something at this speed or more is a crash (m/s).")]
+        public float crashSpeed = 4f;
+        [Tooltip("Over this far from upright is a crash (degrees).")]
+        public float crashLean = 62f;
+        [Tooltip("How hard the bicycle is thrown (m/s).")]
+        public float crashThrow = 5f;
+
+        [Header("The rider")]
+        [Tooltip("The rider's weight on the frame (kg).")]
+        public float riderMass = 45f;
+        [Tooltip("Turns of the pedals for one of the wheel.")]
+        public float gear = 0.45f;
+
+        // The way to go, set by something other than the player's stick (a cutscene, a test). Zero: the stick.
+        [System.NonSerialized] public Vector3 overrideDirection;
+        // Set to have the ride written down, a line a physics step, for tuning.
+        [System.NonSerialized] public System.Text.StringBuilder log;
+
+        public bool Ridden => rider != null;
+        public float Speed => Vector3.Dot(frame.linearVelocity, frame.transform.forward);
+
+        Rigidbody[] bodies;
+        Vector3[] restPlaces;
+        Quaternion[] restTurns;
+        float frameMass;
+        bool simulated;
+
+        Transform rider;
+        Animator riderAnimator;
+        CharacterController riderController;
+        PlayerMovement riderMovement;
+        PlayerRoll riderRoll;
+        Ragdoll riderRagdoll;
+        Vector3 riderModelPlace;
+        Quaternion riderModelFacing;
+        float straightFor;
+        float leanNow;
+        float pedals;
+        float mountedAt;
+
+        void Awake()
+        {
+            bodies = new[] { frame, fork, frontWheel, backWheel };
+            restPlaces = new Vector3[bodies.Length];
+            restTurns = new Quaternion[bodies.Length];
+            for (int i = 0; i < bodies.Length; i++)
+            {
+                // Where each part is, as seen from the frame, with the bicycle as it was made: upright, straight.
+                restPlaces[i] = frame.transform.InverseTransformPoint(bodies[i].transform.position);
+                restTurns[i] = Quaternion.Inverse(frame.transform.rotation) * bodies[i].transform.rotation;
+                bodies[i].maxAngularVelocity = 120f;
+                bodies[i].solverIterations = 16;
+                bodies[i].solverVelocityIterations = 4;
+                bodies[i].isKinematic = true;
+            }
+
+            // The parts do not get in one another's way.
+            Collider[] all = GetComponentsInChildren<Collider>(true);
+            foreach (Collider a in all)
+                foreach (Collider b in all)
+                    if (a != b && !a.isTrigger && !b.isTrigger)
+                        Physics.IgnoreCollision(a, b);
+
+            frameMass = frame.mass;
+            frame.centerOfMass = new Vector3(0f, 0.45f, 0f);
+            if (riderBody != null)
+                riderBody.enabled = false;
+        }
+
+        // ---- Getting on and off -------------------------------------------------------------------------------
+
+        // For the NPCTrigger's onActivate.
+        public void Mount()
+        {
+            if (Ridden)
+                return;
+            PlayerMovement player = FindFirstObjectByType<PlayerMovement>();
+            if (player == null || !player.enabled)
+                return;
+
+            rider = player.transform;
+            riderMovement = player;
+            riderController = rider.GetComponent<CharacterController>();
+            riderRoll = rider.GetComponent<PlayerRoll>();
+            riderRagdoll = rider.GetComponent<Ragdoll>();
+            riderAnimator = rider.GetComponentInChildren<Animator>();
+            riderModelPlace = riderAnimator.transform.localPosition;
+            riderModelFacing = riderAnimator.transform.localRotation;
+
+            // Up on its wheels where it is, facing the way the rider faces.
+            Vector3 place = frame.position;
+            place.y = GroundUnder(place, rider.position.y - 1f) + 0.02f;
+            Stand(place, Quaternion.Euler(0f, rider.eulerAngles.y, 0f));
+
+            riderMovement.enabled = false;
+            if (riderRoll != null)
+                riderRoll.enabled = false;
+            riderController.enabled = false;
+            if (mount != null)
+                mount.gameObject.SetActive(false);
+            if (riderBody != null)
+                riderBody.enabled = true;
+            frame.mass = frameMass + riderMass;
+            straightFor = 0f;
+            mountedAt = Time.time;
+        }
+
+        // The height of the ground at a place, the bicycle itself not counting. `otherwise` when there is none.
+        float GroundUnder(Vector3 place, float otherwise)
+        {
+            float ground = float.MinValue;
+            foreach (RaycastHit hit in Physics.RaycastAll(place + Vector3.up * 3f, Vector3.down, 40f, 1, QueryTriggerInteraction.Ignore))
+                if (hit.collider.GetComponentInParent<Bicycle>() == null && hit.point.y > ground)
+                    ground = hit.point.y;
+            return ground > float.MinValue ? ground : otherwise;
+        }
+
+        // Every part where it belongs for a bicycle standing at `place`, turned `facing`, and still.
+        void Stand(Vector3 place, Quaternion facing)
+        {
+            simulated = true;
+            for (int i = 0; i < bodies.Length; i++)
+            {
+                Rigidbody body = bodies[i];
+                body.isKinematic = false;
+                Vector3 at = place + facing * restPlaces[i];
+                Quaternion turn = facing * restTurns[i];
+                body.transform.SetPositionAndRotation(at, turn);
+                body.position = at;
+                body.rotation = turn;
+                body.linearVelocity = Vector3.zero;
+                body.angularVelocity = Vector3.zero;
+            }
+            SetSteering(0f);
+            SetDrive(0f, false);
+        }
+
+        // The rider off the bicycle, which is no longer balanced. `mountAgain`: the trigger for getting on is back.
+        void Release()
+        {
+            rider = null;
+            frame.mass = frameMass;
+            if (riderBody != null)
+                riderBody.enabled = false;
+            SetDrive(0f, false);
+            SetSteering(0f);
+            if (mount != null)
+                mount.gameObject.SetActive(true);
+        }
+
+        void Dismount()
+        {
+            Transform who = rider;
+            Vector3 beside = frame.position - frame.transform.right * 0.7f;
+            Vector3 velocity = frame.linearVelocity;
+            riderAnimator.transform.localPosition = riderModelPlace;
+            riderAnimator.transform.localRotation = riderModelFacing;
+            Release();
+
+            beside.y = GroundUnder(beside, beside.y - 1f);
+            beside.y += riderController.height * 0.5f - riderController.center.y + riderController.skinWidth;
+            who.SetPositionAndRotation(beside, Quaternion.Euler(0f, frame.transform.eulerAngles.y, 0f));
+            riderController.enabled = true;
+            riderMovement.Velocity = velocity;
+            riderMovement.enabled = true;
+            if (riderRoll != null)
+                riderRoll.enabled = true;
+        }
+
+        // Called by the parts when they hit something (BicyclePart).
+        public void Hit(Collision collision)
+        {
+            if (!Ridden || Time.time < mountedAt + 0.5f)
+                return;
+            // The ground under the wheels is not something hit, however hard the landing.
+            Vector3 normal = collision.GetContact(0).normal;
+            if (normal.y > 0.6f)
+                return;
+            if (collision.relativeVelocity.magnitude >= crashSpeed)
+                Crash();
+        }
+
+        void Crash()
+        {
+            Ragdoll ragdoll = riderRagdoll;
+            Vector3 velocity = frame.linearVelocity;
+            Vector3 modelPlace = riderModelPlace;
+            Quaternion modelFacing = riderModelFacing;
+            Vector3 across = frame.transform.right;
+            Release();
+
+            // The rider on over the handlebars; the bicycle up and away, tumbling.
+            if (ragdoll != null)
+                ragdoll.Fall(velocity * 0.8f + Vector3.up * 2.5f, across * 3f, modelPlace, modelFacing);
+            Vector3 away = (Random.insideUnitSphere + Vector3.up * 1.5f).normalized * crashThrow;
+            foreach (Rigidbody body in bodies)
+            {
+                body.linearVelocity += away;
+                body.angularVelocity += Random.insideUnitSphere * 6f;
+            }
+        }
+
+        // ---- Riding -------------------------------------------------------------------------------------------
+
+        void Update()
+        {
+            if (Ridden && Time.time > mountedAt + 0.3f && Main.inst.input.rollPressed)
+                Dismount();
+        }
+
+        void FixedUpdate()
+        {
+            if (!simulated || !Ridden)
+                return;
+
+            Transform body = frame.transform;
+            Vector3 forward = Vector3.ProjectOnPlane(body.forward, Vector3.up).normalized;
+            float speed = Speed;
+
+            // The way wanted, along the ground.
+            Vector3 wanted = overrideDirection;
+            if (wanted == Vector3.zero)
+            {
+                Vector2 stick = Main.inst.input.move;
+                Camera view = Camera.main;
+                if (stick.magnitude > 0.2f && view != null)
+                    wanted = Vector3.ProjectOnPlane(view.transform.forward, Vector3.up).normalized * stick.y
+                        + Vector3.ProjectOnPlane(view.transform.right, Vector3.up).normalized * stick.x;
+            }
+            wanted.y = 0f;
+            bool going = wanted.sqrMagnitude > 0.01f;
+            float off = going ? Vector3.SignedAngle(forward, wanted.normalized, Vector3.up) : 0f;
+
+            // Handlebars: toward the way wanted, less far the faster it goes.
+            const float wheelbase = 1.05f;
+            float most = Mathf.Min(steerSlow, Mathf.Atan(grip * wheelbase / Mathf.Max(0.5f, speed * speed)) * Mathf.Rad2Deg);
+            // Less the faster the frame is already coming round, so that it straightens up in time and does not
+            // swing past.
+            float turning = frame.angularVelocity.y * Mathf.Rad2Deg;
+            float steer = Mathf.Clamp(off * steerSharpness - turning * steerEasing, -most, most);
+            SetSteering(steer);
+
+            // Speed: slow while there is far to turn; from startSpeed up to topSpeed the longer it goes one way.
+            if (going && Mathf.Abs(off) < straightWithin)
+                straightFor += Time.fixedDeltaTime;
+            else
+                straightFor = Mathf.Max(0f, straightFor - Time.fixedDeltaTime * (going ? 3f : 1.5f));
+            float straight = Mathf.Lerp(startSpeed, topSpeed, Mathf.Clamp01(straightFor / buildTime));
+            float target = Mathf.Lerp(straight, turningSpeed, Mathf.InverseLerp(straightWithin, turningBeyond, Mathf.Abs(off)));
+            // Faster than that, it brakes: the wheel is held to the speed, not left to roll.
+            SetDrive(target, going, speed > target + 0.7f);
+
+            // A turn of the frame itself, so that it comes round from standing and in tight places.
+            // Only while slow: at speed the front wheel does it.
+            float help = 1f - Mathf.InverseLerp(1f, turnHelpBelow, Mathf.Abs(speed));
+            if (going && help > 0f)
+            {
+                float turn = Mathf.Clamp(off / 90f, -1f, 1f) * turnHelp * Mathf.Deg2Rad;
+                frame.AddTorque(Vector3.up * ((turn - frame.angularVelocity.y * 3f) * help), ForceMode.Acceleration);
+            }
+
+            // Balance: about the frame's own length, toward upright leaned into the bend being taken.
+            // The lean a bend of this tightness at this speed asks for, from the handlebars, not from how the
+            // frame happens to be swinging.
+            float bend = speed * speed * Mathf.Tan(steer * Mathf.Deg2Rad) / (wheelbase * 9.81f);
+            leanNow = Mathf.Lerp(leanNow, Mathf.Clamp(Mathf.Atan(bend) * Mathf.Rad2Deg, -mostLean, mostLean), 1f - Mathf.Exp(-6f * Time.fixedDeltaTime));
+            float lean = leanNow;
+            Vector3 along = body.forward;
+            Vector3 upWanted = Quaternion.AngleAxis(-lean, along) * Vector3.ProjectOnPlane(Vector3.up, along).normalized;
+            float tilt = Vector3.SignedAngle(body.up, upWanted, along);
+            float rolling = Vector3.Dot(frame.angularVelocity, along);
+            frame.AddTorque(along * (tilt * Mathf.Deg2Rad * balance - rolling * balanceDamping), ForceMode.Acceleration);
+
+            if (log != null && log.Length < 6000)
+                log.Append(Time.time.ToString("f2")).Append(" yaw ").Append(body.eulerAngles.y.ToString("f0")).Append(" off ").Append(off.ToString("f0"))
+                    .Append(" steer ").Append(steering.angle.ToString("f0")).Append(" v ").Append(speed.ToString("f1")).Append(" tilt ").Append(tilt.ToString("f0")).Append(';');
+
+            if (Mathf.Abs(tilt) > crashLean || Vector3.Angle(body.up, Vector3.up) > 80f)
+                Crash();
+        }
+
+        void SetSteering(float degrees)
+        {
+            JointSpring spring = steering.spring;
+            spring.targetPosition = degrees;
+            steering.spring = spring;
+        }
+
+        // The back wheel driven to roll at `speed` m/s, or left to roll by itself.
+        void SetDrive(float speed, bool on, bool brake = false)
+        {
+            JointMotor motor = drive.motor;
+            motor.targetVelocity = speed / wheelRadius * Mathf.Rad2Deg;
+            motor.force = driveForce;
+            motor.freeSpin = !brake;
+            drive.motor = motor;
+            drive.useMotor = on;
+        }
+
+        // ---- The rider's place and pose -----------------------------------------------------------------------
+
+        // After the rider's Animator has posed it for the frame.
+        void LateUpdate()
+        {
+            pedals += Speed / wheelRadius * gear * Time.deltaTime;
+            if (crank != null)
+                crank.localRotation = Quaternion.Euler(pedals * Mathf.Rad2Deg, 0f, 0f);
+
+            if (!Ridden)
+                return;
+
+            Transform body = frame.transform;
+            Transform hips = riderAnimator.GetBoneTransform(HumanBodyBones.Hips);
+            riderAnimator.transform.localPosition = riderModelPlace;
+            riderAnimator.transform.localRotation = riderModelFacing;
+            rider.rotation = body.rotation;
+            rider.position += saddle.position - hips.position;
+
+            // Bent forward to the handlebars, arms out to them.
+            Vector3 across = body.right;
+            Bend(HumanBodyBones.Spine, across, 22f);
+            Bend(HumanBodyBones.Chest, across, 14f);
+            Bend(HumanBodyBones.Head, across, -24f);
+            Bend(HumanBodyBones.LeftUpperArm, across, -52f);
+            Bend(HumanBodyBones.RightUpperArm, across, -52f);
+            Bend(HumanBodyBones.LeftLowerArm, across, -12f);
+            Bend(HumanBodyBones.RightLowerArm, across, -12f);
+
+            // The legs going round, half a turn apart: the knee is most bent when the thigh is highest.
+            Leg(HumanBodyBones.LeftUpperLeg, HumanBodyBones.LeftLowerLeg, across, pedals);
+            Leg(HumanBodyBones.RightUpperLeg, HumanBodyBones.RightLowerLeg, across, pedals + Mathf.PI);
+        }
+
+        void Leg(HumanBodyBones upper, HumanBodyBones lower, Vector3 across, float turn)
+        {
+            float up = Mathf.Cos(turn);
+            Bend(upper, across, -(58f + 24f * up));
+            Bend(lower, across, 78f + 30f * up);
+        }
+
+        void Bend(HumanBodyBones which, Vector3 axis, float degrees)
+        {
+            Transform bone = riderAnimator.GetBoneTransform(which);
+            if (bone != null)
+                bone.rotation = Quaternion.AngleAxis(degrees, axis) * bone.rotation;
+        }
+    }
+}

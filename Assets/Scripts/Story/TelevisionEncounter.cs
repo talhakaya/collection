@@ -64,21 +64,16 @@ namespace Collection.Story
         Collider floorCollider;
 
         // The sea's floor reaches under the land too, a little under the sea, and whatever of the land goes
-        // deeper than that (the cave) would end on it. So once the land is up, the floor is only there while the
-        // character is off the land's edge, in the sea.
+        // deeper than that (the cave) would end on it. So once the land is up, the floor is only there where
+        // the land's surface is not above it: in the sea, and in the land's ponds.
         void Update()
         {
-            if (!landUp || terrain == null)
+            if (!landUp)
                 return;
             if (floorCollider == null)
                 floorCollider = floor.GetComponent<Collider>();
-            Vector3 corner = terrain.transform.position;
-            Vector3 size = terrain.terrainData.size;
-            Vector3 at = player.position;
-            const float edge = 1f;
-            bool overLand = at.x > corner.x + edge && at.x < corner.x + size.x - edge
-                && at.z > corner.z + edge && at.z < corner.z + size.z - edge;
-            floorCollider.enabled = !overLand;
+            float floorTop = floor.position.y + floor.GetComponent<BoxCollider>().size.y * 0.5f * floor.lossyScale.y;
+            floorCollider.enabled = LandHeight(player.position) < floorTop + 0.3f;
         }
 
         // How far the light is the desert's: 0 the sea's, 1 the desert's.
@@ -90,8 +85,19 @@ namespace Collection.Story
                 desertLook.weight = amount;
         }
 
+        // Every tile of the land: `terrain` and any others among the land's objects.
+        readonly List<Terrain> tiles = new List<Terrain>();
+
         void Awake()
         {
+            if (terrain != null)
+                tiles.Add(terrain);
+            foreach (GameObject part in world)
+                if (part != null)
+                    foreach (Terrain tile in part.GetComponentsInChildren<Terrain>(true))
+                        if (!tiles.Contains(tile))
+                            tiles.Add(tile);
+
             if (sun != null)
                 sunBefore = sun.color;
             SetDesert(0f);
@@ -137,8 +143,7 @@ namespace Collection.Story
         public float GroundHeight(Vector3 at)
         {
             float floorTop = floor.position.y + floor.GetComponent<BoxCollider>().size.y * 0.5f * floor.lossyScale.y;
-            bool land = terrain != null && terrain.gameObject.activeInHierarchy;
-            return land ? Mathf.Max(floorTop, LandHeight(at)) : floorTop;
+            return Mathf.Max(floorTop, LandHeight(at));
         }
 
         // For a Cutscene's onStart.
@@ -203,15 +208,19 @@ namespace Collection.Story
         // The land's surface at a place, wherever the land is at the moment. Far below everything where there is none.
         float LandHeight(Vector3 at)
         {
-            if (terrain == null)
-                return float.MinValue;
-            Vector3 corner = terrain.transform.position;
-            Vector3 size = terrain.terrainData.size;
-            float x = (at.x - corner.x) / size.x;
-            float z = (at.z - corner.z) / size.z;
-            if (x < 0f || x > 1f || z < 0f || z > 1f)
-                return float.MinValue;
-            return corner.y + terrain.terrainData.GetInterpolatedHeight(x, z);
+            foreach (Terrain tile in tiles)
+            {
+                if (tile == null || !tile.gameObject.activeInHierarchy)
+                    continue;
+                Vector3 corner = tile.transform.position;
+                Vector3 size = tile.terrainData.size;
+                float x = (at.x - corner.x) / size.x;
+                float z = (at.z - corner.z) / size.z;
+                if (x < 0f || x > 1f || z < 0f || z > 1f)
+                    continue;
+                return corner.y + tile.terrainData.GetInterpolatedHeight(x, z);
+            }
+            return float.MinValue;
         }
 
         static void SetHeight(Transform what, float y)
