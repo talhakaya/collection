@@ -163,27 +163,19 @@ namespace Collection.MainMenu
 			Menus.Push(screen);
 		}
 
-		/// Asked twice, opening on "No" both times: deleting a slot cannot be undone.
+		/// Asked once, opening on "No": deleting a slot cannot be undone.
 		private void ConfirmDelete(int slot)
 		{
 			string played = PlayTime(SaveManager.Data.slots[slot].timePlayed);
-			var first = new MenuScreen { title = "Delete slot " + (slot + 1) + "?", opaque = true };
-			first.body = () => "Everything in this slot will be lost: " + played + " of play.";
-			first.Button("No, keep it", Menus.Pop);
-			first.Button("Yes, delete it", () =>
+			var screen = new MenuScreen { title = "Delete slot " + (slot + 1) + "?", opaque = true };
+			screen.body = () => "Everything in this slot will be lost (" + played + " of play) and a new game started in it. This cannot be undone.";
+			screen.Button("No, keep it", Menus.Pop);
+			screen.Button("Yes, delete it", () =>
 			{
-				var second = new MenuScreen { title = "Are you sure?", opaque = true };
-				second.body = () => "Slot " + (slot + 1) + " will be deleted and a new game started in it. This cannot be undone.";
-				second.Button("No, keep it", () => Menus.PopTo(first));
-				second.Button("Yes, delete slot " + (slot + 1), () =>
-				{
-					SaveManager.DeleteSlot(slot);
-					StartStory(slot);
-				});
-				second.cancel = () => Menus.PopTo(first);
-				Menus.Push(second);
+				SaveManager.DeleteSlot(slot);
+				StartStory(slot);
 			});
-			Menus.Push(first);
+			Menus.Push(screen);
 		}
 
 		private void StartStory(int slot)
