@@ -23,6 +23,9 @@ namespace Collection.Controls
 		[Tooltip("Optional. The text takes this renderer's colour every frame - for a prompt that replaces part of a sprite which the game's own scripts tint or fade.")]
 		public SpriteRenderer colourFrom;
 
+		[Tooltip("Optional. The same for a UI graphic (an Image the prompt replaces part of): the text takes its colour every frame, and is shown only while it is enabled.")]
+		public UnityEngine.UI.Graphic followGraphic;
+
 		[Tooltip("With a colour source: multiplied into its colour. Black gives black glyphs that still fade with a white-tinted sprite.")]
 		public Color colourTint = Color.white;
 
@@ -65,6 +68,20 @@ namespace Collection.Controls
 				if (text.color != colour)
 				{
 					text.color = colour;
+				}
+			}
+
+			if (followGraphic != null)
+			{
+				Color colour = followGraphic.color * colourTint;
+				if (text.color != colour)
+				{
+					text.color = colour;
+				}
+
+				if (text.enabled != followGraphic.enabled)
+				{
+					text.enabled = followGraphic.enabled;
 				}
 			}
 
