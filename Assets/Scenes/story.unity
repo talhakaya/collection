@@ -4258,6 +4258,7 @@ MonoBehaviour:
   size: 56
   inset: 70
   edge: 0.04
+  fadeTime: 0.6
 --- !u!1 &585478306
 GameObject:
   m_ObjectHideFlags: 0
@@ -5511,6 +5512,7 @@ MonoBehaviour:
   - {fileID: 1626706175}
   - {fileID: 2026329421}
   - {fileID: 406303409}
+  fallenBelow: -30
 --- !u!4 &675054525
 Transform:
   m_ObjectHideFlags: 0
@@ -11732,7 +11734,7 @@ MonoBehaviour:
   emote: scared
   ground:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 4294967295
 --- !u!114 &1500000009
 MonoBehaviour:
   m_ObjectHideFlags: 0

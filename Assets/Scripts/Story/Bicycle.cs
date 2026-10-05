@@ -213,13 +213,19 @@ namespace Collection.Story
             mountedAt = Time.time;
         }
 
-        // The height of the ground at a place, the bicycle itself not counting. `otherwise` when there is none.
+        // The height of the ground under a place: the first thing below it, the bicycle and its rider not
+        // counting. Not the highest thing there - in a cave that is the land over the cave, and the bicycle was
+        // stood up on top of it. `otherwise` when there is nothing.
         float GroundUnder(Vector3 place, float otherwise)
         {
             float ground = float.MinValue;
-            foreach (RaycastHit hit in Physics.RaycastAll(place + Vector3.up * 3f, Vector3.down, 40f, 1, QueryTriggerInteraction.Ignore))
-                if (hit.collider.GetComponentInParent<Bicycle>() == null && hit.point.y > ground)
+            foreach (RaycastHit hit in Physics.RaycastAll(place + Vector3.up * 0.7f, Vector3.down, 40f, ~0, QueryTriggerInteraction.Ignore))
+            {
+                if (hit.collider.GetComponentInParent<Bicycle>() != null || hit.collider.GetComponentInParent<PlayerMovement>() != null)
+                    continue;
+                if (hit.point.y > ground)
                     ground = hit.point.y;
+            }
             return ground > float.MinValue ? ground : otherwise;
         }
 

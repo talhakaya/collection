@@ -30,7 +30,7 @@ namespace Collection.Story
         [Tooltip("The face shown while down.")]
         public string emote = "scared";
         [Tooltip("What the body lands on.")]
-        public LayerMask ground = 1;
+        public LayerMask ground = ~0;
 
         public bool Down { get; private set; }
         public bool GettingUp => rising > 0f;
@@ -136,8 +136,13 @@ namespace Collection.Story
             // The character stands where the hips are, on the ground under them, facing as it did.
             Vector3 place = hips.position;
             float feet = place.y - 1f;
-            if (Physics.Raycast(place + Vector3.up * 0.5f, Vector3.down, out RaycastHit hit, 20f, ground, QueryTriggerInteraction.Ignore))
-                feet = hit.point.y;
+            // The first thing under the hips that is not the character itself.
+            float nearest = float.MinValue;
+            foreach (RaycastHit hit in Physics.RaycastAll(place + Vector3.up * 0.5f, Vector3.down, 20f, ground, QueryTriggerInteraction.Ignore))
+                if (!hit.collider.transform.IsChildOf(transform) && hit.point.y > nearest)
+                    nearest = hit.point.y;
+            if (nearest > float.MinValue)
+                feet = nearest;
             place.y = feet + controller.height * 0.5f - controller.center.y + controller.skinWidth;
             transform.position = place;
             model.localPosition = modelPlace;
