@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.TextCore.LowLevel;
 using UnityEngine.UI;
+using Collection.Controls;
 
 namespace Collection.EditorTools
 {
@@ -162,6 +163,47 @@ namespace Collection.EditorTools
 			tmp.text = text;
 			EditorUtility.SetDirty(go);
 			return tmp;
+		}
+
+		/// <summary>
+		/// For a sprite that is nothing but a picture of a button: empties the sprite and puts
+		/// the prompt in its place, as a TextMesh Pro child with an InputPromptText. The
+		/// object and its renderer stay, so whatever moves, tints or shows and hides the
+		/// sprite does the same to the prompt, which takes the renderer's colour.
+		///
+		/// keyHeight is how tall a key cap comes out, in world units.
+		/// </summary>
+		public static InputPromptText ReplaceSpriteWithPrompt(SpriteRenderer sprite, string template, float keyHeight, bool shadowed)
+		{
+			// A key cap is 74 of the sheet's pixels, drawn at font size / 68 per pixel, and a
+			// 3D text's units are a tenth of its font size.
+			const float KeyHeightPerFontSize = 74f / 68f * 0.1f;
+
+			sprite.sprite = null;
+
+			var go = new GameObject("prompt");
+			go.layer = sprite.gameObject.layer;
+			go.transform.SetParent(sprite.transform, false);
+			Vector3 scale = sprite.transform.lossyScale;
+			go.transform.localScale = new Vector3(1f / scale.x, 1f / scale.y, 1f);
+
+			TextMeshPro tmp = go.AddComponent<TextMeshPro>();
+			tmp.rectTransform.sizeDelta = Vector2.zero;
+			tmp.alignment = TextAlignmentOptions.Center;
+			tmp.textWrappingMode = TextWrappingModes.NoWrap;
+			tmp.overflowMode = TextOverflowModes.Overflow;
+			tmp.fontSize = keyHeight / KeyHeightPerFontSize;
+			tmp.color = sprite.color;
+			tmp.sortingLayerID = sprite.sortingLayerID;
+			tmp.sortingOrder = sprite.sortingOrder;
+			tmp.text = template;
+
+			InputPromptText prompt = go.AddComponent<InputPromptText>();
+			prompt.template = template;
+			prompt.shadowed = shadowed;
+			prompt.colourFrom = sprite;
+			EditorUtility.SetDirty(sprite);
+			return prompt;
 		}
 
 		private static FontStyles ToFontStyles(FontStyle style)
