@@ -119,6 +119,15 @@ namespace Collection.Story
                 centred = false;
         }
 
+        // Takes the text off the screen while the conversation is still going (for a cutscene in the middle of it).
+        public void HideLines()
+        {
+            lineMenu.SetActive(false);
+            optionsMenu.SetActive(false);
+            if (centreMenu != null)
+                centreMenu.SetActive(false);
+        }
+
         public override YarnTask OnDialogueStartedAsync()
         {
             if (shouldLog) Debug.Log($"{name} DialogueStarted", this);

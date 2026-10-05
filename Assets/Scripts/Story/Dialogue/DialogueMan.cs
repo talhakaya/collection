@@ -47,6 +47,9 @@ namespace Collection.Story
         void Start()
         {
             player = FindFirstObjectByType<PlayerMovement>().transform;
+
+            // <<cutscene name>> in the Yarn script: see Cutscene.
+            dialogueUIMain.dialogueRunner.AddCommandHandler("cutscene", new Func<string, IEnumerator>(RunCutscene));
             textPrompt.spriteAsset = InputPrompts.SpriteAsset(true);
             uiPrompt.gameObject.SetActive(false);
         }
@@ -65,6 +68,22 @@ namespace Collection.Story
         void OnNPCTriggerExit(NPCTrigger trigger)
         {
             currentNpcTriggers.Remove(trigger);
+        }
+
+        IEnumerator RunCutscene(string id)
+        {
+            Cutscene cutscene = Cutscene.Find(id);
+            if (cutscene == null)
+            {
+                Debug.LogError($"The Yarn script asks for <<cutscene {id}>>, but no Cutscene in the scene has that id.");
+                yield break;
+            }
+
+            dialogueUIMain.HideLines();
+            cutscene.onStart?.Invoke();
+            if (cutscene.duration > 0f)
+                yield return new WaitForSeconds(cutscene.duration);
+            cutscene.onEnd?.Invoke();
         }
 
         public bool IsTalking()

@@ -1,10 +1,28 @@
 title: Intro
 ---
-God: In the beginning there was a field.
-God: And in the field I put a body.
-God: And on the body I put a head. Of sorts.
-God: I haven't decided about the corners yet.
-God: Go on. Walk around. See how it feels.
+God: man create thing.
+God: this will validate his existence.
+God: maybe.
+God: does he want sea? or desert?
+-> sea
+    God: show me... sea!
+    God: 12 points.
+-> desert
+    God: did you say sea?
+    -> sea
+        God: sea it is.
+    -> desert
+        God: swear I keep hearing sea.
+        -> sea
+            God: of course!
+        -> desert
+            God: time will come for desert.
+            God: let's start with sea.
+<<cutscene sea>>
+God: feel the sun on your skin.
+God: beautiful.
+God: hope it doesn't give you cancer.
+God: anyway.
 ===
 
 title: GreeterFirst
