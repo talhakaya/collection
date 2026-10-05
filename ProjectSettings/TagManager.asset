@@ -30,10 +30,10 @@ TagManager:
   - 
   - Terrain
   - Mud
-  - 
-  - 
-  - 
-  - 
+  - CaveCeiling
+  - Actors
+  - Player
+  - Cave
   - 
   - 
   - 

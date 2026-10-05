@@ -1,0 +1,64 @@
+title: Intro
+---
+God: man create thing.
+God: this will validate his existence.
+God: maybe.
+God: does he want sea? or desert?
+-> sea
+    God: show me... sea!
+    God: 12 points.
+-> desert
+    God: did you say sea?
+    -> sea
+        God: sea it is.
+    -> desert
+        God: swear I keep hearing sea.
+        -> sea
+            God: of course!
+        -> desert
+            God: time will come for desert.
+            God: let's start with sea.
+<<cutscene sea>>
+God: feel the sun on your skin.
+God: beautiful.
+God: hope it doesn't give you cancer.
+God: anyway.
+===
+
+title: TVIntro
+---
+God: TV is allknowing.
+God: he loves TV.
+God: he wishes he could be more like TV.
+God: and for that, the sea needs to go.
+<<cutscene land>>
+===
+
+title: GreeterFirst
+---
+Greeter: Oh. Hello.
+Greeter: That's a big round head you've got there.
+Greeter: Is it... on purpose?
+-> It's a television.
+    Greeter: Televisions have corners. Yours doesn't have a single one.
+    Greeter: I'm not judging. I'm just saying.
+-> I don't know yet.
+    Greeter: Fair. Most of us don't.
+-> ...
+    Greeter: Not a talker. That's all right.
+Greeter: Anyway. Welcome to the field. There's a cave over there, if you like caves.
+===
+
+title: GreeterAgain
+---
+Greeter: Still round, I see.
+-> Still round.
+    Greeter: Good. Consistency matters.
+-> Working on it.
+    Greeter: Take your time.
+===
+
+title: GreeterLater
+---
+Greeter: I've said everything I know.
+===

@@ -59,6 +59,41 @@ namespace Collection.Saving
 		public PenisClonerSave penisCloner = new PenisClonerSave();
 		public SleepyTimeSave sleepyTime = new SleepyTimeSave();
 		public VirtualPetSave virtualPet = new VirtualPetSave();
+
+		/// The story mode's own part.
+		public StorySave story = new StorySave();
+	}
+
+	/// <summary>
+	/// What the story mode keeps. For now the main character: the shape of its head, and the
+	/// look of its body as set in the character creator (a development tool) - its
+	/// proportions, and each choice from the character catalog by the option's id, so that
+	/// reordering or renaming the catalog does not change a saved character.
+	/// </summary>
+	[Serializable]
+	public class StorySave
+	{
+		/// False until a look has been saved; the character keeps the one it has in the scene.
+		public bool characterSaved;
+		public float height = 1f;
+		public float fatness = 1f;
+
+		/// The catalog choices, a key ("top", "pantsColor") and the chosen option's id.
+		public List<string> optionKeys = new List<string>();
+		public List<string> optionIds = new List<string>();
+
+		/// The shape of the main character's head: its six sides (right, left, up, down,
+		/// front, back), each from 0, a flat cube side, to 1, the sphere. A new game starts
+		/// with the sphere.
+		public List<float> headSides = new List<float> { 1f, 1f, 1f, 1f, 1f, 1f };
+
+		/// Conversations that happen only once and have happened, by their Yarn node's name.
+		public List<string> conversations = new List<string>();
+
+		/// Things remembered from conversations (a choice the player made), as a name and a
+		/// value. See StoryMemory.
+		public List<string> memoryKeys = new List<string>();
+		public List<string> memoryValues = new List<string>();
 	}
 
 	[Serializable]
