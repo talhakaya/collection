@@ -156,6 +156,7 @@ MonoBehaviour:
   stagger: 0.19
   spin: {x: 7, y: 23, z: 0}
   animateSides: 1
+  emoteEvery: {x: 2, y: 5}
 --- !u!114 &155933354
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -256,16 +257,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   screen: {fileID: 8400000, guid: ce00e84ad34c6674aaf02cff0100a639, type: 2}
-  idle: {fileID: 32900000, guid: 1fc02e28ba92aaf459a218ec3a027dd9, type: 3}
+  idle: {fileID: 32900000, guid: 476a7c41e831f7b4489bea714c1f5a52, type: 3}
   emotes:
   - name: smile
-    clip: {fileID: 0}
+    clip: {fileID: 32900000, guid: 18d6c595b9eb1174786e9b097b130d81, type: 3}
     loop: 0
   - name: scared
-    clip: {fileID: 0}
+    clip: {fileID: 32900000, guid: 16480ac6c1390bd48b6edf0bdb828a14, type: 3}
     loop: 0
-  - name: confused
-    clip: {fileID: 0}
+  - name: annoyed
+    clip: {fileID: 32900000, guid: 666a9963d70cd5d408524fa00865229f, type: 3}
     loop: 0
 --- !u!1 &1291501343
 GameObject:

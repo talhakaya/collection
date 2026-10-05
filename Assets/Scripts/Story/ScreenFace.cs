@@ -6,7 +6,7 @@ using UnityEngine.Video;
 namespace Collection.Story
 {
 	/// <summary>
-	/// The face on the screen: a video for each emote ("smile", "scared", "confused"), and
+	/// The face on the screen: a video for each emote ("smile", "scared", "annoyed"), and
 	/// one it idles on. Show("scared") changes the face; an emote that does not loop plays
 	/// once and the face goes back to idling.
 	///
@@ -41,7 +41,7 @@ namespace Collection.Story
 		{
 			new Emote { name = "smile" },
 			new Emote { name = "scared" },
-			new Emote { name = "confused" }
+			new Emote { name = "annoyed" }
 		};
 
 		public const string IdleName = "idle";
