@@ -10,7 +10,8 @@
 //
 // The texture is an unwrapped cube (see MorphSphere for the layout). Where it is see-through
 // the screen texture shows instead, spread over the whole of that side and not lit: the
-// hole in the front is a screen.
+// hole in the front is a screen. The screen's picture is given big pixels, scanlines
+// and static on the way (Screen, in the forward pass).
 Shader "Collection/Story/Morph Sphere"
 {
 	Properties
@@ -18,6 +19,14 @@ Shader "Collection/Story/Morph Sphere"
 		_BaseColor ("Colour", Color) = (1, 1, 1, 1)
 		_BaseMap ("Unwrapped cube", 2D) = "white" {}
 		_ScreenMap ("Screen (shows through the holes)", 2D) = "black" {}
+
+		[Header(The screen as an old television)]
+		_ScreenPixels ("Chunky pixels across (0 is off)", Range(0, 256)) = 56
+		_Scanlines ("Scanlines", Range(0, 1)) = 0.45
+		_ScanlineCount ("Scanlines down the screen", Range(8, 400)) = 56
+		_ScanlineSpeed ("Scanlines rolling (lines a second)", Range(-20, 20)) = 1.5
+		_Static ("Static", Range(0, 1)) = 0.18
+		_StaticSize ("Static grains across", Range(8, 400)) = 112
 
 		// The six sides, 0 the cube and 1 the sphere. Not shown on the material: the
 		// MorphSphere component on each object sets them for that object, so sliders here
@@ -50,6 +59,12 @@ Shader "Collection/Story/Morph Sphere"
 			float _Front;
 			float _Back;
 			float _Seam;
+			float _ScreenPixels;
+			float _Scanlines;
+			float _ScanlineCount;
+			float _ScanlineSpeed;
+			float _Static;
+			float _StaticSize;
 		CBUFFER_END
 
 		// Half the edge of the cube inside a sphere of radius 1.
@@ -109,6 +124,36 @@ Shader "Collection/Story/Morph Sphere"
 			TEXTURE2D(_ScreenMap);
 			SAMPLER(sampler_ScreenMap);
 
+			// A number from 0 to 1 that looks random, the same for the same grain.
+			float Grain(float2 cell)
+			{
+				return frac(sin(dot(cell, float2(12.9898, 78.233))) * 43758.5453);
+			}
+
+			// What the screen shows at a point of its side (0 to 1 across and up): the screen
+			// texture as an old television would show it.
+			half3 Screen(float2 uv)
+			{
+				// Chunky pixels: every point of a block shows the middle of the block.
+				float2 at = uv;
+				if (_ScreenPixels >= 1)
+				{
+					at = (floor(uv * _ScreenPixels) + 0.5) / _ScreenPixels;
+				}
+
+				half3 picture = SAMPLE_TEXTURE2D(_ScreenMap, sampler_ScreenMap, at).rgb;
+
+				// Scanlines: dark bands down the screen, drifting.
+				float band = 0.5 + 0.5 * cos((uv.y * _ScanlineCount + _Time.y * _ScanlineSpeed) * 6.2831853);
+				picture *= 1 - _Scanlines * (1 - band);
+
+				// Static: grains of grey that change 24 times a second.
+				float2 grain = floor(uv * _StaticSize) + floor(_Time.y * 24) * float2(17, 31);
+				picture = lerp(picture, Grain(grain), _Static);
+
+				return picture;
+			}
+
 			struct Attributes
 			{
 				float3 positionOS : POSITION;
@@ -146,7 +191,7 @@ Shader "Collection/Story/Morph Sphere"
 				Light light = GetMainLight();
 				half3 lit = light.color * saturate(dot(normal, light.direction)) + SampleSH(normal);
 
-				half3 screen = SAMPLE_TEXTURE2D(_ScreenMap, sampler_ScreenMap, input.sideUv).rgb;
+				half3 screen = Screen(input.sideUv);
 				return half4(lerp(screen, colour.rgb * lit, colour.a), 1);
 			}
 			ENDHLSL
