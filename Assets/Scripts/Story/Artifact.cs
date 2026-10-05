@@ -14,8 +14,12 @@ namespace Collection.Story
     {
         [Tooltip("The name it is kept under in the save. Changing it loses it from saved games.")]
         public string id;
+        [Tooltip("What it is called on the screen. Empty: the object's name.")]
+        public string title;
         [Tooltip("The game that wins it, by its name in the GameList.")]
         public string game;
+        [Tooltip("The Yarn node for talking to it once it is won, straight after coming back from its game. Empty: nothing is said.")]
+        public string wonConversation;
 
         [Header("Look")]
         [Tooltip("The part that turns and bobs.")]
@@ -39,6 +43,8 @@ namespace Collection.Story
 
         public bool Won => SaveManager.Slot.story.artifacts.Contains(id);
 
+        public string Title => string.IsNullOrEmpty(title) ? name : title;
+
         void Awake()
         {
             if (visual != null)
@@ -47,10 +53,22 @@ namespace Collection.Story
             phase = Mathf.Abs(id != null ? id.GetHashCode() % 628 : 0) * 0.01f;
         }
 
-        // For the NPCTrigger's onConversationEnd.
+        // For the NPCTrigger's onConversationEnd: asks whether to play the game, and plays it. Once won, the
+        // trigger is only used for talking to it (TalkAsWon) and this does nothing.
         public void Play()
         {
-            StoryGames.Play(game, id);
+            if (!Won)
+                StoryGames.Ask(game, id, Title);
+        }
+
+        // The conversation with it now that it is won, if it has one.
+        public void TalkAsWon()
+        {
+            if (string.IsNullOrEmpty(wonConversation) || !TryGetComponent(out NPCTrigger trigger))
+                return;
+            trigger.conversation = wonConversation;
+            trigger.nextConversations.Clear();
+            trigger.TryStartDialogue();
         }
 
         // From now on it goes after `behind`: the character, or another artifact.

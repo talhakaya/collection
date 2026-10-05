@@ -51,6 +51,14 @@ namespace Collection.Controls
 			[Tooltip("And the other way: a long or looping clip that is not music (wind, an engine, speech).")]
 			public string[] soundClips = Array.Empty<string>();
 
+			[Header("Story mode")]
+			[Tooltip("The year the game was made, shown before it is played from the story. Zero leaves the line out.")]
+			public int year;
+			[Tooltip("Roughly how long the game takes to give its artifact (minutes), shown before it is played from the story. Zero leaves the line out.")]
+			public int artifactMinutes;
+			[Tooltip("For a game that goes on after it has given its artifact (one with no end, which gives it at some point along the way): the player is offered to keep playing. Off, the only way on from the artifact is back to the story.")]
+			public bool continueAfterArtifact;
+
 			/// The aspect ratio asked for, or zero for any.
 			public float AspectRatio
 			{

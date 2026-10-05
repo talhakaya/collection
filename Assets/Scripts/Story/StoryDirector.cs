@@ -84,6 +84,13 @@ namespace Collection.Story
             television.SetActive(true);
         }
 
+        // Once the scene has started and the artifact has had a moment to come over.
+        IEnumerator TalkToArtifact(Artifact artifact)
+        {
+            yield return new WaitForSeconds(1.5f);
+            artifact.TalkAsWon();
+        }
+
         void SetUpArtifacts(StorySave story)
         {
             string justWon = StoryGames.TakeJustWon();
@@ -100,6 +107,8 @@ namespace Collection.Story
                 // The one just won comes over from where it lay; the others are with the character already.
                 if (id != justWon)
                     artifact.SnapBehind(player, won);
+                else
+                    StartCoroutine(TalkToArtifact(artifact));
                 leader = artifact.transform;
                 won++;
             }
