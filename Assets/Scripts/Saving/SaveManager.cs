@@ -35,6 +35,11 @@ namespace Collection.Saving
 		private static int storySlot = -1;
 		private static bool dirty;
 
+		// When the game being played was entered and when it last saved, in real time.
+		private static string currentGame;
+		private static float gameEnteredAt;
+		private static float gameSavedAt = -1f;
+
 		public static SaveData Data
 		{
 			get
@@ -104,15 +109,26 @@ namespace Collection.Saving
 			Save();
 		}
 
-		/// To be called after changing anything in Slot or Settings. The file is written once
-		/// at the end of the frame, however many changes there were.
+		/// To be called by a game after changing anything in Slot. The file is written once at
+		/// the end of the frame, however many changes there were.
 		public static void MarkDirty()
+		{
+			dirty = true;
+			gameSavedAt = Time.realtimeSinceStartup;
+		}
+
+		/// The same for Settings, which are not a game's progress: "last saved" does not move.
+		public static void MarkSettingsDirty()
 		{
 			dirty = true;
 		}
 
-		/// Seconds of play since the current slot was last written.
-		public static float SecondsSinceSave => Mathf.Max(0f, Slot.timePlayed - Slot.timePlayedAtLastSave);
+		/// Seconds since the game being played last saved anything, for the pause screen.
+		/// Negative when it has saved nothing since it was started.
+		public static float SecondsSinceGameSaved => gameSavedAt < 0f ? -1f : Time.realtimeSinceStartup - gameSavedAt;
+
+		/// Seconds since the game being played was started from the menu.
+		public static float SecondsInGame => Time.realtimeSinceStartup - gameEnteredAt;
 
 		public static void Load()
 		{
@@ -148,8 +164,6 @@ namespace Collection.Saving
 			if (data == null) return;
 
 			dirty = false;
-			foreach (SaveSlotData slot in data.slots) slot.timePlayedAtLastSave = slot.timePlayed;
-			data.freePlay.timePlayedAtLastSave = data.freePlay.timePlayed;
 
 			string path = FilePath;
 			string temp = path + ".tmp";
@@ -172,6 +186,8 @@ namespace Collection.Saving
 			private void Awake()
 			{
 				SceneManager.sceneLoaded += OnSceneLoaded;
+				currentGame = GameContext.FromScenePath(SceneManager.GetActiveScene().path);
+				gameEnteredAt = Time.realtimeSinceStartup;
 			}
 
 			private void OnDestroy()
@@ -183,7 +199,15 @@ namespace Collection.Saving
 			// time that has run up, whether or not the game saved anything itself.
 			private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
 			{
-				if (GameContext.FromScenePath(scene.path) == null)
+				string game = GameContext.FromScenePath(scene.path);
+				if (game != currentGame)
+				{
+					currentGame = game;
+					gameEnteredAt = Time.realtimeSinceStartup;
+					gameSavedAt = -1f;
+				}
+
+				if (game == null)
 				{
 					Paused = false;
 					Save();

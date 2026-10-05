@@ -50,10 +50,6 @@ namespace Collection.Saving
 		/// Seconds spent in games with time running: menus and the pause screen do not count.
 		public float timePlayed;
 
-		/// timePlayed as it was when the slot was last written, so "last saved" can be told
-		/// in the same time.
-		public float timePlayedAtLastSave;
-
 		public BloodSpaceSave bloodSpace = new BloodSpaceSave();
 		public CrimeFactorySave crimeFactory = new CrimeFactorySave();
 		public GolfinitySave golfinity = new GolfinitySave();

@@ -276,6 +276,13 @@ namespace Games.GarbagePeople
 		{
 			fitViewport();
 
+			// In the collection: the game steps itself on real time, so the pause screen's
+			// stopping of Unity's time does not stop it. This does.
+			if (Collection.UI.PauseMenu.Paused)
+			{
+				return;
+			}
+
 			accumulator += Time.unscaledDeltaTime * 1000.0;
 			if (accumulator > StepMs * 4)
 			{

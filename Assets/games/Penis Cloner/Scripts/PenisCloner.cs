@@ -309,6 +309,13 @@ namespace Games.PenisCloner
 
 		private void Update()
 		{
+			// In the collection: the game steps itself on real time, so the pause screen's
+			// stopping of Unity's time does not stop it. This does.
+			if (Collection.UI.PauseMenu.Paused)
+			{
+				return;
+			}
+
 			pollKeys();
 
 			// The engine runs update() from a 17 ms interval timer.

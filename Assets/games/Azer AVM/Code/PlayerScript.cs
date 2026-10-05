@@ -168,6 +168,8 @@ namespace Games.AzerAVM
 	    // In the collection: stands in for Input.anyKeyDown.
 	    public static bool anyKeyDown()
 	    {
+	        // In the collection: not while the pause screen is up, nor the press that opens it.
+	        if (Collection.Controls.TaloketoInputManager.Blocked) return false;
 	        var keyboard = UnityEngine.InputSystem.Keyboard.current;
 	        if (keyboard != null && keyboard.anyKey.wasPressedThisFrame) return true;
 	        var mouse = UnityEngine.InputSystem.Mouse.current;
@@ -175,12 +177,12 @@ namespace Games.AzerAVM
 	        foreach (var pad in UnityEngine.InputSystem.Gamepad.all)
 	        {
 	            if (pad.buttonSouth.wasPressedThisFrame || pad.buttonEast.wasPressedThisFrame || pad.buttonWest.wasPressedThisFrame || pad.buttonNorth.wasPressedThisFrame
-	                || pad.startButton.wasPressedThisFrame || pad.leftShoulder.wasPressedThisFrame || pad.rightShoulder.wasPressedThisFrame) return true;
+	                || pad.leftShoulder.wasPressedThisFrame || pad.rightShoulder.wasPressedThisFrame) return true;
 	        }
 	        return false;
 	    }
 
-	    // In the collection: Start restarts the match, but not as part of the exit chord.
+	    // In the collection: Restart is not to fire as part of the exit chord.
 	    public static bool exitChordHeld()
 	    {
 	        var keyboard = UnityEngine.InputSystem.Keyboard.current;

@@ -21,6 +21,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 14105f93900b63744a7545c1a5d435bb, type: 3}
     entryScenePath: Assets/games/Golfinity/Scenes/main.unity
   - gameName: Chocolate
@@ -30,6 +33,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 1
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 8f872d0d88cbd1748a0c6147230de4db, type: 3}
     entryScenePath: Assets/games/Chocolate/scene0.unity
   - gameName: Nykrig
@@ -39,6 +45,16 @@ MonoBehaviour:
     mouseEmulationSpeed: 0
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips:
+    - Krautwar 0
+    - Krautwar 1
+    - Krautwar 2
+    - Krautwar 3
+    - Krautwar 4
+    - Krautwar 5
+    - Krautwar 6
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 6fe503a84be7b664381fff86a1524a2c, type: 3}
     entryScenePath: Assets/games/Nykrig/main.unity
   - gameName: Space Artist
@@ -48,6 +64,12 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 2800000, guid: 0191a8956460d714aa09afc39c82f638, type: 3}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 1
+    musicClips: []
+    soundClips:
+    - Space Breath
+    - Cam Gicirtisi
+    - jetpack
     entryScene: {fileID: 102900000, guid: a39fe25f1e4fb424f8625ed9bbc73f93, type: 3}
     entryScenePath: Assets/games/Space Artist/menu.unity
   - gameName: Abused
@@ -57,6 +79,10 @@ MonoBehaviour:
     mouseEmulationSpeed: 0
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips:
+    - static
     entryScene: {fileID: 102900000, guid: e0eefedd350e54ec5997f21ac87db47a, type: 3}
     entryScenePath: Assets/games/Abused/main.unity
   - gameName: Sleepy Time
@@ -66,6 +92,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 0
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 5583e350dfa7831a50ba5e22b3900faa, type: 3}
     entryScenePath: Assets/games/Sleepy Time/main.unity
   - gameName: Ode to Pixel Days
@@ -75,6 +104,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 9f033cdb041b9e1488d8aaec479fbabd, type: 3}
     entryScenePath: Assets/games/Ode to Pixel Days/main.unity
   - gameName: Penis Cloner
@@ -84,6 +116,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 9f25eeb00d1ce9640bd155e315f6ca59, type: 3}
     entryScenePath: Assets/games/Penis Cloner/main.unity
   - gameName: Love's First Week
@@ -93,6 +128,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 9fbf65c462971dd4ca40243f70658546, type: 3}
     entryScenePath: Assets/games/Love's First Week/main.unity
   - gameName: Where Lost Ones Go
@@ -102,6 +140,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 456c23bc216a253499edfc94eb5790f6, type: 3}
     entryScenePath: Assets/games/Where Lost Ones Go/main.unity
   - gameName: Garbage People
@@ -111,6 +152,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 9fd338929497c8a47ba50a9610f50c18, type: 3}
     entryScenePath: Assets/games/Garbage People/main.unity
   - gameName: Herbie
@@ -120,6 +164,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 5f284bf69857e0e46b0f6885abacfdaf, type: 3}
     entryScenePath: Assets/games/Herbie/scene0.unity
   - gameName: Lost Shader
@@ -129,6 +176,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 4501c507ccef93f4bb5901189a686757, type: 3}
     entryScenePath: Assets/games/Lost Shader/main.unity
   - gameName: Ode to Cactus
@@ -138,6 +188,10 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips:
+    - static
     entryScene: {fileID: 102900000, guid: 0d99b7d14d7e6484c99a6a291276a150, type: 3}
     entryScenePath: Assets/games/Ode to Cactus/scenes/road.unity
   - gameName: Where Is He
@@ -147,6 +201,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: f9ee539bec4e88b41ba61cb30b9402a7, type: 3}
     entryScenePath: Assets/games/Where Is He/main.unity
   - gameName: Casket Fucker
@@ -156,6 +213,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 13ce2a6a060a5d249a45a533c02f5357, type: 3}
     entryScenePath: Assets/games/Casket Fucker/scene0.unity
   - gameName: Let's Never Do That Again
@@ -165,6 +225,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: deb10bc9cf412f8469cf53f236230ef5, type: 3}
     entryScenePath: Assets/games/Let's Never Do That Again/Scenes/scene0.unity
   - gameName: Over-Eating 101
@@ -174,6 +237,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 454b5d9576356a8419084340c5c47e9a, type: 3}
     entryScenePath: Assets/games/Over-Eating 101/scene0.unity
   - gameName: BloodSpace
@@ -183,6 +249,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 5797a9ce61311fc47b941e36c8047757, type: 3}
     entryScenePath: Assets/games/BloodSpace/scene.unity
   - gameName: Crime Factory
@@ -192,6 +261,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 97b15887fbbecb047b372c1f46048652, type: 3}
     entryScenePath: Assets/games/Crime Factory/Scenes/menu.unity
   - gameName: To Everyone I'll Never Meet
@@ -201,6 +273,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 2b31950abb7d54a43b87805fed65518d, type: 3}
     entryScenePath: Assets/games/To Everyone I'll Never Meet/scene1.unity
   - gameName: The Parasite
@@ -210,6 +285,10 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips:
+    - nefes
     entryScene: {fileID: 102900000, guid: e34da1590ffd42569817aae771de488a, type: 3}
     entryScenePath: Assets/games/The Parasite/test.unity
   - gameName: Troubled Football
@@ -219,6 +298,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: f6440ccbd1640824b9d8ebba97876f59, type: 3}
     entryScenePath: Assets/games/Troubled Football/Scenes/mainScene.unity
   - gameName: Wall Stains
@@ -228,6 +310,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: fd053c8eca0df1143bfeacba5e791ccf, type: 3}
     entryScenePath: Assets/games/Wall Stains/Scenes/scene0.unity
   - gameName: Childhood Nightmare
@@ -237,6 +322,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 14b8e5fc011cc3b41bc883f006d596e6, type: 3}
     entryScenePath: Assets/games/Childhood Nightmare/first.unity
   - gameName: Azer AVM
@@ -246,6 +334,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 0e705967e0dcccd43b71fba0cd377010, type: 3}
     entryScenePath: Assets/games/Azer AVM/scene0.unity
   - gameName: Talha's Screensaver
@@ -255,6 +346,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: a9a0198c8596c26488f6f7c51b2bf29a, type: 3}
     entryScenePath: Assets/games/Talha's Screensaver/main.unity
   - gameName: Hello Fractals
@@ -264,6 +358,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 0792213f4ec6bb245bd604e30cbe4894, type: 3}
     entryScenePath: Assets/games/Hello Fractals/scene0.unity
   - gameName: Incredible Penis
@@ -273,6 +370,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: be4e3d4f646c0b342bdf207bfc6fb49f, type: 3}
     entryScenePath: Assets/games/Incredible Penis/Scenes/video0.unity
   - gameName: Milky Mike
@@ -282,6 +382,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 2f3e458e199a34f4689cbbe598354dbc, type: 3}
     entryScenePath: Assets/games/Milky Mike/main.unity
   - gameName: 120 Pixels
@@ -291,6 +394,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: e3be14def9f67b24b969f8e0715a6bfd, type: 3}
     entryScenePath: Assets/games/120 Pixels/scene0.unity
   - gameName: Kayabros Prototype 0
@@ -300,6 +406,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 242a3d267143be74fa6a975079effb42, type: 3}
     entryScenePath: Assets/games/Kayabros Prototype 0/main.unity
   - gameName: Kayabros Prototype 1
@@ -309,6 +418,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 957d0e72462e43c4ab97ba0351017267, type: 3}
     entryScenePath: Assets/games/Kayabros Prototype 1/main.unity
   - gameName: Kayabros Prototype 3
@@ -318,6 +430,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 58fa6388eab4daf469eaeef0c506ce54, type: 3}
     entryScenePath: Assets/games/Kayabros Prototype 3/lineGame.unity
   - gameName: Kayabros Prototype 4
@@ -327,6 +442,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 4eb9b57568289f44c8ab5bb4592a2ad4, type: 3}
     entryScenePath: Assets/games/Kayabros Prototype 4/main.unity
   - gameName: Oracle
@@ -336,6 +454,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: f9fabaccb4094154ab69ab30427b1806, type: 3}
     entryScenePath: Assets/games/Oracle/test.unity
   - gameName: Sweating In Public
@@ -345,6 +466,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 65c688aae2053ab47a73e56c5e39340a, type: 3}
     entryScenePath: Assets/games/Sweating In Public/scene0.unity
   - gameName: Fuck
@@ -354,6 +478,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 0ab4bfca15e131e478fcdaee337d03c6, type: 3}
     entryScenePath: Assets/games/Fuck/main.unity
   - gameName: Virtual Pet
@@ -363,6 +490,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 293bb4ae384f59e48aa4b165ebea12da, type: 3}
     entryScenePath: Assets/games/Virtual Pet/main.unity
   - gameName: Gridsplosion
@@ -372,6 +502,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: ce5f58a4bbb61a045817cb2506e8e584, type: 3}
     entryScenePath: Assets/games/Gridsplosion/scene0.unity
   - gameName: Slime Fight
@@ -381,6 +514,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: a2a0b8bee9c60f94792c26d39712c64b, type: 3}
     entryScenePath: Assets/games/Slime Fight/Scenes/scene1.unity
   - gameName: GGJ2015
@@ -390,6 +526,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 84b4d8a61244d5b4d8bdec74aec62e99, type: 3}
     entryScenePath: Assets/games/GGJ2015/scene0.unity
   - gameName: But You Are A Horse
@@ -399,6 +538,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 9cf4c4d122da41f9bf9eecceed01c9ef, type: 3}
     entryScenePath: Assets/games/But You Are A Horse/test.unity
   - gameName: Seizure
@@ -408,6 +550,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 3e0c19e4c838ddc4390b59111df21fe7, type: 3}
     entryScenePath: Assets/games/Seizure/main.unity
   - gameName: Screens
@@ -417,6 +562,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 261176bca7038ba458714d81a641d2c4, type: 3}
     entryScenePath: Assets/games/Screens/main.unity
   - gameName: Devil May Cry
@@ -426,6 +574,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: 8535e1c518d84a508a0646691342ae54, type: 3}
     entryScenePath: Assets/games/Devil May Cry/Scenes/Main.unity
   - gameName: FarCryBaby
@@ -435,6 +586,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips: []
     entryScene: {fileID: 102900000, guid: f0d531bc7d87d4b4693159632e1d7f3d, type: 3}
     entryScenePath: Assets/games/FarCryBaby/Scenes/Main.unity
   - gameName: Orphan
@@ -444,5 +598,9 @@ MonoBehaviour:
     mouseEmulationSpeed: 1000
     cursorTexture: {fileID: 0}
     cursorHotspot: {x: 0, y: 0}
+    aspect: 0
+    musicClips: []
+    soundClips:
+    - beach_ambient
     entryScene: {fileID: 102900000, guid: 81c77cbfd596d33459fb5629cf1fa863, type: 3}
     entryScenePath: Assets/games/Orphan/Scenes/TitleScreen.unity

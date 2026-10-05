@@ -26,14 +26,14 @@ namespace Games.SlimeFight
 		{
 			Cutscene.instance.startCutscene (0);
 			game = gameplay;
-			AudioListener.volume = 5;
+			// In the collection: the game turns the global volume up to 5. That volume is the
+			// settings' master volume now, so the 5 is multiplied into it.
+			Collection.CollectionSettings.GameVolume = 5;
 		}
 
-		// In the collection: the game turns the global volume up to 5; it is put back when
-		// the game is left.
 		void OnDestroy ()
 		{
-			AudioListener.volume = 1;
+			Collection.CollectionSettings.GameVolume = 1;
 		}
 
 		void Update ()

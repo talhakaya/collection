@@ -150,15 +150,10 @@ namespace Games.CrimeFactory
 	        }
 	    }
 
-	    // In the collection: Shift+Escape and Start+Select leave to the collection's menu, so
-	    // Escape and Start on their own are what counts as Cancel here.
+	    // In the collection: Cancel was Escape and Start, which are the collection's pause
+	    // screen now. It is Backspace and Select.
 	    public static bool CancelPressed() {
-	        if (!TaloketoInputManager.GetButtonDown("Cancel")) return false;
-	        var keyboard = UnityEngine.InputSystem.Keyboard.current;
-	        var pad = UnityEngine.InputSystem.Gamepad.current;
-	        if (keyboard != null && keyboard.shiftKey.isPressed) return false;
-	        if (pad != null && pad.selectButton.isPressed) return false;
-	        return true;
+	        return TaloketoInputManager.GetButtonDown("Cancel");
 	    }
 
 	    private int frameCount;
