@@ -6,7 +6,7 @@ namespace Games.OdeToPixelDays
 	/// The title screen. Ported from levels/Menu.as.
 	///
 	/// It is a Level with no tile map and Hans parked far above the screen: that gets it the
-	/// sky, the wall of big windows and the mute key for free. Clouds drift past a small
+	/// sky and the wall of big windows for free. Clouds drift past a small
 	/// castle, birds cross in flocks, and starting a game whites the screen out while the
 	/// castle grows towards the camera.
 	///
@@ -33,7 +33,6 @@ namespace Games.OdeToPixelDays
 		private FlxText text2;
 		private FlxText text3;
 		private FlxText text3s;
-		private FlxText text3a;
 		private FlxText text4;
 		private bool pressedSpace;
 		private bool pressed;
@@ -119,9 +118,8 @@ namespace Games.OdeToPixelDays
 			buttons.Add(new FlxButton(120, YBUTTON + 66, "Extras", goToMyURL3));
 			add(buttons[buttons.Count - 1]);
 			selected = 0;
-			text3a = new FlxText(30, 206, 320, "Press M At Any Time To Mute On/Off Sounds and Music", true);
-			text3a.color = 4289357414;
-			add(text3a);
+			// In the collection: the "Press M At Any Time To Mute" line that stood here is gone,
+			// with the key.
 			beyaz = new FlxSprite(0, 0);
 			beyaz.makeGraphic(320, 240, 4294967295);
 			beyaz.alpha = 0;
