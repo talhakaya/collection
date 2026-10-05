@@ -41,14 +41,16 @@ namespace Games.OdeToPixelDays
 	}
 
 	/// The "press space" prompt of the first level. Ported from TutoSpace.as.
-	public class TutoSpace : FlxSprite
+	///
+	/// In the collection: the space bar that was drawn in the picture, going down and up,
+	/// is the collection's glyph for the SPACE action now (see FlxPrompt). The three frames
+	/// are all the bare ellipse.
+	public class TutoSpace : FlxPrompt
 	{
 		private static string S_tutoSpace = "TutoSpace_S_tutoSpace";
 
-		public TutoSpace(double _x, double _y)
+		public TutoSpace(double _x, double _y) : base(_x, _y, null, "{SPACE}", 14)
 		{
-			x = _x;
-			y = _y;
 			loadGraphic(S_tutoSpace, true, false, 48, 24, false);
 			addAnimation("0", new[] { 0, 1, 2 }, 1, true);
 			play("0");

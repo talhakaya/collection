@@ -75,8 +75,10 @@ namespace Games.OdeToPixelDays
 			FlxText tutorial = new FlxText(60, 201, 280, "OR");
 			tutorial.color = 4286019447;
 			add(tutorial);
-			add(new FlxSprite(8, 192, S_tutoWASD));
-			add(new FlxSprite(80, 192, S_tutoDirs));
+			// In the collection: the keys drawn in these two pictures are prompts now, so a
+			// gamepad shows its stick and d-pad here.
+			add(new FlxPrompt(8, 192, S_tutoWASD, "{<Keyboard>/w|<Keyboard>/a|<Keyboard>/s|<Keyboard>/d|<Gamepad>/leftStick}", 20));
+			add(new FlxPrompt(80, 192, S_tutoDirs, "{<Keyboard>/upArrow|<Keyboard>/downArrow|<Keyboard>/leftArrow|<Keyboard>/rightArrow|<Gamepad>/dpad}", 20));
 			tutospace = new TutoSpace(264, 196);
 			tutospace.alpha = 0;
 			add(tutospace);

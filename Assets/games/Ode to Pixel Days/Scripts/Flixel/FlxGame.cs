@@ -103,6 +103,10 @@ namespace Games.OdeToPixelDays
 		private RectTransform screenRect;
 		private readonly List<FlxRenderer> renderers = new List<FlxRenderer>();
 
+		// In the collection: button prompts, drawn over the picture at the window's
+		// resolution (see FlxPrompt).
+		private InputPromptOverlay prompts;
+
 		internal static int DrawFrame
 		{
 			get { return drawFrame; }
@@ -178,6 +182,7 @@ namespace Games.OdeToPixelDays
 			screenRect = (RectTransform)imageObject.transform;
 			screenRect.anchorMin = screenRect.anchorMax = screenRect.pivot = new Vector2(0.5f, 0.5f);
 			fitScreen();
+			prompts = new InputPromptOverlay(screenRect, width, height);
 		}
 
 		/// The largest size that fits the window without changing the picture's shape.
@@ -227,6 +232,11 @@ namespace Games.OdeToPixelDays
 
 			instance.renderers.Add(flxRenderer);
 			return flxRenderer;
+		}
+
+		internal static InputPromptOverlay.Label NewPromptLabel()
+		{
+			return instance.prompts.NewLabel();
 		}
 
 		internal static AudioSource NewAudioSource()
@@ -305,6 +315,7 @@ namespace Games.OdeToPixelDays
 			}
 
 			renderers.Clear();
+			prompts.Clear();
 
 			// Finally assign and create the new state
 			_state = _requestedState;
@@ -318,11 +329,14 @@ namespace Games.OdeToPixelDays
 
 			fitScreen();
 			gameCamera.backgroundColor = toColor(FlxG.bgColor);
+			prompts.BeginFrame();
 
 			if (_state != null)
 			{
 				_state.draw();
 			}
+
+			prompts.EndFrame();
 
 			// Whatever did not draw itself this frame is not on screen.
 			for (int i = renderers.Count - 1; i >= 0; i--)
