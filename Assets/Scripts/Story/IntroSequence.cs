@@ -8,54 +8,65 @@ namespace Collection.Story
     // The story's opening, in the story scene itself.
     //
     //   Begin (as the scene starts): nothing but the character, idling, in black, seen from the front by the intro
-    //   camera. The world is switched off and the sea is in its place, but all of it is under the black.
+    //   camera. The world is switched off and the sea is in its place, lying just under the character's feet, but
+    //   all of it is under the black.
     //
-    //   RevealSea (a cutscene in the conversation): the black fades and the sea is there, while the view moves to
-    //   the sea camera - further back and from a little above, so that the water under the character, and the
-    //   character's reflection in it, are in the picture. (From the intro camera, level with the chest, the
-    //   reflection is below the bottom of the screen.)
+    //   RevealSea (a cutscene in the conversation): the black fades and the sea is there, rising around the
+    //   character's legs as it appears, while the view moves to the sea camera - low over the water and wide,
+    //   looking toward the sun, so that the sun's shine on the water and the character's reflection are in the
+    //   picture.
     //
     //   End (when the conversation is over): back to the follow camera.
     //
-    // The black is a quad drawn over everything late in the see-through queue (the Blackout shader). The character
-    // has to show on top of it, so while the black is up the character's materials are copies set to be drawn later
-    // still; when the black has gone they are put back.
+    // The black is a quad drawn at the very back of the picture, after everything else (the Blackout shader): it
+    // covers the sky and the water, which do not mark how far away they are, and leaves the character, who does.
     //
     // Not saved yet: this happens every time the scene starts.
     public class IntroSequence : MonoBehaviour
     {
-        [Tooltip("The character: everything under it is kept on top of the black.")]
         public Transform player;
+
+        [Header("Opening shot")]
         [Tooltip("The Cinemachine camera for the opening shot. It is put in front of the character when the intro begins.")]
         public GameObject introCamera;
-        [Tooltip("Where the intro camera stands, from the character's feet, in the character's own directions (z is in front).")]
+        [Tooltip("Where the camera stands, from the character's feet, in the character's own directions (z is in front).")]
         public Vector3 cameraOffset = new Vector3(0f, 1.3f, 6f);
         [Tooltip("The height above the character's feet that the camera looks at.")]
         public float lookAtHeight = 1.3f;
-        [Tooltip("The Cinemachine camera the view moves to as the sea appears.")]
-        public GameObject seaCamera;
-        public Vector3 seaCameraOffset = new Vector3(0f, 2.6f, 9.5f);
-        public float seaLookAtHeight = 0.5f;
         [Tooltip("The quad with the Blackout material.")]
         public Renderer blackout;
+
+        [Header("The sea")]
         [Tooltip("Switched off for the intro: the land.")]
         public List<GameObject> world = new List<GameObject>();
         [Tooltip("Switched on for the intro: the water, its floor to stand on, its mirror camera.")]
         public GameObject sea;
+        [Tooltip("The water's surface, which rises as the sea appears.")]
+        public Transform water;
+        [Tooltip("How far up the character's legs the water comes, from the feet (m). Knee deep is about 0.5.")]
+        public float waterDepth = 0.25f;
+        [Tooltip("The Cinemachine camera the view moves to as the sea appears.")]
+        public GameObject seaCamera;
+        public Vector3 seaCameraOffset = new Vector3(0f, 0.9f, 7f);
+        public float seaLookAtHeight = 1.25f;
+        [Tooltip("The sun, turned for the sea: low and ahead of the sea camera, so that it shines on the water.")]
+        public Light sun;
+        [Tooltip("How high the sun is above the horizon (degrees), and how far round to the right of straight ahead of the sea camera.")]
+        public float sunHeight = 13f;
+        public float sunToTheRight = 18f;
 
-        // Later than the black (Transparent+900).
-        const int QueueOverBlackout = 3950;
+        // The water starts this far under the feet: out of sight, and not yet round the legs.
+        const float WaterUnderFeet = 0.02f;
 
         static readonly int ColorId = Shader.PropertyToID("_Color");
         static readonly int TiltShiftDisabledId = Shader.PropertyToID("_TiltShiftDisabled");
 
-        readonly List<Renderer> raised = new List<Renderer>();
-        readonly List<Material[]> originals = new List<Material[]>();
         MaterialPropertyBlock block;
         Coroutine fade;
         CinemachineBrain brain;
         CinemachineBlendDefinition usualBlend;
         bool slowBlend;
+        float feetHeight;
 
         void Start()
         {
@@ -75,9 +86,11 @@ namespace Collection.Story
             if (sea != null)
                 sea.SetActive(true);
 
+            feetHeight = player.GetComponentInChildren<CharacterAppearance>().transform.position.y;
+            SetWaterHeight(-WaterUnderFeet);
+
             SetBlack(1f);
             blackout.gameObject.SetActive(true);
-            RaiseCharacter();
 
             // A plain shot from the front; the blur at the top and bottom of the screen is for the game's own view.
             Shader.SetGlobalFloat(TiltShiftDisabledId, 1f);
@@ -88,6 +101,14 @@ namespace Collection.Story
                 seaCamera.SetActive(false);
             }
             introCamera.SetActive(true);
+
+            // The sun beyond the character as the sea camera sees it, a little to one side: light on the water
+            // between the two.
+            if (sun != null)
+            {
+                float ahead = player.eulerAngles.y + 180f;
+                sun.transform.rotation = Quaternion.Euler(sunHeight, ahead + sunToTheRight + 180f, 0f);
+            }
         }
 
         // Stands a camera in front of the character, looking at a height above its feet.
@@ -100,7 +121,7 @@ namespace Collection.Story
             camera.transform.SetPositionAndRotation(from, Quaternion.LookRotation(target - from, Vector3.up));
         }
 
-        // For a Cutscene's onStart: the black fades over this many seconds.
+        // For a Cutscene's onStart: the black fades, and the water rises, over this many seconds.
         public void RevealSea(float seconds)
         {
             if (fade != null)
@@ -129,18 +150,21 @@ namespace Collection.Story
             for (float t = 0f; t < seconds; t += Time.deltaTime)
             {
                 // Eased, so that it neither starts nor ends abruptly.
-                SetBlack(1f - Mathf.SmoothStep(0f, 1f, t / seconds));
+                float shown = Mathf.SmoothStep(0f, 1f, t / seconds);
+                SetBlack(1f - shown);
+                SetWaterHeight(Mathf.Lerp(-WaterUnderFeet, waterDepth, shown));
                 yield return null;
             }
-            SetBlack(0f);
-            blackout.gameObject.SetActive(false);
-            LowerCharacter();
-            RestoreBlend();
+            Finish();
             fade = null;
         }
 
-        void RestoreBlend()
+        // Everything as it is once the sea has appeared.
+        void Finish()
         {
+            SetBlack(0f);
+            SetWaterHeight(waterDepth);
+            blackout.gameObject.SetActive(false);
             if (slowBlend && brain != null)
                 brain.DefaultBlend = usualBlend;
             slowBlend = false;
@@ -154,9 +178,7 @@ namespace Collection.Story
                 StopCoroutine(fade);
                 fade = null;
             }
-            blackout.gameObject.SetActive(false);
-            LowerCharacter();
-            RestoreBlend();
+            Finish();
             introCamera.SetActive(false);
             if (seaCamera != null)
                 seaCamera.SetActive(false);
@@ -171,38 +193,14 @@ namespace Collection.Story
             blackout.SetPropertyBlock(block);
         }
 
-        void RaiseCharacter()
+        // The height of the water's surface, from the character's feet.
+        void SetWaterHeight(float aboveFeet)
         {
-            if (raised.Count > 0)
+            if (water == null)
                 return;
-            foreach (Renderer renderer in player.GetComponentsInChildren<Renderer>(true))
-            {
-                raised.Add(renderer);
-                originals.Add(renderer.sharedMaterials);
-
-                // Copies: the queue is the material's, and the same materials are on everyone else.
-                Material[] copies = renderer.materials;
-                foreach (Material copy in copies)
-                    copy.renderQueue = QueueOverBlackout;
-                renderer.materials = copies;
-            }
-        }
-
-        void LowerCharacter()
-        {
-            for (int i = 0; i < raised.Count; i++)
-            {
-                Renderer renderer = raised[i];
-                if (renderer == null)
-                    continue;
-                Material[] copies = renderer.sharedMaterials;
-                renderer.sharedMaterials = originals[i];
-                foreach (Material copy in copies)
-                    if (copy != null && System.Array.IndexOf(originals[i], copy) < 0)
-                        Destroy(copy);
-            }
-            raised.Clear();
-            originals.Clear();
+            Vector3 position = water.position;
+            position.y = feetHeight + aboveFeet;
+            water.position = position;
         }
     }
 }
