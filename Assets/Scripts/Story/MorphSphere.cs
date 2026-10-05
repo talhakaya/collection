@@ -8,8 +8,24 @@ namespace Collection.Story
 	/// cube side, to 1, the sphere.
 	///
 	/// The mesh is made here: a sphere of radius 1 built as six grids, one for each side of
-	/// the cube, so every side has its own square of texture coordinates (0 to 1 across, the
-	/// right way up on the four sides around the middle).
+	/// the cube. Every side has two sets of texture coordinates:
+	///
+	/// - the first puts it on its square of an unwrapped cube, a picture three squares wide
+	///   and four high with the sides laid out as a cross:
+	///
+	///       .  down  .
+	///     right back left
+	///       .   up   .
+	///       .  front .
+	///
+	///   The front, at the bottom, is the right way up. The others are as they come when the
+	///   cross is folded: up is hinged on the front's top edge, back on up's far edge, and
+	///   so on round.
+	/// - the second is the side's own square, 0 to 1 across and up, for something shown on
+	///   one whole side (the picture on the front).
+	///
+	/// Both are even across the flat cube side, so a square of the picture is a square on
+	/// the cube; on the sphere it is stretched towards the middle of each side.
 	/// </summary>
 	[ExecuteAlways]
 	[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
@@ -35,6 +51,17 @@ namespace Collection.Story
 		// Each side's outward direction and which way is up on it.
 		private static readonly Vector3[] Normals = { Vector3.right, Vector3.left, Vector3.up, Vector3.down, Vector3.forward, Vector3.back };
 		private static readonly Vector3[] Ups = { Vector3.up, Vector3.up, Vector3.forward, Vector3.back, Vector3.up, Vector3.up };
+
+		// Each side's square in the unwrapped picture: column from the left, row from the top.
+		private static readonly Vector2Int[] Cells =
+		{
+			new Vector2Int(0, 1), new Vector2Int(2, 1), new Vector2Int(1, 2),
+			new Vector2Int(1, 0), new Vector2Int(1, 3), new Vector2Int(1, 1)
+		};
+
+		private const int FrontSide = 4;
+		private const float CellColumns = 3f;
+		private const float CellRows = 4f;
 
 		private Mesh mesh;
 		private int builtResolution;
@@ -125,6 +152,7 @@ namespace Collection.Story
 			int perSide = (n + 1) * (n + 1);
 			var vertices = new Vector3[perSide * 6];
 			var uvs = new Vector2[perSide * 6];
+			var sideUvs = new Vector2[perSide * 6];
 			var triangles = new int[n * n * 6 * 6];
 
 			int t = 0;
@@ -151,7 +179,16 @@ namespace Collection.Story
 
 						int i = first + y * (n + 1) + x;
 						vertices[i] = (normal + across * px + upward * py).normalized;
-						uvs[i] = new Vector2(u, v);
+
+						// Where the point is across the flat side, 0 to 1.
+						var onSide = new Vector2(px * 0.5f + 0.5f, py * 0.5f + 0.5f);
+						sideUvs[i] = onSide;
+
+						// Folded round from the front, every other side comes out turned half
+						// way round in its square.
+						Vector2 inCell = side == FrontSide ? onSide : Vector2.one - onSide;
+						Vector2Int cell = Cells[side];
+						uvs[i] = new Vector2((cell.x + inCell.x) / CellColumns, 1f - (cell.y + 1f - inCell.y) / CellRows);
 					}
 				}
 
@@ -175,6 +212,7 @@ namespace Collection.Story
 			mesh.indexFormat = vertices.Length > 65000 ? UnityEngine.Rendering.IndexFormat.UInt32 : UnityEngine.Rendering.IndexFormat.UInt16;
 			mesh.vertices = vertices;
 			mesh.uv = uvs;
+			mesh.uv2 = sideUvs;
 			mesh.triangles = triangles;
 
 			// The shader never moves a vertex outside the sphere.

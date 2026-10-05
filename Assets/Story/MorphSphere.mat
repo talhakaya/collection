@@ -24,7 +24,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: b96556b120dadef4cb42ac2ba28d4098, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ScreenMap:
+        m_Texture: {fileID: 8400000, guid: ce00e84ad34c6674aaf02cff0100a639, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
@@ -37,6 +41,6 @@ Material:
     - _Seam: 0.02
     - _Up: 1
     m_Colors:
-    - _BaseColor: {r: 0.92, g: 0.9, b: 0.86, a: 1}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

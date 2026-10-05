@@ -7,12 +7,17 @@
 //
 // The mesh is a unit sphere (MorphSphere makes one, as six grids); only the direction of
 // each vertex from the centre is used.
+//
+// The texture is an unwrapped cube (see MorphSphere for the layout). Where it is see-through
+// the screen texture shows instead, spread over the whole of that side and not lit: the
+// hole in the front is a screen.
 Shader "Collection/Story/Morph Sphere"
 {
 	Properties
 	{
 		_BaseColor ("Colour", Color) = (1, 1, 1, 1)
-		_BaseMap ("Texture", 2D) = "white" {}
+		_BaseMap ("Unwrapped cube", 2D) = "white" {}
+		_ScreenMap ("Screen (shows through the holes)", 2D) = "black" {}
 
 		[Header(Sides. 0 is the cube and 1 is the sphere)]
 		_Right ("Right (+X)", Range(0, 1)) = 1
@@ -99,11 +104,14 @@ Shader "Collection/Story/Morph Sphere"
 
 			TEXTURE2D(_BaseMap);
 			SAMPLER(sampler_BaseMap);
+			TEXTURE2D(_ScreenMap);
+			SAMPLER(sampler_ScreenMap);
 
 			struct Attributes
 			{
 				float3 positionOS : POSITION;
 				float2 uv : TEXCOORD0;
+				float2 sideUv : TEXCOORD1;
 			};
 
 			struct Varyings
@@ -111,6 +119,7 @@ Shader "Collection/Story/Morph Sphere"
 				float4 positionCS : SV_POSITION;
 				float2 uv : TEXCOORD0;
 				float3 normalWS : TEXCOORD1;
+				float2 sideUv : TEXCOORD2;
 			};
 
 			Varyings Vertex(Attributes input)
@@ -123,6 +132,7 @@ Shader "Collection/Story/Morph Sphere"
 				output.positionCS = TransformObjectToHClip(position);
 				output.normalWS = TransformObjectToWorldNormal(normal);
 				output.uv = TRANSFORM_TEX(input.uv, _BaseMap);
+				output.sideUv = input.sideUv;
 				return output;
 			}
 
@@ -133,7 +143,9 @@ Shader "Collection/Story/Morph Sphere"
 
 				Light light = GetMainLight();
 				half3 lit = light.color * saturate(dot(normal, light.direction)) + SampleSH(normal);
-				return half4(colour.rgb * lit, 1);
+
+				half3 screen = SAMPLE_TEXTURE2D(_ScreenMap, sampler_ScreenMap, input.sideUv).rgb;
+				return half4(lerp(screen, colour.rgb * lit, colour.a), 1);
 			}
 			ENDHLSL
 		}
