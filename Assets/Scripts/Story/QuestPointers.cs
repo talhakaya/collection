@@ -39,10 +39,21 @@ namespace Collection.Story
         public float inset = 70f;
         [Tooltip("How far inside the screen's edge something still counts as out of the picture, as a part of the screen.")]
         [Range(0f, 0.2f)] public float edge = 0.04f;
+        [Tooltip("Seconds an arrow takes to fade in or out.")]
+        public float fadeTime = 0.6f;
 
-        readonly List<Image> arrows = new List<Image>();
-        readonly List<Vector3> targets = new List<Vector3>();
-        readonly List<Color> colours = new List<Color>();
+        // One arrow for each thing that can be pointed to, kept for as long as the scene: the artifacts in the
+        // director's order, then the television, then the bicycle. Each fades in when it is wanted and out when
+        // it is not.
+        class Pointer
+        {
+            public Image image;
+            public Color colour;
+            public float shown;
+            public bool wanted;
+        }
+
+        readonly List<Pointer> pointers = new List<Pointer>();
         RectTransform area;
         Sprite shape;
         float televisionWaited;
@@ -55,16 +66,21 @@ namespace Collection.Story
 
         void LateUpdate()
         {
-            targets.Clear();
-            colours.Clear();
+            foreach (Pointer pointer in pointers)
+                pointer.wanted = false;
+
             Camera view = Camera.main;
             bool quiet = view == null || Main.inst.dialogue.IsTalking() || Collection.Controls.TaloketoInputManager.Blocked;
 
             if (!quiet && director != null)
             {
+                int slot = 0;
                 foreach (Artifact artifact in director.artifacts)
+                {
                     if (artifact != null && artifact.isActiveAndEnabled && !artifact.Won)
-                        Add(artifact.transform.position, colour);
+                        Point(slot, view, artifact.transform.position, colour);
+                    slot++;
+                }
 
                 // The television: there, and not met yet.
                 NPCTrigger meeting = director.televisionTrigger;
@@ -74,71 +90,76 @@ namespace Collection.Story
                 NPCTrigger again = director.allArtifactsTrigger;
                 bool calling = again != null && again.isActiveAndEnabled && director.television.activeInHierarchy;
                 if ((waiting && televisionWaited >= televisionAfter) || calling)
-                    Add(director.television.transform.position + Vector3.up * televisionHeight, televisionColour);
+                    Point(slot, view, director.television.transform.position + Vector3.up * televisionHeight, televisionColour);
+                slot++;
 
                 if (bicycle != null && bicycle.isActiveAndEnabled && !bicycle.Ridden)
-                    Add(bicycle.frame.position + Vector3.up * 0.6f, bicycleColour);
+                    Point(slot, view, bicycle.frame.position + Vector3.up * 0.6f, bicycleColour);
             }
 
-            int shown = 0;
-            for (int t = 0; t < targets.Count; t++)
+            // (A frame is never counted as longer than a twentieth of a second: the first after a scene has loaded
+            // is as long as the loading, and would have every arrow there at once.)
+            float step = fadeTime > 0f ? Mathf.Min(Time.unscaledDeltaTime, 0.05f) / fadeTime : 1f;
+            float beat = 1f + 0.12f * Mathf.Sin(Time.unscaledTime * 5f);
+            foreach (Pointer pointer in pointers)
             {
-                Vector3 target = targets[t];
-                Vector3 at = view.WorldToViewportPoint(target);
-                bool seen = at.z > 0f && at.x > edge && at.x < 1f - edge && at.y > edge && at.y < 1f - edge;
-                if (seen)
-                    continue;
-
-                // The way to it from the middle of the screen. Behind the camera, what the camera gives is the
-                // way to its opposite.
-                Vector2 way = new Vector2(at.x - 0.5f, at.y - 0.5f);
-                if (at.z < 0f)
-                    way = -way;
-                Vector2 half = area.rect.size * 0.5f;
-                way = new Vector2(way.x * half.x, way.y * half.y);
-                if (way.sqrMagnitude < 0.0001f)
-                    way = Vector2.down;
-
-                // Out along that way to the edge, less the inset.
-                Vector2 reach = new Vector2(Mathf.Max(1f, half.x - inset), Mathf.Max(1f, half.y - inset));
-                float scale = Mathf.Min(reach.x / Mathf.Max(0.0001f, Mathf.Abs(way.x)), reach.y / Mathf.Max(0.0001f, Mathf.Abs(way.y)));
-
-                Image arrow = Arrow(shown++);
-                arrow.color = colours[t];
-                RectTransform rect = arrow.rectTransform;
-                rect.anchoredPosition = way * scale;
-                rect.localRotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(way.y, way.x) * Mathf.Rad2Deg - 90f);
-                float beat = 1f + 0.12f * Mathf.Sin(Time.unscaledTime * 5f);
-                rect.sizeDelta = new Vector2(size, size) * beat;
+                pointer.shown = Mathf.MoveTowards(pointer.shown, pointer.wanted ? 1f : 0f, step);
+                pointer.image.enabled = pointer.shown > 0f;
+                Color faded = pointer.colour;
+                faded.a *= Mathf.SmoothStep(0f, 1f, pointer.shown);
+                pointer.image.color = faded;
+                pointer.image.rectTransform.sizeDelta = new Vector2(size, size) * beat;
             }
-
-            for (int i = 0; i < arrows.Count; i++)
-                arrows[i].enabled = i < shown;
         }
 
-        void Add(Vector3 target, Color arrowColour)
+        // The arrow in `slot` toward `target`, if that is out of the picture. While it is in the picture the arrow
+        // is not wanted, and stays where it last was as it fades.
+        void Point(int slot, Camera view, Vector3 target, Color arrowColour)
         {
-            targets.Add(target);
-            colours.Add(arrowColour);
+            Vector3 at = view.WorldToViewportPoint(target);
+            bool seen = at.z > 0f && at.x > edge && at.x < 1f - edge && at.y > edge && at.y < 1f - edge;
+            if (seen)
+                return;
+
+            // The way to it from the middle of the screen. Behind the camera, what the camera gives is the way to
+            // its opposite.
+            Vector2 way = new Vector2(at.x - 0.5f, at.y - 0.5f);
+            if (at.z < 0f)
+                way = -way;
+            Vector2 half = area.rect.size * 0.5f;
+            way = new Vector2(way.x * half.x, way.y * half.y);
+            if (way.sqrMagnitude < 0.0001f)
+                way = Vector2.down;
+
+            // Out along that way to the edge, less the inset.
+            Vector2 reach = new Vector2(Mathf.Max(1f, half.x - inset), Mathf.Max(1f, half.y - inset));
+            float scale = Mathf.Min(reach.x / Mathf.Max(0.0001f, Mathf.Abs(way.x)), reach.y / Mathf.Max(0.0001f, Mathf.Abs(way.y)));
+
+            Pointer pointer = Slot(slot);
+            pointer.wanted = true;
+            pointer.colour = arrowColour;
+            RectTransform rect = pointer.image.rectTransform;
+            rect.anchoredPosition = way * scale;
+            rect.localRotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(way.y, way.x) * Mathf.Rad2Deg - 90f);
         }
 
-        Image Arrow(int index)
+        Pointer Slot(int index)
         {
-            while (arrows.Count <= index)
+            while (pointers.Count <= index)
             {
                 var go = new GameObject("Arrow", typeof(RectTransform), typeof(Image));
                 go.layer = gameObject.layer;
                 go.transform.SetParent(transform, false);
                 Image image = go.GetComponent<Image>();
                 image.sprite = shape;
-                image.color = colour;
                 image.raycastTarget = false;
+                image.enabled = false;
                 var outline = go.AddComponent<Shadow>();
                 outline.effectColor = new Color(0f, 0f, 0f, 0.6f);
                 outline.effectDistance = new Vector2(2f, -2f);
-                arrows.Add(image);
+                pointers.Add(new Pointer { image = image, colour = colour });
             }
-            return arrows[index];
+            return pointers[index];
         }
 
         // An arrowhead pointing up: a triangle with a notch in its base.
