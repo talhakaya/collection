@@ -161,7 +161,9 @@ namespace Collection.Story
                 // The character's own object along with the hips, without moving the body, which hangs under it.
                 Vector3 place = hips.position;
                 Quaternion turn = hips.rotation;
-                Vector3 to = new Vector3(place.x, transform.position.y, place.z);
+                // (At standing height over the hips, so that the character's own place stays a sound one to
+                // save and to follow.)
+                Vector3 to = new Vector3(place.x, place.y + controller.height * 0.5f - controller.center.y, place.z);
                 if ((to - transform.position).sqrMagnitude > 0.0001f)
                 {
                     transform.position = to;

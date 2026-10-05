@@ -40,6 +40,8 @@ namespace Collection.Story
         [Tooltip("What the television says once every artifact is won. Switched on only then.")]
         public NPCTrigger allArtifactsTrigger;
         public List<Artifact> artifacts = new List<Artifact>();
+        [Tooltip("A character lower than this has fallen out of the world, and is put back on the ground (m).")]
+        public float fallenBelow = -30f;
 
         void OnEnable()
         {
@@ -145,12 +147,33 @@ namespace Collection.Story
             // With no place saved, on the ground where it stands in the scene: its height there is right for the
             // sea, not for land that has come up since.
             var controller = player.GetComponent<CharacterController>();
+            float standing = controller.height * 0.5f - controller.center.y + controller.skinWidth;
             if (!story.placeSaved)
-                place.y = encounter.GroundHeight(place) + controller.height * 0.5f - controller.center.y + controller.skinWidth;
+            {
+                place.y = encounter.GroundHeight(place) + standing;
+            }
+            else if (place.y < encounter.GroundHeight(place) + standing - 0.5f && !SomethingUnder(place))
+            {
+                // A saved place that is under the ground with nothing to stand on: saved where there was sea, or
+                // lower land, in an earlier version of the level. (Under the ground with something to stand on
+                // is the cave.)
+                place.y = encounter.GroundHeight(place) + standing;
+            }
 
             controller.enabled = false;
             player.SetPositionAndRotation(place, Quaternion.Euler(0f, facing, 0f));
             controller.enabled = true;
+        }
+
+        // Whether there is anything to stand on within a few metres under a place. The sea's floor does not count:
+        // it reaches under all of the land.
+        bool SomethingUnder(Vector3 place)
+        {
+            Physics.SyncTransforms();
+            foreach (RaycastHit hit in Physics.RaycastAll(place + Vector3.up * 0.3f, Vector3.down, 5f, ~0, QueryTriggerInteraction.Ignore))
+                if (hit.collider.transform != encounter.floor && !hit.collider.transform.IsChildOf(player))
+                    return true;
+            return false;
         }
 
         // Where the character last stood outside a conversation, kept up every frame so that it is still known
@@ -162,6 +185,21 @@ namespace Collection.Story
 
         void LateUpdate()
         {
+            // Fallen out of the world, by whatever means: back on the ground above.
+            if (player.position.y < fallenBelow)
+            {
+                var controller = player.GetComponent<CharacterController>();
+                Vector3 back = player.position;
+                back.y = encounter.GroundHeight(back) + controller.height * 0.5f - controller.center.y + controller.skinWidth + 0.5f;
+                bool was = controller.enabled;
+                controller.enabled = false;
+                player.position = back;
+                controller.enabled = was;
+                var movement = player.GetComponent<PlayerMovement>();
+                if (movement != null)
+                    movement.Velocity = Vector3.zero;
+            }
+
             if (Main.inst.dialogue.IsTalking())
                 return;
             lastPlace = player.position;
