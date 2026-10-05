@@ -217,11 +217,52 @@ namespace Games.PenisCloner
 			"..................................",
 		};
 
-		// Not in the engine: the same hints for a gamepad, the same width.
-		private const string PadMoveHint = ".d-pad to move....................";
-		private const string PadActionHint = ".A to action......................";
-		private const string PadUndoHint = ".B to undo, Y to restart..........";
-		private const string PadContinueHint = "..........A to continue...........";
+		// In the collection: the hint lines named their keys in the engine's own letters
+		// ("arrow keys to move", "X to action"). The keys are the collection's glyphs now,
+		// for the device in use, drawn over the picture where the words stood (the picture
+		// itself is far too small for them); these are the lines with room left for them.
+		private const string MoveHint = "....to move.......................";
+		private const string ActionHint = "....to action.....................";
+		private const string UndoHint = "....to undo,....to restart........";
+		private const string ContinueHint = "............to continue...........";
+		private const string MoveToken = "{<Keyboard>/upArrow|<Keyboard>/downArrow|<Keyboard>/leftArrow|<Keyboard>/rightArrow|<Gamepad>/dpad}";
+
+		// Where each glyph goes, in character cells from the top-left of the text screen.
+		private struct PromptSpot
+		{
+			public float column;
+			public float row;
+			public string token;
+			public float keyHeight;
+		}
+
+		private readonly List<PromptSpot> promptSpots = new List<PromptSpot>();
+		private readonly List<InputPromptOverlay.Label> promptLabels = new List<InputPromptOverlay.Label>();
+		private InputPromptOverlay prompts;
+
+		private void addPromptSpot(float column, float row, string token, float keyHeight = 0.9f)
+		{
+			promptSpots.Add(new PromptSpot { column = column, row = row, token = token, keyHeight = keyHeight });
+		}
+
+		private void drawPrompts()
+		{
+			prompts.BeginFrame();
+			if (textMode)
+			{
+				for (int i = 0; i < promptSpots.Count; i++)
+				{
+					if (i >= promptLabels.Count)
+					{
+						promptLabels.Add(prompts.NewLabel());
+					}
+
+					promptLabels[i].Show(promptSpots[i].token, promptSpots[i].column, promptSpots[i].row, promptSpots[i].keyHeight, state.fgcolor, false);
+				}
+			}
+
+			prompts.EndFrame();
+		}
 
 		private bool usingGamepad;
 		private readonly bool[] keyDown = new bool[ActionNames.Length];
@@ -289,6 +330,7 @@ namespace Games.PenisCloner
 			}
 
 			canvasResize();
+			drawPrompts();
 		}
 
 		private void OnDestroy()
@@ -552,12 +594,14 @@ namespace Games.PenisCloner
 			}
 
 			titleImage = (string[])template.Clone();
-			if (usingGamepad)
-			{
-				titleImage[9] = PadMoveHint;
-				titleImage[10] = PadActionHint;
-				titleImage[11] = PadUndoHint;
-			}
+			titleImage[9] = MoveHint;
+			titleImage[10] = ActionHint;
+			titleImage[11] = UndoHint;
+			promptSpots.Clear();
+			addPromptSpot(2f, 9.6f, MoveToken, 1.1f);
+			addPromptSpot(2f, 10.6f, "{ACTION}");
+			addPromptSpot(2f, 11.6f, "{UNDO}");
+			addPromptSpot(14f, 11.6f, "{RESTART}");
 
 			for (int i = 0; i < titleImage.Length; i++)
 			{
@@ -613,9 +657,11 @@ namespace Games.PenisCloner
 			titleMode = 0;
 			textMode = true;
 			titleImage = (string[])messagecontainer_template.Clone();
-			if (usingGamepad)
+			titleImage[10] = ContinueHint;
+			promptSpots.Clear();
+			if (!quittingMessageScreen)
 			{
-				titleImage[10] = PadContinueHint;
+				addPromptSpot(10.5f, 10.6f, "{ACTION}");
 			}
 
 			for (int i = 0; i < titleImage.Length; i++)
@@ -1003,6 +1049,7 @@ namespace Games.PenisCloner
 			screen.raycastTarget = false;
 			screenRect = (RectTransform)imageObject.transform;
 			screenRect.anchorMin = screenRect.anchorMax = screenRect.pivot = new Vector2(0f, 1f);
+			prompts = new InputPromptOverlay(screenRect, titleWidth, titleHeight);
 		}
 
 		private void redraw()
