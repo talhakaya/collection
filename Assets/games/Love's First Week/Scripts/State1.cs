@@ -380,12 +380,18 @@ namespace Games.LovesFirstWeek
 				menuRestart.scrollFactor.x = menuRestart.scrollFactor.y = 0;
 				menuSound.scrollFactor.x = menuSound.scrollFactor.y = 0;
 				menuTurkce.scrollFactor.x = menuTurkce.scrollFactor.y = 0;
-				enOndekiler.add(menuWASD = new FlxSprite(140, 193, img2));
-				enOndekiler.add(menuDirs = new FlxSprite(188, 193, img1));
-				enOndekiler.add(menuR = new FlxSprite(286, 210, imgR));
-				enOndekiler.add(menuSpace = new FlxSprite(270, 192, imgSpace));
-				enOndekiler.add(menuRText = new FlxText(240, 210, 2000, "Restart:"));
-				enOndekiler.add(menuSpaceText = new FlxText(240, 192, 2000, "Kick:"));
+				// In the collection: the four pictures of keys that stood here (WASD, the
+				// arrows, R and the space bar) are prompts in the collection's glyphs, drawn by
+				// the texts. The two cluster pictures are texts of their own; the R and space
+				// pictures are part of their labels, and their sprites are left empty.
+				enOndekiler.add(menuWASD = new FlxText(138, 188, 60, "{<Keyboard>/w|<Keyboard>/a|<Keyboard>/s|<Keyboard>/d}").setFormat(null, 24));
+				enOndekiler.add(menuDirs = new FlxText(186, 188, 60, "{<Keyboard>/upArrow|<Keyboard>/downArrow|<Keyboard>/leftArrow|<Keyboard>/rightArrow}").setFormat(null, 24));
+				enOndekiler.add(menuR = new FlxSprite(286, 210));
+				enOndekiler.add(menuSpace = new FlxSprite(270, 192));
+				menuR.visible = false;
+				menuSpace.visible = false;
+				enOndekiler.add(menuRText = new FlxText(240, 210, 2000, "Restart: <size=150%>{R}</size>"));
+				enOndekiler.add(menuSpaceText = new FlxText(240, 192, 2000, "Kick: <size=150%>{SPACE}</size>"));
 				menuWASD.scrollFactor.x = menuWASD.scrollFactor.y = 0;
 				menuDirs.scrollFactor.x = menuDirs.scrollFactor.y = 0;
 				menuR.scrollFactor.x = menuR.scrollFactor.y = 0;
