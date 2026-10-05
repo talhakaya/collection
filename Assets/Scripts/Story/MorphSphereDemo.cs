@@ -19,6 +19,9 @@ namespace Collection.Story
 		[Tooltip("Degrees a second.")]
 		public Vector3 spin = new Vector3(7f, 23f, 0f);
 
+		[Tooltip("Untick to stop this moving the six sides, and move the Morph Sphere's sliders by hand while it plays.")]
+		public bool animateSides = true;
+
 		private MorphSphere sphere;
 
 		private void Awake()
@@ -29,6 +32,8 @@ namespace Collection.Story
 		private void Update()
 		{
 			transform.Rotate(spin * Time.deltaTime, Space.World);
+
+			if (!animateSides) return;
 
 			for (int side = 0; side < 6; side++)
 			{

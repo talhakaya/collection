@@ -19,13 +19,15 @@ Shader "Collection/Story/Morph Sphere"
 		_BaseMap ("Unwrapped cube", 2D) = "white" {}
 		_ScreenMap ("Screen (shows through the holes)", 2D) = "black" {}
 
-		[Header(Sides. 0 is the cube and 1 is the sphere)]
-		_Right ("Right (+X)", Range(0, 1)) = 1
-		_Left ("Left (-X)", Range(0, 1)) = 1
-		_Up ("Up (+Y)", Range(0, 1)) = 1
-		_Down ("Down (-Y)", Range(0, 1)) = 1
-		_Front ("Front (+Z)", Range(0, 1)) = 1
-		_Back ("Back (-Z)", Range(0, 1)) = 1
+		// The six sides, 0 the cube and 1 the sphere. Not shown on the material: the
+		// MorphSphere component on each object sets them for that object, so sliders here
+		// would do nothing.
+		[HideInInspector] _Right ("Right (+X)", Range(0, 1)) = 1
+		[HideInInspector] _Left ("Left (-X)", Range(0, 1)) = 1
+		[HideInInspector] _Up ("Up (+Y)", Range(0, 1)) = 1
+		[HideInInspector] _Down ("Down (-Y)", Range(0, 1)) = 1
+		[HideInInspector] _Front ("Front (+Z)", Range(0, 1)) = 1
+		[HideInInspector] _Back ("Back (-Z)", Range(0, 1)) = 1
 
 		[Header(Where two sides of different values meet)]
 		_Seam ("Seam width", Range(0.001, 0.5)) = 0.02

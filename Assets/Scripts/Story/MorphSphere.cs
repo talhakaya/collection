@@ -114,6 +114,16 @@ namespace Collection.Story
 			}
 		}
 
+		// A slider moved in the Inspector shows at once, in edit mode too, where LateUpdate
+		// only runs when Unity thinks the scene has changed.
+		private void OnValidate()
+		{
+			if (isActiveAndEnabled && meshRenderer != null)
+			{
+				Apply();
+			}
+		}
+
 		private void LateUpdate()
 		{
 			if (mesh == null || builtResolution != resolution)
