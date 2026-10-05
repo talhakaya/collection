@@ -119,7 +119,18 @@ namespace Collection.Story
             Vector3 at = view.WorldToViewportPoint(target);
             bool seen = at.z > 0f && at.x > edge && at.x < 1f - edge && at.y > edge && at.y < 1f - edge;
             if (seen)
+            {
+                // In the picture: the arrow is not wanted, and as it fades it leaves the edge for the thing
+                // itself.
+                if (slot < pointers.Count && pointers[slot].shown > 0f)
+                {
+                    RectTransform fading = pointers[slot].image.rectTransform;
+                    Vector2 size = area.rect.size;
+                    Vector2 onIt = new Vector2((at.x - 0.5f) * size.x, (at.y - 0.5f) * size.y);
+                    fading.anchoredPosition = Vector2.Lerp(fading.anchoredPosition, onIt, 1f - Mathf.Exp(-7f * Mathf.Min(Time.unscaledDeltaTime, 0.05f)));
+                }
                 return;
+            }
 
             // The way to it from the middle of the screen. Behind the camera, what the camera gives is the way to
             // its opposite.
@@ -139,7 +150,10 @@ namespace Collection.Story
             pointer.wanted = true;
             pointer.colour = arrowColour;
             RectTransform rect = pointer.image.rectTransform;
-            rect.anchoredPosition = way * scale;
+            // Straight to the edge when it is new; back out to it, not a jump, when it was on its way in.
+            Vector2 atEdge = way * scale;
+            rect.anchoredPosition = pointer.shown <= 0f ? atEdge
+                : Vector2.Lerp(rect.anchoredPosition, atEdge, 1f - Mathf.Exp(-12f * Mathf.Min(Time.unscaledDeltaTime, 0.05f)));
             rect.localRotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(way.y, way.x) * Mathf.Rad2Deg - 90f);
         }
 

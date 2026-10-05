@@ -802,9 +802,11 @@ MonoBehaviour:
   mount: {fileID: 1220062879294986001}
   wheelRadius: 0.34
   steerSlow: 42
-  steerFast: 9
+  grip: 5
   steerSharpness: 0.6
   steerEasing: 0.22
+  steerRate: 160
+  steerRateFast: 14
   turnHelp: 140
   turnHelpBelow: 4
   turningSpeed: 2.5
@@ -814,9 +816,9 @@ MonoBehaviour:
   straightWithin: 18
   turningBeyond: 70
   driveForce: 90
-  balance: 140
-  balanceDamping: 18
-  mostLean: 28
+  balance: 420
+  balanceDamping: 36
+  mostLean: 34
   crashSpeed: 4
   crashLean: 62
   crashThrow: 5
@@ -1016,7 +1018,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6181301027108973763}
   serializedVersion: 4
-  m_Mass: 2.5
+  m_Mass: 5
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -1326,7 +1328,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7164307441568156411}
   serializedVersion: 4
-  m_Mass: 2.5
+  m_Mass: 5
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -1549,7 +1551,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7365789708782537053}
   serializedVersion: 4
-  m_Mass: 2
+  m_Mass: 6
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}

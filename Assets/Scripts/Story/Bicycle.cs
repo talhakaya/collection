@@ -50,11 +50,14 @@ namespace Collection.Story
         [Tooltip("The furthest the handlebars turn (degrees).")]
         public float steerSlow = 42f;
         [Tooltip("The hardest bend it takes (m/s² sideways): the faster it goes, the less the handlebars turn, to keep within this. More, and it skids round.")]
-        public float grip = 6.5f;
+        public float grip = 5f;
         [Tooltip("How much of the angle to the way wanted the handlebars take.")]
         public float steerSharpness = 0.6f;
         [Tooltip("How much the handlebars come back for the frame's own turning (degrees per degree/s).")]
         public float steerEasing = 0.22f;
+        [Tooltip("How fast the handlebars turn (degrees/s): slow, and at top speed.")]
+        public float steerRate = 160f;
+        public float steerRateFast = 14f;
         [Tooltip("A turn of the frame itself toward the way wanted (degrees/s² at a right angle off), so that it comes round even from standing.")]
         public float turnHelp = 140f;
         [Tooltip("The speed by which that help is gone (m/s).")]
@@ -74,10 +77,10 @@ namespace Collection.Story
         public float driveForce = 90f;
 
         [Header("Balance")]
-        public float balance = 140f;
-        public float balanceDamping = 18f;
+        public float balance = 420f;
+        public float balanceDamping = 36f;
         [Tooltip("The most it leans into a bend (degrees).")]
-        public float mostLean = 28f;
+        public float mostLean = 34f;
 
         [Header("Crashing")]
         [Tooltip("Hitting something at this speed or more is a crash (m/s).")]
@@ -105,6 +108,9 @@ namespace Collection.Story
         Vector3[] restPlaces;
         Quaternion[] restTurns;
         float frameMass;
+        Vector3 wheelInFork;
+        Transform frontWheelLook;
+        float frontWheelTurn;
         bool simulated;
 
         Transform rider;
@@ -117,6 +123,7 @@ namespace Collection.Story
         Quaternion riderModelFacing;
         float straightFor;
         float leanNow;
+        float steerNow;
         float pedals;
         float mountedAt;
 
@@ -131,8 +138,13 @@ namespace Collection.Story
                 restPlaces[i] = frame.transform.InverseTransformPoint(bodies[i].transform.position);
                 restTurns[i] = Quaternion.Inverse(frame.transform.rotation) * bodies[i].transform.rotation;
                 bodies[i].maxAngularVelocity = 120f;
-                bodies[i].solverIterations = 16;
-                bodies[i].solverVelocityIterations = 4;
+                // Light parts with next to no resistance to being turned shake in their joints; each is given
+                // at least a fair one.
+                Vector3 inertia = bodies[i].inertiaTensor;
+                float least = bodies[i].mass * 0.06f;
+                bodies[i].inertiaTensor = new Vector3(Mathf.Max(inertia.x, least), Mathf.Max(inertia.y, least), Mathf.Max(inertia.z, least));
+                bodies[i].solverIterations = 30;
+                bodies[i].solverVelocityIterations = 8;
                 // Standing where it was put, and going with whatever moves it there (the land coming up), until
                 // it is first ridden.
                 bodies[i].isKinematic = true;
@@ -146,6 +158,17 @@ namespace Collection.Story
                     if (a != b && !a.isTrigger && !b.isTrigger)
                         Physics.IgnoreCollision(a, b);
 
+            wheelInFork = fork.transform.InverseTransformPoint(frontWheel.transform.position);
+
+            // What is seen of the front wheel is carried by the fork, exactly where it belongs in it, and only
+            // turned as the wheel's rigid body turns: under a hard bend the body itself gives a little in its
+            // hinge, and a wheel seen leaving its fork looks broken.
+            frontWheelLook = new GameObject("Front Wheel Look").transform;
+            frontWheelLook.SetParent(fork.transform, false);
+            frontWheelLook.localPosition = wheelInFork;
+            frontWheelLook.localRotation = Quaternion.identity;
+            for (int i = frontWheel.transform.childCount - 1; i >= 0; i--)
+                frontWheel.transform.GetChild(i).SetParent(frontWheelLook, false);
             frameMass = frame.mass;
             frame.centerOfMass = new Vector3(0f, 0.45f, 0f);
             if (riderBody != null)
@@ -217,6 +240,7 @@ namespace Collection.Story
                 body.linearVelocity = Vector3.zero;
                 body.angularVelocity = Vector3.zero;
             }
+            steerNow = 0f;
             SetSteering(0f);
             SetDrive(0f, false);
         }
@@ -323,7 +347,14 @@ namespace Collection.Story
             // Less the faster the frame is already coming round, so that it straightens up in time and does not
             // swing past.
             float turning = frame.angularVelocity.y * Mathf.Rad2Deg;
+            // And the handlebars themselves only turn so fast, so they do not flick from side to side with every
+            // twitch of the frame.
             float steer = Mathf.Clamp(off * steerSharpness - turning * steerEasing, -most, most);
+            // Slower still at speed: the front wheel grips, and a bend taken before the frame has leaned into it
+            // throws the bicycle over outward. (Which is how it falls when it is turned too hard, too fast.)
+            float rate = Mathf.Lerp(steerRate, steerRateFast, Mathf.InverseLerp(2f, topSpeed, Mathf.Abs(speed)));
+            steerNow = Mathf.MoveTowards(steerNow, steer, rate * Time.fixedDeltaTime);
+            steer = steerNow;
             SetSteering(steer);
 
             // Speed: slow while there is far to turn; from startSpeed up to topSpeed the longer it goes one way.
@@ -349,7 +380,7 @@ namespace Collection.Story
             // The lean a bend of this tightness at this speed asks for, from the handlebars, not from how the
             // frame happens to be swinging.
             float bend = speed * speed * Mathf.Tan(steer * Mathf.Deg2Rad) / (wheelbase * 9.81f);
-            leanNow = Mathf.Lerp(leanNow, Mathf.Clamp(Mathf.Atan(bend) * Mathf.Rad2Deg, -mostLean, mostLean), 1f - Mathf.Exp(-6f * Time.fixedDeltaTime));
+            leanNow = Mathf.Lerp(leanNow, Mathf.Clamp(Mathf.Atan(bend) * Mathf.Rad2Deg, -mostLean, mostLean), 1f - Mathf.Exp(-10f * Time.fixedDeltaTime));
             float lean = leanNow;
             Vector3 along = body.forward;
             Vector3 upWanted = Quaternion.AngleAxis(-lean, along) * Vector3.ProjectOnPlane(Vector3.up, along).normalized;
@@ -359,7 +390,8 @@ namespace Collection.Story
 
             if (log != null && log.Length < 6000)
                 log.Append(Time.time.ToString("f2")).Append(" yaw ").Append(body.eulerAngles.y.ToString("f0")).Append(" off ").Append(off.ToString("f0"))
-                    .Append(" steer ").Append(steering.angle.ToString("f0")).Append(" v ").Append(speed.ToString("f1")).Append(" tilt ").Append(tilt.ToString("f0")).Append(';');
+                    .Append(" steer ").Append(steer.ToString("f0")).Append(" v ").Append(speed.ToString("f1")).Append(" tilt ").Append(tilt.ToString("f0"))
+                    .Append(" loose ").Append((Vector3.Distance(frontWheel.position, fork.transform.TransformPoint(wheelInFork)) * 100f).ToString("f1")).Append(';');
 
             if (Mathf.Abs(tilt) > crashLean || Vector3.Angle(body.up, Vector3.up) > 80f)
                 Crash();
@@ -367,6 +399,14 @@ namespace Collection.Story
 
         void SetSteering(float degrees)
         {
+            // Held at the angle, not sprung toward it: the fork is light and a spring has it swinging. The hinge
+            // is given no room but a degree round where it should be.
+            JointLimits limits = steering.limits;
+            limits.min = degrees - 0.5f;
+            limits.max = degrees + 0.5f;
+            limits.bounciness = 0f;
+            steering.limits = limits;
+            steering.useLimits = true;
             JointSpring spring = steering.spring;
             spring.targetPosition = degrees;
             steering.spring = spring;
@@ -391,6 +431,8 @@ namespace Collection.Story
             pedals += Speed / wheelRadius * gear * Time.deltaTime;
             if (crank != null)
                 crank.localRotation = Quaternion.Euler(pedals * Mathf.Rad2Deg, 0f, 0f);
+            frontWheelTurn += Vector3.Dot(frontWheel.angularVelocity, fork.transform.right) * Mathf.Rad2Deg * Time.deltaTime;
+            frontWheelLook.localRotation = Quaternion.Euler(frontWheelTurn, 0f, 0f);
 
             if (!Ridden)
                 return;
