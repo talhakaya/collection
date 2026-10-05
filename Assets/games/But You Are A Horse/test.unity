@@ -1483,6 +1483,7 @@ MonoBehaviour:
   template: '{<Keyboard>/upArrow|<Keyboard>/downArrow|<Keyboard>/leftArrow|<Keyboard>/rightArrow|<Gamepad>/leftStick}'
   shadowed: 1
   colourFrom: {fileID: 2752379}
+  followGraphic: {fileID: 0}
   colourTint: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &231862196
 MonoBehaviour:
@@ -1526,7 +1527,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -2077,7 +2078,7 @@ Transform:
   m_GameObject: {fileID: 373832579}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -20, z: 0}
+  m_LocalPosition: {x: 0, y: 0.26, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2387,7 +2388,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 6.3999996, z: 0}
-  m_LocalScale: {x: 2.85, y: 2.85, z: 1}
+  m_LocalScale: {x: 2.8444445, y: 2.8444445, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 373832580}
@@ -2714,7 +2715,7 @@ Transform:
   m_GameObject: {fileID: 486054945}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 29.7, y: 22.8, z: 0}
+  m_LocalPosition: {x: -2.5, y: 20.4, z: 0}
   m_LocalScale: {x: 6, y: 6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

@@ -55,9 +55,9 @@ Unity 5 removed (`rigidbody2D`, `collider2D`, `camera`, ...) to `GetComponent<>(
 `namespace Games.<Name>`. Script GUIDs are untouched, so component bindings survive.
 It prints what it changed and a `BY HAND:` list. By hand:
 
-- **Quitting.** An Escape-quit is deleted (the collection has its own exit: Start+Select
-  or Shift+Escape). Any other `Application.Quit()` becomes
-  `GlobalInputManager.ReturnToMainMenu()`.
+- **Quitting.** An Escape-quit is deleted (the collection has its own exit: the pause
+  screen, and Start+Select or Shift+Escape in "Just the games"). Any other
+  `Application.Quit()` becomes `GlobalInputManager.ReturnToMainMenu()`.
 - **`Resources.Load("x")`** becomes `Resources.Load("<Name>/x")`.
 - **Axis compared with exactly 1 or -1** (`GetAxisRaw("Horizontal") == 1`) becomes
   `> 0.5f` / `< -0.5f`: a stick rarely reads exactly 1.
@@ -551,3 +551,54 @@ first. What each kind of prompt needs:
   play mode; `Force(null, null)` goes back to following the player.
 - After redrawing or adding a glyph in `Assets/Textures/Input`, run
   `Collection > Build Input Glyph Assets`.
+
+## Saves (the collection's one save file)
+
+Nothing is kept in `PlayerPrefs`. Everything a game keeps between sessions is its own typed
+class in `SaveSlotData` (`Assets/Scripts/Saving/SaveData.cs`), written with the rest to
+`save.json` by `SaveManager`.
+
+- Give the game a `[Serializable]` class there (`NykrigSave { public int score; }`) and a
+  field for it in `SaveSlotData`, initialised with `new`.
+- In the game, read and write `Collection.Saving.SaveManager.Slot.<game>.<field>` and call
+  `SaveManager.MarkDirty()` after a change. The file is written once at the end of that
+  frame; there is no need to call anything like `PlayerPrefs.Save()`.
+- `JsonUtility` writes the file: no dictionaries, no nullable types. Use a list, and a
+  value such as -1 or the empty string for "not set" (see `LovesFirstWeekSave`).
+- `Slot` is the story slot being played, or the free-play area for a game started from
+  "Just the games". `SaveManager.IsStoryMode` tells a game which. A game's scene played
+  straight from the editor uses the first story slot.
+- A game's "wipe my save" replaces its own part (`Slot.crimeFactory = new CrimeFactorySave()`),
+  never the slot.
+- Play time (`timePlayed`) is counted by `SaveManager` only in a game's scene, with time
+  running and the collection's pause off.
+
+## Pause, settings and the screen (what the collection does for every game)
+
+Escape and Start open the collection's pause screen in every game (`PauseMenu`, drawn by
+`Menus`). A game does not set any of this up, but it has to leave room for it:
+
+- **Escape and Start are taken.** No action of the game may be bound to them: the press
+  never reaches the game. A game's own "back to my menu" goes on Backspace and Select
+  (Nykrig, Ode to Pixel Days, Penis Cloner, Crime Factory); where Start was one of several
+  ways to confirm it is just removed.
+- **Pausing** sets `Time.timeScale` to 0, pauses the `AudioListener`, and blocks the game's
+  input: `TaloketoInputManager` reads nothing while `TaloketoInputManager.Blocked`, until
+  the buttons that closed the menu are let go. Code that reads `Keyboard.current` or
+  `Gamepad.current` itself is not blocked, and has to test `Blocked` (the "any key" of
+  Casket Fucker and Lost Shader).
+- **A game that steps itself** on `Time.unscaledDeltaTime` or by the frame does not stop
+  with `timeScale`. It returns early from its update while `Collection.UI.PauseMenu.Paused`
+  (the Flixel, Phaser, Flash and PuzzleScript ports, Sleepy Time).
+- **Volume.** The master volume is `AudioListener.volume`, so a game must not set that: it
+  sets `CollectionSettings.GameVolume`, which is multiplied in (Slime Fight). The music
+  volume reaches a source through a mixer group it is moved onto when its clip looks like
+  music: 45 seconds or longer, or looping and 15 seconds or longer. A clip that guess gets
+  wrong is named in the game's `GameList` entry (`musicClips`, `soundClips`).
+- **Full screen and resolution** are settings too: no `Screen.SetResolution`, no
+  `Screen.fullScreen` in a game.
+- **Aspect ratio.** A game made for one shape of screen gets `aspect` set in its `GameList`
+  entry (4:3 or 16:9). In a build it is then given a resolution of that shape and the
+  rest of the screen is black bars. Nothing shows in the editor, where the Game view's
+  own aspect setting is what to use. `Collection.EditorTools.AspectAudit.Run` lists what a
+  16:10 screen would cut off in a game's saved scenes.

@@ -6,42 +6,42 @@ using UnityEngine;
 namespace Games.CrimeFactory
 {
 	public static class SaveSystem {
-	    private const string LAST_LEVEL = "CrimeFactory.LAST_LEVEL";
-	    private const string MONEY = "CrimeFactory.MONEY";
-	    private const string FIRE_RATE = "CrimeFactory.FIRE_RATE";
-	    private const string SHIELDS = "CrimeFactory.SHIELDS";
-	    private const string BOMBS = "CrimeFactory.BOMBS";
+	    // In the collection: these were PlayerPrefs keys. The game's save is its part of the
+	    // collection's save file now.
+	    private static Collection.Saving.CrimeFactorySave Data {
+	        get { return Collection.Saving.SaveManager.Slot.crimeFactory; }
+	    }
 
 	    public static void SaveLevel(string levelName) {
-	        PlayerPrefs.SetString(LAST_LEVEL, levelName);
-	        PlayerPrefs.Save();
+	        Data.lastLevel = levelName;
+	        Collection.Saving.SaveManager.MarkDirty();
 	    }
 
 	    public static void LoadLevel(out string lastLevelName) {
-	        lastLevelName = PlayerPrefs.GetString(LAST_LEVEL, "mom0");
+	        lastLevelName = Data.lastLevel != "" ? Data.lastLevel : "mom0";
 	    }
 
 	    public static void SaveStats(int money, int numFireRateUpgrades, int numShields, int numBombs) {
-	        PlayerPrefs.SetInt(MONEY, money);
-	        PlayerPrefs.SetInt(FIRE_RATE, numFireRateUpgrades);
-	        PlayerPrefs.SetInt(BOMBS, numBombs);
+	        Data.money = money;
+	        Data.fireRateUpgrades = numFireRateUpgrades;
+	        Data.bombs = numBombs;
 	        SaveNumShields(numShields);
 	    }
 
 	    public static void SaveNumShields(int numShields) {
-	        PlayerPrefs.SetInt(SHIELDS, numShields);
-	        PlayerPrefs.Save();
+	        Data.shields = numShields;
+	        Collection.Saving.SaveManager.MarkDirty();
 	    }
 
 	    public static void LoadStats(out int money, out int numFireRateUpgrades, out int numShields, out int numBombs) {
-	        money = PlayerPrefs.GetInt(MONEY, 0);
-	        numFireRateUpgrades = PlayerPrefs.GetInt(FIRE_RATE, 0);
-	        numShields = PlayerPrefs.GetInt(SHIELDS, 0);
-	        numBombs = PlayerPrefs.GetInt(BOMBS, 0);
+	        money = Data.money;
+	        numFireRateUpgrades = Data.fireRateUpgrades;
+	        numShields = Data.shields;
+	        numBombs = Data.bombs;
 	    }
 
 	    public static bool HasSave() {
-	        return PlayerPrefs.GetString(LAST_LEVEL, "") != "";
+	        return Data.lastLevel != "";
 	    }
 
 	    public static void Save(string lastLevelName, int money, int numFireRateUpgrades, int numShields, int numBombs) {
@@ -55,14 +55,10 @@ namespace Games.CrimeFactory
 	    }
 
 	    public static void WipeData() {
-	        // In the collection: was PlayerPrefs.DeleteAll(), which would wipe every other game's
-	        // saves too. The keys are prefixed and only this game's are deleted.
-	        PlayerPrefs.DeleteKey(LAST_LEVEL);
-	        PlayerPrefs.DeleteKey(MONEY);
-	        PlayerPrefs.DeleteKey(FIRE_RATE);
-	        PlayerPrefs.DeleteKey(SHIELDS);
-	        PlayerPrefs.DeleteKey(BOMBS);
-	        PlayerPrefs.Save();
+	        // In the collection: was PlayerPrefs.DeleteAll(). Only this game's part of the slot
+	        // is emptied.
+	        Collection.Saving.SaveManager.Slot.crimeFactory = new Collection.Saving.CrimeFactorySave();
+	        Collection.Saving.SaveManager.MarkDirty();
 	    }
 	}
 }

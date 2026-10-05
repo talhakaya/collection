@@ -101,7 +101,7 @@ namespace Games.OverEating101
 					ruleText.text = "Total Score: " + totalScore;
 				}
 
-				// In the collection: was KeyCode.Return; "Submit" is Enter and the gamepad's A and Start.
+				// In the collection: was KeyCode.Return; "Submit" is Enter and the gamepad's A.
 				if (TaloketoInputManager.GetButtonDown("Submit") && ruleNo < rules.Length - 1)
 				{
 					ruleNo++;

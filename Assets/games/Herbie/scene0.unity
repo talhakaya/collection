@@ -701,6 +701,7 @@ MonoBehaviour:
   template: '{<Keyboard>/w|<Keyboard>/a|<Keyboard>/s|<Keyboard>/d|<Gamepad>/leftStick}'
   shadowed: 1
   colourFrom: {fileID: 1246731459}
+  followGraphic: {fileID: 0}
   colourTint: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &73917981
 MonoBehaviour:
@@ -749,8 +750,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 5.5135136
-  m_fontSizeBase: 5.5135136
+  m_fontSize: 3.8594594
+  m_fontSizeBase: 3.8594594
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 0
@@ -1801,6 +1802,7 @@ MonoBehaviour:
   template: '{<Keyboard>/upArrow|<Keyboard>/downArrow|<Keyboard>/leftArrow|<Keyboard>/rightArrow|<Gamepad>/dpad}'
   shadowed: 1
   colourFrom: {fileID: 1246731459}
+  followGraphic: {fileID: 0}
   colourTint: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &170652674
 MonoBehaviour:
@@ -1849,8 +1851,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 5.5135136
-  m_fontSizeBase: 5.5135136
+  m_fontSize: 3.8594594
+  m_fontSizeBase: 3.8594594
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 0
@@ -4967,9 +4969,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b218280ae8bc9d46b5b9f565c34e2ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  template: Press <voffset=-0.2em><size=170%>{<Keyboard>/enter|<Gamepad>/buttonSouth}</size></voffset>
+  template: Press <voffset=-0.1em><size=120%>{<Keyboard>/enter|<Gamepad>/buttonSouth}</size></voffset>
   shadowed: 0
   colourFrom: {fileID: 0}
+  followGraphic: {fileID: 0}
   colourTint: {r: 1, g: 1, b: 1, a: 1}
 --- !u!224 &519954550
 RectTransform:
@@ -5011,7 +5014,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Press <voffset=-0.2em><size=170%>{<Keyboard>/enter|<Gamepad>/buttonSouth}</size></voffset>
+  m_text: Press <voffset=-0.1em><size=120%>{<Keyboard>/enter|<Gamepad>/buttonSouth}</size></voffset>
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b9745c8c40ec404a8f50b8553907325, type: 2}
   m_sharedMaterial: {fileID: 6811204695050797906, guid: 1b9745c8c40ec404a8f50b8553907325, type: 2}
@@ -5098,9 +5101,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b218280ae8bc9d46b5b9f565c34e2ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  template: Press <voffset=-0.2em><size=170%>{<Keyboard>/enter|<Gamepad>/buttonSouth}</size></voffset>
+  template: Press <voffset=-0.1em><size=120%>{<Keyboard>/enter|<Gamepad>/buttonSouth}</size></voffset>
   shadowed: 0
   colourFrom: {fileID: 0}
+  followGraphic: {fileID: 0}
   colourTint: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &519954553
 MonoBehaviour:
@@ -5122,7 +5126,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Press <voffset=-0.2em><size=170%>{<Keyboard>/enter|<Gamepad>/buttonSouth}</size></voffset>
+  m_text: Press <voffset=-0.1em><size=120%>{<Keyboard>/enter|<Gamepad>/buttonSouth}</size></voffset>
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b9745c8c40ec404a8f50b8553907325, type: 2}
   m_sharedMaterial: {fileID: 6811204695050797906, guid: 1b9745c8c40ec404a8f50b8553907325, type: 2}
@@ -16595,6 +16599,7 @@ MonoBehaviour:
   template: '{<Keyboard>/space|<Keyboard>/z|<Gamepad>/buttonSouth}'
   shadowed: 1
   colourFrom: {fileID: 1246731459}
+  followGraphic: {fileID: 0}
   colourTint: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &1866210193
 MonoBehaviour:
@@ -16643,8 +16648,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 2.9405406
-  m_fontSizeBase: 2.9405406
+  m_fontSize: 2.0583785
+  m_fontSizeBase: 2.0583785
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 0

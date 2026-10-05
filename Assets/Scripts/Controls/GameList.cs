@@ -3,6 +3,14 @@ using UnityEngine;
 
 namespace Collection.Controls
 {
+	/// The shape a game's picture is kept to (see GameList.Entry.aspect).
+	public enum GameAspect
+	{
+		Any,
+		FourByThree,
+		SixteenByNine
+	}
+
 	/// <summary>
 	/// Per-game metadata: one entry per Assets/games/&lt;Name&gt; folder, keyed by gameName
 	/// (matches the folder name / input action map name). GameImportWindow creates a blank
@@ -17,6 +25,10 @@ namespace Collection.Controls
 		public class Entry
 		{
 			public string gameName;
+
+			[Tooltip("Leaves the game out of the main menu's list of games. Off for every game unless ticked. The game's scenes and files are still part of the build; this only takes away the way in.")]
+			public bool hidden;
+
 			[TextArea] public string description;
 			public Vector2 gravity;
 
@@ -30,6 +42,28 @@ namespace Collection.Controls
 			public Texture2D cursorTexture;
 			[Tooltip("The click point within cursorTexture, in pixels from its top-left corner.")]
 			public Vector2 cursorHotspot;
+
+			[Tooltip("The shape the game has to be shown at. On a screen of another shape it gets black bars: a 4:3 game on the left and right, a 16:9 game above and below on a 16:10 screen. Any leaves the game to fill whatever screen there is.")]
+			public GameAspect aspect;
+
+			[Tooltip("The music volume of the settings applies to sources playing music, which is guessed from the clip: a long one, or a looping one of some length. Clips the guess gets wrong are named here - a short loop that is music.")]
+			public string[] musicClips = Array.Empty<string>();
+			[Tooltip("And the other way: a long or looping clip that is not music (wind, an engine, speech).")]
+			public string[] soundClips = Array.Empty<string>();
+
+			/// The aspect ratio asked for, or zero for any.
+			public float AspectRatio
+			{
+				get
+				{
+					switch (aspect)
+					{
+						case GameAspect.FourByThree: return 4f / 3f;
+						case GameAspect.SixteenByNine: return 16f / 9f;
+						default: return 0f;
+					}
+				}
+			}
 
 #if UNITY_EDITOR
 			// Editor-only scene picker, synced into entryScenePath (below) by OnValidate.

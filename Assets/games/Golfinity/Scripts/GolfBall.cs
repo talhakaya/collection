@@ -234,7 +234,7 @@ namespace Games.Golfinity
 	        if (!inMud) CreateTerrainParticle(false);
 	        Game.noOfStrokes++;
 	        Game.noOfStrokesSinceBeginningOfLevel++;
-	        PlayerPrefs.SetInt("noOfStrokes", Game.noOfStrokes);
+	        Collection.Saving.SaveManager.Slot.golfinity.noOfStrokes = Game.noOfStrokes; Collection.Saving.SaveManager.MarkDirty();
 	        if (Game.soundOn)
 	        {
 	            audioSource.volume = 1.5f * aimLength / AimMaxLength;

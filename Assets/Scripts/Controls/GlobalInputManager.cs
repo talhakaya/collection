@@ -121,6 +121,13 @@ namespace Collection.Controls
 
 		private void OnExitToMainMenu(InputAction.CallbackContext context)
 		{
+			// The quick way out is for "Just the games". In story mode a game is left through
+			// the pause screen.
+			if (Collection.Saving.SaveManager.IsStoryMode)
+			{
+				return;
+			}
+
 			ReturnToMainMenu();
 		}
 
@@ -270,7 +277,7 @@ namespace Collection.Controls
 			// Moving the pointer with the stick only makes sense for games that opted in, and
 			// only while a gamepad is actually what's driving - if the debug toggle is keeping
 			// the mouse cursor on regardless, emulation stands down too.
-			bool emulating = mouseEmulationEnabled && gamepadDriving;
+			bool emulating = mouseEmulationEnabled && gamepadDriving && !TaloketoInputManager.Blocked;
 			MouseEmulationActive = emulating;
 
 			Mouse mouse = Mouse.current;

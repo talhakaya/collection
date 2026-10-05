@@ -13,41 +13,23 @@ namespace Games.OdeToPixelDays
 	/// </summary>
 	public class FlxSave
 	{
-		private const string Prefix = "OdeToPixelDays.";
 
+		/// In the collection: the level was a PlayerPrefs key. It is the game's part of the
+		/// collection's save file now, where -1 stands for "not set".
 		public class Data
 		{
-			private readonly string key;
-
-			internal Data(string key)
-			{
-				this.key = key;
-			}
-
 			/// Null until a game has been started, as an unset SharedObject property is.
 			public int? level
 			{
 				get
 				{
-					if (!PlayerPrefs.HasKey(key))
-					{
-						return null;
-					}
-
-					return PlayerPrefs.GetInt(key);
+					int saved = Collection.Saving.SaveManager.Slot.odeToPixelDays.level;
+					return saved >= 0 ? saved : (int?)null;
 				}
 				set
 				{
-					if (value == null)
-					{
-						PlayerPrefs.DeleteKey(key);
-					}
-					else
-					{
-						PlayerPrefs.SetInt(key, value.Value);
-					}
-
-					PlayerPrefs.Save();
+					Collection.Saving.SaveManager.Slot.odeToPixelDays.level = value ?? -1;
+					Collection.Saving.SaveManager.MarkDirty();
 				}
 			}
 		}
@@ -58,13 +40,12 @@ namespace Games.OdeToPixelDays
 		public bool bind(string Name)
 		{
 			name = Name;
-			data = new Data(Prefix + Name + ".level");
+			data = new Data();
 			return true;
 		}
 
 		public bool flush()
 		{
-			PlayerPrefs.Save();
 			return true;
 		}
 

@@ -62,8 +62,8 @@ namespace Games.VirtualPet
 		void Start ()
 	    {
 	        question = Question.None;
-	        playerName = PlayerPrefs.GetString("VirtualPet.playerName", "");
-	        petName = PlayerPrefs.GetString("VirtualPet.petName", "");
+	        playerName = Collection.Saving.SaveManager.Slot.virtualPet.playerName;
+	        petName = Collection.Saving.SaveManager.Slot.virtualPet.petName;
 		}
 
 		void Update ()
@@ -263,11 +263,11 @@ namespace Games.VirtualPet
 	        {
 	            case Question.PlayerName:
 	                playerName = answerString;
-	                PlayerPrefs.SetString("VirtualPet.playerName", playerName);
+	                Collection.Saving.SaveManager.Slot.virtualPet.playerName = playerName; Collection.Saving.SaveManager.MarkDirty();
 	                break;
 	            case Question.PetName:
 	                petName = answerString;
-	                PlayerPrefs.SetString("VirtualPet.petName", petName);
+	                Collection.Saving.SaveManager.Slot.virtualPet.petName = petName; Collection.Saving.SaveManager.MarkDirty();
 	                break;
 	        }
 	    }

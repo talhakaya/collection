@@ -164,7 +164,8 @@ namespace Games.LovesFirstWeek
 					case "DOWN": if (pad.dpad.down.isPressed || pad.buttonEast.isPressed) return true; break;
 					case "ENTER": if (pad.buttonNorth.isPressed) return true; break;
 					case "R": if (pad.selectButton.isPressed) return true; break;
-					case "ESCAPE": if (pad.startButton.isPressed) return true; break;
+					// In the collection: Start was here, for the game's own menu. Start is the
+					// collection's pause screen now; the menu is on Backspace and its button.
 					case "MENU_UP": if (up) return true; break;
 					case "MENU_DOWN": if (down) return true; break;
 					case "MENU_SELECT": if (pad.buttonSouth.isPressed || pad.buttonWest.isPressed) return true; break;

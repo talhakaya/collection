@@ -15,7 +15,7 @@ namespace Games.BloodSpace
 		{
 			audioSource = GetComponent<AudioSource>();
 	//		AudioListener.volume = 0.2f;
-			if (PlayerPrefs.GetInt ("BloodSpace.musicOn", 1) == 1)
+			if (Collection.Saving.SaveManager.Slot.bloodSpace.musicOn)
 			{
 				GetComponent<AudioSource>().volume = volume;
 			}
@@ -32,12 +32,12 @@ namespace Games.BloodSpace
 				if (GetComponent<AudioSource>().volume > 0)
 				{
 					GetComponent<AudioSource>().volume = 0;
-					PlayerPrefs.SetInt ("BloodSpace.musicOn", 0);
+					Collection.Saving.SaveManager.Slot.bloodSpace.musicOn = false; Collection.Saving.SaveManager.MarkDirty();
 				}
 				else
 				{
 					GetComponent<AudioSource>().volume = volume;
-					PlayerPrefs.SetInt ("BloodSpace.musicOn", 1);
+					Collection.Saving.SaveManager.Slot.bloodSpace.musicOn = true; Collection.Saving.SaveManager.MarkDirty();
 				}
 			}
 

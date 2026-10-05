@@ -60,6 +60,9 @@ namespace Games.CasketFucker
 		{
 			get
 			{
+				// In the collection: not while the pause screen is up, nor the press that opens it.
+				if (Collection.Controls.TaloketoInputManager.Blocked) return false;
+
 				Keyboard keyboard = Keyboard.current;
 				if (keyboard != null)
 				{

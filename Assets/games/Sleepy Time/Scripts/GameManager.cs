@@ -99,9 +99,13 @@ namespace Games.SleepyTime
 			return paused ? current : min + Random.value * range;
 		}
 
+		// In the collection: the game's clock was real time. It is real time that stands
+		// still while the collection's pause screen is up.
+		private static double clockSeconds;
+
 		public static int getTimer()
 		{
-			return (int)(Time.unscaledTime * 1000f);
+			return (int)(clockSeconds * 1000.0);
 		}
 
 		/// <summary>
@@ -266,9 +270,15 @@ namespace Games.SleepyTime
 		}
 
 		/// The Fullscreen button, and what the original's F key did.
+		///
+		/// In the collection: full screen is one of the collection's settings, so this
+		/// changes that, as its settings screen would.
 		public void switchFullScreen()
 		{
-			Screen.fullScreen = !Screen.fullScreen;
+			Collection.Saving.Settings settings = Collection.Saving.SaveManager.Settings;
+			settings.fullscreen = !settings.fullscreen;
+			Collection.Saving.SaveManager.MarkSettingsDirty();
+			Collection.CollectionSettings.Apply();
 		}
 
 		/// <summary>
@@ -278,6 +288,14 @@ namespace Games.SleepyTime
 		/// </summary>
 		private void Update()
 		{
+			// In the collection: nothing moves under the pause screen.
+			if (Collection.UI.PauseMenu.Paused)
+			{
+				return;
+			}
+
+			clockSeconds += Time.unscaledDeltaTime;
+
 			pollInput();
 			calculateTime();
 			buttonHandler();
@@ -487,20 +505,14 @@ namespace Games.SleepyTime
 				}
 				else if (button.text == "Twitter")
 				{
-					if (Screen.fullScreen)
-					{
-						switchFullScreen();
-					}
-
+					// In the collection: this left full screen first. That is a setting of the
+					// collection now, and is left alone.
 					Application.OpenURL("https://twitter.com/kayabros");
 				}
 				else if (button.text == "Soundtrack")
 				{
-					if (Screen.fullScreen)
-					{
-						switchFullScreen();
-					}
-
+					// In the collection: this left full screen first. That is a setting of the
+					// collection now, and is left alone.
 					Application.OpenURL("http://talhakaya.bandcamp.com/album/sleepy-time-soundtrack");
 				}
 				else if (button.text == "Song 1")

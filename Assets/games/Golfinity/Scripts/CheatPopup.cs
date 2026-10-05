@@ -19,14 +19,14 @@ namespace Games.Golfinity
 	                if (int.TryParse(inputGold.text, out var gold))
 	                {
 	                    Game.gold = gold;
-	                    PlayerPrefs.SetInt("gold", Game.gold);
+	                    Collection.Saving.SaveManager.Slot.golfinity.gold = Game.gold; Collection.Saving.SaveManager.MarkDirty();
 	                }
 	                break;
 	            case 1:
 	                if (int.TryParse(inputStrokes.text, out var strokes))
 	                {
 	                    Game.noOfStrokes = strokes;
-	                    PlayerPrefs.SetInt("noOfStrokes", Game.noOfStrokes);
+	                    Collection.Saving.SaveManager.Slot.golfinity.noOfStrokes = Game.noOfStrokes; Collection.Saving.SaveManager.MarkDirty();
 	                }
 	                break;
 	            case 2:
@@ -40,23 +40,16 @@ namespace Games.Golfinity
 	                        Game.stars.Add(new string('1', Game.STAR_LENGTH));
 	                    }
 	                    Game.stars.Add(new string('1', charIndex));
-	                    for (int i = 0, len = Game.stars.Count; i < len; i++)
-	                    {
-	                        PlayerPrefs.SetString($"stars_{i}", Game.stars[i]);
-	                    }
-	                    PlayerPrefs.SetString($"stars_{Game.stars.Count}", "");
+	                    Game.SaveStars();
 	                }
 	                break;
 
 	        }
-	        PlayerPrefs.Save();
 	    }
 
 	    public void OnClickRemoveAds()
 	    {
 	        Game.removedAds = true;
-	        PlayerPrefs.SetInt("Game.removedAds", 1);
-	        PlayerPrefs.Save();
 	    }
 
 	    public void OnClickBack()

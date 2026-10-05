@@ -26,7 +26,22 @@ namespace Games.LetsNeverDoThatAgain
 
 		void Start ()
 	    {
+	        // In the collection: the penguin of a new scene knew no animation yet, and only
+	        // changed to one when walking started or stopped. Arriving with the keys already
+	        // held, nothing changed and it slid along on one frame. It starts on the right one.
+	        walk.enabled = false;
+	        idle.enabled = false;
+	        bool walking = TaloketoInputManager.GetAxisRaw("Horizontal") != 0 || TaloketoInputManager.GetAxisRaw("Vertical") != 0;
+	        changeAnimation(walking ? walk : idle);
+	        walkingOld = walking;
 
+	        // In the collection: in the third scene (scene1.5) the penguin could be tipped
+	        // onto its side as the scene began, and the scene could not be finished. Only the
+	        // scene before it has the penguin fall over; here it stays upright.
+	        if (Scene0.sceneCount == 2)
+	        {
+	            GetComponent<Rigidbody2D>().freezeRotation = true;
+	        }
 		}
 
 		void Update ()

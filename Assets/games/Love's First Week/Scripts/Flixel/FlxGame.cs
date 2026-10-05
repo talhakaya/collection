@@ -250,6 +250,13 @@ namespace Games.LovesFirstWeek
 				return;
 			}
 
+			// In the collection: the game steps itself on real time, so the pause screen's
+			// stopping of Unity's time does not stop it. This does.
+			if (Collection.UI.PauseMenu.Paused)
+			{
+				return;
+			}
+
 			FlxG.keys.poll();
 			FlxG.mouse.poll(windowToGame(TaloketoInputManager.mousePosition), FlxG.camera);
 

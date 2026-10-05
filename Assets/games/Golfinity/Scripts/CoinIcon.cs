@@ -18,8 +18,7 @@ namespace Games.Golfinity
 	    public static void Create(int amount, Vector3 position)
 	    {
 	        Game.gold += amount;
-	        PlayerPrefs.SetInt("gold", Game.gold);
-	        PlayerPrefs.Save();
+	        Collection.Saving.SaveManager.Slot.golfinity.gold = Game.gold; Collection.Saving.SaveManager.MarkDirty();
 	        Game.goldAnimating += amount;
 	        instance.StartCoroutine(instance.DoCreate(amount, position));
 	    }

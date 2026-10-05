@@ -224,7 +224,7 @@ namespace Games.BloodSpace
 					if (!isThereEnemy)
 					{
 						credits.SetActive(true);
-						PlayerPrefs.SetInt("BloodSpace.Won", PlayerPrefs.GetInt("BloodSpace.Won",0) + 1);
+						Collection.Saving.SaveManager.Slot.bloodSpace.won++; Collection.Saving.SaveManager.MarkDirty();
 					}
 				}
 				else

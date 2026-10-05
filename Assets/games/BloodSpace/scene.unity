@@ -1725,6 +1725,7 @@ MonoBehaviour:
   template: '{<Keyboard>/w|<Keyboard>/a|<Keyboard>/s|<Keyboard>/d|<Gamepad>/dpad}'
   shadowed: 0
   colourFrom: {fileID: 1074565068}
+  followGraphic: {fileID: 0}
   colourTint: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &516664542
 MonoBehaviour:
@@ -1773,8 +1774,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 11.486486
-  m_fontSizeBase: 11.486486
+  m_fontSize: 5.743243
+  m_fontSizeBase: 5.743243
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 0
@@ -1924,6 +1925,7 @@ MonoBehaviour:
   template: '{<Keyboard>/upArrow|<Keyboard>/downArrow|<Keyboard>/leftArrow|<Keyboard>/rightArrow|<Gamepad>/leftStick}'
   shadowed: 0
   colourFrom: {fileID: 1318921551}
+  followGraphic: {fileID: 0}
   colourTint: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &561383198
 MonoBehaviour:
@@ -1972,8 +1974,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 11.486486
-  m_fontSizeBase: 11.486486
+  m_fontSize: 5.743243
+  m_fontSizeBase: 5.743243
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 0
@@ -2118,6 +2120,7 @@ MonoBehaviour:
   template: '{<Mouse>/leftButton}'
   shadowed: 0
   colourFrom: {fileID: 2071519892}
+  followGraphic: {fileID: 0}
   colourTint: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &571716150
 MonoBehaviour:
@@ -2166,8 +2169,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 7.3513513
-  m_fontSizeBase: 7.3513513
+  m_fontSize: 3.6756756
+  m_fontSizeBase: 3.6756756
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 0
@@ -2602,6 +2605,7 @@ MonoBehaviour:
   template: '{MouseOnOff}'
   shadowed: 0
   colourFrom: {fileID: 1673293838}
+  followGraphic: {fileID: 0}
   colourTint: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &744021726
 MonoBehaviour:
@@ -2650,8 +2654,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 7.3513513
-  m_fontSizeBase: 7.3513513
+  m_fontSize: 3.6756756
+  m_fontSizeBase: 3.6756756
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 0
@@ -2925,6 +2929,7 @@ MonoBehaviour:
   template: '{<Keyboard>/enter|<Gamepad>/buttonSouth}'
   shadowed: 0
   colourFrom: {fileID: 0}
+  followGraphic: {fileID: 0}
   colourTint: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &812106850
 MonoBehaviour:
@@ -2973,8 +2978,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 5.5135136
-  m_fontSizeBase: 5.5135136
+  m_fontSize: 2.7567568
+  m_fontSizeBase: 2.7567568
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -3417,6 +3422,7 @@ MonoBehaviour:
   template: '{GameMode}'
   shadowed: 0
   colourFrom: {fileID: 1819891791}
+  followGraphic: {fileID: 0}
   colourTint: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &936325090
 MonoBehaviour:
@@ -3465,8 +3471,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 7.3513513
-  m_fontSizeBase: 7.3513513
+  m_fontSize: 3.6756756
+  m_fontSizeBase: 3.6756756
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 0
@@ -6125,6 +6131,7 @@ MonoBehaviour:
   template: '{<Keyboard>/c}'
   shadowed: 0
   colourFrom: {fileID: 1774429123}
+  followGraphic: {fileID: 0}
   colourTint: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &1819066492
 MonoBehaviour:
@@ -6173,8 +6180,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 7.3513513
-  m_fontSizeBase: 7.3513513
+  m_fontSize: 3.6756756
+  m_fontSizeBase: 3.6756756
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 0
@@ -6666,6 +6673,7 @@ MonoBehaviour:
   template: '{<Keyboard>/space|<Gamepad>/buttonSouth}'
   shadowed: 0
   colourFrom: {fileID: 697542301}
+  followGraphic: {fileID: 0}
   colourTint: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &1947142794
 MonoBehaviour:
@@ -6714,8 +6722,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 7.3513513
-  m_fontSizeBase: 7.3513513
+  m_fontSize: 3.6756756
+  m_fontSizeBase: 3.6756756
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 0
@@ -6865,6 +6873,7 @@ MonoBehaviour:
   template: '{MusicOnOff}'
   shadowed: 0
   colourFrom: {fileID: 224333784}
+  followGraphic: {fileID: 0}
   colourTint: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &1985856722
 MonoBehaviour:
@@ -6913,8 +6922,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 7.3513513
-  m_fontSizeBase: 7.3513513
+  m_fontSize: 3.6756756
+  m_fontSizeBase: 3.6756756
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 0

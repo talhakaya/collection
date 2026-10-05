@@ -9,8 +9,14 @@ namespace Games.SpaceArtist
 	    public const float udelta = 0.01f;
 	    private Resolution maxResolution;
 
+		// In the collection: this made the window 4:3 itself, every frame, and windowed. The
+		// collection does that for the game now (its GameList entry asks for 4:3, which gives
+		// it black bars at the sides), so nothing here runs.
 		void Start ()
 	    {
+	        enabled = false;
+	        if (!enabled) return;
+
 	        maxResolution = Screen.resolutions[0];
 	        for (int i = 1; i < Screen.resolutions.Length; i++)
 	        {

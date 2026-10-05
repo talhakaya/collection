@@ -58,7 +58,7 @@ namespace Games.CrimeFactory
 	        navVerticalOld = vertical;
 	        var keyboard = UnityEngine.InputSystem.Keyboard.current;
 	        bool confirm = TaloketoInputManager.GetButtonDown("Jump")
-	            || (keyboard != null && (keyboard.enterKey.wasPressedThisFrame || keyboard.numpadEnterKey.wasPressedThisFrame));
+	            || (keyboard != null && !TaloketoInputManager.Blocked && (keyboard.enterKey.wasPressedThisFrame || keyboard.numpadEnterKey.wasPressedThisFrame)); // In the collection: not while the pause screen has the keys
 	        if (areCreditsPlaying || !creditObjects[0].activeInHierarchy) return;
 	        if (navIndex < 0) {
 	            if (move == 0 && !confirm) return;

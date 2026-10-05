@@ -33,7 +33,6 @@ namespace Games.PenisCloner
 	public class PenisCloner : MonoBehaviour
 	{
 		private const string SourceResourcePath = "PenisCloner/source";
-		private const string SaveKey = "PenisCloner.curlevel";
 
 		// The logic below is written for exactly these, as they appear in the source.
 		private const string TheRule = "[ > player | create | ] -> [ player | create | player ]";
@@ -297,7 +296,7 @@ namespace Games.PenisCloner
 				&& (Keyboard.current == null || Gamepad.current.lastUpdateTime > Keyboard.current.lastUpdateTime);
 
 			// Engine: curlevel = localStorage[document.URL], then setGameState(["restart"]).
-			curlevel = PlayerPrefs.GetInt(SaveKey, 0);
+			curlevel = Collection.Saving.SaveManager.Slot.penisCloner.level;
 			if (curlevel < 0 || curlevel >= state.levels.Count)
 			{
 				curlevel = 0;
@@ -310,6 +309,13 @@ namespace Games.PenisCloner
 
 		private void Update()
 		{
+			// In the collection: the game steps itself on real time, so the pause screen's
+			// stopping of Unity's time does not stop it. This does.
+			if (Collection.UI.PauseMenu.Paused)
+			{
+				return;
+			}
+
 			pollKeys();
 
 			// The engine runs update() from a 17 ms interval timer.
@@ -759,8 +765,8 @@ namespace Games.PenisCloner
 			}
 
 			// Engine: localStorage[document.URL] = curlevel.
-			PlayerPrefs.SetInt(SaveKey, curlevel);
-			PlayerPrefs.Save();
+			Collection.Saving.SaveManager.Slot.penisCloner.level = curlevel;
+			Collection.Saving.SaveManager.MarkDirty();
 
 			redraw();
 		}

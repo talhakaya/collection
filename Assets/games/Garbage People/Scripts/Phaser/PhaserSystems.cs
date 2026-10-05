@@ -406,10 +406,22 @@ namespace Games.GarbagePeople
 		public bool isDown;
 		internal bool justDown;
 
+		// In the collection: a key that was already held when a scene asked for it. In
+		// Phaser a scene's new key is up until the next key-down event, so Space still held
+		// from the dialogue before a level did not swing at once. It counts as up here too,
+		// until it has been let go.
+		internal bool heldFromBefore;
+
 		internal void poll()
 		{
 			InputAction a = TaloketoInputManager.GetAction(action);
 			bool down = a != null && a.IsPressed();
+			if (heldFromBefore)
+			{
+				heldFromBefore = down;
+				down = false;
+			}
+
 			if (down && !isDown)
 			{
 				justDown = true;
@@ -460,6 +472,8 @@ namespace Games.GarbagePeople
 		{
 			var key = new Key { action = code };
 			key.poll();
+			key.heldFromBefore = key.isDown;
+			key.isDown = false;
 			key.justDown = false;
 			keys.Add(key);
 			return key;

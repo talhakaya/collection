@@ -62,8 +62,36 @@ namespace Collection.Controls
 				return;
 			}
 
-			currentMap.Enable();
+			if (!blocked)
+			{
+				currentMap.Enable();
+			}
 		}
+
+		/// <summary>
+		/// While true the game gets no input at all: every read here gives nothing pressed,
+		/// and the game's action map is off. Set by the collection's menus (the pause screen)
+		/// so that what is pressed in them does not reach the game underneath.
+		///
+		/// A button still held when the block lifts does not count as pressed until it is
+		/// pressed again.
+		/// </summary>
+		public static bool Blocked
+		{
+			get { return blocked; }
+			set
+			{
+				if (blocked == value) return;
+
+				blocked = value;
+				if (currentMap == null) return;
+
+				if (blocked) currentMap.Disable();
+				else currentMap.Enable();
+			}
+		}
+
+		private static bool blocked;
 
 		public static float GetAxis(string name)
 		{
@@ -72,6 +100,8 @@ namespace Collection.Controls
 
 		public static float GetAxisRaw(string name)
 		{
+			if (blocked) return 0f;
+
 			InputAction action = FindAction(name);
 			return action?.ReadValue<float>() ?? 0f;
 		}
@@ -81,24 +111,32 @@ namespace Collection.Controls
 		/// new system, and reading them as one action keeps deadzone/normalisation intact.
 		public static Vector2 GetVector2(string name)
 		{
+			if (blocked) return Vector2.zero;
+
 			InputAction action = FindAction(name);
 			return action?.ReadValue<Vector2>() ?? Vector2.zero;
 		}
 
 		public static bool GetButton(string name)
 		{
+			if (blocked) return false;
+
 			InputAction action = FindAction(name);
 			return action != null && action.IsPressed();
 		}
 
 		public static bool GetButtonDown(string name)
 		{
+			if (blocked) return false;
+
 			InputAction action = FindAction(name);
 			return action != null && action.WasPressedThisFrame();
 		}
 
 		public static bool GetButtonUp(string name)
 		{
+			if (blocked) return false;
+
 			InputAction action = FindAction(name);
 			return action != null && action.WasReleasedThisFrame();
 		}
@@ -135,6 +173,8 @@ namespace Collection.Controls
 
 		public static bool GetMouseButton(int button)
 		{
+			if (blocked) return false;
+
 			if (GlobalInputManager.MouseEmulationActive)
 			{
 				return GlobalInputManager.GetMouseButton(button);
@@ -146,6 +186,8 @@ namespace Collection.Controls
 
 		public static bool GetMouseButtonDown(int button)
 		{
+			if (blocked) return false;
+
 			if (GlobalInputManager.MouseEmulationActive)
 			{
 				return GlobalInputManager.GetMouseButtonDown(button);
@@ -157,6 +199,8 @@ namespace Collection.Controls
 
 		public static bool GetMouseButtonUp(int button)
 		{
+			if (blocked) return false;
+
 			if (GlobalInputManager.MouseEmulationActive)
 			{
 				return GlobalInputManager.GetMouseButtonUp(button);
