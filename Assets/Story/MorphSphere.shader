@@ -197,6 +197,48 @@ Shader "Collection/Story/Morph Sphere"
 			ENDHLSL
 		}
 
+		// The shape casts a shadow.
+		Pass
+		{
+			Name "ShadowCaster"
+			Tags { "LightMode" = "ShadowCaster" }
+			ZWrite On
+			ZTest LEqual
+			ColorMask 0
+
+			HLSLPROGRAM
+			#pragma vertex Vertex
+			#pragma fragment Fragment
+			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"
+
+			float3 _LightDirection;
+
+			float4 Vertex(float3 positionOS : POSITION) : SV_POSITION
+			{
+				float3 position;
+				float3 normal;
+				MorphWithNormal(normalize(positionOS), position, normal);
+
+				float3 positionWS = TransformObjectToWorld(position);
+				float3 normalWS = TransformObjectToWorldNormal(normal);
+				float4 positionCS = TransformWorldToHClip(ApplyShadowBias(positionWS, normalWS, _LightDirection));
+
+				// Nothing of the caster may fall in front of the light's near plane.
+				#if UNITY_REVERSED_Z
+					positionCS.z = min(positionCS.z, UNITY_NEAR_CLIP_VALUE);
+				#else
+					positionCS.z = max(positionCS.z, UNITY_NEAR_CLIP_VALUE);
+				#endif
+				return positionCS;
+			}
+
+			half4 Fragment() : SV_Target
+			{
+				return 0;
+			}
+			ENDHLSL
+		}
+
 		// So the shape, not the sphere it is made from, is what other passes see.
 		Pass
 		{

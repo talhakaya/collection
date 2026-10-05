@@ -11,6 +11,16 @@ namespace Collection.Controls
 	{
 		public const string GamesRootFolder = "Assets/games/";
 
+		/// The story mode's scene. Not a game of the collection, but played like one: it can
+		/// be paused and its time counts as play time.
+		public const string StoryScenePath = "Assets/Scenes/story.unity";
+
+		/// Whether a scene is one that is played - a game's, or the story's - rather than a menu.
+		public static bool IsPlayed(string scenePath)
+		{
+			return FromScenePath(scenePath) != null || scenePath == StoryScenePath;
+		}
+
 		public static string FromScenePath(string scenePath)
 		{
 			if (string.IsNullOrEmpty(scenePath) || !scenePath.StartsWith(GamesRootFolder))

@@ -219,7 +219,7 @@ namespace Collection.Saving
 				}
 
 				// Only time spent playing: in a game's scene, not paused, time running.
-				if (!Paused && Time.timeScale > 0f && GameContext.FromScenePath(SceneManager.GetActiveScene().path) != null)
+				if (!Paused && Time.timeScale > 0f && GameContext.IsPlayed(SceneManager.GetActiveScene().path))
 				{
 					SaveSlotData slot = Slot;
 					slot.started = true;

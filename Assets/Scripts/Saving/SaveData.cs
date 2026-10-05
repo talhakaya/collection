@@ -59,6 +59,28 @@ namespace Collection.Saving
 		public PenisClonerSave penisCloner = new PenisClonerSave();
 		public SleepyTimeSave sleepyTime = new SleepyTimeSave();
 		public VirtualPetSave virtualPet = new VirtualPetSave();
+
+		/// The story mode's own part.
+		public StorySave story = new StorySave();
+	}
+
+	/// <summary>
+	/// What the story mode keeps. For now the look of the main character's body, as set in
+	/// the character creator (a development tool): its proportions, and each choice from
+	/// the character catalog by the option's id, so that reordering or renaming the catalog
+	/// does not change a saved character.
+	/// </summary>
+	[Serializable]
+	public class StorySave
+	{
+		/// False until a look has been saved; the character keeps the one it has in the scene.
+		public bool characterSaved;
+		public float height = 1f;
+		public float fatness = 1f;
+
+		/// The catalog choices, a key ("top", "pantsColor") and the chosen option's id.
+		public List<string> optionKeys = new List<string>();
+		public List<string> optionIds = new List<string>();
 	}
 
 	[Serializable]

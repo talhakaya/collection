@@ -1,0 +1,221 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c3fae5e629cc5a498573f081083b629, type: 3}
+  m_Name: CharacterCatalog
+  m_EditorClassIdentifier: 
+  skinColors:
+  - name: Porcelain
+    id: porcelain
+    color: {r: 1, g: 0.87, b: 0.78, a: 1}
+  - name: Fair
+    id: fair
+    color: {r: 0.97, g: 0.82, b: 0.7, a: 1}
+  - name: Peach
+    id: peach
+    color: {r: 0.96, g: 0.78, b: 0.6, a: 1}
+  - name: Beige
+    id: beige
+    color: {r: 0.87, g: 0.67, b: 0.5, a: 1}
+  - name: Tan
+    id: tan
+    color: {r: 0.78, g: 0.57, b: 0.4, a: 1}
+  - name: Honey
+    id: honey
+    color: {r: 0.67, g: 0.47, b: 0.3, a: 1}
+  - name: Brown
+    id: brown
+    color: {r: 0.52, g: 0.34, b: 0.22, a: 1}
+  - name: Deep Brown
+    id: deep_brown
+    color: {r: 0.38, g: 0.24, b: 0.16, a: 1}
+  - name: Ebony
+    id: ebony
+    color: {r: 0.25, g: 0.16, b: 0.11, a: 1}
+  clothColors:
+  - name: Royal Blue
+    id: royal_blue
+    color: {r: 0.2, g: 0.45, b: 0.85, a: 1}
+  - name: Navy
+    id: navy
+    color: {r: 0.12, g: 0.18, b: 0.4, a: 1}
+  - name: Sky Blue
+    id: sky_blue
+    color: {r: 0.45, g: 0.7, b: 0.92, a: 1}
+  - name: Denim
+    id: denim
+    color: {r: 0.25, g: 0.35, b: 0.55, a: 1}
+  - name: Teal
+    id: teal
+    color: {r: 0.1, g: 0.55, b: 0.55, a: 1}
+  - name: Olive
+    id: olive
+    color: {r: 0.22, g: 0.3, b: 0.2, a: 1}
+  - name: Leaf Green
+    id: leaf_green
+    color: {r: 0.35, g: 0.62, b: 0.25, a: 1}
+  - name: Mustard
+    id: mustard
+    color: {r: 0.85, g: 0.65, b: 0.15, a: 1}
+  - name: Orange
+    id: orange
+    color: {r: 0.9, g: 0.45, b: 0.15, a: 1}
+  - name: Red
+    id: red
+    color: {r: 0.75, g: 0.15, b: 0.15, a: 1}
+  - name: Maroon
+    id: maroon
+    color: {r: 0.45, g: 0.1, b: 0.15, a: 1}
+  - name: Pink
+    id: pink
+    color: {r: 0.92, g: 0.56, b: 0.66, a: 1}
+  - name: Purple
+    id: purple
+    color: {r: 0.45, g: 0.25, b: 0.6, a: 1}
+  - name: White
+    id: white
+    color: {r: 0.92, g: 0.92, b: 0.9, a: 1}
+  - name: Grey
+    id: grey
+    color: {r: 0.5, g: 0.5, b: 0.52, a: 1}
+  - name: Charcoal
+    id: charcoal
+    color: {r: 0.18, g: 0.18, b: 0.2, a: 1}
+  - name: Khaki
+    id: khaki
+    color: {r: 0.72, g: 0.62, b: 0.45, a: 1}
+  - name: Brown
+    id: brown
+    color: {r: 0.25, g: 0.17, b: 0.12, a: 1}
+  hairColors:
+  - name: Black
+    id: black
+    color: {r: 0.08, g: 0.07, b: 0.07, a: 1}
+  - name: Dark Brown
+    id: dark_brown
+    color: {r: 0.22, g: 0.14, b: 0.09, a: 1}
+  - name: Brown
+    id: brown
+    color: {r: 0.4, g: 0.26, b: 0.15, a: 1}
+  - name: Auburn
+    id: auburn
+    color: {r: 0.5, g: 0.2, b: 0.12, a: 1}
+  - name: Ginger
+    id: ginger
+    color: {r: 0.8, g: 0.38, b: 0.14, a: 1}
+  - name: Blonde
+    id: blonde
+    color: {r: 0.9, g: 0.76, b: 0.42, a: 1}
+  - name: Platinum
+    id: platinum
+    color: {r: 0.93, g: 0.9, b: 0.8, a: 1}
+  - name: Grey
+    id: grey
+    color: {r: 0.58, g: 0.58, b: 0.58, a: 1}
+  eyes:
+  - name: Round
+    id: round
+    texture: {fileID: 2800000, guid: 4262e5b758032574a9d9bbd9c38dd8e6, type: 3}
+  - name: Sleepy
+    id: sleepy
+    texture: {fileID: 2800000, guid: 64180d3df3e606242ae553c9f925419d, type: 3}
+  masks:
+  - name: Tribal
+    id: tribal
+    texture: {fileID: 2800000, guid: 8d37bbf368b76a642a48bb3751295403, type: 3}
+  - name: Bandit
+    id: bandit
+    texture: {fileID: 2800000, guid: 70721bbbd4f04d94db4addfc57142731, type: 3}
+  tops:
+  - name: T-Shirt
+    id: t_shirt
+    coverage: 5
+    pieces: {fileID: 0}
+  - name: Long Sleeve
+    id: long_sleeve
+    coverage: 13
+    pieces: {fileID: 0}
+  - name: Tank Top
+    id: tank_top
+    coverage: 1
+    pieces: {fileID: 0}
+  - name: Turtleneck
+    id: turtleneck
+    coverage: 269
+    pieces: {fileID: 0}
+  bottoms:
+  - name: Trousers & Shoes
+    id: trousers_shoes
+    coverage: 226
+    pieces: {fileID: 0}
+  - name: Shorts & Shoes
+    id: shorts_shoes
+    coverage: 162
+    pieces: {fileID: 0}
+  - name: Trousers & Boots
+    id: trousers_boots
+    coverage: 226
+    pieces: {fileID: 1911615414258371897, guid: bb528ec1f139ef847bdbddb7fce60cc1, type: 3}
+  - name: Barefoot Shorts
+    id: barefoot_shorts
+    coverage: 34
+    pieces: {fileID: 0}
+  jackets:
+  - name: None
+    id: none
+    coverage: 0
+    pieces: {fileID: 0}
+  - name: Open Jacket
+    id: open_jacket
+    coverage: 12
+    pieces: {fileID: 3591981804329687941, guid: cdacc90e6807902459384b73cfe2b934, type: 3}
+  - name: Vest
+    id: vest
+    coverage: 0
+    pieces: {fileID: 2602839968775990374, guid: 81b9df6585af63f449ec1a7e591cf752, type: 3}
+  - name: Cape
+    id: cape
+    coverage: 0
+    pieces: {fileID: 8148438634171088531, guid: a0d3d86c4098c264b860f170161ffdef, type: 3}
+  hats:
+  - name: None
+    id: none
+    coverage: 0
+    pieces: {fileID: 0}
+  - name: Cap
+    id: cap
+    coverage: 0
+    pieces: {fileID: 330672739666490117, guid: f3d293ba71d1a1f458821b1473ad2a82, type: 3}
+  - name: Top Hat
+    id: top_hat
+    coverage: 0
+    pieces: {fileID: 1939982810590788970, guid: 69d783b3612a90f47a141b77556a14b5, type: 3}
+  - name: Beanie
+    id: beanie
+    coverage: 0
+    pieces: {fileID: 6802554759005930861, guid: cc5759414091ded4bb08b36726b7bee4, type: 3}
+  hairStyles:
+  - name: Bald
+    id: bald
+    coverage: 0
+    pieces: {fileID: 0}
+  - name: Short
+    id: short
+    coverage: 0
+    pieces: {fileID: 5441353539905465935, guid: cd202939bdd868d43b7a4348d218829e, type: 3}
+  - name: Long
+    id: long
+    coverage: 0
+    pieces: {fileID: 6268210552713217256, guid: 87fba8c6d8afbaa4885d58230d303fd3, type: 3}
+  - name: Mohawk
+    id: mohawk
+    coverage: 0
+    pieces: {fileID: 4077027590628846246, guid: 787432d3f2941a740a7c055bec2856c9, type: 3}

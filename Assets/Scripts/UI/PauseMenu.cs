@@ -67,7 +67,7 @@ namespace Collection.UI
 			}
 
 			if (Menus.IsOpen) return;
-			if (GameContext.FromScenePath(SceneManager.GetActiveScene().path) == null) return;
+			if (!GameContext.IsPlayed(SceneManager.GetActiveScene().path)) return;
 
 			// In "Just the games", Shift+Escape and Select+Start are the quick way out
 			// (GlobalInputManager), not a pause.
@@ -146,7 +146,7 @@ namespace Collection.UI
 		// paused must not leave time stopped in the menu.
 		private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
 		{
-			if (GameContext.FromScenePath(scene.path) != null) return;
+			if (GameContext.IsPlayed(scene.path)) return;
 
 			if (Paused)
 			{
