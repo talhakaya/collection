@@ -3597,6 +3597,7 @@ GameObject:
   - component: {fileID: 755278455}
   - component: {fileID: 755278454}
   - component: {fileID: 755278453}
+  - component: {fileID: 755278457}
   m_Layer: 12
   m_Name: TV Head
   m_TagString: Untagged
@@ -3613,7 +3614,7 @@ Transform:
   m_GameObject: {fileID: 755278451}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.3, z: 0}
+  m_LocalPosition: {x: 0, y: 0.29999998, z: 0}
   m_LocalScale: {x: 0.4849742, y: 0.4849742, z: 0.4849742}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3655,12 +3656,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d1d893fa08891c4f906df6089bb54ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  right: 0
-  left: 0
-  up: 0
-  down: 0
-  front: 0
-  back: 0
+  right: 1
+  left: 1
+  up: 1
+  down: 1
+  front: 1
+  back: 1
   resolution: 32
 --- !u!23 &755278455
 MeshRenderer:
@@ -3715,6 +3716,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 755278451}
   m_Mesh: {fileID: 0}
+--- !u!114 &755278457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 755278451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52e2b66955d008b49bae04670b138e8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  neckGap: 0.02
 --- !u!1 &798741520
 GameObject:
   m_ObjectHideFlags: 0

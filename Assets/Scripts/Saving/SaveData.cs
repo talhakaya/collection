@@ -65,10 +65,10 @@ namespace Collection.Saving
 	}
 
 	/// <summary>
-	/// What the story mode keeps. For now the look of the main character's body, as set in
-	/// the character creator (a development tool): its proportions, and each choice from
-	/// the character catalog by the option's id, so that reordering or renaming the catalog
-	/// does not change a saved character.
+	/// What the story mode keeps. For now the main character: the shape of its head, and the
+	/// look of its body as set in the character creator (a development tool) - its
+	/// proportions, and each choice from the character catalog by the option's id, so that
+	/// reordering or renaming the catalog does not change a saved character.
 	/// </summary>
 	[Serializable]
 	public class StorySave
@@ -81,6 +81,11 @@ namespace Collection.Saving
 		/// The catalog choices, a key ("top", "pantsColor") and the chosen option's id.
 		public List<string> optionKeys = new List<string>();
 		public List<string> optionIds = new List<string>();
+
+		/// The shape of the main character's head: its six sides (right, left, up, down,
+		/// front, back), each from 0, a flat cube side, to 1, the sphere. A new game starts
+		/// with the sphere.
+		public List<float> headSides = new List<float> { 1f, 1f, 1f, 1f, 1f, 1f };
 	}
 
 	[Serializable]
