@@ -53,6 +53,13 @@ namespace Collection.Story
             DialogueMan.OnDialogueComplete -= SavePlace;
         }
 
+        void Awake()
+        {
+            // A level with no edges set up in its scene gets the usual ones.
+            if (FindFirstObjectByType<LevelBounds>(FindObjectsInactive.Include) == null)
+                new GameObject("Level Bounds").AddComponent<LevelBounds>();
+        }
+
         void Start()
         {
             StorySave story = SaveManager.Slot.story;
