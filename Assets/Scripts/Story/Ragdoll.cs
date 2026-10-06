@@ -107,6 +107,16 @@ namespace Collection.Story
             }
         }
 
+        // Turns the whole body as it falls, for one physics step (radians/s² about the axis given): for a fall
+        // that is meant to tumble all the way down. The parts are damped, and stop turning by themselves.
+        public void Tumble(Vector3 turning)
+        {
+            if (!Down)
+                return;
+            foreach (Part part in parts)
+                part.body.AddTorque(turning, ForceMode.Acceleration);
+        }
+
         public void Fall()
         {
             Fall(controller.velocity, Vector3.zero, model.localPosition, model.localRotation);

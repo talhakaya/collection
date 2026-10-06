@@ -7,9 +7,15 @@ namespace Collection.Story
 {
     // Coming to the grassy field, the first time: out of the box the desert ended in, and out of the sky.
     //
-    //   The character falls from `height` metres as a ragdoll, lands, and lies there. It cannot get up.
+    //   The character falls from `height` metres as a ragdoll, turning over as it comes, lands, and lies
+    //   there. It cannot get up.
     //
-    //   After `liesFor` seconds someone comes over from the top right of the picture (`helper`, a character of
+    //   The fall is not followed down by the camera, which from that height would show the whole level and its
+    //   edges. The view waits where the character will land, from further off than the game's own (`wide`
+    //   times as far), and the character falls into it. While the character lies there the view comes in to
+    //   the game's own, taking exactly the `liesFor` seconds to do it.
+    //
+    //   After those `liesFor` seconds someone comes over from the top right of the picture (`helper`, a character of
     //   the level kept switched off until now), stops by the character and speaks (the conversation of
     //   `helperTrigger`).
     //
@@ -31,7 +37,12 @@ namespace Collection.Story
 
         [Tooltip("How high the fall is from (m).")]
         public float height = 100f;
-        [Tooltip("Seconds lying on the ground before the helper sets out.")]
+        [Tooltip("How far it is tipped over as the fall starts, at most (degrees), and how fast it turns on the way down (radians/s, about).")]
+        public float tipped = 35f;
+        public float turns = 1.3f;
+        [Tooltip("How much further off than the game's own camera the view of the landing is.")]
+        public float wide = 1.5f;
+        [Tooltip("Seconds lying on the ground before the helper sets out: the view comes in to the game's own in that time.")]
         public float liesFor = 10f;
         [Tooltip("How far off the helper starts (m), how fast it comes (m/s), and how near it stops (m).")]
         public float comesFrom = 20f;
@@ -54,29 +65,72 @@ namespace Collection.Story
             PlayerControl control = PlayerControl.Of(player);
             Ragdoll ragdoll = player.GetComponent<Ragdoll>();
 
-            // Up, and falling. (The cameras are told the character has been moved, not flown there.)
+            // The view: where the game's own camera would stand for a character on the ground here, but further
+            // off, and staying there.
             Vector3 from = player.position;
+            GameObject waiting = null;
+            Vector3 offset = Vector3.zero;
+            CinemachineCamera own = FollowCamera();
+            if (own != null)
+            {
+                offset = own.GetComponent<CinemachineFollow>().FollowOffset;
+                waiting = new GameObject("CM Arrival Camera");
+                waiting.SetActive(false);
+                var camera = waiting.AddComponent<CinemachineCamera>();
+                camera.Lens = own.Lens;
+                camera.Priority = new PrioritySettings { Enabled = true, Value = 50 };
+                waiting.transform.SetPositionAndRotation(from + offset * wide, own.transform.rotation);
+                waiting.SetActive(true);
+            }
+
+            // Up, and falling: tipped over a little, and turning. (The cameras are told the character has been
+            // moved, not flown there.)
             Vector3 up = from;
             up.y = Ground.Land(from) + height;
             control.MoveTo(up);
             CinemachineCore.OnTargetObjectWarped(player, up - from);
+            Transform model = player.GetComponentInChildren<Animator>().transform;
+            Vector3 modelPlace = model.localPosition;
+            Quaternion modelFacing = model.localRotation;
+            Vector3 about = Random.onUnitSphere;
+            about.y *= 0.35f;
+            about = about.sqrMagnitude > 0.001f ? about.normalized : Vector3.right;
+            model.rotation = Quaternion.AngleAxis(Random.Range(tipped * 0.5f, tipped), Vector3.Cross(Vector3.up, about)) * model.rotation;
             ragdoll.held = true;
-            ragdoll.Fall();
+            ragdoll.Fall(Vector3.zero, about * turns, modelPlace, modelFacing);
 
-            // Down: near the ground and all but still. (Or after long enough, whatever it has landed on.)
+            // Down: near the ground and all but still. (Or after long enough, whatever it has landed on.) Kept
+            // turning on the way, about a line that wanders.
             float fallen = 0f;
             Vector3 was = player.position;
             float still = 0f;
             while (fallen < 30f && still < 0.6f)
             {
-                yield return null;
-                fallen += Time.deltaTime;
+                yield return new WaitForFixedUpdate();
+                float step = Time.fixedDeltaTime;
+                fallen += step;
                 bool low = player.position.y - Ground.Land(player.position) < 3f;
-                bool slow = (player.position - was).magnitude < 1.5f * Time.deltaTime;
-                still = low && slow ? still + Time.deltaTime : 0f;
+                bool slow = (player.position - was).magnitude < 1.5f * step;
+                still = low && slow ? still + step : 0f;
                 was = player.position;
+                // (As much as the parts' own damping takes away, to keep the turning about steady.)
+                if (!low)
+                    ragdoll.Tumble(Quaternion.AngleAxis(fallen * 40f, Vector3.up) * about * (turns * 1.5f));
             }
-            yield return new WaitForSeconds(liesFor);
+
+            // Lying there, as the view comes in to the game's own.
+            Vector3 far = waiting != null ? waiting.transform.position : Vector3.zero;
+            for (float t = 0f; t < liesFor; t += Time.deltaTime)
+            {
+                if (waiting != null)
+                    waiting.transform.position = Vector3.Lerp(far, player.position + offset, Mathf.SmoothStep(0f, 1f, t / liesFor));
+                yield return null;
+            }
+            if (waiting != null)
+            {
+                waiting.SetActive(false);
+                Destroy(waiting, 1f);
+            }
 
             // The helper, from the top right of the picture.
             Camera view = Camera.main;
@@ -102,6 +156,15 @@ namespace Collection.Story
                 yield return null;
             yield return Walk(body, () => home, 0.3f);
             helper.gameObject.SetActive(false);
+        }
+
+        // The game's own camera: the one that is on and follows the character.
+        CinemachineCamera FollowCamera()
+        {
+            foreach (CinemachineCamera camera in FindObjectsByType<CinemachineCamera>(FindObjectsSortMode.None))
+                if (camera.Follow == player && camera.GetComponent<CinemachineFollow>() != null)
+                    return camera;
+            return null;
         }
 
         // Walks someone over the land to within `near` metres of a place (which may move).

@@ -16,7 +16,9 @@ namespace Collection.Story
     //
     //   IntoTheBox: the character is lifted, turned upside down as stiff as a doll, and let down head first
     //   into the box - slowly and evenly, a perfect fit - and once the head is in, the rest drops after it and
-    //   the picture goes black. Then the head, as the hammer left it, is kept in the save: the level is over.
+    //   the picture goes black. On the way up its arms and legs are brought straight in line with the body, and
+    //   as it drops the body is made a little narrower: the box is the head's size, and a body standing easy,
+    //   feet apart, would go through the box's sides. Then the head, as the hammer left it, is kept in the save: the level is over.
     //
     // The conversation's end, after that, is what goes on to the next level (StoryDirector.NextLevel).
     //
@@ -51,6 +53,8 @@ namespace Collection.Story
         public float fitTime = 5f;
         [Tooltip("Seconds for the rest to go after it, and for the black.")]
         public float dropTime = 0.8f;
+        [Tooltip("How wide the body is as it drops, as a part of its own width.")]
+        [Range(0.3f, 1f)] public float narrowed = 0.7f;
 
         // From the middle of a sphere of radius 1 to a side of the cube inside it.
         const float CubeHalf = 0.57735027f;
@@ -137,10 +141,17 @@ namespace Collection.Story
             control.Take(this);
             TelevisionHead head = player.GetComponentInChildren<TelevisionHead>();
             head.keepFullSize = true;
-            // Not animated: as it stands at this moment, all the way.
+            // Not animated: as it stands at this moment, all the way. (The Animator is switched off, not just
+            // stopped: stopped, it still puts the body back in its pose every frame.)
             Animator animator = player.GetComponentInChildren<Animator>();
-            animator.speed = 0f;
             yield return null;
+            animator.enabled = false;
+
+            // The arms and legs straight down, in line with the body. Worked out now, while it stands upright,
+            // and gone to over the lift.
+            Transform[] limbs;
+            Quaternion[] easy, straight;
+            Straighten(animator, out limbs, out easy, out straight);
 
             // Upside down, and with the head's sides square to the box's. The head is turned a little on the
             // body by the pose it is held in; the body is turned to make up for that.
@@ -156,6 +167,8 @@ namespace Collection.Story
             for (float t = 0f; t < liftTime; t += Time.deltaTime)
             {
                 float done = Mathf.SmoothStep(0f, 1f, t / liftTime);
+                for (int i = 0; i < limbs.Length; i++)
+                    limbs[i].localRotation = Quaternion.Slerp(easy[i], straight[i], done);
                 Hold(player, head, Quaternion.Slerp(stood, over, done), Vector3.Lerp(headStart, above, done) + Vector3.up * (Mathf.Sin(done * Mathf.PI) * 0.6f));
                 yield return null;
             }
@@ -171,9 +184,13 @@ namespace Collection.Story
 
             // And the rest after it, as the picture goes black.
             CanvasGroup black = Main.inst.camera.screenFade;
+            Transform model = animator.transform;
+            Vector3 full = model.localScale;
             for (float t = 0f; t < dropTime; t += Time.deltaTime)
             {
                 float done = t / dropTime;
+                float width = Mathf.Lerp(1f, narrowed, Mathf.Clamp01(done * 4f));
+                model.localScale = new Vector3(full.x * width, full.y, full.z * width);
                 Hold(player, head, over, inside + Vector3.down * (done * done * 9f));
                 if (black != null)
                     black.alpha = Mathf.Clamp01(done * 1.4f);
@@ -185,6 +202,39 @@ namespace Collection.Story
             // The level is over: the head is the character's from now on.
             head.Save();
             Cutscene.FinishRunning();
+        }
+
+        // The arms and legs (shoulder, elbow, hip, knee) and how each is turned in its parent: as the pose has
+        // them, and with every one of them pointing straight down the body. The body is left as the pose has it.
+        static void Straighten(Animator body, out Transform[] limbs, out Quaternion[] easy, out Quaternion[] straight)
+        {
+            // Each with the joint after it, which is what it is pointed by. Parents before children.
+            HumanBodyBones[,] pairs =
+            {
+                { HumanBodyBones.LeftUpperLeg, HumanBodyBones.LeftLowerLeg }, { HumanBodyBones.LeftLowerLeg, HumanBodyBones.LeftFoot },
+                { HumanBodyBones.RightUpperLeg, HumanBodyBones.RightLowerLeg }, { HumanBodyBones.RightLowerLeg, HumanBodyBones.RightFoot },
+                { HumanBodyBones.LeftUpperArm, HumanBodyBones.LeftLowerArm }, { HumanBodyBones.LeftLowerArm, HumanBodyBones.LeftHand },
+                { HumanBodyBones.RightUpperArm, HumanBodyBones.RightLowerArm }, { HumanBodyBones.RightLowerArm, HumanBodyBones.RightHand },
+            };
+            int count = pairs.GetLength(0);
+            limbs = new Transform[count];
+            easy = new Quaternion[count];
+            straight = new Quaternion[count];
+            Vector3 down = -body.transform.up;
+            for (int i = 0; i < count; i++)
+            {
+                limbs[i] = body.GetBoneTransform(pairs[i, 0]);
+                easy[i] = limbs[i].localRotation;
+            }
+            for (int i = 0; i < count; i++)
+            {
+                Transform next = body.GetBoneTransform(pairs[i, 1]);
+                limbs[i].rotation = Quaternion.FromToRotation(next.position - limbs[i].position, down) * limbs[i].rotation;
+                straight[i] = limbs[i].localRotation;
+            }
+            // Back as it was: it goes there over time.
+            for (int i = 0; i < count; i++)
+                limbs[i].localRotation = easy[i];
         }
 
         // The character turned a way, and put so that its head's middle is at a place.
