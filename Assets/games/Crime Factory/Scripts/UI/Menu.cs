@@ -19,6 +19,13 @@ namespace Games.CrimeFactory
 	    private bool areCreditsPlaying;
 	    // Start is called before the first frame update
 	    void Start() {
+	        // In the collection: played from the story for its artifact, there is no menu. The game
+	        // starts at once: where it was left, if it was left partway, and otherwise from its
+	        // beginning.
+	        if (Collection.Story.StoryGames.Playing) {
+	            OnClickContinue();
+	            return;
+	        }
 	        Localization.Init();
 	        textStart.text = Localization.Get("START");
 	        textContinue.text = Localization.Get("CONTINUE");
@@ -80,6 +87,7 @@ namespace Games.CrimeFactory
 	    }
 
 	    private void Update() {
+	        if (Collection.Story.StoryGames.Playing) return; // In the collection: on its way into the game (see Start).
 	        UpdateNavigation();
 	        if (Platformer.CancelPressed()) {
 	            GlobalInputManager.ReturnToMainMenu(); // In the collection: was Application.Quit().

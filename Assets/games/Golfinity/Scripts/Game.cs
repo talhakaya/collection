@@ -423,9 +423,14 @@ namespace Games.Golfinity
 	        Game.instance.level.ResetLevel();
 	    }
 
+	    // In the collection: the game has no end. In the story mode it gives its artifact once
+	    // this many holes are behind the player, and can be played on after that.
+	    public const int StoryArtifactHoles = 10;
+
 	    public static void NextLevel()
 	    {
 	        int holeNo = LevelGenerator.CurrentHoleNo + 1;
+	        if (holeNo >= StoryArtifactHoles) Collection.Story.StoryGames.Finish();
 	        if (holeNo > 0 && holeNo % LevelGenerator.numLevelsPerColor == 0 && Game.instance.level.GetNumGoldToUnlock(holeNo / LevelGenerator.numLevelsPerColor) > 0)
 	        {
 	            Game.instance.SetState(GameState.Map);

@@ -45,6 +45,10 @@ namespace Games.WhereIsHe
 	                }
 	                if (disablePlayer)
 	                {
+	                    // In the collection: this is the game's end ("the end" on the screen, the player
+	                    // stopped), which in the story mode is what wins its artifact, after a moment to
+	                    // read it.
+	                    Collection.Story.StoryGames.Finish(2.5f);
 	                    PlayerScript.instance.GetComponent<PlatformerController>().sprite.GetComponent<Animator>().speed = 0f;
 	                    PlayerScript.instance.GetComponent<Collider2D>().enabled = false;
 	                    PlayerScript.instance.GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;

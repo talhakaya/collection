@@ -440,6 +440,9 @@ namespace Games.BloodSpace
 
 		public void Die()
 		{
+			// In the collection: see Game.StoryArtifactDeaths.
+			Game.storyDeaths++;
+			if (Game.storyDeaths >= Game.StoryArtifactDeaths) Collection.Story.StoryGames.Finish(1.5f);
 			Game.instance.menu.SetActive (true);
 			Game.instance.audioPlayerDeath.Play ();
 			ExplosionScript.Create(transform.position, 5f);

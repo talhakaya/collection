@@ -70,6 +70,8 @@ namespace Games.BloodSpace
 					Game.score += 2500;
 					Game.deadOctopus++;
 					Game.instance.audioOctopusDeath.Play ();
+					// In the collection: see Game.StoryArtifactDeaths.
+					Collection.Story.StoryGames.Finish(1.5f);
 				}
 				else if (GetComponent<EnemyFire>() != null)
 				{

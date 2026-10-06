@@ -27,7 +27,7 @@ MonoBehaviour:
     soundClips: []
     year: 0
     artifactMinutes: 0
-    continueAfterArtifact: 0
+    continueAfterArtifact: 1
     entryScene: {fileID: 102900000, guid: 14105f93900b63744a7545c1a5d435bb, type: 3}
     entryScenePath: Assets/games/Golfinity/Scenes/main.unity
   - gameName: Chocolate
@@ -327,7 +327,7 @@ MonoBehaviour:
     soundClips: []
     year: 0
     artifactMinutes: 0
-    continueAfterArtifact: 0
+    continueAfterArtifact: 1
     entryScene: {fileID: 102900000, guid: 5797a9ce61311fc47b941e36c8047757, type: 3}
     entryScenePath: Assets/games/BloodSpace/scene.unity
   - gameName: Crime Factory
@@ -342,8 +342,8 @@ MonoBehaviour:
     musicClips: []
     soundClips: []
     year: 0
-    artifactMinutes: 0
-    continueAfterArtifact: 0
+    artifactMinutes: 25
+    continueAfterArtifact: 1
     entryScene: {fileID: 102900000, guid: 97b15887fbbecb047b372c1f46048652, type: 3}
     entryScenePath: Assets/games/Crime Factory/Scenes/menu.unity
   - gameName: To Everyone I'll Never Meet
