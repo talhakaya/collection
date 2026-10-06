@@ -18,13 +18,20 @@ namespace Collection.Story
         // While a conversation is up (talking, set by DialogueMan) the character stands still: the same keys and
         // stick choose between dialogue options instead (navigate).
         [HideInInspector] public bool talking;
+        // The same for something that is not a conversation: a chest being opened.
+        [HideInInspector] public bool held;
 
-        public Vector2 move => Blocked || talking ? Vector2.zero : moveAction.ReadValue<Vector2>();
+        public Vector2 move => Blocked || talking || held ? Vector2.zero : moveAction.ReadValue<Vector2>();
         public Vector2 navigate => Blocked ? Vector2.zero : moveAction.ReadValue<Vector2>();
         // Hold Left Shift, RB or RT, or click the left stick (L3) to toggle sprint on until you stop moving.
-        public bool sprint => !Blocked && !talking && (sprintAction.IsPressed() || sprintToggled);
-        // E, Enter, Space or the pad's bottom button: talks to someone, moves a conversation on, picks an option.
+        public bool sprint => !Blocked && !talking && !held && (sprintAction.IsPressed() || sprintToggled);
+        // E, Enter or the pad's bottom button: talks to someone, moves a conversation on, picks an option.
         public bool interactPressed => !Blocked && interactAction.WasPressedThisFrame();
+        // Space or the pad's right button: the dodge roll.
+        public bool rollPressed => !Blocked && !talking && !held && rollAction.WasPressedThisFrame();
+        // Anything at all that counts as wanting to get going again (for getting up after a fall).
+        public bool anyPressed => !Blocked && !talking && !held && (moveAction.ReadValue<Vector2>().magnitude > 0.3f
+            || interactAction.WasPressedThisFrame() || rollAction.WasPressedThisFrame());
         // -1..1: turns the character in the character creator (gamepad right stick; the mouse drags instead).
         public float rotate => Blocked ? 0f : rotateAction.ReadValue<float>();
 
@@ -36,6 +43,7 @@ namespace Collection.Story
         InputAction sprintToggleAction;
         InputAction rotateAction;
         InputAction interactAction;
+        InputAction rollAction;
         bool sprintToggled;
 
         void Awake()
@@ -54,6 +62,7 @@ namespace Collection.Story
             sprintToggleAction = map.FindAction("SprintToggle");
             rotateAction = map.FindAction("Rotate");
             interactAction = map.FindAction("Interact");
+            rollAction = map.FindAction("Roll");
         }
 
         void OnEnable()

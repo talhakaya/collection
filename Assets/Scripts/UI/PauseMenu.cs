@@ -71,7 +71,9 @@ namespace Collection.UI
 
 			// In "Just the games", Shift+Escape and Select+Start are the quick way out
 			// (GlobalInputManager), not a pause.
-			if (!SaveManager.IsStoryMode)
+			// In a game played from the story they are the cheat for its artifact, and not a
+			// pause either.
+			if (!SaveManager.IsStoryMode || (BuildSettings.Cheats && Collection.Story.StoryGames.Playing))
 			{
 				Keyboard keyboard = Keyboard.current;
 				Gamepad pad = context.control.device as Gamepad;
@@ -96,7 +98,23 @@ namespace Collection.UI
 			screen = new MenuScreen { title = "Paused" };
 			screen.Button("Continue", Resume);
 			screen.Button("Settings", SettingsScreen.Open);
-			screen.Button("Exit to main menu", () =>
+			// A game started from inside the story is left for the story (ReturnToMainMenu
+			// sees to that): without its artifact, unless it has given it already.
+			// For testing the story without playing every game through: the game's artifact as
+			// if the game had been played to where it gives it.
+			// Only in a Debug build (BuildSettings).
+			if (BuildSettings.Cheats && Collection.Story.StoryGames.Playing && !Collection.Story.StoryGames.Gathered)
+			{
+				screen.Button("Cheat: take the artifact", () =>
+				{
+					Resume();
+					Collection.Story.StoryGames.Finish();
+				});
+			}
+
+			string leave = !Collection.Story.StoryGames.Playing ? "Exit to main menu"
+				: Collection.Story.StoryGames.Gathered ? "Back to the story" : "Abandon the artifact for now";
+			screen.Button(leave, () =>
 			{
 				Resume();
 				GlobalInputManager.ReturnToMainMenu();

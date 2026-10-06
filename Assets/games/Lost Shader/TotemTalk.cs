@@ -49,6 +49,10 @@ namespace Games.LostShader
 	            if (screenshakeTimer > 20f)
 	            {
 	                //the end
+	                // In the collection: in the story mode this wins the game's artifact, after a
+	                // moment to look at the kid in colour. Played by itself the game stays here,
+	                // as it always did.
+	                Collection.Story.StoryGames.Finish(4f);
 	                Destroy(destroyObject);
 	            }
 	            if (screenshakeTimer > 18f)

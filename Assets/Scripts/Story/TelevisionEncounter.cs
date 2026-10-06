@@ -14,9 +14,13 @@ namespace Collection.Story
     //   character rides up on whatever ground comes up under its feet. The television, which stands in the sea,
     //   goes down with the sea.
     //
+    //   As the land comes up the light turns to the desert's: the sun goes yellow and the desert's own look (a
+    //   post-processing volume: colour grading, contrast, bloom) comes in over the sea's.
+    //
     //   End (when the conversation is over): back to the follow camera, on land.
     //
-    // Not saved yet: after the intro, this happens every time.
+    // It happens once in a save slot (its NPCTrigger is onlyOnce). For a game in which it has happened,
+    // StoryDirector calls Skip: the land up and the sea down, as RaiseLand leaves them.
     public class TelevisionEncounter : MonoBehaviour
     {
         public Transform player;
@@ -44,13 +48,60 @@ namespace Collection.Story
         [Tooltip("How far the sea sinks (m).")]
         public float seaDrop = 0.85f;
 
+        [Header("The desert's light")]
+        public Light sun;
+        [Tooltip("The sun's colour once the land is up.")]
+        public Color sunColour = new Color(1f, 0.84f, 0.5f);
+        [Tooltip("The desert's look, a global volume over the scene's own. Its weight goes from 0 to 1 as the land comes up.")]
+        public UnityEngine.Rendering.Volume desertLook;
+
         static readonly int TiltShiftDisabledId = Shader.PropertyToID("_TiltShiftDisabled");
 
         readonly List<Vector3> places = new List<Vector3>();
         Coroutine rising;
+        Color sunBefore;
+        bool landUp;
+        Collider floorCollider;
+
+        // The sea's floor reaches under the land too, a little under the sea, and whatever of the land goes
+        // deeper than that (the cave) would end on it. So once the land is up, the floor is only there where
+        // the land's surface is not above it: in the sea, and in the land's ponds.
+        void Update()
+        {
+            if (!landUp)
+                return;
+            if (floorCollider == null)
+                floorCollider = floor.GetComponent<Collider>();
+            float floorTop = floor.position.y + floor.GetComponent<BoxCollider>().size.y * 0.5f * floor.lossyScale.y;
+            floorCollider.enabled = LandHeight(player.position) < floorTop + 0.3f;
+        }
+
+        // How far the light is the desert's: 0 the sea's, 1 the desert's.
+        void SetDesert(float amount)
+        {
+            if (sun != null)
+                sun.color = Color.Lerp(sunBefore, sunColour, amount);
+            if (desertLook != null)
+                desertLook.weight = amount;
+        }
+
+        // Every tile of the land: `terrain` and any others among the land's objects.
+        readonly List<Terrain> tiles = new List<Terrain>();
 
         void Awake()
         {
+            if (terrain != null)
+                tiles.Add(terrain);
+            foreach (GameObject part in world)
+                if (part != null)
+                    foreach (Terrain tile in part.GetComponentsInChildren<Terrain>(true))
+                        if (!tiles.Contains(tile))
+                            tiles.Add(tile);
+
+            if (sun != null)
+                sunBefore = sun.color;
+            SetDesert(0f);
+
             // Where the land belongs, before anything moves it.
             foreach (GameObject part in world)
                 places.Add(part != null ? part.transform.position : Vector3.zero);
@@ -68,6 +119,31 @@ namespace Collection.Story
             // A plain wide shot: the blur at the top and bottom of the screen would be across the television.
             Shader.SetGlobalFloat(TiltShiftDisabledId, 1f);
             wideCamera.SetActive(true);
+        }
+
+        // The land and the sea as they are after RaiseLand. To be called after IntroSequence.Skip, which puts the
+        // sea where it is before.
+        public void Skip()
+        {
+            for (int i = 0; i < world.Count; i++)
+            {
+                if (world[i] == null)
+                    continue;
+                world[i].transform.position = places[i];
+                world[i].SetActive(true);
+            }
+            SetHeight(water, water.position.y - seaDrop);
+            SetHeight(floor, floor.position.y - seaDrop);
+            SetHeight(television, television.position.y - seaDrop);
+            SetDesert(1f);
+            landUp = true;
+        }
+
+        // The ground at a place: the higher of the sea's floor and the land, if the land is there.
+        public float GroundHeight(Vector3 at)
+        {
+            float floorTop = floor.position.y + floor.GetComponent<BoxCollider>().size.y * 0.5f * floor.lossyScale.y;
+            return Mathf.Max(floorTop, LandHeight(at));
         }
 
         // For a Cutscene's onStart.
@@ -108,6 +184,7 @@ namespace Collection.Story
                     if (world[i] != null)
                         world[i].transform.position = places[i] + Vector3.down * (landDepth * (1f - eased));
 
+                SetDesert(eased);
                 float drop = seaDrop * eased;
                 SetHeight(water, waterStart - drop);
                 SetHeight(floor, floorStart - drop);
@@ -124,21 +201,26 @@ namespace Collection.Story
 
             controller.enabled = true;
             movement.enabled = true;
+            landUp = true;
             rising = null;
         }
 
         // The land's surface at a place, wherever the land is at the moment. Far below everything where there is none.
         float LandHeight(Vector3 at)
         {
-            if (terrain == null)
-                return float.MinValue;
-            Vector3 corner = terrain.transform.position;
-            Vector3 size = terrain.terrainData.size;
-            float x = (at.x - corner.x) / size.x;
-            float z = (at.z - corner.z) / size.z;
-            if (x < 0f || x > 1f || z < 0f || z > 1f)
-                return float.MinValue;
-            return corner.y + terrain.terrainData.GetInterpolatedHeight(x, z);
+            foreach (Terrain tile in tiles)
+            {
+                if (tile == null || !tile.gameObject.activeInHierarchy)
+                    continue;
+                Vector3 corner = tile.transform.position;
+                Vector3 size = tile.terrainData.size;
+                float x = (at.x - corner.x) / size.x;
+                float z = (at.z - corner.z) / size.z;
+                if (x < 0f || x > 1f || z < 0f || z > 1f)
+                    continue;
+                return corner.y + tile.terrainData.GetInterpolatedHeight(x, z);
+            }
+            return float.MinValue;
         }
 
         static void SetHeight(Transform what, float y)

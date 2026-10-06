@@ -40,6 +40,12 @@ Shader "Collection/Story/Morph Sphere"
 
 		[Header(Where two sides of different values meet)]
 		_Seam ("Seam width", Range(0.001, 0.5)) = 0.02
+
+		// How much of it is there, for appearing and disappearing: below 1 it is drawn as a
+		// scatter of its pixels, more of them the nearer 1. (Not see-through drawing, which
+		// would not sort with the water or show in the water's reflection.) Set by the
+		// component.
+		[HideInInspector] _Visible ("Visible", Range(0, 1)) = 1
 	}
 
 	SubShader
@@ -65,7 +71,16 @@ Shader "Collection/Story/Morph Sphere"
 			float _ScanlineSpeed;
 			float _Static;
 			float _StaticSize;
+			float _Visible;
 		CBUFFER_END
+
+		// Drops the pixel when the shape is less there (_Visible) than this pixel's place in a
+		// fixed scatter over the screen.
+		void Scatter(float2 pixel)
+		{
+			float threshold = frac(52.9829189 * frac(dot(pixel, float2(0.06711056, 0.00583715))));
+			clip(_Visible - threshold * 0.999 - 0.0005);
+		}
 
 		// Half the edge of the cube inside a sphere of radius 1.
 		#define CUBE_HALF 0.57735027
@@ -185,6 +200,7 @@ Shader "Collection/Story/Morph Sphere"
 
 			half4 Fragment(Varyings input) : SV_Target
 			{
+				Scatter(input.positionCS.xy);
 				half4 colour = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, input.uv) * _BaseColor;
 				half3 normal = normalize(input.normalWS);
 
@@ -232,8 +248,9 @@ Shader "Collection/Story/Morph Sphere"
 				return positionCS;
 			}
 
-			half4 Fragment() : SV_Target
+			half4 Fragment(float4 positionCS : SV_POSITION) : SV_Target
 			{
+				Scatter(positionCS.xy);
 				return 0;
 			}
 			ENDHLSL
@@ -255,8 +272,9 @@ Shader "Collection/Story/Morph Sphere"
 				return TransformObjectToHClip(Morph(normalize(positionOS)));
 			}
 
-			half4 Fragment() : SV_Target
+			half4 Fragment(float4 positionCS : SV_POSITION) : SV_Target
 			{
+				Scatter(positionCS.xy);
 				return 0;
 			}
 			ENDHLSL

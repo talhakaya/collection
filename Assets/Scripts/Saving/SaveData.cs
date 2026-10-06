@@ -65,10 +65,11 @@ namespace Collection.Saving
 	}
 
 	/// <summary>
-	/// What the story mode keeps. For now the main character: the shape of its head, and the
+	/// What the story mode keeps. The main character: the shape of its head, and the
 	/// look of its body as set in the character creator (a development tool) - its
 	/// proportions, and each choice from the character catalog by the option's id, so that
-	/// reordering or renaming the catalog does not change a saved character.
+	/// reordering or renaming the catalog does not change a saved character. And how far
+	/// the story has got: the conversations had, the artifacts won, where the character is.
 	/// </summary>
 	[Serializable]
 	public class StorySave
@@ -94,6 +95,27 @@ namespace Collection.Saving
 		/// value. See StoryMemory.
 		public List<string> memoryKeys = new List<string>();
 		public List<string> memoryValues = new List<string>();
+
+		/// The level the story is at, counted from 0 (see GameContext.StoryLevelScenes).
+		public int level;
+
+		/// Coins, from chests and barrels.
+		public int coins;
+
+		/// Things that are used up for good, by their ids: chests opened, barrels broken.
+		public List<string> spent = new List<string>();
+
+		/// The artifacts won so far, by their ids, in the order they were won: the order
+		/// they follow the character in.
+		public List<string> artifacts = new List<string>();
+
+		/// Where the character was standing when the story was last left (for a game, or for
+		/// the menu), and which way it faced. Not set until then.
+		public bool placeSaved;
+		public float placeX;
+		public float placeY;
+		public float placeZ;
+		public float placeFacing;
 	}
 
 	[Serializable]

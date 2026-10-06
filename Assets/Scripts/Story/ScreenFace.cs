@@ -84,6 +84,14 @@ namespace Collection.Story
 		/// video yet.
 		public bool Show(string emoteName)
 		{
+			return Show(emoteName, false);
+		}
+
+		/// The same, with `keep` for an emote that is to stay until the face is changed again
+		/// (ShowIdle, or another emote): it is played over and over, whether or not it is one
+		/// that loops.
+		public bool Show(string emoteName, bool keep)
+		{
 			foreach (Emote emote in emotes)
 			{
 				if (!string.Equals(emote.name, emoteName, StringComparison.OrdinalIgnoreCase)) continue;
@@ -94,7 +102,7 @@ namespace Collection.Story
 					return false;
 				}
 
-				Play(emote.clip, emote.loop, emote.name);
+				Play(emote.clip, emote.loop || keep, emote.name);
 				return true;
 			}
 

@@ -185,9 +185,11 @@ namespace Collection.MainMenu
 			}
 
 			// Leaving the story comes back to the first screen, not to the list of games.
+			// The loading screen goes up before the menus come down, so the list of games
+			// behind them is never what is looked at while the story loads.
 			inList = false;
+			Collection.Story.StoryLevels.Load();
 			Menus.CloseAll();
-			SceneManager.LoadScene(GameContext.StoryScenePath);
 		}
 
 		private static string PlayTime(float seconds)

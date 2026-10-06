@@ -125,6 +125,20 @@ namespace Collection.Controls
 			// the pause screen.
 			if (Collection.Saving.SaveManager.IsStoryMode)
 			{
+				// In a game played from the story for its artifact, the same buttons are a
+				// cheat for testing: the artifact, as if the game had been played to where it
+				// gives it.
+				// Only in a Debug build (BuildSettings).
+				if (BuildSettings.Cheats && Collection.Story.StoryGames.Playing && !Collection.Story.StoryGames.Gathered)
+				{
+					if (Collection.UI.PauseMenu.Paused)
+					{
+						Collection.UI.PauseMenu.Resume();
+					}
+
+					Collection.Story.StoryGames.Finish();
+				}
+
 				return;
 			}
 
@@ -141,9 +155,17 @@ namespace Collection.Controls
 		/// to know which build index the menu is.
 		///
 		/// A no-op when the menu is already what's loaded.
+		///
+		/// A game that was started from inside the story goes back to the story instead,
+		/// with nothing won (see StoryGames).
 		/// </summary>
 		public static void ReturnToMainMenu()
 		{
+			if (Collection.Story.StoryGames.Leave())
+			{
+				return;
+			}
+
 			if (SceneManager.GetActiveScene().buildIndex == MainMenuBuildIndex)
 			{
 				return;
