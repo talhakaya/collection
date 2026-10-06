@@ -85,14 +85,16 @@ namespace Collection.Story
         }
 
         // Once the scene has started and the artifact has had a moment to come over. Until it speaks the
-        // character stays where it is: it is not to be walked off with before it has had its say. (From then on
-        // the conversation keeps the character still, as any does.)
+        // character is not steered: it is not to be walked off with before the artifact has had its say. (From
+        // then on the conversation keeps the character still, as any does.) Not steered, but not taken over
+        // either: it still settles onto the ground where it was put.
         IEnumerator TalkToArtifact(Artifact artifact)
         {
-            control.Take(this, false);
+            InputMan input = Main.inst.input;
+            input.Hold();
             yield return new WaitForSeconds(1.5f);
             artifact.TalkAsWon();
-            control.Release(this);
+            input.LetGo();
         }
 
         void SetUpArtifacts(StorySave story)
