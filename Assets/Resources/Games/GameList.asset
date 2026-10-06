@@ -25,8 +25,8 @@ MonoBehaviour:
     aspect: 0
     musicClips: []
     soundClips: []
-    year: 0
-    artifactMinutes: 0
+    year: 2017
+    artifactMinutes: 10
     continueAfterArtifact: 1
     entryScene: {fileID: 102900000, guid: 14105f93900b63744a7545c1a5d435bb, type: 3}
     entryScenePath: Assets/games/Golfinity/Scenes/main.unity
@@ -83,8 +83,8 @@ MonoBehaviour:
     - Space Breath
     - Cam Gicirtisi
     - jetpack
-    year: 0
-    artifactMinutes: 0
+    year: 2015
+    artifactMinutes: 5
     continueAfterArtifact: 0
     entryScene: {fileID: 102900000, guid: a39fe25f1e4fb424f8625ed9bbc73f93, type: 3}
     entryScenePath: Assets/games/Space Artist/menu.unity
@@ -228,8 +228,8 @@ MonoBehaviour:
     aspect: 0
     musicClips: []
     soundClips: []
-    year: 0
-    artifactMinutes: 0
+    year: 2016
+    artifactMinutes: 10
     continueAfterArtifact: 0
     entryScene: {fileID: 102900000, guid: 4501c507ccef93f4bb5901189a686757, type: 3}
     entryScenePath: Assets/games/Lost Shader/main.unity
@@ -261,8 +261,8 @@ MonoBehaviour:
     aspect: 2
     musicClips: []
     soundClips: []
-    year: 0
-    artifactMinutes: 0
+    year: 2015
+    artifactMinutes: 10
     continueAfterArtifact: 0
     entryScene: {fileID: 102900000, guid: f9ee539bec4e88b41ba61cb30b9402a7, type: 3}
     entryScenePath: Assets/games/Where Is He/main.unity
@@ -325,8 +325,8 @@ MonoBehaviour:
     aspect: 2
     musicClips: []
     soundClips: []
-    year: 0
-    artifactMinutes: 0
+    year: 2013
+    artifactMinutes: 5
     continueAfterArtifact: 1
     entryScene: {fileID: 102900000, guid: 5797a9ce61311fc47b941e36c8047757, type: 3}
     entryScenePath: Assets/games/BloodSpace/scene.unity
@@ -341,7 +341,7 @@ MonoBehaviour:
     aspect: 0
     musicClips: []
     soundClips: []
-    year: 0
+    year: 2020
     artifactMinutes: 25
     continueAfterArtifact: 1
     entryScene: {fileID: 102900000, guid: 97b15887fbbecb047b372c1f46048652, type: 3}

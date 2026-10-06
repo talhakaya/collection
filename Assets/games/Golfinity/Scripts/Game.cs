@@ -100,8 +100,10 @@ namespace Games.Golfinity
 	        OutlineSprite.isOn = Collection.Saving.SaveManager.Slot.golfinity.outlineOn;
 	        Game.reverseShooting = Collection.Saving.SaveManager.Slot.golfinity.reverseShooting;
 	        Game.holesOnWalls = Collection.Saving.SaveManager.Slot.golfinity.holesOnWalls;
-	        Game.soundOn = Collection.Saving.SaveManager.Slot.golfinity.soundOn;
-	        Game.musicOn = Collection.Saving.SaveManager.Slot.golfinity.musicOn;
+	        // In the collection: always on. The switches for them are gone from the options (see
+	        // OptionsPopup); a save that had one switched off would have no way to put it back.
+	        Game.soundOn = true;
+	        Game.musicOn = true;
 	        Game.terrainEffectOn = Collection.Saving.SaveManager.Slot.golfinity.terrainEffectOn;
 	        Game.circleHoleEffectOn = Collection.Saving.SaveManager.Slot.golfinity.circleHoleEffectOn;
 	        Game.removedAds = true;

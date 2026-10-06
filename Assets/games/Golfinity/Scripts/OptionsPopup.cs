@@ -18,6 +18,21 @@ namespace Games.Golfinity
 
 	    private void Start()
 	    {
+	        // In the collection: sound and music are the collection's own settings (the pause
+	        // screen's), so the game's two switches for them are not shown. Both are always on
+	        // here (see Game), and how loud they are is the collection's to say.
+	        // The buttons under them move up into the two places left empty (the list is laid
+	        // out by hand, a button every so far down).
+	        RectTransform sound = (RectTransform)buttonSound.transform;
+	        RectTransform music = (RectTransform)buttonMusic.transform;
+	        float step = sound.anchoredPosition.y - music.anchoredPosition.y;
+	        foreach (RectTransform other in sound.parent)
+	        {
+	            if (other == sound || other == music || other.GetComponent<UnityEngine.UI.Selectable>() == null) continue;
+	            if (other.anchoredPosition.y < music.anchoredPosition.y + 0.01f) other.anchoredPosition += new Vector2(0f, step * 2f);
+	        }
+	        buttonSound.gameObject.SetActive(false);
+	        buttonMusic.gameObject.SetActive(false);
 	        Local.OnLanguageChange += OnLanguageChange;
 	        buttonReverseShooting.icon.enabled = Game.reverseShooting;
 	        buttonHolesOnWalls.icon.enabled = Game.holesOnWalls;
