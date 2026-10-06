@@ -133,19 +133,12 @@ namespace Collection.Story
             // The character stands where the hips are, on the ground under them, facing as it did.
             Vector3 place = hips.position;
             float feet = place.y - 1f;
-            // The first thing under the hips that is not the character itself.
-            float nearest = float.MinValue;
-            foreach (RaycastHit hit in Physics.RaycastAll(place + Vector3.up * 0.5f, Vector3.down, 20f, ground, QueryTriggerInteraction.Ignore))
-                if (!hit.collider.transform.IsChildOf(transform) && hit.point.y > nearest)
-                    nearest = hit.point.y;
-            // Nothing under them: the body has ended up under the ground (the land came up through it). Then
-            // the highest thing over it.
-            if (nearest == float.MinValue)
-                foreach (RaycastHit hit in Physics.RaycastAll(place + Vector3.up * 200f, Vector3.down, 200f, ground, QueryTriggerInteraction.Ignore))
-                    if (!hit.collider.transform.IsChildOf(transform) && hit.point.y > nearest)
-                        nearest = hit.point.y;
-            if (nearest > float.MinValue)
-                feet = nearest;
+            // The first thing under the hips that is not the character itself. With nothing under them the body
+            // has ended up under the ground (the land came up through it): then the first thing under the sky.
+            float under;
+            if (Ground.Under(place + Vector3.up * 0.5f, 20f, ground, out under, transform)
+                || Ground.Under(place + Vector3.up * 200f, 200f, ground, out under, transform))
+                feet = under;
             place.y = feet + control.Standing;
             control.MoveTo(place);
             model.localPosition = modelPlace;
@@ -156,6 +149,8 @@ namespace Collection.Story
             // Back to the player, unless something else has the character meanwhile (a cutscene).
             control.Release(this);
             rising = getUpTime;
+            if (rising <= 0f && head != null)
+                head.keepFullSize = false;
             if (face != null)
                 face.ShowIdle();
         }
@@ -179,11 +174,7 @@ namespace Collection.Story
             }
 
             if (rising <= 0f)
-            {
-                if (head != null)
-                    head.keepFullSize = false;
                 return;
-            }
 
             // From where each part lay to where the Animator has it this frame. The animated places are read
             // first, all of them, because moving a part moves the parts under it.
@@ -202,6 +193,11 @@ namespace Collection.Story
                     part.bone.position = Vector3.Lerp(hipsAnimated, part.lyingPosition, lying);
                 part.bone.rotation = Quaternion.Slerp(animated[i], part.lyingRotation, lying);
             }
+
+            // Up: the head may be small near the ground again. (Once, here, and not every frame after: the head
+            // is anything else's to keep full size too.)
+            if (rising <= 0f && head != null)
+                head.keepFullSize = false;
         }
 
         // ---- Making the ragdoll ---------------------------------------------------------------------------------

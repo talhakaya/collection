@@ -126,28 +126,60 @@ namespace Collection.Story
         // sea where it is before.
         public void Skip()
         {
-            for (int i = 0; i < world.Count; i++)
-            {
-                if (world[i] == null)
-                    continue;
-                world[i].transform.position = places[i];
-                world[i].SetActive(true);
-            }
-            SetHeight(water, water.position.y - seaDrop);
-            SetHeight(floor, floor.position.y - seaSettle);
-            SetHeight(television, television.position.y - televisionDrop);
-            SetDesert(1f);
+            TakeStart();
+            foreach (GameObject part in world)
+                if (part != null)
+                    part.SetActive(true);
+            Show(1f);
             SeaGone();
+        }
+
+        // Where the sea, its floor and the television are before any of this. Taken once: everything after is
+        // counted from there.
+        bool startKnown;
+        float waterStart, floorStart, televisionStart;
+
+        void TakeStart()
+        {
+            if (startKnown)
+                return;
+            startKnown = true;
+            waterStart = water.position.y;
+            floorStart = floor.position.y;
+            televisionStart = television.position.y;
+        }
+
+        // The land, the sea, the television and the light with this much of the rise behind them (0 to 1). The
+        // one description of it: the rise goes through it from 0 to 1, and a game in which it has happened is
+        // shown it at 1.
+        void Show(float done)
+        {
+            float eased = Mathf.SmoothStep(0f, 1f, done);
+
+            for (int i = 0; i < world.Count; i++)
+                if (world[i] != null)
+                    world[i].transform.position = places[i] + Vector3.down * (landDepth * (1f - eased));
+
+            SetDesert(eased);
+            // The sea stays round the land as it comes up, a little lower, and drains away at the end.
+            float drop = seaSettle * eased;
+            float drained = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(drainFrom, 1f, done));
+            SetHeight(water, waterStart - drop - (seaDrop - seaSettle) * drained);
+            SetHeight(floor, floorStart - drop);
+            SetHeight(television, televisionStart - televisionDrop * eased);
+        }
+
+        // The top of the sea's floor, where it is at the moment.
+        float FloorTop()
+        {
+            return floor.position.y + floor.GetComponent<BoxCollider>().size.y * 0.5f * floor.lossyScale.y;
         }
 
         // The ground at a place: the higher of the sea's floor and the land, if the land is there.
         public float GroundHeight(Vector3 at)
         {
             float land = LandHeight(at);
-            if (landUp)
-                return land;
-            float floorTop = floor.position.y + floor.GetComponent<BoxCollider>().size.y * 0.5f * floor.lossyScale.y;
-            return Mathf.Max(floorTop, land);
+            return landUp ? land : Mathf.Max(FloorTop(), land);
         }
 
         // For a Cutscene's onStart.
@@ -164,40 +196,22 @@ namespace Collection.Story
             control.Take(this);
             var ragdoll = player.GetComponent<Ragdoll>();
 
-            float waterStart = water.position.y;
-            float floorStart = floor.position.y;
-            float televisionStart = television.position.y;
-            float floorTop = floorStart + floor.GetComponent<BoxCollider>().size.y * 0.5f * floor.lossyScale.y;
-            float standing = player.position.y - floorTop;
+            TakeStart();
+            float standing = player.position.y - FloorTop();
 
-            for (int i = 0; i < world.Count; i++)
-            {
-                if (world[i] == null)
-                    continue;
-                world[i].transform.position = places[i] + Vector3.down * landDepth;
-                world[i].SetActive(true);
-            }
+            Show(0f);
+            foreach (GameObject part in world)
+                if (part != null)
+                    part.SetActive(true);
 
             for (float t = 0f; ; t += Time.deltaTime)
             {
                 float done = seconds > 0f ? Mathf.Clamp01(t / seconds) : 1f;
-                float eased = Mathf.SmoothStep(0f, 1f, done);
-
-                for (int i = 0; i < world.Count; i++)
-                    if (world[i] != null)
-                        world[i].transform.position = places[i] + Vector3.down * (landDepth * (1f - eased));
-
-                SetDesert(eased);
-                // The sea stays round the land as it comes up, a little lower, and drains away at the end.
-                float drop = seaSettle * eased;
-                float drained = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(drainFrom, 1f, done));
-                SetHeight(water, waterStart - drop - (seaDrop - seaSettle) * drained);
-                SetHeight(floor, floorStart - drop);
-                SetHeight(television, televisionStart - televisionDrop * eased);
+                Show(done);
 
                 // The higher of the sea's floor and the land, where the character is.
                 // (Not one that is lying after a fall: that one is where its body is, on whatever is under it.)
-                float ground = Mathf.Max(floorTop - drop, LandHeight(player.position));
+                float ground = Mathf.Max(FloorTop(), LandHeight(player.position));
                 if (ragdoll == null || !ragdoll.Down)
                     SetHeight(player, ground + standing);
 

@@ -166,14 +166,14 @@ namespace Collection.Story
             float standing = control.Standing;
             if (!story.placeSaved)
             {
-                place.y = Ground(ref place) + standing;
+                place.y = LandUnder(ref place) + standing;
             }
-            else if (place.y < Ground(ref place) + standing - 0.5f && !SomethingUnder(place))
+            else if (place.y < LandUnder(ref place) + standing - 0.5f && !SomethingUnder(place))
             {
                 // A saved place that is under the ground with nothing to stand on: saved where there was sea, or
                 // lower land, in an earlier version of the level. (Under the ground with something to stand on
                 // is the cave.)
-                place.y = Ground(ref place) + standing;
+                place.y = LandUnder(ref place) + standing;
             }
 
             control.MoveTo(place, Quaternion.Euler(0f, facing, 0f));
@@ -181,7 +181,7 @@ namespace Collection.Story
 
         // The height of the ground at a place. Where there is none (off the land's edge, with the sea gone) the
         // place itself is changed, to where the character stands in the scene.
-        float Ground(ref Vector3 place)
+        float LandUnder(ref Vector3 place)
         {
             float ground = encounter.GroundHeight(place);
             if (ground < -1000f)
@@ -198,10 +198,8 @@ namespace Collection.Story
         bool SomethingUnder(Vector3 place)
         {
             Physics.SyncTransforms();
-            foreach (RaycastHit hit in Physics.RaycastAll(place + Vector3.up * 0.3f, Vector3.down, 5f, ~0, QueryTriggerInteraction.Ignore))
-                if (hit.collider.transform != encounter.floor && !hit.collider.transform.IsChildOf(player))
-                    return true;
-            return false;
+            float under;
+            return Ground.Under(place + Vector3.up * 0.3f, 5f, ~0, out under, encounter.floor, player);
         }
 
         // Where the character last stood outside a conversation, kept up every frame so that it is still known
@@ -217,7 +215,7 @@ namespace Collection.Story
             if (player.position.y < fallenBelow)
             {
                 Vector3 back = player.position;
-                back.y = Ground(ref back) + control.Standing + 0.5f;
+                back.y = LandUnder(ref back) + control.Standing + 0.5f;
                 control.MoveTo(back);
                 var movement = player.GetComponent<PlayerMovement>();
                 if (movement != null)

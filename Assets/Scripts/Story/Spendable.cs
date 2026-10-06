@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Collection.Saving;
 using UnityEngine;
 
@@ -12,6 +13,24 @@ namespace Collection.Story
         [SerializeField] string id;
 
         public bool Spent => SaveManager.Slot.story.spent.Contains(id);
+
+        // Every one there is, by its id, to catch two with the same: they would be used up together, one in play
+        // and the other on coming back to the level. The ids are given in the editor (OnValidate, below), which
+        // one made from code, or placed without the editor noticing, has not been through.
+        static readonly Dictionary<string, Spendable> known = new Dictionary<string, Spendable>();
+
+        protected virtual void Awake()
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                Debug.LogError($"{name} has no id for the save to know it by: it will be used up along with every other that has none.", this);
+                return;
+            }
+            Spendable other;
+            if (known.TryGetValue(id, out other) && other != null && other != this)
+                Debug.LogError($"{name} and {other.name} have the same id ({id}): the save cannot tell them apart.", this);
+            known[id] = this;
+        }
 
         protected void Spend()
         {

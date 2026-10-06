@@ -234,19 +234,12 @@ namespace Collection.Story
         }
 
         // The height of the ground under a place: the first thing below it, the bicycle and its rider not
-        // counting. Not the highest thing there - in a cave that is the land over the cave, and the bicycle was
-        // stood up on top of it. `otherwise` when there is nothing.
+        // counting (Ground). `otherwise` when there is nothing.
         float GroundUnder(Vector3 place, float otherwise)
         {
-            float ground = float.MinValue;
-            foreach (RaycastHit hit in Physics.RaycastAll(place + Vector3.up * 0.7f, Vector3.down, 40f, ~0, QueryTriggerInteraction.Ignore))
-            {
-                if (hit.collider.GetComponentInParent<Bicycle>() != null || hit.collider.GetComponentInParent<PlayerMovement>() != null)
-                    continue;
-                if (hit.point.y > ground)
-                    ground = hit.point.y;
-            }
-            return ground > float.MinValue ? ground : otherwise;
+            float ground;
+            Transform who = riderMovement != null ? riderMovement.transform : null;
+            return Ground.Under(place + Vector3.up * 0.7f, 40f, ~0, out ground, transform, who) ? ground : otherwise;
         }
 
         // Every part where it belongs for a bicycle standing at `place`, turned `facing`, and still.
@@ -359,10 +352,8 @@ namespace Collection.Story
             if (wanted == Vector3.zero)
             {
                 Vector2 stick = Main.inst.input.move;
-                Camera view = Camera.main;
-                if (stick.magnitude > 0.2f && view != null)
-                    wanted = Vector3.ProjectOnPlane(view.transform.forward, Vector3.up).normalized * stick.y
-                        + Vector3.ProjectOnPlane(view.transform.right, Vector3.up).normalized * stick.x;
+                if (stick.magnitude > 0.2f)
+                    wanted = PlayerMovement.CameraRelative(stick);
             }
             wanted.y = 0f;
             bool going = wanted.sqrMagnitude > 0.01f;

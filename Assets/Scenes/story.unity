@@ -6611,6 +6611,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1795467328}
     m_Modifications:
+    - target: {fileID: 1330502715320674639, guid: f533002bc7339994a9108101196f2df2, type: 3}
+      propertyPath: id
+      value: 9bd241ac785b
+      objectReference: {fileID: 0}
     - target: {fileID: 5523527502119664742, guid: f533002bc7339994a9108101196f2df2, type: 3}
       propertyPath: m_Name
       value: Barrel
@@ -8546,6 +8550,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1795467328}
     m_Modifications:
+    - target: {fileID: 195509817478934567, guid: 58999ed9628a0ca489ad404c8dbd495b, type: 3}
+      propertyPath: id
+      value: 97cafc46be32
+      objectReference: {fileID: 0}
     - target: {fileID: 7015399700990418632, guid: 58999ed9628a0ca489ad404c8dbd495b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -10

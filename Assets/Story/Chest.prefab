@@ -417,7 +417,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e48ecbc6d1576240ae1d4e6b0c5c2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 97cafc46be32
+  id: 
   lid: {fileID: 7409820376462020353}
   openAngle: 110
   lidTime: 0.7
@@ -427,6 +427,7 @@ MonoBehaviour:
   coin: {fileID: 8781115710199721522, guid: eadba798bcd9064498003f51c34d8d0e, type: 3}
   mouth: {fileID: 3588803359380635598}
   coinsApart: 0.06
+  emote: smile
 --- !u!114 &1778769079016846542
 MonoBehaviour:
   m_ObjectHideFlags: 0

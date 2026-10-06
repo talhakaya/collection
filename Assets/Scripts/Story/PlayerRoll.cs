@@ -100,13 +100,8 @@ namespace Collection.Story
         {
             Vector2 stick = Main.inst.input.move;
             direction = transform.forward;
-            Camera view = Camera.main;
-            if (stick.magnitude > 0.2f && view != null)
-            {
-                Vector3 forward = Vector3.ProjectOnPlane(view.transform.forward, Vector3.up).normalized;
-                Vector3 right = Vector3.ProjectOnPlane(view.transform.right, Vector3.up).normalized;
-                direction = (forward * stick.y + right * stick.x).normalized;
-            }
+            if (stick.magnitude > 0.2f)
+                direction = PlayerMovement.CameraRelative(stick).normalized;
             transform.rotation = Quaternion.LookRotation(direction, Vector3.up);
 
             modelPlace = model.localPosition;

@@ -93,7 +93,9 @@ namespace Collection.Story
             animator.SetFloat(TurnParam, Mathf.Clamp(turnRate / turnAnimationRate, -1f, 1f), 0.15f, dt);
         }
 
-        static Vector3 CameraRelative(Vector2 input)
+        // The way along the ground that a push of the stick means, as the camera sees it: up on the stick is away
+        // from the camera. For everything steered like walking (the roll, the bicycle).
+        public static Vector3 CameraRelative(Vector2 input)
         {
             Camera cam = Camera.main;
             if (cam == null)
