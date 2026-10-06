@@ -13,7 +13,7 @@ namespace Collection.Story
     //   Down, the television head keeps its full size (it has a collider that size, so it lies on the ground and
     //   not in it) and shows `emote`.
     //
-    //   Getting up: after `downFor` seconds, on moving or pressing something. The Animator takes over again and
+    //   Getting up: after `downFor` seconds (and not while `held`), on moving or pressing something. The Animator takes over again and
     //   the body goes from where it lay to the animated pose over `getUpTime` seconds. (There is no getting-up
     //   animation; the body simply rights itself.)
     //
@@ -33,6 +33,9 @@ namespace Collection.Story
         public LayerMask ground = ~0;
 
         public bool Down { get; private set; }
+        // Set by whatever has the character lying there for its own reasons (a cutscene): it cannot get up,
+        // whatever is pressed, until this is cleared.
+        [System.NonSerialized] public bool held;
         public bool GettingUp => rising > 0f;
 
         class Part
@@ -104,6 +107,16 @@ namespace Collection.Story
             }
         }
 
+        // Turns the whole body as it falls, for one physics step (radians/s² about the axis given): for a fall
+        // that is meant to tumble all the way down. The parts are damped, and stop turning by themselves.
+        public void Tumble(Vector3 turning)
+        {
+            if (!Down)
+                return;
+            foreach (Part part in parts)
+                part.body.AddTorque(turning, ForceMode.Acceleration);
+        }
+
         public void Fall()
         {
             Fall(controller.velocity, Vector3.zero, model.localPosition, model.localRotation);
@@ -114,7 +127,7 @@ namespace Collection.Story
             if (!Down)
                 return;
             downTime += Time.deltaTime;
-            if (downTime >= downFor && Main.inst.input.anyPressed)
+            if (downTime >= downFor && !held && Main.inst.input.anyPressed)
                 GetUp();
         }
 

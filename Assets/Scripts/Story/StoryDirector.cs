@@ -84,11 +84,17 @@ namespace Collection.Story
             StoryLevels.Advance();
         }
 
-        // Once the scene has started and the artifact has had a moment to come over.
+        // Once the scene has started and the artifact has had a moment to come over. Until it speaks the
+        // character is not steered: it is not to be walked off with before the artifact has had its say. (From
+        // then on the conversation keeps the character still, as any does.) Not steered, but not taken over
+        // either: it still settles onto the ground where it was put.
         IEnumerator TalkToArtifact(Artifact artifact)
         {
+            InputMan input = Main.inst.input;
+            input.Hold();
             yield return new WaitForSeconds(1.5f);
             artifact.TalkAsWon();
+            input.LetGo();
         }
 
         void SetUpArtifacts(StorySave story)

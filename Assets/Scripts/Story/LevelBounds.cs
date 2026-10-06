@@ -22,8 +22,8 @@ namespace Collection.Story
         public float viewFar = 5f;
         [Tooltip("The distance of the camera from the character that those three are given for (m): the outdoor camera's. A camera nearer or further has them scaled to its own.")]
         public float viewsAtDistance = 19.8f;
-        [Tooltip("The walls' top and bottom (m).")]
-        public float top = 80f;
+        [Tooltip("The walls' top and bottom (m). The cameras are kept under the top too: it is above anything that happens (a fall out of the sky).")]
+        public float top = 220f;
         public float bottom = -40f;
         public float thickness = 6f;
         [Tooltip("The Cinemachine cameras kept inside. Empty: every one in the scene that follows something (the outdoor and the cave camera).")]

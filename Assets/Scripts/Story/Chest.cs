@@ -67,7 +67,7 @@ namespace Collection.Story
         IEnumerator Opening()
         {
             InputMan input = Main.inst.input;
-            input.held = true;
+            input.Hold();
             if (view != null)
                 view.SetActive(true);
             yield return new WaitForSeconds(viewTime);
@@ -94,7 +94,7 @@ namespace Collection.Story
 
             if (view != null)
                 view.SetActive(false);
-            input.held = false;
+            input.LetGo();
         }
     }
 }

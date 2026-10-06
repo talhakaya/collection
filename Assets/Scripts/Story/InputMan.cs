@@ -18,8 +18,21 @@ namespace Collection.Story
         // While a conversation is up (talking, set by DialogueMan) the character stands still: the same keys and
         // stick choose between dialogue options instead (navigate).
         [HideInInspector] public bool talking;
-        // The same for something that is not a conversation: a chest being opened.
-        [HideInInspector] public bool held;
+        // The same for something that is not a conversation: a chest being opened, an artifact about to speak.
+        // The character is not steered, but is still its own to stand on the ground (unlike one that has been
+        // taken over: PlayerControl). Each Hold is ended by a LetGo; while any is on, nothing is read.
+        public bool held => holds > 0;
+        int holds;
+
+        public void Hold()
+        {
+            holds++;
+        }
+
+        public void LetGo()
+        {
+            holds = Mathf.Max(0, holds - 1);
+        }
 
         public Vector2 move => Blocked || talking || held ? Vector2.zero : moveAction.ReadValue<Vector2>();
         public Vector2 navigate => Blocked ? Vector2.zero : moveAction.ReadValue<Vector2>();
