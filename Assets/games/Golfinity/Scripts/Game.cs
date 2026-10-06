@@ -100,8 +100,10 @@ namespace Games.Golfinity
 	        OutlineSprite.isOn = Collection.Saving.SaveManager.Slot.golfinity.outlineOn;
 	        Game.reverseShooting = Collection.Saving.SaveManager.Slot.golfinity.reverseShooting;
 	        Game.holesOnWalls = Collection.Saving.SaveManager.Slot.golfinity.holesOnWalls;
-	        Game.soundOn = Collection.Saving.SaveManager.Slot.golfinity.soundOn;
-	        Game.musicOn = Collection.Saving.SaveManager.Slot.golfinity.musicOn;
+	        // In the collection: always on. The switches for them are gone from the options (see
+	        // OptionsPopup); a save that had one switched off would have no way to put it back.
+	        Game.soundOn = true;
+	        Game.musicOn = true;
 	        Game.terrainEffectOn = Collection.Saving.SaveManager.Slot.golfinity.terrainEffectOn;
 	        Game.circleHoleEffectOn = Collection.Saving.SaveManager.Slot.golfinity.circleHoleEffectOn;
 	        Game.removedAds = true;
@@ -423,9 +425,14 @@ namespace Games.Golfinity
 	        Game.instance.level.ResetLevel();
 	    }
 
+	    // In the collection: the game has no end. In the story mode it gives its artifact once
+	    // this many holes are behind the player, and can be played on after that.
+	    public const int StoryArtifactHoles = 10;
+
 	    public static void NextLevel()
 	    {
 	        int holeNo = LevelGenerator.CurrentHoleNo + 1;
+	        if (holeNo >= StoryArtifactHoles) Collection.Story.StoryGames.Finish();
 	        if (holeNo > 0 && holeNo % LevelGenerator.numLevelsPerColor == 0 && Game.instance.level.GetNumGoldToUnlock(holeNo / LevelGenerator.numLevelsPerColor) > 0)
 	        {
 	            Game.instance.SetState(GameState.Map);

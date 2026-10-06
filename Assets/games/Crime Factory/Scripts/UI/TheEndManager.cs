@@ -29,6 +29,8 @@ namespace Games.CrimeFactory
 	        textThanks.text = Localization.Get("THANKS_FOR_PLAYING");
 	        AudioPlayer.instance.Play(AudioPlayer.instance.clipDoor);
 	        yield return new WaitForSeconds(2f);
+	        // In the collection: played on from the story to its end, it is back to the story from here.
+	        if (Collection.Story.StoryGames.Leave()) yield break;
 	        UnityEngine.SceneManagement.SceneManager.LoadScene("Assets/games/Crime Factory/Scenes/menu.unity"); // In the collection: by path.
 	    }
 	}

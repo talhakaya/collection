@@ -73,7 +73,9 @@ namespace Games.CrimeFactory
 	    }
 
 		void Update () {
-	        if (CancelPressed()) {
+	        // In the collection: not from the story, where the game has no menu to go back to (the
+	        // collection's pause screen is the way out).
+	        if (CancelPressed() && !Collection.Story.StoryGames.Playing) {
 	            UnityEngine.SceneManagement.SceneManager.LoadScene("Assets/games/Crime Factory/Scenes/menu.unity"); // In the collection: by path, scene names are not unique here.
 	        }
 	        if ((simulator == null || simulator.player == null) && !LevelEditor.On) return;
@@ -199,10 +201,17 @@ namespace Games.CrimeFactory
 	        LevelEditor.Load(File.ReadAllText(string.Format(pathFormat, levelName)), levelName);
 	    }
 
+	    // In the collection: in the story mode the game gives its artifact here, on coming to this
+	    // level. It is the first level of the second run of them: the first boss (level 22) is
+	    // beaten, and the talk that follows it (the police, home, the police again, the shop) is
+	    // over. Twenty minutes or so of the game; the rest of it can be played on from there.
+	    public const string StoryArtifactLevel = "23";
+
 	    public void OnLoad(string levelName) {
 	        lastLevelName = levelName;
 	        int.TryParse(levelName, out levelIndex);
 	        SaveSystem.SaveLevel(levelName);
+	        if (levelName == StoryArtifactLevel) Collection.Story.StoryGames.Finish();
 	    }
 	}
 }

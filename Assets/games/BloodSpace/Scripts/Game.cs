@@ -42,6 +42,11 @@ namespace Games.BloodSpace
 		public static float screenShake;
 		public static bool textReadable;
 		public static int deadOctopus;
+		// In the collection: in the story mode the game gives its artifact when the first octopus
+		// is beaten, or when the player has died this many times since starting it - whichever
+		// comes first. It can be played on after that.
+		public const int StoryArtifactDeaths = 5;
+		public static int storyDeaths;
 
 		public GameObject menu;
 		public GameObject credits;
@@ -69,6 +74,7 @@ namespace Games.BloodSpace
 			instance = this;
 
 			// In the collection: the process outlives the game, so what a run left behind is cleared.
+			storyDeaths = 0;
 			score = 0;
 			deadOctopus = 0;
 			screenShake = 0f;
