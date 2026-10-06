@@ -66,7 +66,23 @@ Glue: (placeholder: what the glue says when you have it)
 
 title: TVArtifacts
 ---
-God: (placeholder: you have the stick, the hard bit and the glue. the next cutscene goes here)
+God: (placeholder) You found them. The stick. The hard bit. The glue.
+God: (placeholder) They were one thing once. Put them back together.
+<<cutscene Jigsaw>>
+God: (placeholder) There. A hammer.
+God: (placeholder) You have a round head. Mine has corners. Hold still.
+<<cutscene Hammer>>
+God: (placeholder) Much better. You are almost like me now.
+God: (placeholder) If you want to be like me, you need to enter this.
+<<cutscene Box>>
+God: (placeholder) Head first.
+<<cutscene IntoTheBox>>
+===
+
+title: FieldHelper
+---
+Villager: Hey, are you alright?
+Villager: Follow me, I'll get you to our town to heal.
 ===
 
 title: GreeterFirst

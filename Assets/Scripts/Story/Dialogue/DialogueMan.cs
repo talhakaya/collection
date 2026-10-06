@@ -80,9 +80,18 @@ namespace Collection.Story
             }
 
             dialogueUIMain.HideLines();
+            cutscene.Begin();
             cutscene.onStart?.Invoke();
-            if (cutscene.duration > 0f)
+            if (cutscene.untilFinished)
+            {
+                while (!cutscene.Finished)
+                    yield return null;
+            }
+            else if (cutscene.duration > 0f)
+            {
                 yield return new WaitForSeconds(cutscene.duration);
+            }
+            cutscene.Finish();
             cutscene.onEnd?.Invoke();
         }
 

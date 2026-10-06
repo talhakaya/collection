@@ -2943,6 +2943,235 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!1 &330599763
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 330599770}
+  - component: {fileID: 330599769}
+  - component: {fileID: 330599768}
+  - component: {fileID: 330599767}
+  - component: {fileID: 330599766}
+  - component: {fileID: 330599765}
+  - component: {fileID: 330599764}
+  m_Layer: 0
+  m_Name: Desert Ending
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &330599764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330599763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e195c2a972dae67488061028f4b8f0ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: IntoTheBox
+  duration: 0
+  untilFinished: 1
+  onStart:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 330599769}
+        m_TargetAssemblyTypeName: Collection.Story.DesertEnding, Assembly-CSharp
+        m_MethodName: IntoTheBox
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onEnd:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &330599765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330599763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e195c2a972dae67488061028f4b8f0ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: Box
+  duration: 2.2
+  untilFinished: 0
+  onStart:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 330599769}
+        m_TargetAssemblyTypeName: Collection.Story.DesertEnding, Assembly-CSharp
+        m_MethodName: ShowBox
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onEnd:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &330599766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330599763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e195c2a972dae67488061028f4b8f0ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: Hammer
+  duration: 0
+  untilFinished: 1
+  onStart:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 330599768}
+        m_TargetAssemblyTypeName: Collection.Story.HammerGame, Assembly-CSharp
+        m_MethodName: Play
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onEnd:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &330599767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330599763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e195c2a972dae67488061028f4b8f0ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: Jigsaw
+  duration: 0
+  untilFinished: 1
+  onStart:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 330599769}
+        m_TargetAssemblyTypeName: Collection.Story.DesertEnding, Assembly-CSharp
+        m_MethodName: Jigsaw
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onEnd:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &330599768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330599763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ffffb2e61f94c6d825c12ef4e7e4a8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  director: {fileID: 675054524}
+  cameraDistance: 6.2
+  cameraPitch: 14
+  fieldOfView: 36
+  priority: 50
+  slant: 28
+  facesAside: 20
+  faceDistance: 1.9
+  faceTime: 0.9
+  faceStays: 1.6
+  handleMaterial: {fileID: 2100000, guid: 050de8c938b7df94792d794132cc5d79, type: 2}
+  headMaterial: {fileID: 2100000, guid: 65497bda398568f4da5fc42242a0d283, type: 2}
+  glueMaterial: {fileID: 2100000, guid: e3c0e4737e7573e48ae679d3ee4a7978, type: 2}
+  waitsAt: 1.3
+  waitsOver: 0.75
+  blowTime: 0.08
+  stayTime: 0.22
+  backTime: 0.4
+  turnTime: 0.7
+  gatherTime: 1.4
+  terror: terror
+  pain: pain
+  word: SMASH!
+--- !u!114 &330599769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330599763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d7e3ff70ea14b8a8ab4187861d1c0b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  director: {fileID: 675054524}
+  boxMaterial: {fileID: 2100000, guid: 4c593e216d2301a40a42059b94f73025, type: 2}
+  flapAngle: 20
+  flapLength: 0.5
+  boxAhead: 2.2
+  room: 0.012
+  cameraFrom: {x: 5.6, y: 2, z: -0.8}
+  lookAtHeight: 1
+  priority: 50
+  liftTime: 1.6
+  hangsAbove: 0.5
+  fitTime: 5
+  dropTime: 0.8
+--- !u!4 &330599770
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330599763}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &331004146
 GameObject:
   m_ObjectHideFlags: 0
@@ -6454,6 +6683,12 @@ MonoBehaviour:
   - name: annoyed
     clip: {fileID: 32900000, guid: 666a9963d70cd5d408524fa00865229f, type: 3}
     loop: 0
+  - name: terror
+    clip: {fileID: 32900000, guid: 16480ac6c1390bd48b6edf0bdb828a14, type: 3}
+    loop: 0
+  - name: pain
+    clip: {fileID: 32900000, guid: 16480ac6c1390bd48b6edf0bdb828a14, type: 3}
+    loop: 0
 --- !u!114 &755278454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9521,6 +9756,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: land
   duration: 6
+  untilFinished: 0
   onStart:
     m_PersistentCalls:
       m_Calls:
@@ -10069,6 +10305,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: sea
   duration: 4
+  untilFinished: 0
   onStart:
     m_PersistentCalls:
       m_Calls:
@@ -16176,3 +16413,4 @@ SceneRoots:
   - {fileID: 1795467328}
   - {fileID: 421654522}
   - {fileID: 689176671}
+  - {fileID: 330599770}
