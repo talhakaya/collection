@@ -12,7 +12,6 @@ namespace Collection.Story
     public class CaveZone : MonoBehaviour
     {
         BoxCollider box;
-        Transform player;
         bool inside;
 
         void Reset()
@@ -27,13 +26,10 @@ namespace Collection.Story
 
         void Update()
         {
-            if (player == null)
-            {
-                PlayerMovement movement = FindFirstObjectByType<PlayerMovement>(FindObjectsInactive.Include);
-                if (movement == null)
-                    return;
-                player = movement.transform;
-            }
+            PlayerMovement movement = PlayerMovement.Current;
+            if (movement == null)
+                return;
+            Transform player = movement.transform;
 
             // In the box's own space, where it is a plain box about its centre.
             Vector3 at = transform.InverseTransformPoint(player.position) - box.center;

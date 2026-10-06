@@ -86,19 +86,8 @@ namespace Collection.Story
                 desertLook.weight = amount;
         }
 
-        // Every tile of the land: `terrain` and any others among the land's objects.
-        readonly List<Terrain> tiles = new List<Terrain>();
-
         void Awake()
         {
-            if (terrain != null)
-                tiles.Add(terrain);
-            foreach (GameObject part in world)
-                if (part != null)
-                    foreach (Terrain tile in part.GetComponentsInChildren<Terrain>(true))
-                        if (!tiles.Contains(tile))
-                            tiles.Add(tile);
-
             if (sun != null)
                 sunBefore = sun.color;
             SetDesert(0f);
@@ -178,7 +167,7 @@ namespace Collection.Story
         // The ground at a place: the higher of the sea's floor and the land, if the land is there.
         public float GroundHeight(Vector3 at)
         {
-            float land = LandHeight(at);
+            float land = Ground.Land(at);
             return landUp ? land : Mathf.Max(FloorTop(), land);
         }
 
@@ -211,7 +200,7 @@ namespace Collection.Story
 
                 // The higher of the sea's floor and the land, where the character is.
                 // (Not one that is lying after a fall: that one is where its body is, on whatever is under it.)
-                float ground = Mathf.Max(FloorTop(), LandHeight(player.position));
+                float ground = Mathf.Max(FloorTop(), Ground.Land(player.position));
                 if (ragdoll == null || !ragdoll.Down)
                     SetHeight(player, ground + standing);
 
@@ -223,24 +212,6 @@ namespace Collection.Story
             control.Release(this);
             SeaGone();
             rising = null;
-        }
-
-        // The land's surface at a place, wherever the land is at the moment. Far below everything where there is none.
-        float LandHeight(Vector3 at)
-        {
-            foreach (Terrain tile in tiles)
-            {
-                if (tile == null || !tile.gameObject.activeInHierarchy)
-                    continue;
-                Vector3 corner = tile.transform.position;
-                Vector3 size = tile.terrainData.size;
-                float x = (at.x - corner.x) / size.x;
-                float z = (at.z - corner.z) / size.z;
-                if (x < 0f || x > 1f || z < 0f || z > 1f)
-                    continue;
-                return corner.y + tile.terrainData.GetInterpolatedHeight(x, z);
-            }
-            return float.MinValue;
         }
 
         static void SetHeight(Transform what, float y)

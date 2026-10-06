@@ -19,7 +19,6 @@ namespace Collection.Story
         float age;
         float floor;
         float speed;
-        static Transform character;
 
         // `count` coins out of `from`, one after the other, `apart` seconds between them.
         public static void Spill(Coin prefab, int count, Vector3 from, float apart)
@@ -45,13 +44,10 @@ namespace Collection.Story
 
         void Update()
         {
-            if (character == null)
-            {
-                PlayerMovement player = FindFirstObjectByType<PlayerMovement>();
-                if (player == null)
-                    return;
-                character = player.transform;
-            }
+            PlayerMovement player = PlayerMovement.Current;
+            if (player == null)
+                return;
+            Transform character = player.transform;
 
             age += Time.deltaTime;
             transform.Rotate(Vector3.up, turnSpeed * Time.deltaTime, Space.World);

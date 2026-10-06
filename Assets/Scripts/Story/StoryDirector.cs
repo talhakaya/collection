@@ -5,41 +5,33 @@ using UnityEngine;
 
 namespace Collection.Story
 {
-    // Sets the story scene up as the save slot being played has it. The scene is loaded afresh on starting or
-    // continuing a slot and on coming back from a game, and this decides, before anything else in it starts, which
-    // part of the story it is at:
+    // Sets a level's scene up as the save slot being played has it. The scene is loaded afresh on starting or
+    // continuing a slot, on coming back from a game, and on coming to the level from the one before; and this
+    // decides, before anything else in it starts, how things stand in it. What every level has in common is
+    // here:
     //
-    //   Nothing has happened: the intro begins. The giant television is kept out of sight until the intro is
-    //   over, for the character to find later.
+    //   The character is put back where it was standing when the story was last left, and the bicycle, if the
+    //   level has one, where it was left.
     //
-    //   The intro has been had: the sea, the character standing in it, the television in the distance.
+    //   The level's artifacts lie where they are, and those already won follow the character instead. Once all
+    //   of them are won, the trigger for what comes of that is switched on (allArtifactsTrigger); at the end of
+    //   that conversation the story goes on to the next level (NextLevel).
     //
-    //   The television has been met: the land is up. The artifacts lie on it, and those already won follow the
-    //   character instead.
+    //   A character that has fallen out of the world is put back on the ground.
     //
-    //   All the artifacts are won: the television has something new to say (its second NPCTrigger).
-    //
-    // What has happened is read from the conversations kept in the slot: the intro's and the television's
-    // NPCTriggers are onlyOnce. The character is put back where it was standing when the story was last left.
+    // What a level has of its own before any of that is its opening: the desert's is the intro in the sea and
+    // the television that brings the land up (DesertOpening). A level without one simply starts.
     [DefaultExecutionOrder(-100)]
     public class StoryDirector : MonoBehaviour
     {
         public Transform player;
-        public IntroSequence intro;
-        [Tooltip("The intro's conversation.")]
-        public NPCTrigger introTrigger;
-        public TelevisionEncounter encounter;
-        [Tooltip("The first meeting with the television.")]
-        public NPCTrigger televisionTrigger;
-        [Tooltip("The whole television, kept out of sight during the intro.")]
-        public GameObject television;
-        [Tooltip("Seconds after the intro's end before the television is there: until the view is back above the character and only the television's reflection can be in it.")]
-        public float televisionAppearsAfter = 1f;
-        [Tooltip("Seconds the television takes to appear.")]
-        public float televisionFadeTime = 3f;
-        [Tooltip("What the television says once every artifact is won. Switched on only then.")]
+        [Tooltip("The desert's own beginning: the intro, the sea, the television. Empty in a level that has none.")]
+        public DesertOpening desert;
+        [Tooltip("What is said once every artifact is won. Switched on only then.")]
         public NPCTrigger allArtifactsTrigger;
         public List<Artifact> artifacts = new List<Artifact>();
+        [Tooltip("Kept in the save where it was left. Empty: the one in the scene, if there is one.")]
+        public Bicycle bicycle;
         [Tooltip("A character lower than this has fallen out of the world, and is put back on the ground (m).")]
         public float fallenBelow = -30f;
 
@@ -73,49 +65,23 @@ namespace Collection.Story
             // Whatever game was being played from the story is over: this is the story.
             StoryGames.Arrive();
             StorySave story = SaveManager.Slot.story;
-            bool introHad = story.conversations.Contains(introTrigger.conversation);
-            bool televisionMet = story.conversations.Contains(televisionTrigger.conversation);
 
-            if (!introHad)
-            {
-                intro.Begin();
-                television.SetActive(false);
-            }
-            else
-            {
-                // In this order, and before the character is moved: each starts from what the one before left.
-                intro.Skip();
-                if (televisionMet)
-                    encounter.Skip();
+            // The level's opening first, and before the character is moved: it starts from where the character
+            // stands in the scene. While it is still to be had, the character stays there.
+            if (desert == null || desert.SetUp(story))
                 PlacePlayer(story);
-            }
+
+            if (bicycle == null)
+                bicycle = FindFirstObjectByType<Bicycle>();
+            PlaceBicycle(story);
 
             SetUpArtifacts(story);
         }
 
-        // For the intro conversation's end.
-        public void IntroEnded()
+        // For the end of the conversation that closes the level (allArtifactsTrigger's): on to the next one.
+        public void NextLevel()
         {
-            StartCoroutine(ShowTelevision());
-        }
-
-        IEnumerator ShowTelevision()
-        {
-            yield return new WaitForSeconds(televisionAppearsAfter);
-
-            // Not all at once: its reflection is in the picture, and would jump into it.
-            MorphSphere[] shapes = television.GetComponentsInChildren<MorphSphere>(true);
-            foreach (MorphSphere shape in shapes)
-                shape.Visible = 0f;
-            television.SetActive(true);
-            for (float t = 0f; t < televisionFadeTime; t += Time.deltaTime)
-            {
-                foreach (MorphSphere shape in shapes)
-                    shape.Visible = Mathf.SmoothStep(0f, 1f, t / televisionFadeTime);
-                yield return null;
-            }
-            foreach (MorphSphere shape in shapes)
-                shape.Visible = 1f;
+            StoryLevels.Advance();
         }
 
         // Once the scene has started and the artifact has had a moment to come over.
@@ -161,8 +127,8 @@ namespace Collection.Story
                 facing = story.placeFacing;
             }
 
-            // With no place saved, on the ground where it stands in the scene: its height there is right for the
-            // sea, not for land that has come up since.
+            // With no place saved, on the ground where it stands in the scene: its height there need not be the
+            // land's (the desert's is right for the sea, not for land that has come up since).
             float standing = control.Standing;
             if (!story.placeSaved)
             {
@@ -172,23 +138,43 @@ namespace Collection.Story
             {
                 // A saved place that is under the ground with nothing to stand on: saved where there was sea, or
                 // lower land, in an earlier version of the level. (Under the ground with something to stand on
-                // is the cave.)
+                // is a cave.)
                 place.y = LandUnder(ref place) + standing;
             }
 
             control.MoveTo(place, Quaternion.Euler(0f, facing, 0f));
         }
 
-        // The height of the ground at a place. Where there is none (off the land's edge, with the sea gone) the
-        // place itself is changed, to where the character stands in the scene.
+        // The bicycle where it was left, standing. One never ridden is where the scene has it.
+        void PlaceBicycle(StorySave story)
+        {
+            if (bicycle == null || !story.bikeSaved)
+                return;
+            Vector3 place = new Vector3(story.bikeX, story.bikeY, story.bikeZ);
+            Physics.SyncTransforms();
+            float under;
+            if (Ground.Under(place + Vector3.up * 1.5f, 40f, ~0, out under, bicycle.transform, player))
+                place.y = under + 0.02f;
+            bicycle.PutAt(place, story.bikeFacing);
+        }
+
+        // The height of the level's ground at a place: the land's, and in the desert the sea's floor while there
+        // is a sea.
+        float Land(Vector3 at)
+        {
+            return desert != null ? desert.encounter.GroundHeight(at) : Ground.Land(at);
+        }
+
+        // The height of the ground at a place. Where there is none (off the land's edge) the place itself is
+        // changed, to where the character stands in the scene.
         float LandUnder(ref Vector3 place)
         {
-            float ground = encounter.GroundHeight(place);
+            float ground = Land(place);
             if (ground < -1000f)
             {
                 place.x = startPlace.x;
                 place.z = startPlace.z;
-                ground = encounter.GroundHeight(place);
+                ground = Land(place);
             }
             return ground;
         }
@@ -199,7 +185,7 @@ namespace Collection.Story
         {
             Physics.SyncTransforms();
             float under;
-            return Ground.Under(place + Vector3.up * 0.3f, 5f, ~0, out under, encounter.floor, player);
+            return Ground.Under(place + Vector3.up * 0.3f, 5f, ~0, out under, desert != null ? desert.encounter.floor : null, player);
         }
 
         // Where the character last stood outside a conversation, kept up every frame so that it is still known
@@ -229,8 +215,8 @@ namespace Collection.Story
             placeKnown = true;
         }
 
-        // Keeps where the character is: on leaving the scene (for a game, or for the menu), on quitting, and
-        // after every conversation.
+        // Keeps where the character is, and the bicycle: on leaving the scene (for a game, or for the menu), on
+        // quitting, and after every conversation.
         public void SavePlace()
         {
             if (!placeKnown)
@@ -246,6 +232,9 @@ namespace Collection.Story
             story.placeY = lastPlace.y;
             story.placeZ = lastPlace.z;
             story.placeFacing = lastFacing;
+            // (The bicycle may be destroyed already, with the scene; what it knew of its place is still there.)
+            if (!ReferenceEquals(bicycle, null))
+                bicycle.Keep(story);
             SaveManager.MarkDirty();
         }
 

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Collection.Story
 {
-    // What there is to stand on under a place: one answer for everything that puts something down on the ground
+    // What there is to stand on under a place (Under): one answer for everything that puts something down on the ground
     // (the character getting up after a fall, getting off the bicycle, the bicycle being stood up, a saved place
     // being checked).
     //
@@ -23,6 +23,24 @@ namespace Collection.Story
                 height = hit.point.y;
             }
             return height > float.MinValue;
+        }
+
+        // The height of the land's surface at a place: of the terrain there, wherever it is at the moment (the
+        // desert's comes up out of the sea). What is over or under the land - a cave's floor, a rock - is not
+        // in it. Far below everything where there is no land.
+        public static float Land(Vector3 at)
+        {
+            foreach (Terrain tile in Terrain.activeTerrains)
+            {
+                Vector3 corner = tile.transform.position;
+                Vector3 size = tile.terrainData.size;
+                float x = (at.x - corner.x) / size.x;
+                float z = (at.z - corner.z) / size.z;
+                if (x < 0f || x > 1f || z < 0f || z > 1f)
+                    continue;
+                return corner.y + tile.terrainData.GetInterpolatedHeight(x, z);
+            }
+            return float.MinValue;
         }
 
         static bool Among(Transform what, Transform[] not)

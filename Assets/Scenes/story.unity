@@ -1704,79 +1704,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 154675172}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1001 &164677910
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2094181209598375552, guid: a8e89c036dc1df141b472e7bdaafd7f6, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 2.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2094181209598375552, guid: a8e89c036dc1df141b472e7bdaafd7f6, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.05021431
-      objectReference: {fileID: 0}
-    - target: {fileID: 2094181209598375552, guid: a8e89c036dc1df141b472e7bdaafd7f6, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 6.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2094181209598375552, guid: a8e89c036dc1df141b472e7bdaafd7f6, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: -0.17364821
-      objectReference: {fileID: 0}
-    - target: {fileID: 2094181209598375552, guid: a8e89c036dc1df141b472e7bdaafd7f6, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2094181209598375552, guid: a8e89c036dc1df141b472e7bdaafd7f6, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.9848078
-      objectReference: {fileID: 0}
-    - target: {fileID: 2094181209598375552, guid: a8e89c036dc1df141b472e7bdaafd7f6, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2094181209598375552, guid: a8e89c036dc1df141b472e7bdaafd7f6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2094181209598375552, guid: a8e89c036dc1df141b472e7bdaafd7f6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2094181209598375552, guid: a8e89c036dc1df141b472e7bdaafd7f6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4220849562451372498, guid: a8e89c036dc1df141b472e7bdaafd7f6, type: 3}
-      propertyPath: m_Name
-      value: Bicycle
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: a8e89c036dc1df141b472e7bdaafd7f6, type: 3}
---- !u!1 &164677911 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4220849562451372498, guid: a8e89c036dc1df141b472e7bdaafd7f6, type: 3}
-  m_PrefabInstance: {fileID: 164677910}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &164677912 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6095623766518495933, guid: a8e89c036dc1df141b472e7bdaafd7f6, type: 3}
-  m_PrefabInstance: {fileID: 164677910}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 164677911}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04cdc18cadbdd62468acd4da72c2cf56, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &179779677
 GameObject:
   m_ObjectHideFlags: 0
@@ -4251,7 +4178,6 @@ MonoBehaviour:
   director: {fileID: 675054524}
   televisionAfter: 30
   televisionHeight: 10
-  bicycle: {fileID: 164677912}
   colour: {r: 1, g: 0.95, b: 0.8, a: 0.95}
   televisionColour: {r: 0.75, g: 0.9, b: 1, a: 0.95}
   bicycleColour: {r: 1, g: 0.45, b: 0.4, a: 0.95}
@@ -5480,6 +5406,7 @@ GameObject:
   m_Component:
   - component: {fileID: 675054525}
   - component: {fileID: 675054524}
+  - component: {fileID: 675054526}
   m_Layer: 0
   m_Name: Story Director
   m_TagString: Untagged
@@ -5500,18 +5427,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1500000002}
-  intro: {fileID: 1213611661}
-  introTrigger: {fileID: 1213611658}
-  encounter: {fileID: 1137044735}
-  televisionTrigger: {fileID: 912867076}
-  television: {fileID: 1137044733}
-  televisionAppearsAfter: 1
-  televisionFadeTime: 3
+  desert: {fileID: 675054526}
   allArtifactsTrigger: {fileID: 1779693307}
   artifacts:
   - {fileID: 1626706175}
   - {fileID: 2026329421}
   - {fileID: 406303409}
+  bicycle: {fileID: 0}
   fallenBelow: -30
 --- !u!4 &675054525
 Transform:
@@ -5528,6 +5450,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &675054526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 675054523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1926b9b5ec434d48b11d989701221234, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  intro: {fileID: 1213611661}
+  introTrigger: {fileID: 1213611658}
+  encounter: {fileID: 1137044735}
+  televisionTrigger: {fileID: 912867076}
+  television: {fileID: 1137044733}
+  televisionAppearsAfter: 1
+  televisionFadeTime: 3
 --- !u!1 &685472163
 GameObject:
   m_ObjectHideFlags: 0
@@ -9624,7 +9565,6 @@ MonoBehaviour:
   - {fileID: 648929597}
   - {fileID: 1795467327}
   - {fileID: 689176670}
-  - {fileID: 164677911}
   terrain: {fileID: 1649457102}
   landDepth: 9
   water: {fileID: 1767114987}
@@ -10088,8 +10028,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 675054524}
-        m_TargetAssemblyTypeName: Collection.Story.StoryDirector, Assembly-CSharp
+      - m_Target: {fileID: 675054526}
+        m_TargetAssemblyTypeName: Collection.Story.DesertOpening, Assembly-CSharp
         m_MethodName: IntroEnded
         m_Mode: 0
         m_Arguments:
@@ -10172,7 +10112,6 @@ MonoBehaviour:
   - {fileID: 648929597}
   - {fileID: 1795467327}
   - {fileID: 689176670}
-  - {fileID: 164677911}
   sea: {fileID: 524097410}
   water: {fileID: 1767114987}
   waterDepth: 0.25
@@ -13275,6 +13214,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 675054524}
+        m_TargetAssemblyTypeName: Collection.Story.StoryDirector, Assembly-CSharp
+        m_MethodName: NextLevel
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!135 &1779693308
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -16225,4 +16176,3 @@ SceneRoots:
   - {fileID: 1795467328}
   - {fileID: 421654522}
   - {fileID: 689176671}
-  - {fileID: 164677910}

@@ -200,8 +200,8 @@ namespace Collection.Story
         {
             if (Ridden)
                 return;
-            PlayerMovement player = FindFirstObjectByType<PlayerMovement>();
-            if (player == null)
+            PlayerMovement player = PlayerMovement.Current;
+            if (player == null || !player.gameObject.activeInHierarchy)
                 return;
             // Not one that something else has: rolling, lying after a fall, in a cutscene.
             PlayerControl control = PlayerControl.Of(player);
@@ -245,6 +245,37 @@ namespace Collection.Story
             float ground;
             Transform who = riderMovement != null ? riderMovement.transform : null;
             return Ground.Under(place + Vector3.up * 0.7f, 40f, ~0, out ground, transform, who) ? ground : otherwise;
+        }
+
+        // ---- Where it was left ---------------------------------------------------------------------------------
+
+        // Where it is, for the save: kept up while it is simulated, so that it is still known when the scene is
+        // being taken down. One never ridden has no place to keep but the scene's.
+        Vector3 lastPlace;
+        float lastFacing;
+        bool placeKnown;
+
+        // Stands it at a place on the ground, facing a way (degrees round), not simulated: as it is in its
+        // scene until it is first ridden. For putting it back where a save has it (StoryDirector).
+        public void PutAt(Vector3 place, float facing)
+        {
+            Quaternion turn = Quaternion.Euler(0f, facing, 0f);
+            for (int i = 0; i < bodies.Length; i++)
+                bodies[i].transform.SetPositionAndRotation(place + turn * restPlaces[i], turn * restTurns[i]);
+            lastPlace = place;
+            lastFacing = facing;
+            placeKnown = true;
+        }
+
+        public void Keep(Collection.Saving.StorySave story)
+        {
+            if (!placeKnown)
+                return;
+            story.bikeSaved = true;
+            story.bikeX = lastPlace.x;
+            story.bikeY = lastPlace.y;
+            story.bikeZ = lastPlace.z;
+            story.bikeFacing = lastFacing;
         }
 
         // Every part where it belongs for a bicycle standing at `place`, turned `facing`, and still.
@@ -457,6 +488,13 @@ namespace Collection.Story
             frontWheelTurn += Vector3.Dot(frontWheel.angularVelocity, fork.transform.right) * Mathf.Rad2Deg * Time.deltaTime;
             frontWheelLook.localRotation = Quaternion.Euler(frontWheelTurn, 0f, 0f);
 
+            if (simulated)
+            {
+                lastPlace = frame.position;
+                lastFacing = frame.transform.eulerAngles.y;
+                placeKnown = true;
+            }
+
             if (!Ridden)
                 return;
 
@@ -474,12 +512,12 @@ namespace Collection.Story
             Vector3 across = body.right;
             if (heldTurns == null)
             {
-                Bend(HumanBodyBones.Spine, across, 22f);
-                Bend(HumanBodyBones.Chest, across, 14f);
-                Bend(HumanBodyBones.LeftUpperArm, across, -52f);
-                Bend(HumanBodyBones.RightUpperArm, across, -52f);
-                Bend(HumanBodyBones.LeftLowerArm, across, -12f);
-                Bend(HumanBodyBones.RightLowerArm, across, -12f);
+                Pose.Bend(riderAnimator, HumanBodyBones.Spine, across, 22f);
+                Pose.Bend(riderAnimator, HumanBodyBones.Chest, across, 14f);
+                Pose.Bend(riderAnimator, HumanBodyBones.LeftUpperArm, across, -52f);
+                Pose.Bend(riderAnimator, HumanBodyBones.RightUpperArm, across, -52f);
+                Pose.Bend(riderAnimator, HumanBodyBones.LeftLowerArm, across, -12f);
+                Pose.Bend(riderAnimator, HumanBodyBones.RightLowerArm, across, -12f);
                 // And each hand brought to its end of the handlebars, as they are with the bicycle going straight.
                 if (grips != null)
                 {
@@ -504,7 +542,7 @@ namespace Collection.Story
                 }
                 // Turning the hips has moved nothing but what hangs from them; they are still on the saddle.
             }
-            Bend(HumanBodyBones.Head, across, -24f);
+            Pose.Bend(riderAnimator, HumanBodyBones.Head, across, -24f);
 
             // The legs going round, half a turn apart: the knee is most bent when the thigh is highest.
             Leg(HumanBodyBones.LeftUpperLeg, HumanBodyBones.LeftLowerLeg, across, pedals);
@@ -541,15 +579,8 @@ namespace Collection.Story
         void Leg(HumanBodyBones upper, HumanBodyBones lower, Vector3 across, float turn)
         {
             float up = Mathf.Cos(turn);
-            Bend(upper, across, -(58f + 24f * up));
-            Bend(lower, across, 78f + 30f * up);
-        }
-
-        void Bend(HumanBodyBones which, Vector3 axis, float degrees)
-        {
-            Transform bone = riderAnimator.GetBoneTransform(which);
-            if (bone != null)
-                bone.rotation = Quaternion.AngleAxis(degrees, axis) * bone.rotation;
+            Pose.Bend(riderAnimator, upper, across, -(58f + 24f * up));
+            Pose.Bend(riderAnimator, lower, across, 78f + 30f * up);
         }
     }
 }

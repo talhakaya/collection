@@ -116,6 +116,14 @@ namespace Collection.Saving
 		public float placeY;
 		public float placeZ;
 		public float placeFacing;
+
+		/// Where the level's bicycle was left, once it has been ridden: where it stands on
+		/// the ground, and which way it faces. Until then it is where its scene has it.
+		public bool bikeSaved;
+		public float bikeX;
+		public float bikeY;
+		public float bikeZ;
+		public float bikeFacing;
 	}
 
 	[Serializable]
