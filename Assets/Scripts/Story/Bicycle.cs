@@ -40,6 +40,9 @@ namespace Collection.Story
         public Transform saddle;
         [Tooltip("Turned with the pedalling.")]
         public Transform crank;
+        [Tooltip("The middle of the handlebars, on the fork: where the rider's hands go, `gripHalfWidth` to either side. Empty: the hands are left where the pose has them.")]
+        public Transform grips;
+        public float gripHalfWidth = 0.22f;
         [Tooltip("Stands in for the rider's body while riding, so that it is the rider that hits things.")]
         public Collider riderBody;
         [Tooltip("The trigger for getting on.")]
@@ -109,6 +112,7 @@ namespace Collection.Story
         Quaternion[] restTurns;
         float frameMass;
         Vector3 wheelInFork;
+        Vector3 gripsInFrame;
         Transform frontWheelLook;
         float frontWheelTurn;
         bool simulated;
@@ -171,6 +175,8 @@ namespace Collection.Story
                         Physics.IgnoreCollision(a, b);
 
             wheelInFork = fork.transform.InverseTransformPoint(frontWheel.transform.position);
+            if (grips != null)
+                gripsInFrame = frame.transform.InverseTransformPoint(grips.position);
 
             // What is seen of the front wheel is carried by the fork, exactly where it belongs in it, and only
             // turned as the wheel's rigid body turns: under a hard bend the body itself gives a little in its
@@ -476,6 +482,13 @@ namespace Collection.Story
                 Bend(HumanBodyBones.RightUpperArm, across, -52f);
                 Bend(HumanBodyBones.LeftLowerArm, across, -12f);
                 Bend(HumanBodyBones.RightLowerArm, across, -12f);
+                // And each hand brought to its end of the handlebars, as they are with the bicycle going straight.
+                if (grips != null)
+                {
+                    Vector3 middle = body.TransformPoint(gripsInFrame);
+                    Reach(HumanBodyBones.LeftUpperArm, HumanBodyBones.LeftLowerArm, HumanBodyBones.LeftHand, middle - across * gripHalfWidth, across);
+                    Reach(HumanBodyBones.RightUpperArm, HumanBodyBones.RightLowerArm, HumanBodyBones.RightHand, middle + across * gripHalfWidth, across);
+                }
                 heldTurns = new Quaternion[Held.Length];
                 for (int i = 0; i < Held.Length; i++)
                 {
@@ -498,6 +511,33 @@ namespace Collection.Story
             // The legs going round, half a turn apart: the knee is most bent when the thigh is highest.
             Leg(HumanBodyBones.LeftUpperLeg, HumanBodyBones.LeftLowerLeg, across, pedals);
             Leg(HumanBodyBones.RightUpperLeg, HumanBodyBones.RightLowerLeg, across, pedals + Mathf.PI);
+        }
+
+        // Turns an arm at the shoulder and the elbow so that the hand is at `target` (or as near as the arm is
+        // long): first the elbow, to make the hand as far from the shoulder as the target is, then the whole arm
+        // round the shoulder to point at it.
+        void Reach(HumanBodyBones upperArm, HumanBodyBones lowerArm, HumanBodyBones hand, Vector3 target, Vector3 across)
+        {
+            Transform shoulder = riderAnimator.GetBoneTransform(upperArm);
+            Transform elbow = riderAnimator.GetBoneTransform(lowerArm);
+            Transform wrist = riderAnimator.GetBoneTransform(hand);
+            if (shoulder == null || elbow == null || wrist == null)
+                return;
+
+            float upper = Vector3.Distance(shoulder.position, elbow.position);
+            float lower = Vector3.Distance(elbow.position, wrist.position);
+            float far = Mathf.Clamp(Vector3.Distance(shoulder.position, target), Mathf.Abs(upper - lower) + 0.01f, upper + lower - 0.01f);
+
+            Vector3 toShoulder = shoulder.position - elbow.position;
+            Vector3 toWrist = wrist.position - elbow.position;
+            Vector3 hinge = Vector3.Cross(toShoulder, toWrist);
+            if (hinge.sqrMagnitude < 0.000001f)
+                hinge = across;
+            float bendNow = Vector3.Angle(toShoulder, toWrist);
+            float bendWanted = Mathf.Acos(Mathf.Clamp((upper * upper + lower * lower - far * far) / (2f * upper * lower), -1f, 1f)) * Mathf.Rad2Deg;
+            elbow.rotation = Quaternion.AngleAxis(bendWanted - bendNow, hinge.normalized) * elbow.rotation;
+
+            shoulder.rotation = Quaternion.FromToRotation(wrist.position - shoulder.position, target - shoulder.position) * shoulder.rotation;
         }
 
         void Leg(HumanBodyBones upper, HumanBodyBones lower, Vector3 across, float turn)

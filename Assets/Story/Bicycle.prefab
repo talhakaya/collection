@@ -798,6 +798,8 @@ MonoBehaviour:
   drive: {fileID: 2954751356809114576}
   saddle: {fileID: 2962257058542514448}
   crank: {fileID: 8535666187214381443}
+  grips: {fileID: 2582900293950791537}
+  gripHalfWidth: 0.22
   riderBody: {fileID: 1192263631277981009}
   mount: {fileID: 1220062879294986001}
   wheelRadius: 0.34
@@ -1110,6 +1112,37 @@ HingeJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!1 &6215449042192805397
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2582900293950791537}
+  m_Layer: 11
+  m_Name: Grips
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2582900293950791537
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6215449042192805397}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.14, z: -0.02}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9036277809366430224}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6568057546811408946
 GameObject:
   m_ObjectHideFlags: 0
@@ -1541,6 +1574,7 @@ Transform:
   m_Children:
   - {fileID: 2082866800309119987}
   - {fileID: 9053198706711335079}
+  - {fileID: 2582900293950791537}
   m_Father: {fileID: 2094181209598375552}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &3875549224434019449

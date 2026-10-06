@@ -16,8 +16,10 @@ namespace Collection.Story
     {
         [Tooltip("How far in from the outer edge of the land the walls stand (m). The land's last stretch goes down under the sea; the walls are best in that stretch.")]
         public float inset = 14f;
-        [Tooltip("How far in from the walls the cameras are kept (m).")]
-        public float cameraInset = 2f;
+        [Tooltip("How near the walls the middle of the picture may come (m): to the sides, toward the camera, and away from it. Less than the picture reaches that way from its middle, so the character can still be seen at the wall.")]
+        public float viewSide = 7f;
+        public float viewNear = 3f;
+        public float viewFar = 5f;
         [Tooltip("The walls' top and bottom (m).")]
         public float top = 80f;
         public float bottom = -40f;
@@ -65,15 +67,10 @@ namespace Collection.Story
             Wall("Wall South", new Vector3(middleX, middleY, minZ - thickness * 0.5f), new Vector3(width + thickness * 2f, height, thickness));
             Wall("Wall North", new Vector3(middleX, middleY, maxZ + thickness * 0.5f), new Vector3(width + thickness * 2f, height, thickness));
 
-            // The cameras' box. A trigger, on the layer rays pass by, so it is in nothing's way.
-            var volume = new GameObject("Camera Volume");
-            volume.layer = 2;
-            volume.transform.SetParent(transform, false);
-            volume.transform.position = new Vector3(middleX, middleY, middleZ);
-            var box = volume.AddComponent<BoxCollider>();
-            box.isTrigger = true;
-            box.size = new Vector3(Mathf.Max(1f, width - cameraInset * 2f), height, Mathf.Max(1f, depth - cameraInset * 2f));
-
+            // The cameras' boxes, one for each: a camera stands behind and above what it follows, so its box is the
+            // walls' rectangle moved by that much, and drawn in by how far the picture reaches each way from the
+            // character - so that the character can walk on to the wall, toward the picture's edge, while the
+            // picture itself stops short of showing what is beyond.
             CinemachineCamera[] kept = cameras;
             if (kept == null || kept.Length == 0)
                 kept = FindObjectsByType<CinemachineCamera>(FindObjectsInactive.Include, FindObjectsSortMode.None);
@@ -83,6 +80,22 @@ namespace Collection.Story
                 // meant to be.
                 if (camera == null || camera.Follow == null)
                     continue;
+
+                Vector3 offset = camera.TryGetComponent(out CinemachineFollow follow) ? follow.FollowOffset : Vector3.zero;
+                // Scaled to the camera's distance: the insets are given for the outdoor camera's.
+                float reach = offset.magnitude > 0.01f ? offset.magnitude / 19.8f : 1f;
+                float west = minX + viewSide * reach + offset.x, east = maxX - viewSide * reach + offset.x;
+                float south = minZ + viewNear * reach + offset.z, north = maxZ - viewFar * reach + offset.z;
+
+                var volume = new GameObject("Camera Volume (" + camera.name + ")");
+                // A trigger, on the layer rays pass by, so it is in nothing's way.
+                volume.layer = 2;
+                volume.transform.SetParent(transform, false);
+                volume.transform.position = new Vector3((west + east) * 0.5f, middleY, (south + north) * 0.5f);
+                var box = volume.AddComponent<BoxCollider>();
+                box.isTrigger = true;
+                box.size = new Vector3(Mathf.Max(1f, east - west), height, Mathf.Max(1f, north - south));
+
                 if (!camera.TryGetComponent(out CinemachineConfiner3D confiner))
                     confiner = camera.gameObject.AddComponent<CinemachineConfiner3D>();
                 confiner.BoundingVolume = box;

@@ -60,8 +60,11 @@ namespace Collection.Story
                 new GameObject("Level Bounds").AddComponent<LevelBounds>();
         }
 
+        Vector3 startPlace;
+
         void Start()
         {
+            startPlace = player.position;
             StorySave story = SaveManager.Slot.story;
             bool introHad = story.conversations.Contains(introTrigger.conversation);
             bool televisionMet = story.conversations.Contains(televisionTrigger.conversation);
@@ -157,19 +160,33 @@ namespace Collection.Story
             float standing = controller.height * 0.5f - controller.center.y + controller.skinWidth;
             if (!story.placeSaved)
             {
-                place.y = encounter.GroundHeight(place) + standing;
+                place.y = Ground(ref place) + standing;
             }
-            else if (place.y < encounter.GroundHeight(place) + standing - 0.5f && !SomethingUnder(place))
+            else if (place.y < Ground(ref place) + standing - 0.5f && !SomethingUnder(place))
             {
                 // A saved place that is under the ground with nothing to stand on: saved where there was sea, or
                 // lower land, in an earlier version of the level. (Under the ground with something to stand on
                 // is the cave.)
-                place.y = encounter.GroundHeight(place) + standing;
+                place.y = Ground(ref place) + standing;
             }
 
             controller.enabled = false;
             player.SetPositionAndRotation(place, Quaternion.Euler(0f, facing, 0f));
             controller.enabled = true;
+        }
+
+        // The height of the ground at a place. Where there is none (off the land's edge, with the sea gone) the
+        // place itself is changed, to where the character stands in the scene.
+        float Ground(ref Vector3 place)
+        {
+            float ground = encounter.GroundHeight(place);
+            if (ground < -1000f)
+            {
+                place.x = startPlace.x;
+                place.z = startPlace.z;
+                ground = encounter.GroundHeight(place);
+            }
+            return ground;
         }
 
         // Whether there is anything to stand on within a few metres under a place. The sea's floor does not count:
@@ -197,7 +214,7 @@ namespace Collection.Story
             {
                 var controller = player.GetComponent<CharacterController>();
                 Vector3 back = player.position;
-                back.y = encounter.GroundHeight(back) + controller.height * 0.5f - controller.center.y + controller.skinWidth + 0.5f;
+                back.y = Ground(ref back) + controller.height * 0.5f - controller.center.y + controller.skinWidth + 0.5f;
                 bool was = controller.enabled;
                 controller.enabled = false;
                 player.position = back;
