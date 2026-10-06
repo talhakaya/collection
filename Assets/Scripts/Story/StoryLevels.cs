@@ -48,6 +48,7 @@ namespace Collection.Story
                 return;
             story.level = Current + 1;
             story.placeSaved = false;
+            story.bikeSaved = false;
             SaveManager.Save();
             Load();
         }

@@ -163,17 +163,17 @@ namespace Collection.Story
 
             // The tuck, each part turned about the model's left-to-right line. Parents before children.
             Vector3 across = model.right;
-            Bend(spine, across, 30f * tuck);
-            Bend(chest, across, 30f * tuck);
-            Bend(upperChest, across, 20f * tuck);
-            Bend(leftUpperLeg, across, -115f * tuck);
-            Bend(rightUpperLeg, across, -115f * tuck);
-            Bend(leftLowerLeg, across, 125f * tuck);
-            Bend(rightLowerLeg, across, 125f * tuck);
-            Bend(leftUpperArm, across, -55f * tuck);
-            Bend(rightUpperArm, across, -55f * tuck);
-            Bend(leftLowerArm, across, -95f * tuck);
-            Bend(rightLowerArm, across, -95f * tuck);
+            Pose.Bend(spine, across, 30f * tuck);
+            Pose.Bend(chest, across, 30f * tuck);
+            Pose.Bend(upperChest, across, 20f * tuck);
+            Pose.Bend(leftUpperLeg, across, -115f * tuck);
+            Pose.Bend(rightUpperLeg, across, -115f * tuck);
+            Pose.Bend(leftLowerLeg, across, 125f * tuck);
+            Pose.Bend(rightLowerLeg, across, 125f * tuck);
+            Pose.Bend(leftUpperArm, across, -55f * tuck);
+            Pose.Bend(rightUpperArm, across, -55f * tuck);
+            Pose.Bend(leftLowerArm, across, -95f * tuck);
+            Pose.Bend(rightLowerArm, across, -95f * tuck);
 
             // The roll that goes wrong: from this pose, at this speed, as a ragdoll.
             if (fallAt >= 0f && time >= fallAt && ragdoll != null)
@@ -186,12 +186,6 @@ namespace Collection.Story
                 // The fall has the character now.
                 control.Release(this);
             }
-        }
-
-        static void Bend(Transform bone, Vector3 axis, float degrees)
-        {
-            if (bone != null)
-                bone.rotation = Quaternion.AngleAxis(degrees, axis) * bone.rotation;
         }
     }
 }

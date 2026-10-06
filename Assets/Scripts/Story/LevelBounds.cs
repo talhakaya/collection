@@ -20,6 +20,8 @@ namespace Collection.Story
         public float viewSide = 7f;
         public float viewNear = 3f;
         public float viewFar = 5f;
+        [Tooltip("The distance of the camera from the character that those three are given for (m): the outdoor camera's. A camera nearer or further has them scaled to its own.")]
+        public float viewsAtDistance = 19.8f;
         [Tooltip("The walls' top and bottom (m).")]
         public float top = 80f;
         public float bottom = -40f;
@@ -82,8 +84,8 @@ namespace Collection.Story
                     continue;
 
                 Vector3 offset = camera.TryGetComponent(out CinemachineFollow follow) ? follow.FollowOffset : Vector3.zero;
-                // Scaled to the camera's distance: the insets are given for the outdoor camera's.
-                float reach = offset.magnitude > 0.01f ? offset.magnitude / 19.8f : 1f;
+                // Scaled to the camera's distance.
+                float reach = offset.magnitude > 0.01f && viewsAtDistance > 0f ? offset.magnitude / viewsAtDistance : 1f;
                 float west = minX + viewSide * reach + offset.x, east = maxX - viewSide * reach + offset.x;
                 float south = minZ + viewNear * reach + offset.z, north = maxZ - viewFar * reach + offset.z;
 

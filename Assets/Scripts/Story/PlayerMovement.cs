@@ -32,6 +32,12 @@ namespace Collection.Story
         static readonly int SpeedParam = Animator.StringToHash("Speed");
         static readonly int TurnParam = Animator.StringToHash("Turn");
 
+        // The character, for everything in a level that has to find it (a coin flying to it, a cave noticing
+        // it, a bicycle being got on).
+        static PlayerMovement current;
+        public static PlayerMovement Current => current != null ? current
+            : current = FindFirstObjectByType<PlayerMovement>(FindObjectsInactive.Include);
+
         CharacterController controller;
         Vector3 horizontalVelocity;
         float verticalVelocity;

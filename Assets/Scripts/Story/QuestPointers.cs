@@ -12,7 +12,10 @@ namespace Collection.Story
     //   the giant television, when it has been waiting to be found in the sea for `televisionAfter` seconds,
     //   and again once every artifact is won and it has something new to say;
     //
-    //   the bicycle, while nobody is riding it.
+    //   the level's bicycle, if it has one, while nobody is riding it.
+    //
+    // What there is to point to is asked of the level's StoryDirector each frame, so a level needs nothing set up
+    // here for it: its artifacts, its bicycle and (in the desert) its television are the director's.
     //
     // "Out of the picture" is about where it is, not about what is in front of it: something behind a hill but
     // within the screen's edges counts as seen.
@@ -25,9 +28,6 @@ namespace Collection.Story
         public float televisionAfter = 30f;
         [Tooltip("The height on the television that is pointed to, and that counts as seeing it (m above its base).")]
         public float televisionHeight = 10f;
-
-        [Tooltip("Pointed to while it is not being ridden. Empty: none.")]
-        public Bicycle bicycle;
 
         [Header("Look")]
         [Tooltip("The arrows to the artifacts, to the television, and to the bicycle.")]
@@ -82,17 +82,22 @@ namespace Collection.Story
                     slot++;
                 }
 
-                // The television: there, and not met yet.
-                NPCTrigger meeting = director.televisionTrigger;
-                bool waiting = meeting != null && meeting.isActiveAndEnabled && director.television.activeInHierarchy;
+                // The television, in the level that has it (the desert): there, and not met yet.
+                DesertOpening desert = director.desert;
+                GameObject television = desert != null ? desert.television : null;
+                NPCTrigger meeting = desert != null ? desert.televisionTrigger : null;
+                bool there = television != null && television.activeInHierarchy;
+                bool waiting = there && meeting != null && meeting.isActiveAndEnabled;
                 televisionWaited = waiting ? televisionWaited + Time.deltaTime : 0f;
                 // And when it has something new to say: that trigger is only switched on then, and off once said.
                 NPCTrigger again = director.allArtifactsTrigger;
-                bool calling = again != null && again.isActiveAndEnabled && director.television.activeInHierarchy;
+                bool calling = there && again != null && again.isActiveAndEnabled;
                 if ((waiting && televisionWaited >= televisionAfter) || calling)
-                    Point(slot, view, director.television.transform.position + Vector3.up * televisionHeight, televisionColour);
+                    Point(slot, view, television.transform.position + Vector3.up * televisionHeight, televisionColour);
                 slot++;
 
+                // The level's bicycle (the director knows it), while nobody is riding it.
+                Bicycle bicycle = director.bicycle;
                 if (bicycle != null && bicycle.isActiveAndEnabled && !bicycle.Ridden)
                     Point(slot, view, bicycle.frame.position + Vector3.up * 0.6f, bicycleColour);
             }
