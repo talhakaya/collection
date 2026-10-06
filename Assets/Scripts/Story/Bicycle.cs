@@ -122,6 +122,18 @@ namespace Collection.Story
         Vector3 riderModelPlace;
         Quaternion riderModelFacing;
         float straightFor;
+
+        // The parts of the rider held still against the frame, parents before children, and how each is turned
+        // as seen from the frame. Null until the pose has been made.
+        static readonly HumanBodyBones[] Held =
+        {
+            HumanBodyBones.Hips, HumanBodyBones.Spine, HumanBodyBones.Chest, HumanBodyBones.UpperChest,
+            HumanBodyBones.LeftShoulder, HumanBodyBones.RightShoulder,
+            HumanBodyBones.LeftUpperArm, HumanBodyBones.RightUpperArm,
+            HumanBodyBones.LeftLowerArm, HumanBodyBones.RightLowerArm,
+            HumanBodyBones.LeftHand, HumanBodyBones.RightHand,
+        };
+        Quaternion[] heldTurns;
         float leanNow;
         float steerNow;
         float pedals;
@@ -210,6 +222,7 @@ namespace Collection.Story
                 riderBody.enabled = true;
             frame.mass = frameMass + riderMass;
             straightFor = 0f;
+            heldTurns = null;
             mountedAt = Time.time;
         }
 
@@ -450,15 +463,37 @@ namespace Collection.Story
             rider.rotation = body.rotation;
             rider.position += saddle.position - hips.position;
 
-            // Bent forward to the handlebars, arms out to them.
+            // Bent forward to the handlebars, arms out to them. The pose is made once, on getting on, from
+            // whatever the Animator had the body doing at that moment, and then held as it is against the frame:
+            // the Animator goes on playing its idle, and hands that swayed with it would not be holding
+            // anything.
             Vector3 across = body.right;
-            Bend(HumanBodyBones.Spine, across, 22f);
-            Bend(HumanBodyBones.Chest, across, 14f);
+            if (heldTurns == null)
+            {
+                Bend(HumanBodyBones.Spine, across, 22f);
+                Bend(HumanBodyBones.Chest, across, 14f);
+                Bend(HumanBodyBones.LeftUpperArm, across, -52f);
+                Bend(HumanBodyBones.RightUpperArm, across, -52f);
+                Bend(HumanBodyBones.LeftLowerArm, across, -12f);
+                Bend(HumanBodyBones.RightLowerArm, across, -12f);
+                heldTurns = new Quaternion[Held.Length];
+                for (int i = 0; i < Held.Length; i++)
+                {
+                    Transform bone = riderAnimator.GetBoneTransform(Held[i]);
+                    heldTurns[i] = bone != null ? Quaternion.Inverse(body.rotation) * bone.rotation : Quaternion.identity;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < Held.Length; i++)
+                {
+                    Transform bone = riderAnimator.GetBoneTransform(Held[i]);
+                    if (bone != null)
+                        bone.rotation = body.rotation * heldTurns[i];
+                }
+                // Turning the hips has moved nothing but what hangs from them; they are still on the saddle.
+            }
             Bend(HumanBodyBones.Head, across, -24f);
-            Bend(HumanBodyBones.LeftUpperArm, across, -52f);
-            Bend(HumanBodyBones.RightUpperArm, across, -52f);
-            Bend(HumanBodyBones.LeftLowerArm, across, -12f);
-            Bend(HumanBodyBones.RightLowerArm, across, -12f);
 
             // The legs going round, half a turn apart: the knee is most bent when the thigh is highest.
             Leg(HumanBodyBones.LeftUpperLeg, HumanBodyBones.LeftLowerLeg, across, pedals);
