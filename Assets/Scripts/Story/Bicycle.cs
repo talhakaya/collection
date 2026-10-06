@@ -207,6 +207,11 @@ namespace Collection.Story
             PlayerControl control = PlayerControl.Of(player);
             if (!control.Free)
                 return;
+            // Nor one still getting up from a fall: its body is on its way from lying to standing, and the pose
+            // it is given on the bicycle is made from the body as it is at that moment.
+            Ragdoll fallen = player.GetComponent<Ragdoll>();
+            if (fallen != null && fallen.GettingUp)
+                return;
 
             rider = player.transform;
             riderMovement = player;

@@ -141,6 +141,16 @@ namespace Collection.Story
         public override YarnTask OnDialogueCompleteAsync()
         {
             if (shouldLog) Debug.Log($"{name} DialogueComplete", this);
+            // Cut off by the scene going (the story left in the middle of a conversation, the application
+            // closing): the dialogue runner stops the conversation as it is destroyed, and that is not the
+            // conversation having been had. Nothing of its end happens - it is not kept in the save as had, no
+            // cutscene's end is run on things already destroyed, no artifact asks whether to play its game.
+            if (!gameObject.scene.isLoaded)
+            {
+                isActive = false;
+                currentNpcTrigger = null;
+                return YarnTask.CompletedTask;
+            }
             lineMenu.SetActive(false);
             optionsMenu.SetActive(false);
             if (centreMenu != null)
