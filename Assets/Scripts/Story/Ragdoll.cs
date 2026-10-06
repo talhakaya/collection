@@ -47,7 +47,7 @@ namespace Collection.Story
         readonly List<Part> parts = new List<Part>();
         CharacterController controller;
         PlayerMovement movement;
-        PlayerRoll roll;
+        PlayerControl control;
         Transform model;
         Transform hips;
         Vector3 modelPlace;
@@ -63,7 +63,7 @@ namespace Collection.Story
         {
             controller = GetComponent<CharacterController>();
             movement = GetComponent<PlayerMovement>();
-            roll = GetComponent<PlayerRoll>();
+            control = PlayerControl.Of(this);
             model = animator.transform;
             hips = animator.GetBoneTransform(HumanBodyBones.Hips);
             head = GetComponentInChildren<TelevisionHead>();
@@ -91,10 +91,7 @@ namespace Collection.Story
                 face.Show(emote, true);
 
             animator.enabled = false;
-            movement.enabled = false;
-            if (roll != null)
-                roll.enabled = false;
-            controller.enabled = false;
+            control.Take(this);
 
             Vector3 middle = hips.position;
             foreach (Part part in parts)
@@ -141,19 +138,23 @@ namespace Collection.Story
             foreach (RaycastHit hit in Physics.RaycastAll(place + Vector3.up * 0.5f, Vector3.down, 20f, ground, QueryTriggerInteraction.Ignore))
                 if (!hit.collider.transform.IsChildOf(transform) && hit.point.y > nearest)
                     nearest = hit.point.y;
+            // Nothing under them: the body has ended up under the ground (the land came up through it). Then
+            // the highest thing over it.
+            if (nearest == float.MinValue)
+                foreach (RaycastHit hit in Physics.RaycastAll(place + Vector3.up * 200f, Vector3.down, 200f, ground, QueryTriggerInteraction.Ignore))
+                    if (!hit.collider.transform.IsChildOf(transform) && hit.point.y > nearest)
+                        nearest = hit.point.y;
             if (nearest > float.MinValue)
                 feet = nearest;
-            place.y = feet + controller.height * 0.5f - controller.center.y + controller.skinWidth;
-            transform.position = place;
+            place.y = feet + control.Standing;
+            control.MoveTo(place);
             model.localPosition = modelPlace;
             model.localRotation = modelFacing;
 
             animator.enabled = true;
-            controller.enabled = true;
             movement.Velocity = Vector3.zero;
-            movement.enabled = true;
-            if (roll != null)
-                roll.enabled = true;
+            // Back to the player, unless something else has the character meanwhile (a cutscene).
+            control.Release(this);
             rising = getUpTime;
             if (face != null)
                 face.ShowIdle();

@@ -38,7 +38,6 @@ namespace Collection.Story
         CharacterAppearance appearance;
         Transform player;
         PlayerMovement movement;
-        CharacterController controller;
         Vector3 returnPosition;
         Action onConfirm;
         bool open;
@@ -69,12 +68,10 @@ namespace Collection.Story
         {
             movement = appearance.GetComponentInParent<PlayerMovement>(true);
             player = movement.transform;
-            controller = player.GetComponent<CharacterController>();
             while (!player.gameObject.activeInHierarchy)
                 yield return null;
 
-            movement.enabled = false;
-            controller.enabled = false;
+            PlayerControl.Of(movement).Take(this);
             returnPosition = player.position;
             MovePlayer(new Vector3(returnPosition.x, studioHeight, returnPosition.z));
 
@@ -144,8 +141,7 @@ namespace Collection.Story
             panel.SetActive(false);
             EventSystem.current.SetSelectedGameObject(null);
             MovePlayer(returnPosition);
-            controller.enabled = true;
-            movement.enabled = true;
+            PlayerControl.Of(movement).Release(this);
             Main.inst.camera.ExitStudio(studioCamera);
             onConfirm?.Invoke();
         }

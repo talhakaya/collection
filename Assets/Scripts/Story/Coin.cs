@@ -24,6 +24,7 @@ namespace Collection.Story
         // `count` coins out of `from`, one after the other, `apart` seconds between them.
         public static void Spill(Coin prefab, int count, Vector3 from, float apart)
         {
+            CoinCounter.Sent(count);
             for (int i = 0; i < count; i++)
             {
                 Coin coin = Instantiate(prefab, from, Random.rotation);
@@ -73,7 +74,7 @@ namespace Collection.Story
             float step = speed * Time.deltaTime;
             if (to.magnitude <= step + 0.3f)
             {
-                CoinCounter.Add(1);
+                CoinCounter.Arrived();
                 Destroy(gameObject);
                 return;
             }

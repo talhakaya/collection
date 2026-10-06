@@ -61,10 +61,17 @@ namespace Collection.Story
         }
 
         Vector3 startPlace;
+        PlayerControl control;
+        // The level this scene was started as. The slot may be on to the next before the scene is gone.
+        int level;
 
         void Start()
         {
             startPlace = player.position;
+            control = PlayerControl.Of(player);
+            level = StoryLevels.Current;
+            // Whatever game was being played from the story is over: this is the story.
+            StoryGames.Arrive();
             StorySave story = SaveManager.Slot.story;
             bool introHad = story.conversations.Contains(introTrigger.conversation);
             bool televisionMet = story.conversations.Contains(televisionTrigger.conversation);
@@ -156,8 +163,7 @@ namespace Collection.Story
 
             // With no place saved, on the ground where it stands in the scene: its height there is right for the
             // sea, not for land that has come up since.
-            var controller = player.GetComponent<CharacterController>();
-            float standing = controller.height * 0.5f - controller.center.y + controller.skinWidth;
+            float standing = control.Standing;
             if (!story.placeSaved)
             {
                 place.y = Ground(ref place) + standing;
@@ -170,9 +176,7 @@ namespace Collection.Story
                 place.y = Ground(ref place) + standing;
             }
 
-            controller.enabled = false;
-            player.SetPositionAndRotation(place, Quaternion.Euler(0f, facing, 0f));
-            controller.enabled = true;
+            control.MoveTo(place, Quaternion.Euler(0f, facing, 0f));
         }
 
         // The height of the ground at a place. Where there is none (off the land's edge, with the sea gone) the
@@ -212,13 +216,9 @@ namespace Collection.Story
             // Fallen out of the world, by whatever means: back on the ground above.
             if (player.position.y < fallenBelow)
             {
-                var controller = player.GetComponent<CharacterController>();
                 Vector3 back = player.position;
-                back.y = Ground(ref back) + controller.height * 0.5f - controller.center.y + controller.skinWidth + 0.5f;
-                bool was = controller.enabled;
-                controller.enabled = false;
-                player.position = back;
-                controller.enabled = was;
+                back.y = Ground(ref back) + control.Standing + 0.5f;
+                control.MoveTo(back);
                 var movement = player.GetComponent<PlayerMovement>();
                 if (movement != null)
                     movement.Velocity = Vector3.zero;
@@ -236,6 +236,10 @@ namespace Collection.Story
         public void SavePlace()
         {
             if (!placeKnown)
+                return;
+            // Not once the slot has gone on to the next level (StoryLevels.Advance): this scene is still there
+            // for a moment, and its place is not one in that level.
+            if (StoryLevels.Current != level)
                 return;
 
             StorySave story = SaveManager.Slot.story;

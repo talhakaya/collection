@@ -39,6 +39,7 @@ namespace Collection.Story
 
         CharacterController controller;
         PlayerMovement movement;
+        PlayerControl control;
         Transform model;
         Vector3 modelPlace;
         Quaternion modelFacing;
@@ -56,6 +57,7 @@ namespace Collection.Story
         {
             controller = GetComponent<CharacterController>();
             movement = GetComponent<PlayerMovement>();
+            control = PlayerControl.Of(this);
             model = animator.transform;
 
             hips = animator.GetBoneTransform(HumanBodyBones.Hips);
@@ -76,7 +78,7 @@ namespace Collection.Story
         {
             if (!Rolling)
             {
-                if (movement.enabled && controller.enabled && controller.isGrounded && Time.time >= nextAt
+                if (control.Free && controller.isGrounded && Time.time >= nextAt
                     && Main.inst.input.rollPressed)
                     Begin();
                 return;
@@ -112,7 +114,8 @@ namespace Collection.Story
             time = 0f;
             verticalVelocity = -2f;
             fallAt = Random.value < fallChance ? Random.Range(fallWindow.x, fallWindow.y) * duration : -1f;
-            movement.enabled = false;
+            // The movement, not the body: the roll moves that itself.
+            control.Take(this, false);
             Rolling = true;
         }
 
@@ -123,7 +126,14 @@ namespace Collection.Story
             model.localPosition = modelPlace;
             model.localRotation = modelFacing;
             movement.Velocity = velocity;
-            movement.enabled = true;
+            control.Release(this);
+        }
+
+        // No roll for this long from now: for whatever hands the character back on the press of the roll button
+        // (getting off the bicycle), which is not also a roll.
+        public void Wait(float seconds)
+        {
+            nextAt = Mathf.Max(nextAt, Time.time + seconds);
         }
 
         // Rolling into a barrel breaks it.
@@ -178,6 +188,8 @@ namespace Collection.Story
                 nextAt = Time.time + pause;
                 movement.Velocity = Vector3.zero;
                 ragdoll.Fall(direction * (speed * fallCarry), across * (360f / duration * Mathf.Deg2Rad * fallCarry), modelPlace, modelFacing);
+                // The fall has the character now.
+                control.Release(this);
             }
         }
 

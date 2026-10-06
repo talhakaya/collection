@@ -160,10 +160,9 @@ namespace Collection.Story
         IEnumerator Rise(float seconds)
         {
             // The character is carried, not walking, while the ground moves.
-            var controller = player.GetComponent<CharacterController>();
-            var movement = player.GetComponent<PlayerMovement>();
-            movement.enabled = false;
-            controller.enabled = false;
+            PlayerControl control = PlayerControl.Of(player);
+            control.Take(this);
+            var ragdoll = player.GetComponent<Ragdoll>();
 
             float waterStart = water.position.y;
             float floorStart = floor.position.y;
@@ -197,16 +196,17 @@ namespace Collection.Story
                 SetHeight(television, televisionStart - televisionDrop * eased);
 
                 // The higher of the sea's floor and the land, where the character is.
+                // (Not one that is lying after a fall: that one is where its body is, on whatever is under it.)
                 float ground = Mathf.Max(floorTop - drop, LandHeight(player.position));
-                SetHeight(player, ground + standing);
+                if (ragdoll == null || !ragdoll.Down)
+                    SetHeight(player, ground + standing);
 
                 if (done >= 1f)
                     break;
                 yield return null;
             }
 
-            controller.enabled = true;
-            movement.enabled = true;
+            control.Release(this);
             SeaGone();
             rising = null;
         }

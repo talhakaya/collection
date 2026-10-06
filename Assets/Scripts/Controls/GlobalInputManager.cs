@@ -129,7 +129,7 @@ namespace Collection.Controls
 				// cheat for testing: the artifact, as if the game had been played to where it
 				// gives it.
 				// Only in a Debug build (BuildSettings).
-				if (BuildSettings.Cheats && Collection.Story.StoryGames.Playing && !Collection.Story.StoryGames.Gathered)
+				if (Collection.Story.StoryGames.CanCheat)
 				{
 					if (Collection.UI.PauseMenu.Paused)
 					{

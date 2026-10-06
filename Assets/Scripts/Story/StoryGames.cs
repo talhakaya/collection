@@ -33,10 +33,19 @@ namespace Collection.Story
         // Finish has been called, and the artifact is on its way (finishing) or won (gathered).
         static bool finishing;
         static bool gathered;
+        // On the way back to the story: the game is still there for a frame or two under the loading screen, and
+        // is not to take that for being played by itself (and run its own ending, or go to the main menu).
+        static bool leaving;
         static float timeScaleBefore = 1f;
         static Runner runner;
 
         public static bool Playing => reward != null && SaveManager.IsStoryMode;
+
+        static bool Leaving => leaving && LoadingScreen.Loading;
+
+        // The cheat for the artifact can be used: a game is being played for one it has not given yet, in a
+        // Debug build (BuildSettings).
+        public static bool CanCheat => BuildSettings.Cheats && Playing && !Gathered;
 
         // The game being played has given its artifact, and is being played on.
         public static bool Gathered => gathered;
@@ -53,8 +62,30 @@ namespace Collection.Story
             game = null;
             finishing = false;
             gathered = false;
+            leaving = false;
             runner = null;
             JustWon = null;
+        }
+
+        // For the story scene, as it starts: no game is being played from it, however the last one was left.
+        public static void Arrive()
+        {
+            reward = null;
+            rewardTitle = null;
+            game = null;
+            finishing = false;
+            gathered = false;
+            leaving = false;
+        }
+
+        // The artifact kept in the slot, and remembered as the one just won for the story scene to come.
+        static void Win(string artifact)
+        {
+            StorySave story = SaveManager.Slot.story;
+            if (!story.artifacts.Contains(artifact))
+                story.artifacts.Add(artifact);
+            JustWon = artifact;
+            SaveManager.Save();
         }
 
         public static string TakeJustWon()
@@ -120,6 +151,7 @@ namespace Collection.Story
             game = gameName;
             finishing = false;
             gathered = false;
+            leaving = false;
             JustWon = null;
             SaveManager.Save();
             LoadingScreen.Load(scene);
@@ -129,11 +161,7 @@ namespace Collection.Story
         // coming back from the game.
         public static void Cheat(string artifact)
         {
-            StorySave story = SaveManager.Slot.story;
-            if (!story.artifacts.Contains(artifact))
-                story.artifacts.Add(artifact);
-            JustWon = artifact;
-            SaveManager.Save();
+            Win(artifact);
             StoryLevels.Load();
         }
 
@@ -142,6 +170,8 @@ namespace Collection.Story
         // that goes on may, does nothing more.
         public static bool Finish(float after = 0f)
         {
+            if (Leaving)
+                return true;
             if (!Playing)
                 return false;
             if (finishing || gathered)
@@ -183,11 +213,7 @@ namespace Collection.Story
         {
             finishing = false;
             gathered = true;
-            StorySave story = SaveManager.Slot.story;
-            if (!story.artifacts.Contains(reward))
-                story.artifacts.Add(reward);
-            JustWon = reward;
-            SaveManager.Save();
+            Win(reward);
 
             // The game stands still under the screen.
             timeScaleBefore = Time.timeScale;
@@ -217,6 +243,8 @@ namespace Collection.Story
         // True when a game was being played from the story, and the story is what comes next.
         public static bool Leave()
         {
+            if (Leaving)
+                return true;
             if (!Playing)
                 return false;
             BackToTheStory();
@@ -237,6 +265,7 @@ namespace Collection.Story
 
             // Whatever speed the game left time running at.
             Time.timeScale = 1f;
+            leaving = true;
             StoryLevels.Load();
         }
 

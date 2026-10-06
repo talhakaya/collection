@@ -16,6 +16,8 @@ namespace Collection.Story
         static CoinCounter inst;
         float sinceLast = float.MaxValue;
         int shown = -1;
+        // Coins that are the character's already but are still flying to it: not counted on the screen yet.
+        int onTheWay;
 
         public static int Coins => SaveManager.Slot.story.coins;
 
@@ -33,6 +35,25 @@ namespace Collection.Story
                 inst.sinceLast = 0f;
         }
 
+        // Coins that have come out of something and are on their way to the character (Coin). They are in the slot
+        // from this moment, all at once: the flight is for show, and leaving in the middle of it loses nothing.
+        // The screen counts each as it gets there (Arrived).
+        public static void Sent(int coins)
+        {
+            SaveManager.Slot.story.coins += coins;
+            SaveManager.MarkDirty();
+            if (inst != null)
+                inst.onTheWay += coins;
+        }
+
+        public static void Arrived()
+        {
+            if (inst == null)
+                return;
+            inst.onTheWay = Mathf.Max(0, inst.onTheWay - 1);
+            inst.sinceLast = 0f;
+        }
+
         // Shows the counter without anything being got: for a shop, say.
         public static void Show()
         {
@@ -47,7 +68,7 @@ namespace Collection.Story
             if (group.alpha <= 0f)
                 return;
 
-            int coins = Coins;
+            int coins = Coins - onTheWay;
             if (coins != shown)
             {
                 shown = coins;

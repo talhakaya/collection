@@ -119,8 +119,8 @@ namespace Collection.Story
 
         Transform rider;
         Animator riderAnimator;
-        CharacterController riderController;
         PlayerMovement riderMovement;
+        PlayerControl riderControl;
         PlayerRoll riderRoll;
         Ragdoll riderRagdoll;
         Vector3 riderModelPlace;
@@ -201,12 +201,16 @@ namespace Collection.Story
             if (Ridden)
                 return;
             PlayerMovement player = FindFirstObjectByType<PlayerMovement>();
-            if (player == null || !player.enabled)
+            if (player == null)
+                return;
+            // Not one that something else has: rolling, lying after a fall, in a cutscene.
+            PlayerControl control = PlayerControl.Of(player);
+            if (!control.Free)
                 return;
 
             rider = player.transform;
             riderMovement = player;
-            riderController = rider.GetComponent<CharacterController>();
+            riderControl = control;
             riderRoll = rider.GetComponent<PlayerRoll>();
             riderRagdoll = rider.GetComponent<Ragdoll>();
             riderAnimator = rider.GetComponentInChildren<Animator>();
@@ -218,10 +222,7 @@ namespace Collection.Story
             place.y = GroundUnder(place, rider.position.y - 1f) + 0.02f;
             Stand(place, Quaternion.Euler(0f, rider.eulerAngles.y, 0f));
 
-            riderMovement.enabled = false;
-            if (riderRoll != null)
-                riderRoll.enabled = false;
-            riderController.enabled = false;
+            riderControl.Take(this);
             if (mount != null)
                 mount.gameObject.SetActive(false);
             if (riderBody != null)
@@ -285,7 +286,6 @@ namespace Collection.Story
 
         void Dismount()
         {
-            Transform who = rider;
             Vector3 beside = frame.position - frame.transform.right * 0.7f;
             Vector3 velocity = frame.linearVelocity;
             riderAnimator.transform.localPosition = riderModelPlace;
@@ -293,13 +293,13 @@ namespace Collection.Story
             Release();
 
             beside.y = GroundUnder(beside, beside.y - 1f);
-            beside.y += riderController.height * 0.5f - riderController.center.y + riderController.skinWidth;
-            who.SetPositionAndRotation(beside, Quaternion.Euler(0f, frame.transform.eulerAngles.y, 0f));
-            riderController.enabled = true;
+            beside.y += riderControl.Standing;
+            riderControl.MoveTo(beside, Quaternion.Euler(0f, frame.transform.eulerAngles.y, 0f));
             riderMovement.Velocity = velocity;
-            riderMovement.enabled = true;
+            // The press that got the rider off is the roll's button, and is not a roll as well.
             if (riderRoll != null)
-                riderRoll.enabled = true;
+                riderRoll.Wait(0.25f);
+            riderControl.Release(this);
         }
 
         // Called by the parts when they hit something (BicyclePart).
@@ -327,6 +327,8 @@ namespace Collection.Story
             // The rider on over the handlebars; the bicycle up and away, tumbling.
             if (ragdoll != null)
                 ragdoll.Fall(velocity * 0.8f + Vector3.up * 2.5f, across * 3f, modelPlace, modelFacing);
+            // The fall has the rider now (or, with no ragdoll to fall as, the player again).
+            riderControl.Release(this);
             Vector3 away = (Random.insideUnitSphere + Vector3.up * 1.5f).normalized * crashThrow;
             foreach (Rigidbody body in bodies)
             {

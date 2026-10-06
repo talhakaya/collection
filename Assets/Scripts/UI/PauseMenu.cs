@@ -67,6 +67,8 @@ namespace Collection.UI
 			}
 
 			if (Menus.IsOpen) return;
+			// Not under the loading screen: the scene that would be paused is on its way out.
+			if (LoadingScreen.Loading) return;
 			if (!GameContext.IsPlayed(SceneManager.GetActiveScene().path)) return;
 
 			// In "Just the games", Shift+Escape and Select+Start are the quick way out
@@ -103,7 +105,7 @@ namespace Collection.UI
 			// For testing the story without playing every game through: the game's artifact as
 			// if the game had been played to where it gives it.
 			// Only in a Debug build (BuildSettings).
-			if (BuildSettings.Cheats && Collection.Story.StoryGames.Playing && !Collection.Story.StoryGames.Gathered)
+			if (Collection.Story.StoryGames.CanCheat)
 			{
 				screen.Button("Cheat: take the artifact", () =>
 				{
