@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Collection.Story
 {
-    // A barrel, broken by rolling into it (PlayerRoll).
+    // A barrel, broken by rolling into it (PlayerRoll) or riding into it (Bicycle).
     //
     // It is built of its pieces - the staves round it and its lid - standing still, with one collider for the
     // whole. Breaking it takes that collider away and lets the pieces go, each a rigid body of its own, thrown
@@ -45,10 +45,11 @@ namespace Collection.Story
         }
 
         // `velocity`: the speed of what hit it. `by`: its collider, which the pieces do not get in the way of.
-        public void Break(Vector3 velocity, Collider by)
+        // False when it was broken already.
+        public bool Break(Vector3 velocity, Collider by)
         {
             if (broken)
-                return;
+                return false;
             broken = true;
             Spend();
             body.enabled = false;
@@ -81,6 +82,7 @@ namespace Collection.Story
 
             if (coin != null && Random.value < coinChance)
                 Coin.Spill(coin, Random.Range(coinsFewest, coinsMost + 1), middle, 0f);
+            return true;
         }
 
         IEnumerator Go(Transform piece)

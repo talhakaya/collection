@@ -15,6 +15,10 @@ namespace Collection.Story
     // "left" and "right" of the bicycle. The handlebars turn toward that way, more sharply the slower the
     // bicycle is going, and the bicycle comes round as it rolls. Speed: slow while it has far to turn (it brakes
     // for a sharp change of mind), and faster and faster the longer it is kept going the same way. Roll (Space, pad B) gets off.
+    // With Sprint held (the running button) all of that is `fastTimes` as fast.
+    //
+    // In the air (thrown by a BoostRamp, or off the top of a rise) it is kept level front to back, so that it
+    // comes down on its wheels. At the top of a jump that is high enough the game runs slow for a moment.
     //
     // Getting on (the NPCTrigger on the frame, onActivate -> Mount): the bicycle stands up where it is, facing
     // the way the character faces, and the character is sat on it. The character's own movement is switched off;
@@ -22,7 +26,7 @@ namespace Collection.Story
     // forward, arms out to the handlebars, legs going round with the pedals at the bicycle's speed.
     //
     // Crashing: hitting something hard, or going over too far, throws the rider off as a ragdoll (Ragdoll) and
-    // sends the bicycle flying.
+    // sends the bicycle flying. A barrel is not something hard: it breaks, and the bicycle goes on.
     //
     // Until it is first ridden it stands where it was put, not simulated.
     public class Bicycle : MonoBehaviour
@@ -78,6 +82,23 @@ namespace Collection.Story
         public float turningBeyond = 70f;
         [Tooltip("How hard the back wheel is driven.")]
         public float driveForce = 90f;
+        [Tooltip("With Sprint held: how many times as fast it goes, and as hard it is driven.")]
+        public float fastTimes = 1.35f;
+
+        [Header("In the air")]
+        [Tooltip("Off the ground by this much (m) it is in the air: kept level front to back, this strongly and this damped.")]
+        public float airAbove = 0.45f;
+        public float airLevel = 45f;
+        public float airDamping = 9f;
+        [Tooltip("The game runs slow at the top of a jump. Unticked: never.")]
+        public bool slowAtTheTop = true;
+        [Tooltip("Only a jump whose top is this far off the ground (m) or more.")]
+        public float slowAbove = 2.2f;
+        [Tooltip("How slow (1 is the usual speed), and for how long (s, by the clock): going slow, staying, and coming back.")]
+        [Range(0.05f, 1f)] public float slowTo = 0.3f;
+        public float slowIn = 0.12f;
+        public float slowStays = 0.55f;
+        public float slowOut = 0.35f;
 
         [Header("Balance")]
         public float balance = 420f;
@@ -92,6 +113,8 @@ namespace Collection.Story
         public float crashLean = 62f;
         [Tooltip("How hard the bicycle is thrown (m/s).")]
         public float crashThrow = 5f;
+        [Tooltip("Riding into a barrel breaks it and the bicycle goes on through. This often, the rider comes off as well.")]
+        [Range(0f, 1f)] public float barrelFallChance = 0.2f;
 
         [Header("The rider")]
         [Tooltip("The rider's weight on the frame (kg).")]
@@ -101,6 +124,8 @@ namespace Collection.Story
 
         // The way to go, set by something other than the player's stick (a cutscene, a test). Zero: the stick.
         [System.NonSerialized] public Vector3 overrideDirection;
+        // With that: as if Sprint were held.
+        [System.NonSerialized] public bool overrideFast;
         // Set to have the ride written down, a line a physics step, for tuning.
         [System.NonSerialized] public System.Text.StringBuilder log;
 
@@ -138,6 +163,13 @@ namespace Collection.Story
             HumanBodyBones.LeftHand, HumanBodyBones.RightHand,
         };
         Quaternion[] heldTurns;
+        float driving;
+        float landedFor = 1f;
+        // The frame's speed as the last physics step began: what it was going at before whatever it has just hit.
+        Vector3 before;
+        float risingAt;
+        bool slowed;
+        Coroutine slowing;
         float leanNow;
         float steerNow;
         float pedals;
@@ -223,7 +255,8 @@ namespace Collection.Story
             riderModelFacing = riderAnimator.transform.localRotation;
 
             // Up on its wheels where it is, facing the way the rider faces.
-            Vector3 place = frame.position;
+            // (Where it is seen to be: one put somewhere this moment, PutAt, is not there yet for the physics.)
+            Vector3 place = frame.transform.position;
             place.y = GroundUnder(place, rider.position.y - 1f) + 0.02f;
             Stand(place, Quaternion.Euler(0f, rider.eulerAngles.y, 0f));
 
@@ -336,6 +369,25 @@ namespace Collection.Story
         {
             if (!Ridden || Time.time < mountedAt + 0.5f)
                 return;
+
+            // A barrel: broken, and ridden on through as if it had not been there - the bicycle keeps the speed
+            // it came with, and the pieces do not get in its way. Now and then the rider comes off all the same.
+            // (Its pieces, flying about afterwards, are nothing to crash into either.)
+            Barrel barrel = collision.collider.GetComponentInParent<Barrel>();
+            if (barrel != null)
+            {
+                if (!barrel.Break(before, riderBody))
+                    return;
+                foreach (Collider piece in barrel.GetComponentsInChildren<Collider>())
+                    foreach (Collider part in GetComponentsInChildren<Collider>(true))
+                        if (!piece.isTrigger && !part.isTrigger)
+                            Physics.IgnoreCollision(piece, part);
+                foreach (Rigidbody part in bodies)
+                    part.linearVelocity = before;
+                if (Random.value < barrelFallChance)
+                    Crash();
+                return;
+            }
             // The ground under the wheels is not something hit, however hard the landing.
             Vector3 normal = collision.GetContact(0).normal;
             if (normal.y > 0.6f)
@@ -382,6 +434,16 @@ namespace Collection.Story
             Transform body = frame.transform;
             Vector3 forward = Vector3.ProjectOnPlane(body.forward, Vector3.up).normalized;
             float speed = Speed;
+            before = frame.linearVelocity;
+            // Off the ground (over a rise taken fast, off a ramp) there is nothing to steer or lean against:
+            // the handlebars go straight, the frame is held upright and level, and it flies as it was going.
+            float height = body.position.y - GroundUnder(body.position, body.position.y);
+            Height = height;
+            bool flying = height > airAbove;
+            // Just down again, the handlebars are given back over a moment, not all at once: it has come down
+            // going a little off the way wanted, and a hard correction at that speed has it over.
+            landedFor = flying ? 0f : landedFor + Time.fixedDeltaTime;
+            float hold = Mathf.Clamp01(landedFor / 0.6f);
 
             // The way wanted, along the ground.
             Vector3 wanted = overrideDirection;
@@ -403,7 +465,7 @@ namespace Collection.Story
             float turning = frame.angularVelocity.y * Mathf.Rad2Deg;
             // And the handlebars themselves only turn so fast, so they do not flick from side to side with every
             // twitch of the frame.
-            float steer = Mathf.Clamp(off * steerSharpness - turning * steerEasing, -most, most);
+            float steer = flying ? 0f : Mathf.Clamp(off * steerSharpness - turning * steerEasing, -most, most) * hold;
             // Slower still at speed: the front wheel grips, and a bend taken before the frame has leaned into it
             // throws the bicycle over outward. (Which is how it falls when it is turned too hard, too fast.)
             float rate = Mathf.Lerp(steerRate, steerRateFast, Mathf.InverseLerp(2f, topSpeed, Mathf.Abs(speed)));
@@ -418,13 +480,18 @@ namespace Collection.Story
                 straightFor = Mathf.Max(0f, straightFor - Time.fixedDeltaTime * (going ? 3f : 1.5f));
             float straight = Mathf.Lerp(startSpeed, topSpeed, Mathf.Clamp01(straightFor / buildTime));
             float target = Mathf.Lerp(straight, turningSpeed, Mathf.InverseLerp(straightWithin, turningBeyond, Mathf.Abs(off)));
+            // Sprint: all of it faster, the pedalling harder.
+            bool fast = overrideDirection != Vector3.zero ? overrideFast : Main.inst.input.sprint;
+            driving = driveForce * (fast ? fastTimes : 1f);
+            if (fast)
+                target *= fastTimes;
             // Faster than that, it brakes: the wheel is held to the speed, not left to roll.
             SetDrive(target, going, speed > target + 0.7f);
 
             // A turn of the frame itself, so that it comes round from standing and in tight places.
             // Only while slow: at speed the front wheel does it.
             float help = 1f - Mathf.InverseLerp(1f, turnHelpBelow, Mathf.Abs(speed));
-            if (going && help > 0f)
+            if (going && help > 0f && !flying)
             {
                 float turn = Mathf.Clamp(off / 90f, -1f, 1f) * turnHelp * Mathf.Deg2Rad;
                 frame.AddTorque(Vector3.up * ((turn - frame.angularVelocity.y * 3f) * help), ForceMode.Acceleration);
@@ -434,13 +501,37 @@ namespace Collection.Story
             // The lean a bend of this tightness at this speed asks for, from the handlebars, not from how the
             // frame happens to be swinging.
             float bend = speed * speed * Mathf.Tan(steer * Mathf.Deg2Rad) / (wheelbase * 9.81f);
-            leanNow = Mathf.Lerp(leanNow, Mathf.Clamp(Mathf.Atan(bend) * Mathf.Rad2Deg, -mostLean, mostLean), 1f - Mathf.Exp(-10f * Time.fixedDeltaTime));
+            leanNow = Mathf.Lerp(leanNow, flying ? 0f : Mathf.Clamp(Mathf.Atan(bend) * Mathf.Rad2Deg, -mostLean, mostLean), 1f - Mathf.Exp(-10f * Time.fixedDeltaTime));
             float lean = leanNow;
             Vector3 along = body.forward;
             Vector3 upWanted = Quaternion.AngleAxis(-lean, along) * Vector3.ProjectOnPlane(Vector3.up, along).normalized;
             float tilt = Vector3.SignedAngle(body.up, upWanted, along);
             float rolling = Vector3.Dot(frame.angularVelocity, along);
             frame.AddTorque(along * (tilt * Mathf.Deg2Rad * balance - rolling * balanceDamping), ForceMode.Acceleration);
+
+            // In the air: level front to back, along the way it is flying, so it comes down on its wheels and
+            // not on its nose. And at the top of a jump worth the name, a moment of the game running slow.
+            if (flying)
+            {
+                Vector3 across = body.right;
+                // (And not swinging round: whatever turn it left the ground with is taken off it.)
+                frame.AddTorque(Vector3.up * (-frame.angularVelocity.y * airDamping), ForceMode.Acceleration);
+                Vector3 heading = frame.linearVelocity.sqrMagnitude > 4f ? frame.linearVelocity.normalized : forward;
+                // Half way between level and the way it is flying: nose up going up, down coming down, a little.
+                Vector3 nose = Vector3.ProjectOnPlane(Vector3.Slerp(forward, heading, 0.5f), across);
+                float pitch = Vector3.SignedAngle(body.forward, nose, across);
+                float pitching = Vector3.Dot(frame.angularVelocity, across);
+                frame.AddTorque(across * (pitch * Mathf.Deg2Rad * airLevel - pitching * airDamping), ForceMode.Acceleration);
+
+                float rising = frame.linearVelocity.y;
+                if (slowAtTheTop && risingAt > 0f && rising <= 0f && height >= slowAbove && slowing == null)
+                    slowing = StartCoroutine(SlowForAMoment());
+                risingAt = rising;
+            }
+            else
+            {
+                risingAt = 0f;
+            }
 
             if (log != null && log.Length < 6000)
                 log.Append(Time.time.ToString("f2")).Append(" yaw ").Append(body.eulerAngles.y.ToString("f0")).Append(" off ").Append(off.ToString("f0"))
@@ -449,6 +540,51 @@ namespace Collection.Story
 
             if (Mathf.Abs(tilt) > crashLean || Vector3.Angle(body.up, Vector3.up) > 80f)
                 Crash();
+        }
+
+        // How far off the ground it is (m), while it is ridden.
+        public float Height { get; private set; }
+
+        // Thrown: every part of it going this way at this speed from now (a BoostRamp).
+        public void Launch(Vector3 velocity)
+        {
+            if (!simulated)
+                return;
+            foreach (Rigidbody part in bodies)
+                part.linearVelocity = velocity;
+        }
+
+        // The game slow for a moment, and back. By the clock, not by the game's own time, which is what is
+        // being slowed. Left alone while a menu has the game stopped.
+        System.Collections.IEnumerator SlowForAMoment()
+        {
+            slowed = true;
+            float t = 0f;
+            while (t < slowIn + slowStays + slowOut)
+            {
+                // A menu up (the pause screen) has stopped the game and will put its speed back as it found it:
+                // this waits, and goes on from where it was.
+                if (!Collection.UI.Menus.IsOpen)
+                {
+                    t += Time.unscaledDeltaTime;
+                    Time.timeScale = t < slowIn ? Mathf.Lerp(1f, slowTo, t / slowIn)
+                        : t < slowIn + slowStays ? slowTo
+                        : Mathf.Lerp(slowTo, 1f, Mathf.Clamp01((t - slowIn - slowStays) / slowOut));
+                }
+                yield return null;
+            }
+            Time.timeScale = 1f;
+            slowed = false;
+            slowing = null;
+        }
+
+        // Gone in the middle of that (the scene left): the game is not to stay slow.
+        void OnDisable()
+        {
+            if (slowed && !Collection.UI.Menus.IsOpen)
+                Time.timeScale = 1f;
+            slowed = false;
+            slowing = null;
         }
 
         void SetSteering(float degrees)
@@ -471,7 +607,7 @@ namespace Collection.Story
         {
             JointMotor motor = drive.motor;
             motor.targetVelocity = speed / wheelRadius * Mathf.Rad2Deg;
-            motor.force = driveForce;
+            motor.force = driving > 0f ? driving : driveForce;
             motor.freeSpin = !brake;
             drive.motor = motor;
             drive.useMotor = on;
