@@ -125,6 +125,19 @@ namespace Collection.Controls
 			// the pause screen.
 			if (Collection.Saving.SaveManager.IsStoryMode)
 			{
+				// In a game played from the story for its artifact, the same buttons are a
+				// cheat for testing: the artifact, as if the game had been played to where it
+				// gives it.
+				if (Collection.Story.StoryGames.Playing && !Collection.Story.StoryGames.Gathered)
+				{
+					if (Collection.UI.PauseMenu.Paused)
+					{
+						Collection.UI.PauseMenu.Resume();
+					}
+
+					Collection.Story.StoryGames.Finish();
+				}
+
 				return;
 			}
 

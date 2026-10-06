@@ -93,6 +93,12 @@ namespace Collection.Story
                 Play(gameName, artifact, artifactTitle);
             });
             screen.Button("Back", Menus.CloseAll);
+            // For testing the story without playing every game through.
+            screen.Button("Cheat: take the artifact", () =>
+            {
+                Menus.CloseAll();
+                Cheat(artifact);
+            });
             screen.cancel = Menus.CloseAll;
             Menus.Push(screen);
         }
@@ -114,6 +120,18 @@ namespace Collection.Story
             JustWon = null;
             SaveManager.Save();
             LoadingScreen.Load(scene);
+        }
+
+        // The artifact without the game, from the story scene: won, kept, and the scene started again as it is on
+        // coming back from the game.
+        public static void Cheat(string artifact)
+        {
+            StorySave story = SaveManager.Slot.story;
+            if (!story.artifacts.Contains(artifact))
+                story.artifacts.Add(artifact);
+            JustWon = artifact;
+            SaveManager.Save();
+            StoryLevels.Load();
         }
 
         // For a game to call where it gives its artifact. `after` is how long that moment stays on the screen
