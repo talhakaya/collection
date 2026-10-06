@@ -79,6 +79,46 @@ God: (placeholder) Head first.
 <<cutscene IntoTheBox>>
 ===
 
+title: FieldCube1
+---
+Cube 1: (placeholder: what cube 1 says before its game)
+===
+
+title: GotCube1
+---
+Cube 1: (placeholder: what cube 1 says when you have it)
+===
+
+title: FieldCube2
+---
+Cube 2: (placeholder: what cube 2 says before its game)
+===
+
+title: GotCube2
+---
+Cube 2: (placeholder: what cube 2 says when you have it)
+===
+
+title: FieldCube3
+---
+Cube 3: (placeholder: what cube 3 says before its game)
+===
+
+title: GotCube3
+---
+Cube 3: (placeholder: what cube 3 says when you have it)
+===
+
+title: FieldCube4
+---
+Cube 4: (placeholder: what cube 4 says before its game)
+===
+
+title: GotCube4
+---
+Cube 4: (placeholder: what cube 4 says when you have it)
+===
+
 title: FieldHelper
 ---
 Villager: Hey, are you alright?

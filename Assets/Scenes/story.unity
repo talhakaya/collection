@@ -3157,6 +3157,7 @@ MonoBehaviour:
   hangsAbove: 0.5
   fitTime: 5
   dropTime: 0.8
+  narrowed: 0.7
 --- !u!4 &330599770
 Transform:
   m_ObjectHideFlags: 0
@@ -12273,7 +12274,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sprintToggleStopThreshold: 0.2
   talking: 0
-  held: 0
 --- !u!114 &1500000049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12746,7 +12746,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8998060360184993326, guid: 671b225f4d180b349ab51ef70013a6e3, type: 3}
       propertyPath: game
-      value: Chocolate
+      value: Crime Factory
       objectReference: {fileID: 0}
     - target: {fileID: 8998060360184993326, guid: 671b225f4d180b349ab51ef70013a6e3, type: 3}
       propertyPath: wonConversation
