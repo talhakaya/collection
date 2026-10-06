@@ -85,6 +85,15 @@ namespace Collection.Story
             StartCoroutine(RestoreBlendAfterCut());
         }
 
+        // The next change of camera, made this frame, is a cut and not a move from the one before: for a scene
+        // that starts on a camera of its own. (The game's follow camera is live from the scene's first moment,
+        // and anything switched on after it would be moved to from there.)
+        public void Cut()
+        {
+            brain.DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Styles.Cut, 0f);
+            StartCoroutine(RestoreBlendAfterCut());
+        }
+
         IEnumerator RestoreBlendAfterCut()
         {
             // Let the brain make the cut back to the follow camera first.

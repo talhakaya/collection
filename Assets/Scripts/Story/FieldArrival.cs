@@ -80,6 +80,8 @@ namespace Collection.Story
                 camera.Lens = own.Lens;
                 camera.Priority = new PrioritySettings { Enabled = true, Value = 50 };
                 waiting.transform.SetPositionAndRotation(from + offset * wide, own.transform.rotation);
+                // Straight to it: the level opens on this view.
+                Main.inst.camera.Cut();
                 waiting.SetActive(true);
             }
 

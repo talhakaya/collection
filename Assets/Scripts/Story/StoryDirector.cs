@@ -84,11 +84,15 @@ namespace Collection.Story
             StoryLevels.Advance();
         }
 
-        // Once the scene has started and the artifact has had a moment to come over.
+        // Once the scene has started and the artifact has had a moment to come over. Until it speaks the
+        // character stays where it is: it is not to be walked off with before it has had its say. (From then on
+        // the conversation keeps the character still, as any does.)
         IEnumerator TalkToArtifact(Artifact artifact)
         {
+            control.Take(this, false);
             yield return new WaitForSeconds(1.5f);
             artifact.TalkAsWon();
+            control.Release(this);
         }
 
         void SetUpArtifacts(StorySave story)

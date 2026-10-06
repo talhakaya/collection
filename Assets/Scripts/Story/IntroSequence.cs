@@ -90,6 +90,8 @@ namespace Collection.Story
                 Aim(seaCamera, seaCameraOffset, seaLookAtHeight);
                 seaCamera.SetActive(false);
             }
+            // Straight to it: the game opens on this shot, not on a move to it from the follow camera's.
+            Main.inst.camera.Cut();
             introCamera.SetActive(true);
         }
 
