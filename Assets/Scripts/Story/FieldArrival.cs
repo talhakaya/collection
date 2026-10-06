@@ -36,7 +36,7 @@ namespace Collection.Story
         public NPCTrigger helperTrigger;
 
         [Tooltip("How high the fall is from (m).")]
-        public float height = 100f;
+        public float height = 50f;
         [Tooltip("How far it is tipped over as the fall starts, at most (degrees), and how fast it turns on the way down (radians/s, about).")]
         public float tipped = 35f;
         public float turns = 1.3f;

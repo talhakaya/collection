@@ -1148,7 +1148,7 @@ MonoBehaviour:
   player: {fileID: 1500000002}
   helper: {fileID: 994335785}
   helperTrigger: {fileID: 814685538}
-  height: 100
+  height: 50
   liesFor: 10
   comesFrom: 20
   speed: 3.4
