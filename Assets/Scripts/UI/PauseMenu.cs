@@ -73,7 +73,7 @@ namespace Collection.UI
 			// (GlobalInputManager), not a pause.
 			// In a game played from the story they are the cheat for its artifact, and not a
 			// pause either.
-			if (!SaveManager.IsStoryMode || Collection.Story.StoryGames.Playing)
+			if (!SaveManager.IsStoryMode || (BuildSettings.Cheats && Collection.Story.StoryGames.Playing))
 			{
 				Keyboard keyboard = Keyboard.current;
 				Gamepad pad = context.control.device as Gamepad;
@@ -102,7 +102,8 @@ namespace Collection.UI
 			// sees to that): without its artifact, unless it has given it already.
 			// For testing the story without playing every game through: the game's artifact as
 			// if the game had been played to where it gives it.
-			if (Collection.Story.StoryGames.Playing && !Collection.Story.StoryGames.Gathered)
+			// Only in a Debug build (BuildSettings).
+			if (BuildSettings.Cheats && Collection.Story.StoryGames.Playing && !Collection.Story.StoryGames.Gathered)
 			{
 				screen.Button("Cheat: take the artifact", () =>
 				{

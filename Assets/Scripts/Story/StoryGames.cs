@@ -93,12 +93,15 @@ namespace Collection.Story
                 Play(gameName, artifact, artifactTitle);
             });
             screen.Button("Back", Menus.CloseAll);
-            // For testing the story without playing every game through.
-            screen.Button("Cheat: take the artifact", () =>
+            // For testing the story without playing every game through. Only in a Debug build (BuildSettings).
+            if (BuildSettings.Cheats)
             {
-                Menus.CloseAll();
-                Cheat(artifact);
-            });
+                screen.Button("Cheat: take the artifact", () =>
+                {
+                    Menus.CloseAll();
+                    Cheat(artifact);
+                });
+            }
             screen.cancel = Menus.CloseAll;
             Menus.Push(screen);
         }
