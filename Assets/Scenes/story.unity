@@ -9621,7 +9621,10 @@ MonoBehaviour:
   landDepth: 9
   water: {fileID: 1767114987}
   floor: {fileID: 1706522789}
-  seaDrop: 0.85
+  seaDrop: 40
+  seaSettle: 0.85
+  drainFrom: 0.6
+  televisionDrop: 2.4
   sun: {fileID: 410087040}
   sunColour: {r: 1, g: 0.92, b: 0.72, a: 1}
   desertLook: {fileID: 421654521}

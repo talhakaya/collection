@@ -10,7 +10,8 @@ namespace Collection.Story
     //   to take all of the television in.
     //
     //   RaiseLand (a cutscene in the conversation): the land, which the intro switched off, comes up from under
-    //   the water while the sea sinks a little, until the land is where it belongs and the sea lies below it. The
+    //   the water while the sea sinks a little, and as the land settles the sea drains away out of sight: the
+    //   desert has none. The
     //   character rides up on whatever ground comes up under its feet. The television, which stands in the sea,
     //   goes down with the sea.
     //
@@ -45,8 +46,14 @@ namespace Collection.Story
         [Tooltip("The water's surface and the floor under it.")]
         public Transform water;
         public Transform floor;
-        [Tooltip("How far the sea sinks (m).")]
-        public float seaDrop = 0.85f;
+        [Tooltip("How far the sea sinks (m): far enough to be out of sight for good. The desert has no sea.")]
+        public float seaDrop = 40f;
+        [Tooltip("How far it sinks while the land is still coming up, staying round it (m); the rest of the way it goes in the last part of the rise. The floor under it, which the character stands on, goes down only this far.")]
+        public float seaSettle = 0.85f;
+        [Tooltip("The part of the rise after which the sea drains away (0 to 1).")]
+        [Range(0f, 1f)] public float drainFrom = 0.6f;
+        [Tooltip("How far the television goes down (m): onto the bed of the bay it stood in.")]
+        public float televisionDrop = 2.4f;
 
         [Header("The desert's light")]
         public Light sun;
@@ -61,19 +68,13 @@ namespace Collection.Story
         Coroutine rising;
         Color sunBefore;
         bool landUp;
-        Collider floorCollider;
 
-        // The sea's floor reaches under the land too, a little under the sea, and whatever of the land goes
-        // deeper than that (the cave) would end on it. So once the land is up, the floor is only there where
-        // the land's surface is not above it: in the sea, and in the land's ponds.
-        void Update()
+        // The sea, once it has drained: gone, with its floor and the camera that drew its reflections.
+        void SeaGone()
         {
-            if (!landUp)
-                return;
-            if (floorCollider == null)
-                floorCollider = floor.GetComponent<Collider>();
-            float floorTop = floor.position.y + floor.GetComponent<BoxCollider>().size.y * 0.5f * floor.lossyScale.y;
-            floorCollider.enabled = LandHeight(player.position) < floorTop + 0.3f;
+            landUp = true;
+            if (water != null && water.parent != null)
+                water.parent.gameObject.SetActive(false);
         }
 
         // How far the light is the desert's: 0 the sea's, 1 the desert's.
@@ -133,17 +134,20 @@ namespace Collection.Story
                 world[i].SetActive(true);
             }
             SetHeight(water, water.position.y - seaDrop);
-            SetHeight(floor, floor.position.y - seaDrop);
-            SetHeight(television, television.position.y - seaDrop);
+            SetHeight(floor, floor.position.y - seaSettle);
+            SetHeight(television, television.position.y - televisionDrop);
             SetDesert(1f);
-            landUp = true;
+            SeaGone();
         }
 
         // The ground at a place: the higher of the sea's floor and the land, if the land is there.
         public float GroundHeight(Vector3 at)
         {
+            float land = LandHeight(at);
+            if (landUp)
+                return land;
             float floorTop = floor.position.y + floor.GetComponent<BoxCollider>().size.y * 0.5f * floor.lossyScale.y;
-            return Mathf.Max(floorTop, LandHeight(at));
+            return Mathf.Max(floorTop, land);
         }
 
         // For a Cutscene's onStart.
@@ -185,10 +189,12 @@ namespace Collection.Story
                         world[i].transform.position = places[i] + Vector3.down * (landDepth * (1f - eased));
 
                 SetDesert(eased);
-                float drop = seaDrop * eased;
-                SetHeight(water, waterStart - drop);
+                // The sea stays round the land as it comes up, a little lower, and drains away at the end.
+                float drop = seaSettle * eased;
+                float drained = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(drainFrom, 1f, done));
+                SetHeight(water, waterStart - drop - (seaDrop - seaSettle) * drained);
                 SetHeight(floor, floorStart - drop);
-                SetHeight(television, televisionStart - drop);
+                SetHeight(television, televisionStart - televisionDrop * eased);
 
                 // The higher of the sea's floor and the land, where the character is.
                 float ground = Mathf.Max(floorTop - drop, LandHeight(player.position));
@@ -201,7 +207,7 @@ namespace Collection.Story
 
             controller.enabled = true;
             movement.enabled = true;
-            landUp = true;
+            SeaGone();
             rising = null;
         }
 
