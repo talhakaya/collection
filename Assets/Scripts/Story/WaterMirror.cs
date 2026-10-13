@@ -15,7 +15,8 @@ namespace Collection.Story
     //     really is this frame and not where it was before Cinemachine moved it.
     //   - Draws into a texture the size of the screen (times `resolution`), made here and handed to the water's
     //     renderers, where the asset used one fixed 1024 texture.
-    //   - Leaves the water itself and anything on the layers not ticked in `reflects` out of the reflection.
+    //   - Leaves the water itself and anything on the layers not ticked in `reflects` out of the reflection, and
+    //     the terrains' grass and trees too where `foliage` is off.
     //
     // The picture is flipped left to right compared with a true mirror image, as the asset's was: the shader
     // un-flips it when it reads it.
@@ -32,6 +33,8 @@ namespace Collection.Story
         [Range(0.25f, 1f)] public float resolution = 0.75f;
         [Tooltip("How far above the surface the cut is (m). A little above avoids a bright line where things meet the water.")]
         public float clipOffset = 0.02f;
+        [Tooltip("Whether the terrains' grass and trees show in the reflection. Off saves drawing them all a second time, and from under the water the mirror sees a lot more of them than the main camera does.")]
+        public bool foliage = true;
 
         // The shader graph's name for its Reflection Texture.
         static readonly int ReflectionTextureId = Shader.PropertyToID("Texture2D_28de85506601443d82b6148f21ccc69c");
@@ -44,12 +47,14 @@ namespace Collection.Story
         {
             mirror = GetComponent<Camera>();
             RenderPipelineManager.beginCameraRendering += OnBeginCameraRendering;
+            RenderPipelineManager.endCameraRendering += OnEndCameraRendering;
             UpdateTexture();
         }
 
         void OnDisable()
         {
             RenderPipelineManager.beginCameraRendering -= OnBeginCameraRendering;
+            RenderPipelineManager.endCameraRendering -= OnEndCameraRendering;
             mirror.targetTexture = null;
             if (texture != null)
             {
@@ -93,8 +98,25 @@ namespace Collection.Story
 
         void OnBeginCameraRendering(ScriptableRenderContext context, Camera camera)
         {
-            if (camera == mirror)
-                Place();
+            if (camera != mirror)
+                return;
+            Place();
+            if (!foliage)
+                DrawFoliage(false);
+        }
+
+        void OnEndCameraRendering(ScriptableRenderContext context, Camera camera)
+        {
+            if (camera == mirror && !foliage)
+                DrawFoliage(true);
+        }
+
+        // The terrains' grass and trees on or off, for the one picture: off as the mirror's is about to be drawn,
+        // back on when it has been.
+        static void DrawFoliage(bool on)
+        {
+            foreach (Terrain terrain in Terrain.activeTerrains)
+                terrain.drawTreesAndFoliage = on;
         }
 
         void Place()
