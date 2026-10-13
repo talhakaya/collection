@@ -142,7 +142,7 @@ namespace Games.Golfinity
 					if (InputPrompts.TryGetGlyph(path, InputPrompts.PadKind, out InputGlyph glyph))
 					{
 						animated = glyph.Animated;
-						return "<size=120%><sprite name=\"" + glyph.Current + "\" color=#FFFFFF></size>";
+						return "<size=96%><sprite name=\"" + glyph.Current + "\" color=#FFFFFF></size>";
 					}
 
 					return action.GetBindingDisplayString(i);

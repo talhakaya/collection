@@ -227,6 +227,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actionName: 
   hideWhenPopupOpen: 0
+  gap: 5
 --- !u!1 &2436698045849960805
 GameObject:
   m_ObjectHideFlags: 0

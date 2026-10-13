@@ -26,12 +26,23 @@ namespace Games.Golfinity
 		[Tooltip("For the top bar, which stays on screen behind an open popup but stops responding to its shortcuts - advertising them then would be a lie. Popup buttons don't need it: they only exist while their popup is up.")]
 		public bool hideWhenPopupOpen;
 
-		[Tooltip("Gap between the bottom of the button's artwork and the middle of the prompt, in canvas units. Measured from the rendered corners, so buttons of different sizes all get the same gap.")]
-		public float gap = 6.5f;
+		[Tooltip("Gap between the bottom of the button's shadow and the middle of the prompt, in canvas units. Measured from the rendered corners, so buttons of different sizes all get the same gap.")]
+		public float gap = 5f;
 
+		[Tooltip("How far below the glyph its drop shadow is drawn, in canvas units. Zero for no shadow.")]
+		public float shadowOffset = 0.7f;
+
+		// What the glyph's white is swapped for in the shadow's copy of the text.
+		private const string GlyphColour = "color=#FFFFFF";
+		private const string ShadowColour = "color=#000000C0";
+
+		// The shadow is this object's own text, and the glyph is a child drawn over it: a child
+		// is what the canvas draws after, and so on top of, its parent.
 		private TextMeshProUGUI text;
+		private TextMeshProUGUI front;
 		private RectTransform self;
 		private RectTransform owner;
+		private float shadowDrop;
 		private string lastGlyph;
 		private int lastPadId = -1;
 		private GamepadKind lastPadKind;
@@ -54,9 +65,53 @@ namespace Games.Golfinity
 				// The node that actually carries the artwork, and the one the button's
 				// animation moves - following it is what makes the prompt bob with the button.
 				owner = button.transform.Find("button") as RectTransform;
+
+				// How far the shadow hangs below the artwork at rest, in the button's own
+				// units. The shadow is the same diamond, so this is also how far its tip is
+				// below the artwork's - and the prompt goes below that, clear of the shadow.
+				RectTransform shadow = button.transform.Find("shadow") as RectTransform;
+				if (owner != null && shadow != null)
+				{
+					shadowDrop = Mathf.Max(0f, owner.anchoredPosition.y - shadow.anchoredPosition.y);
+				}
 			}
 
 			NormaliseScale();
+			CreateFront();
+		}
+
+		/// <summary>
+		/// The glyph proper: a copy of this text as a child, shadowOffset above it. This
+		/// object's own text is left to be the shadow underneath, so it goes dark here.
+		///
+		/// Drawn twice because the glyphs are sprites, which TextMesh Pro's own outline and
+		/// underlay do nothing for - those belong to the font's shader.
+		/// </summary>
+		private void CreateFront()
+		{
+			var go = new GameObject("glyph", typeof(RectTransform));
+			go.layer = gameObject.layer;
+			var rect = (RectTransform)go.transform;
+			rect.SetParent(self, false);
+			rect.anchorMin = Vector2.zero;
+			rect.anchorMax = Vector2.one;
+			rect.sizeDelta = Vector2.zero;
+			rect.anchoredPosition = new Vector2(0f, shadowOffset);
+
+			front = go.AddComponent<TextMeshProUGUI>();
+			front.font = text.font;
+			front.fontSharedMaterial = text.fontSharedMaterial;
+			front.spriteAsset = text.spriteAsset;
+			front.fontSize = text.fontSize;
+			front.alignment = text.alignment;
+			front.textWrappingMode = text.textWrappingMode;
+			front.overflowMode = text.overflowMode;
+			front.color = text.color;
+			front.raycastTarget = false;
+			front.enabled = text.enabled;
+
+			// For a pad the sheet has no glyph for, where the prompt is a letter in the font.
+			text.color = new Color(0f, 0f, 0f, 0.75f);
 		}
 
 		/// <summary>
@@ -92,7 +147,8 @@ namespace Games.Golfinity
 		/// identical whatever the button's scale, and costs four corner reads.
 		///
 		/// The corners are the rotated ones - these buttons are diamonds - so the lowest of the
-		/// four is the tip, which is what the eye reads as the bottom.
+		/// four is the tip, which is what the eye reads as the bottom. The shadow's tip is
+		/// shadowDrop below that, and the gap is counted from there.
 		/// </summary>
 		private void PlaceBelowButton()
 		{
@@ -109,7 +165,8 @@ namespace Games.Golfinity
 
 			centreX *= 0.25f;
 			float scale = self.lossyScale.y;
-			self.position = new Vector3(centreX, lowest - gap * scale, self.position.z);
+			float drop = owner.parent != null ? shadowDrop * owner.parent.lossyScale.y : 0f;
+			self.position = new Vector3(centreX, lowest - drop - (gap + shadowOffset) * scale, self.position.z);
 		}
 
 		private void LateUpdate()
@@ -123,6 +180,7 @@ namespace Games.Golfinity
 			if (text.enabled != visible)
 			{
 				text.enabled = visible;
+				front.enabled = visible;
 			}
 
 			if (!visible)
@@ -148,7 +206,8 @@ namespace Games.Golfinity
 			if (glyph != lastGlyph)
 			{
 				lastGlyph = glyph;
-				text.text = glyph;
+				front.text = glyph;
+				text.text = glyph.Replace(GlyphColour, ShadowColour);
 			}
 		}
 	}
