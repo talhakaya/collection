@@ -45,7 +45,7 @@ namespace Games.Golfinity
 			self = (RectTransform)transform;
 
 			// In the collection: the prompt is the collection's glyph for the button rather
-			// than its letter in the game's font, in the grey of the buttons' icons.
+			// than its letter in the game's font, in white.
 			text.spriteAsset = InputPrompts.SpriteAsset();
 
 			ButtonExtended button = GetComponentInParent<ButtonExtended>(true);
