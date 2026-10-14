@@ -276,7 +276,7 @@ Shader "Universal Render Pipeline/Nature/Stylized Grass"
             #pragma multi_compile_fragment _ _LIGHT_LAYERS 
 			#pragma multi_compile_fragment _ _LIGHT_COOKIES 
             //#pragma multi_compile _ _MIXED_LIGHTING_SUBTRACTIVE //Deprecated?
-			#pragma multi_compile _ _CLUSTERED_RENDERING 
+			#pragma multi_compile _ _CLUSTERED_RENDERING _FORWARD_PLUS //In the collection: _FORWARD_PLUS is Forward+ in URP 15 and on, so point lights reach the grass
 			#pragma multi_compile_fragment _ DEBUG_DISPLAY
 
 			//URP 14+

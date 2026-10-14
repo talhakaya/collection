@@ -8136,6 +8136,63 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &1433509152
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1433509154}
+  - component: {fileID: 1433509153}
+  m_Layer: 0
+  m_Name: Field Night
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1433509153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1433509152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e6b9e1a5cf7a2944a0cc48649605592, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sun: {fileID: 410087040}
+  nightAtStart: 1
+  fadeSeconds: 4
+  moonlight: 0.01
+  darkness: 0.05
+  moonColour: {r: 0.6, g: 0.72, b: 1, a: 1}
+  nightTint: {r: 0.7, g: 0.82, b: 1.25, a: 1}
+  lanternColour: {r: 1, g: 0.74, b: 0.45, a: 1}
+  lanternIntensity: 7
+  lanternHeight: 1.6
+  minReach: 5
+  maxReach: 7
+  flicker: 2.5
+--- !u!4 &1433509154
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1433509152}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1449765606
 GameObject:
   m_ObjectHideFlags: 0
@@ -11197,3 +11254,4 @@ SceneRoots:
   - {fileID: 1810333222}
   - {fileID: 1596887768}
   - {fileID: 947874396}
+  - {fileID: 1433509154}
