@@ -32,6 +32,9 @@ namespace Collection.Saving
 		/// Zero means the display's own resolution.
 		public int resolutionWidth;
 		public int resolutionHeight;
+
+		/// The collection's text in the usual font rather than the handwritten one (CollectionFonts).
+		public bool normalFont;
 	}
 
 	/// <summary>

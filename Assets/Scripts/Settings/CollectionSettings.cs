@@ -87,6 +87,14 @@ namespace Collection
 		{
 			ApplyAudio(SaveManager.Settings);
 			ApplyDisplay(SaveManager.Settings);
+			ApplyFont(SaveManager.Settings);
+		}
+
+		/// The font of the given settings, which need not be the saved ones: the settings screen
+		/// shows what it is showing.
+		public static void ApplyFont(Settings settings)
+		{
+			Collection.UI.CollectionFonts.Use(settings.normalFont);
 		}
 
 		/// The volumes of the given settings, which need not be the saved ones: the settings

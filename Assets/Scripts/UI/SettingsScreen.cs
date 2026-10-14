@@ -48,6 +48,12 @@ namespace Collection.UI
 					shown.resolutionHeight = resolutions[at].y;
 				});
 
+			screen.Choice("Font Type", () => shown.normalFont ? "Normal" : "Handwritten", by =>
+			{
+				shown.normalFont = !shown.normalFont;
+				CollectionSettings.ApplyFont(shown);
+			});
+
 			string applied = "";
 			screen.Button("Apply", () =>
 			{
@@ -61,12 +67,14 @@ namespace Collection.UI
 			{
 				Copy(new Settings(), shown);
 				CollectionSettings.ApplyAudio(shown);
+				CollectionSettings.ApplyFont(shown);
 				applied = "These are the defaults. Apply to keep them.";
 			});
 
 			System.Action back = () =>
 			{
 				CollectionSettings.ApplyAudio(saved);
+				CollectionSettings.ApplyFont(saved);
 				Menus.Pop();
 			};
 
@@ -101,12 +109,14 @@ namespace Collection.UI
 			to.fullscreen = from.fullscreen;
 			to.resolutionWidth = from.resolutionWidth;
 			to.resolutionHeight = from.resolutionHeight;
+			to.normalFont = from.normalFont;
 		}
 
 		private static bool Same(Settings a, Settings b)
 		{
 			return Mathf.Approximately(a.masterVolume, b.masterVolume) && Mathf.Approximately(a.musicVolume, b.musicVolume)
-				&& a.fullscreen == b.fullscreen && a.resolutionWidth == b.resolutionWidth && a.resolutionHeight == b.resolutionHeight;
+				&& a.fullscreen == b.fullscreen && a.resolutionWidth == b.resolutionWidth && a.resolutionHeight == b.resolutionHeight
+				&& a.normalFont == b.normalFont;
 		}
 	}
 }

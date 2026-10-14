@@ -1,0 +1,2873 @@
+fileFormatVersion: 2
+guid: c34c99c29da185f4cafb383b86f5b030
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2063484698427613737
+    second: Font_Raw_0
+  - first:
+      213: -3405910726345309793
+    second: Font_Raw_1
+  - first:
+      213: 8912408632521224951
+    second: Font_Raw_2
+  - first:
+      213: -3432944471205128960
+    second: Font_Raw_3
+  - first:
+      213: -4672996741063776013
+    second: Font_Raw_4
+  - first:
+      213: 4040469319951506433
+    second: Font_Raw_5
+  - first:
+      213: 2635769215849691884
+    second: Font_Raw_6
+  - first:
+      213: 2753341030729566848
+    second: Font_Raw_7
+  - first:
+      213: 3215112070724040584
+    second: Font_Raw_8
+  - first:
+      213: -341263913939288968
+    second: Font_Raw_9
+  - first:
+      213: -2864069135986058401
+    second: Font_Raw_10
+  - first:
+      213: -8100025505934654957
+    second: Font_Raw_11
+  - first:
+      213: 8665466712100441022
+    second: Font_Raw_12
+  - first:
+      213: -8082119880524781695
+    second: Font_Raw_13
+  - first:
+      213: -7252686691951723060
+    second: Font_Raw_14
+  - first:
+      213: 3588245309483418287
+    second: Font_Raw_15
+  - first:
+      213: -8459780689135958095
+    second: Font_Raw_16
+  - first:
+      213: 4277288818369746115
+    second: Font_Raw_17
+  - first:
+      213: -2656975454383217859
+    second: Font_Raw_18
+  - first:
+      213: 3018404139026331335
+    second: Font_Raw_19
+  - first:
+      213: -4178951548198734863
+    second: Font_Raw_20
+  - first:
+      213: 3024929184126151972
+    second: Font_Raw_21
+  - first:
+      213: 4573941960913065788
+    second: Font_Raw_22
+  - first:
+      213: -922904397202970812
+    second: Font_Raw_23
+  - first:
+      213: -8476247500027323048
+    second: Font_Raw_24
+  - first:
+      213: 1891234716963670441
+    second: Font_Raw_25
+  - first:
+      213: -3690450940951897601
+    second: Font_Raw_26
+  - first:
+      213: -3225441613703092388
+    second: Font_Raw_27
+  - first:
+      213: 7861043487180837155
+    second: Font_Raw_28
+  - first:
+      213: 5944977403298544170
+    second: Font_Raw_29
+  - first:
+      213: -6249485053016110312
+    second: Font_Raw_30
+  - first:
+      213: 2677153769712299668
+    second: Font_Raw_31
+  - first:
+      213: 3195346082609788915
+    second: Font_Raw_32
+  - first:
+      213: -6873325772720719616
+    second: Font_Raw_33
+  - first:
+      213: -2326355755909628118
+    second: Font_Raw_34
+  - first:
+      213: -2008907271589382893
+    second: Font_Raw_35
+  - first:
+      213: 8690695623345593744
+    second: Font_Raw_36
+  - first:
+      213: 2060698696353665898
+    second: Font_Raw_37
+  - first:
+      213: 1907761688182027987
+    second: Font_Raw_38
+  - first:
+      213: -6983410195637295201
+    second: Font_Raw_39
+  - first:
+      213: -4134177735904257275
+    second: Font_Raw_40
+  - first:
+      213: -6478560884264066572
+    second: Font_Raw_41
+  - first:
+      213: -4508374072062320285
+    second: Font_Raw_42
+  - first:
+      213: -3535954577025003804
+    second: Font_Raw_43
+  - first:
+      213: -7467100548212768469
+    second: Font_Raw_44
+  - first:
+      213: -3824792353845151033
+    second: Font_Raw_45
+  - first:
+      213: 6153684518859846123
+    second: Font_Raw_46
+  - first:
+      213: 5763957966362746780
+    second: Font_Raw_47
+  - first:
+      213: -3135909146941123036
+    second: Font_Raw_48
+  - first:
+      213: -2588041873055153109
+    second: Font_Raw_49
+  - first:
+      213: -2794715559913163706
+    second: Font_Raw_50
+  - first:
+      213: 2108626877434810795
+    second: Font_Raw_51
+  - first:
+      213: -3651259735437182450
+    second: Font_Raw_52
+  - first:
+      213: 3973985067982840548
+    second: Font_Raw_53
+  - first:
+      213: 8588101617992529284
+    second: Font_Raw_54
+  - first:
+      213: -8082583664295763089
+    second: Font_Raw_55
+  - first:
+      213: -7925025968833002834
+    second: Font_Raw_56
+  - first:
+      213: 45374368356061271
+    second: Font_Raw_57
+  - first:
+      213: 1394426708252923932
+    second: Font_Raw_58
+  - first:
+      213: 3706530172372485370
+    second: Font_Raw_59
+  - first:
+      213: 8998699949853497677
+    second: Font_Raw_60
+  - first:
+      213: -633861267145136604
+    second: Font_Raw_61
+  - first:
+      213: -4417524278890900187
+    second: Font_Raw_62
+  - first:
+      213: -8600296527042757426
+    second: Font_Raw_63
+  - first:
+      213: 1275117129569176443
+    second: Font_Raw_64
+  - first:
+      213: 7425468277417400252
+    second: Font_Raw_65
+  - first:
+      213: -5714959764935757076
+    second: Font_Raw_66
+  - first:
+      213: 295601760863124399
+    second: Font_Raw_67
+  - first:
+      213: -5387746901605541442
+    second: Font_Raw_68
+  - first:
+      213: -5575738723580416695
+    second: Font_Raw_69
+  - first:
+      213: -8163505967077399846
+    second: Font_Raw_70
+  - first:
+      213: 7929436062747853921
+    second: Font_Raw_71
+  - first:
+      213: -710342522816127023
+    second: Font_Raw_72
+  - first:
+      213: -7723350398223788322
+    second: Font_Raw_73
+  - first:
+      213: -6902230054354146554
+    second: Font_Raw_74
+  - first:
+      213: -7729794519411699638
+    second: Font_Raw_75
+  - first:
+      213: 1233299332925457737
+    second: Font_Raw_76
+  - first:
+      213: 9194423741230674788
+    second: Font_Raw_77
+  - first:
+      213: 8087030971033534788
+    second: Font_Raw_78
+  - first:
+      213: -6712721222412127658
+    second: Font_Raw_79
+  - first:
+      213: 838363068672547073
+    second: Font_Raw_80
+  - first:
+      213: -6469426362053574311
+    second: Font_Raw_81
+  - first:
+      213: -3487653494645312653
+    second: Font_Raw_82
+  - first:
+      213: 4126881406522193639
+    second: Font_Raw_83
+  - first:
+      213: -3770839139022532372
+    second: Font_Raw_84
+  - first:
+      213: 1884229006576967714
+    second: Font_Raw_85
+  - first:
+      213: -7017588704515580309
+    second: Font_Raw_86
+  - first:
+      213: -4611870154732884300
+    second: Font_Raw_87
+  - first:
+      213: -7537867744437139147
+    second: Font_Raw_88
+  - first:
+      213: -6232156441104565714
+    second: Font_Raw_89
+  - first:
+      213: -5979037905569782229
+    second: Font_Raw_90
+  - first:
+      213: -6509136422439697592
+    second: Font_Raw_91
+  - first:
+      213: -1558651049174515776
+    second: Font_Raw_92
+  - first:
+      213: -4365219011658488603
+    second: Font_Raw_93
+  - first:
+      213: 443339603575586669
+    second: Font_Raw_94
+  - first:
+      213: 3270112656656769864
+    second: Font_Raw_95
+  - first:
+      213: -3635034531430106533
+    second: Font_Raw_96
+  - first:
+      213: 5519578992288317978
+    second: Font_Raw_97
+  - first:
+      213: -2046291204481952609
+    second: Font_Raw_98
+  - first:
+      213: -3381555888396521952
+    second: Font_Raw_99
+  - first:
+      213: -3916542287163747192
+    second: Font_Raw_100
+  - first:
+      213: 5489310332712005758
+    second: Font_Raw_101
+  - first:
+      213: 5424676099083293105
+    second: Font_Raw_102
+  - first:
+      213: 1279490754465337691
+    second: Font_Raw_103
+  - first:
+      213: 8855885194183730720
+    second: Font_Raw_104
+  - first:
+      213: 2618607278073089142
+    second: Font_Raw_105
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Font_Raw_0
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 2373
+        width: 112
+        height: 163
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9226b318668f2ac10800000000000000
+      internalID: 2063484698427613737
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_1
+      rect:
+        serializedVersion: 2
+        x: 335
+        y: 2368
+        width: 101
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f91ce7b5d36cbb0d0800000000000000
+      internalID: -3405910726345309793
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_2
+      rect:
+        serializedVersion: 2
+        x: 590
+        y: 2389
+        width: 122
+        height: 133
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7f27d8a6e6c3fab70800000000000000
+      internalID: 8912408632521224951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_3
+      rect:
+        serializedVersion: 2
+        x: 836
+        y: 2383
+        width: 112
+        height: 139
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0055d24213bbb50d0800000000000000
+      internalID: -3432944471205128960
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_4
+      rect:
+        serializedVersion: 2
+        x: 1091
+        y: 2380
+        width: 136
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f8e55cf83e262fb0800000000000000
+      internalID: -4672996741063776013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_5
+      rect:
+        serializedVersion: 2
+        x: 1351
+        y: 2386
+        width: 104
+        height: 138
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 10cd29d6071a21830800000000000000
+      internalID: 4040469319951506433
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_6
+      rect:
+        serializedVersion: 2
+        x: 1588
+        y: 2386
+        width: 135
+        height: 134
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cea71ac0322249420800000000000000
+      internalID: 2635769215849691884
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_7
+      rect:
+        serializedVersion: 2
+        x: 1859
+        y: 2385
+        width: 87
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 08ac4226415d53620800000000000000
+      internalID: 2753341030729566848
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_8
+      rect:
+        serializedVersion: 2
+        x: 1949
+        y: 2393
+        width: 19
+        height: 121
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 887b398d46f5e9c20800000000000000
+      internalID: 3215112070724040584
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_9
+      rect:
+        serializedVersion: 2
+        x: 2161
+        y: 2375
+        width: 20
+        height: 143
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87c3df24746934bf0800000000000000
+      internalID: -341263913939288968
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_10
+      rect:
+        serializedVersion: 2
+        x: 2390
+        y: 2380
+        width: 91
+        height: 135
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f5b14699b48c048d0800000000000000
+      internalID: -2864069135986058401
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_11
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 2128
+        width: 100
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3124927d7bde69f80800000000000000
+      internalID: -8100025505934654957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_12
+      rect:
+        serializedVersion: 2
+        x: 344
+        y: 2129
+        width: 95
+        height: 139
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ebb08b3201ce14870800000000000000
+      internalID: 8665466712100441022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_13
+      rect:
+        serializedVersion: 2
+        x: 572
+        y: 2141
+        width: 127
+        height: 142
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 187a2312aca86df80800000000000000
+      internalID: -8082119880524781695
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_14
+      rect:
+        serializedVersion: 2
+        x: 835
+        y: 2136
+        width: 108
+        height: 140
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ccdb30b41e7495b90800000000000000
+      internalID: -7252686691951723060
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_15
+      rect:
+        serializedVersion: 2
+        x: 1087
+        y: 2128
+        width: 149
+        height: 160
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fa288bef8120cc130800000000000000
+      internalID: 3588245309483418287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_16
+      rect:
+        serializedVersion: 2
+        x: 1348
+        y: 2131
+        width: 108
+        height: 148
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b7875af842d89a80800000000000000
+      internalID: -8459780689135958095
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_17
+      rect:
+        serializedVersion: 2
+        x: 1591
+        y: 2106
+        width: 140
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c4ddaca48bfb5b30800000000000000
+      internalID: 4277288818369746115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_18
+      rect:
+        serializedVersion: 2
+        x: 1862
+        y: 2123
+        width: 120
+        height: 154
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d336e88c6e6802bd0800000000000000
+      internalID: -2656975454383217859
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_19
+      rect:
+        serializedVersion: 2
+        x: 2115
+        y: 2120
+        width: 114
+        height: 153
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c6bb3f729683e920800000000000000
+      internalID: 3018404139026331335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_20
+      rect:
+        serializedVersion: 2
+        x: 2376
+        y: 2141
+        width: 129
+        height: 132
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1f3bb0c35b16106c0800000000000000
+      internalID: -4178951548198734863
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_21
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 1882
+        width: 118
+        height: 132
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42d2d82f015baf920800000000000000
+      internalID: 3024929184126151972
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_22
+      rect:
+        serializedVersion: 2
+        x: 328
+        y: 1875
+        width: 125
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c371a7bcaf7e97f30800000000000000
+      internalID: 4573941960913065788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_23
+      rect:
+        serializedVersion: 2
+        x: 555
+        y: 1881
+        width: 160
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 447221b275f2133f0800000000000000
+      internalID: -922904397202970812
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_24
+      rect:
+        serializedVersion: 2
+        x: 847
+        y: 1870
+        width: 114
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85d149ccec15e5a80800000000000000
+      internalID: -8476247500027323048
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_25
+      rect:
+        serializedVersion: 2
+        x: 1092
+        y: 1872
+        width: 109
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a9818374f30f3a10800000000000000
+      internalID: 1891234716963670441
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_26
+      rect:
+        serializedVersion: 2
+        x: 1351
+        y: 1877
+        width: 123
+        height: 140
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff95e8b0c62e8ccc0800000000000000
+      internalID: -3690450940951897601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_27
+      rect:
+        serializedVersion: 2
+        x: 1614
+        y: 1873
+        width: 65
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c57e67301fdec33d0800000000000000
+      internalID: -3225441613703092388
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_28
+      rect:
+        serializedVersion: 2
+        x: 1628
+        y: 1874
+        width: 90
+        height: 112
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 321df49e669081d60800000000000000
+      internalID: 7861043487180837155
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_29
+      rect:
+        serializedVersion: 2
+        x: 1873
+        y: 1879
+        width: 87
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2a7551537dc08250800000000000000
+      internalID: 5944977403298544170
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_30
+      rect:
+        serializedVersion: 2
+        x: 2130
+        y: 1879
+        width: 88
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81b8cd9947e5549a0800000000000000
+      internalID: -6249485053016110312
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_31
+      rect:
+        serializedVersion: 2
+        x: 2392
+        y: 1870
+        width: 80
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 49eaccc5b29272520800000000000000
+      internalID: 2677153769712299668
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_32
+      rect:
+        serializedVersion: 2
+        x: 357
+        y: 1605
+        width: 72
+        height: 157
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f7746c1556285c20800000000000000
+      internalID: 3195346082609788915
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_33
+      rect:
+        serializedVersion: 2
+        x: 860
+        y: 1622
+        width: 85
+        height: 150
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 009b17b40aa0d90a0800000000000000
+      internalID: -6873325772720719616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_34
+      rect:
+        serializedVersion: 2
+        x: 1143
+        y: 1730
+        width: 28
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2f32dbf3cf17bfd0800000000000000
+      internalID: -2326355755909628118
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_35
+      rect:
+        serializedVersion: 2
+        x: 1395
+        y: 1730
+        width: 25
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 315373aea7dee14e0800000000000000
+      internalID: -2008907271589382893
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_36
+      rect:
+        serializedVersion: 2
+        x: 1623
+        y: 1625
+        width: 75
+        height: 143
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09d5e88cf9d8b9870800000000000000
+      internalID: 8690695623345593744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_37
+      rect:
+        serializedVersion: 2
+        x: 1910
+        y: 1607
+        width: 58
+        height: 152
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a635549db82199c10800000000000000
+      internalID: 2060698696353665898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_38
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 1626
+        width: 77
+        height: 99
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d6703cc52bb97a10800000000000000
+      internalID: 1907761688182027987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_39
+      rect:
+        serializedVersion: 2
+        x: 596
+        y: 1576
+        width: 82
+        height: 144
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f97a2304d61f51f90800000000000000
+      internalID: -6983410195637295201
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_40
+      rect:
+        serializedVersion: 2
+        x: 1142
+        y: 1618
+        width: 21
+        height: 90
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50b1915c04370a6c0800000000000000
+      internalID: -4134177735904257275
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_41
+      rect:
+        serializedVersion: 2
+        x: 1382
+        y: 1594
+        width: 47
+        height: 121
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f123bd53378716a0800000000000000
+      internalID: -6478560884264066572
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_42
+      rect:
+        serializedVersion: 2
+        x: 2096
+        y: 1615
+        width: 146
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 361e428faa90f61c0800000000000000
+      internalID: -4508374072062320285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_43
+      rect:
+        serializedVersion: 2
+        x: 2389
+        y: 1617
+        width: 93
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ee0286eb04cdeec0800000000000000
+      internalID: -3535954577025003804
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_44
+      rect:
+        serializedVersion: 2
+        x: 87
+        y: 1362
+        width: 87
+        height: 104
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2147a12d978f5890800000000000000
+      internalID: -7467100548212768469
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_45
+      rect:
+        serializedVersion: 2
+        x: 349
+        y: 1319
+        width: 80
+        height: 154
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7cafd696e9b9beac0800000000000000
+      internalID: -3824792353845151033
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_46
+      rect:
+        serializedVersion: 2
+        x: 599
+        y: 1314
+        width: 78
+        height: 153
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be1367e5777466550800000000000000
+      internalID: 6153684518859846123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_47
+      rect:
+        serializedVersion: 2
+        x: 870
+        y: 1380
+        width: 86
+        height: 84
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9f955d4b31bdff40800000000000000
+      internalID: 5763957966362746780
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_48
+      rect:
+        serializedVersion: 2
+        x: 1116
+        y: 1360
+        width: 73
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4261da0ee330b74d0800000000000000
+      internalID: -3135909146941123036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_49
+      rect:
+        serializedVersion: 2
+        x: 1371
+        y: 1362
+        width: 85
+        height: 127
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2406b4e0ad651cd0800000000000000
+      internalID: -2588041873055153109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_50
+      rect:
+        serializedVersion: 2
+        x: 1612
+        y: 1359
+        width: 103
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6447e1b510d2739d0800000000000000
+      internalID: -2794715559913163706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_51
+      rect:
+        serializedVersion: 2
+        x: 1882
+        y: 1358
+        width: 95
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba1d75919f8534d10800000000000000
+      internalID: 2108626877434810795
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_52
+      rect:
+        serializedVersion: 2
+        x: 2101
+        y: 1366
+        width: 158
+        height: 106
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e0a7496ad9e145dc0800000000000000
+      internalID: -3651259735437182450
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_53
+      rect:
+        serializedVersion: 2
+        x: 2383
+        y: 1376
+        width: 98
+        height: 97
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e2e2df3d5e662730800000000000000
+      internalID: 3973985067982840548
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_54
+      rect:
+        serializedVersion: 2
+        x: 90
+        y: 1048
+        width: 75
+        height: 166
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 485f66b7be01f2770800000000000000
+      internalID: 8588101617992529284
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_55
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 1103
+        width: 97
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f63a64e0bf4e4df80800000000000000
+      internalID: -8082583664295763089
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_56
+      rect:
+        serializedVersion: 2
+        x: 595
+        y: 1086
+        width: 92
+        height: 161
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ea286f3bed6a40290800000000000000
+      internalID: -7925025968833002834
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_57
+      rect:
+        serializedVersion: 2
+        x: 860
+        y: 1118
+        width: 58
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75055c36fb331a000800000000000000
+      internalID: 45374368356061271
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_58
+      rect:
+        serializedVersion: 2
+        x: 1103
+        y: 1108
+        width: 110
+        height: 140
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c189bb204bff95310800000000000000
+      internalID: 1394426708252923932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_59
+      rect:
+        serializedVersion: 2
+        x: 1371
+        y: 1107
+        width: 86
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: af48781cd8d307330800000000000000
+      internalID: 3706530172372485370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_60
+      rect:
+        serializedVersion: 2
+        x: 1620
+        y: 1111
+        width: 96
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d49d75f5dedc1ec70800000000000000
+      internalID: 8998699949853497677
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_61
+      rect:
+        serializedVersion: 2
+        x: 1882
+        y: 1113
+        width: 88
+        height: 129
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4266fee29821437f0800000000000000
+      internalID: -633861267145136604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_62
+      rect:
+        serializedVersion: 2
+        x: 2129
+        y: 1094
+        width: 96
+        height: 153
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5255b0ac21dc1b2c0800000000000000
+      internalID: -4417524278890900187
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_63
+      rect:
+        serializedVersion: 2
+        x: 2398
+        y: 1109
+        width: 100
+        height: 129
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ecc379effdb95a880800000000000000
+      internalID: -8600296527042757426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_64
+      rect:
+        serializedVersion: 2
+        x: 87
+        y: 841
+        width: 88
+        height: 166
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b7b8cf2064022b110800000000000000
+      internalID: 1275117129569176443
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_65
+      rect:
+        serializedVersion: 2
+        x: 341
+        y: 843
+        width: 93
+        height: 152
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb755667e009c0760800000000000000
+      internalID: 7425468277417400252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_66
+      rect:
+        serializedVersion: 2
+        x: 636
+        y: 894
+        width: 16
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce2ba597f5260b0b0800000000000000
+      internalID: -5714959764935757076
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_67
+      rect:
+        serializedVersion: 2
+        x: 874
+        y: 922
+        width: 18
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fabf93f3c303a1400800000000000000
+      internalID: 295601760863124399
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_68
+      rect:
+        serializedVersion: 2
+        x: 915
+        y: 928
+        width: 16
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: eb9171e0db0ea35b0800000000000000
+      internalID: -5387746901605541442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_69
+      rect:
+        serializedVersion: 2
+        x: 1104
+        y: 863
+        width: 99
+        height: 115
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 94d69942c2ffe92b0800000000000000
+      internalID: -5575738723580416695
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_70
+      rect:
+        serializedVersion: 2
+        x: 1367
+        y: 836
+        width: 93
+        height: 163
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad2e196339665be80800000000000000
+      internalID: -8163505967077399846
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_71
+      rect:
+        serializedVersion: 2
+        x: 1597
+        y: 918
+        width: 54
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 164024d46140b0e60800000000000000
+      internalID: 7929436062747853921
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_72
+      rect:
+        serializedVersion: 2
+        x: 1621
+        y: 874
+        width: 98
+        height: 127
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1df90b23d3b5426f0800000000000000
+      internalID: -710342522816127023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_73
+      rect:
+        serializedVersion: 2
+        x: 1878
+        y: 844
+        width: 98
+        height: 145
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed6dffd9bb521d490800000000000000
+      internalID: -7723350398223788322
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_74
+      rect:
+        serializedVersion: 2
+        x: 2164
+        y: 922
+        width: 23
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60b223cc55a5630a0800000000000000
+      internalID: -6902230054354146554
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_75
+      rect:
+        serializedVersion: 2
+        x: 2399
+        y: 814
+        width: 67
+        height: 171
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4054bbb6d04ab490800000000000000
+      internalID: -7729794519411699638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_76
+      rect:
+        serializedVersion: 2
+        x: 632
+        y: 843
+        width: 26
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9458fb0853f8d1110800000000000000
+      internalID: 1233299332925457737
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_77
+      rect:
+        serializedVersion: 2
+        x: 1698
+        y: 868
+        width: 43
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 463f872bda7299f70800000000000000
+      internalID: 9194423741230674788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_78
+      rect:
+        serializedVersion: 2
+        x: 107
+        y: 548
+        width: 43
+        height: 191
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 441490c32d7ea3070800000000000000
+      internalID: 8087030971033534788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_79
+      rect:
+        serializedVersion: 2
+        x: 359
+        y: 657
+        width: 64
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 65236ed1d9f97d2a0800000000000000
+      internalID: -6712721222412127658
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_80
+      rect:
+        serializedVersion: 2
+        x: 605
+        y: 599
+        width: 103
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1099805e4c672ab00800000000000000
+      internalID: 838363068672547073
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_81
+      rect:
+        serializedVersion: 2
+        x: 1120
+        y: 636
+        width: 70
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 951cf3d000bf736a0800000000000000
+      internalID: -6469426362053574311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_82
+      rect:
+        serializedVersion: 2
+        x: 1645
+        y: 589
+        width: 53
+        height: 154
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 373340000ad599fc0800000000000000
+      internalID: -3487653494645312653
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_83
+      rect:
+        serializedVersion: 2
+        x: 1901
+        y: 654
+        width: 27
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e67be926c0a54930800000000000000
+      internalID: 4126881406522193639
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_84
+      rect:
+        serializedVersion: 2
+        x: 2156
+        y: 651
+        width: 27
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce01c6528c94babc0800000000000000
+      internalID: -3770839139022532372
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_85
+      rect:
+        serializedVersion: 2
+        x: 2367
+        y: 613
+        width: 119
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 220e1846c40262a10800000000000000
+      internalID: 1884229006576967714
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_86
+      rect:
+        serializedVersion: 2
+        x: 890
+        y: 544
+        width: 24
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6e1e8701448c9e90800000000000000
+      internalID: -7017588704515580309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_87
+      rect:
+        serializedVersion: 2
+        x: 1396
+        y: 591
+        width: 30
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4beabec67885fffb0800000000000000
+      internalID: -4611870154732884300
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_88
+      rect:
+        serializedVersion: 2
+        x: 1900
+        y: 593
+        width: 30
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 53903f8493d146790800000000000000
+      internalID: -7537867744437139147
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_89
+      rect:
+        serializedVersion: 2
+        x: 2147
+        y: 566
+        width: 39
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2abc477cbee289a0800000000000000
+      internalID: -6232156441104565714
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_90
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 419
+        width: 78
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b26eae304b0360da0800000000000000
+      internalID: -5979037905569782229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_91
+      rect:
+        serializedVersion: 2
+        x: 330
+        y: 359
+        width: 95
+        height: 111
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 843cce129e6eaa5a0800000000000000
+      internalID: -6509136422439697592
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_92
+      rect:
+        serializedVersion: 2
+        x: 611
+        y: 376
+        width: 69
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0cfb92df02f8e5ae0800000000000000
+      internalID: -1558651049174515776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_93
+      rect:
+        serializedVersion: 2
+        x: 828
+        y: 301
+        width: 151
+        height: 198
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5e46053df60ab63c0800000000000000
+      internalID: -4365219011658488603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_94
+      rect:
+        serializedVersion: 2
+        x: 1133
+        y: 314
+        width: 72
+        height: 167
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6f3cf1450f072600800000000000000
+      internalID: 443339603575586669
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_95
+      rect:
+        serializedVersion: 2
+        x: 1382
+        y: 349
+        width: 70
+        height: 137
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 843298ba226c16d20800000000000000
+      internalID: 3270112656656769864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_96
+      rect:
+        serializedVersion: 2
+        x: 1626
+        y: 315
+        width: 56
+        height: 170
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b5a74d75a53cd8dc0800000000000000
+      internalID: -3635034531430106533
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_97
+      rect:
+        serializedVersion: 2
+        x: 1881
+        y: 412
+        width: 87
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a12cd0979db799c40800000000000000
+      internalID: 5519578992288317978
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_98
+      rect:
+        serializedVersion: 2
+        x: 2401
+        y: 435
+        width: 47
+        height: 59
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f94d8d1cdfc1a93e0800000000000000
+      internalID: -2046291204481952609
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_99
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 368
+        width: 94
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02eaef3f5dc4211d0800000000000000
+      internalID: -3381555888396521952
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_100
+      rect:
+        serializedVersion: 2
+        x: 629
+        y: 329
+        width: 21
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8841fc16a85a5a9c0800000000000000
+      internalID: -3916542287163747192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_101
+      rect:
+        serializedVersion: 2
+        x: 2104
+        y: 289
+        width: 128
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e703e2bf9a2fd2c40800000000000000
+      internalID: 5489310332712005758
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_102
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 40
+        width: 87
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b15963cb22584b40800000000000000
+      internalID: 5424676099083293105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_103
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 37
+        width: 20
+        height: 199
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b519d49ef0aa1c110800000000000000
+      internalID: 1279490754465337691
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_104
+      rect:
+        serializedVersion: 2
+        x: 609
+        y: 33
+        width: 57
+        height: 207
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02666f2e9ac66ea70800000000000000
+      internalID: 8855885194183730720
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Font_Raw_105
+      rect:
+        serializedVersion: 2
+        x: 843
+        y: 126
+        width: 113
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67c8cc70279275420800000000000000
+      internalID: 2618607278073089142
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Font_Raw_0: 2063484698427613737
+      Font_Raw_1: -3405910726345309793
+      Font_Raw_10: -2864069135986058401
+      Font_Raw_100: -3916542287163747192
+      Font_Raw_101: 5489310332712005758
+      Font_Raw_102: 5424676099083293105
+      Font_Raw_103: 1279490754465337691
+      Font_Raw_104: 8855885194183730720
+      Font_Raw_105: 2618607278073089142
+      Font_Raw_11: -8100025505934654957
+      Font_Raw_12: 8665466712100441022
+      Font_Raw_13: -8082119880524781695
+      Font_Raw_14: -7252686691951723060
+      Font_Raw_15: 3588245309483418287
+      Font_Raw_16: -8459780689135958095
+      Font_Raw_17: 4277288818369746115
+      Font_Raw_18: -2656975454383217859
+      Font_Raw_19: 3018404139026331335
+      Font_Raw_2: 8912408632521224951
+      Font_Raw_20: -4178951548198734863
+      Font_Raw_21: 3024929184126151972
+      Font_Raw_22: 4573941960913065788
+      Font_Raw_23: -922904397202970812
+      Font_Raw_24: -8476247500027323048
+      Font_Raw_25: 1891234716963670441
+      Font_Raw_26: -3690450940951897601
+      Font_Raw_27: -3225441613703092388
+      Font_Raw_28: 7861043487180837155
+      Font_Raw_29: 5944977403298544170
+      Font_Raw_3: -3432944471205128960
+      Font_Raw_30: -6249485053016110312
+      Font_Raw_31: 2677153769712299668
+      Font_Raw_32: 3195346082609788915
+      Font_Raw_33: -6873325772720719616
+      Font_Raw_34: -2326355755909628118
+      Font_Raw_35: -2008907271589382893
+      Font_Raw_36: 8690695623345593744
+      Font_Raw_37: 2060698696353665898
+      Font_Raw_38: 1907761688182027987
+      Font_Raw_39: -6983410195637295201
+      Font_Raw_4: -4672996741063776013
+      Font_Raw_40: -4134177735904257275
+      Font_Raw_41: -6478560884264066572
+      Font_Raw_42: -4508374072062320285
+      Font_Raw_43: -3535954577025003804
+      Font_Raw_44: -7467100548212768469
+      Font_Raw_45: -3824792353845151033
+      Font_Raw_46: 6153684518859846123
+      Font_Raw_47: 5763957966362746780
+      Font_Raw_48: -3135909146941123036
+      Font_Raw_49: -2588041873055153109
+      Font_Raw_5: 4040469319951506433
+      Font_Raw_50: -2794715559913163706
+      Font_Raw_51: 2108626877434810795
+      Font_Raw_52: -3651259735437182450
+      Font_Raw_53: 3973985067982840548
+      Font_Raw_54: 8588101617992529284
+      Font_Raw_55: -8082583664295763089
+      Font_Raw_56: -7925025968833002834
+      Font_Raw_57: 45374368356061271
+      Font_Raw_58: 1394426708252923932
+      Font_Raw_59: 3706530172372485370
+      Font_Raw_6: 2635769215849691884
+      Font_Raw_60: 8998699949853497677
+      Font_Raw_61: -633861267145136604
+      Font_Raw_62: -4417524278890900187
+      Font_Raw_63: -8600296527042757426
+      Font_Raw_64: 1275117129569176443
+      Font_Raw_65: 7425468277417400252
+      Font_Raw_66: -5714959764935757076
+      Font_Raw_67: 295601760863124399
+      Font_Raw_68: -5387746901605541442
+      Font_Raw_69: -5575738723580416695
+      Font_Raw_7: 2753341030729566848
+      Font_Raw_70: -8163505967077399846
+      Font_Raw_71: 7929436062747853921
+      Font_Raw_72: -710342522816127023
+      Font_Raw_73: -7723350398223788322
+      Font_Raw_74: -6902230054354146554
+      Font_Raw_75: -7729794519411699638
+      Font_Raw_76: 1233299332925457737
+      Font_Raw_77: 9194423741230674788
+      Font_Raw_78: 8087030971033534788
+      Font_Raw_79: -6712721222412127658
+      Font_Raw_8: 3215112070724040584
+      Font_Raw_80: 838363068672547073
+      Font_Raw_81: -6469426362053574311
+      Font_Raw_82: -3487653494645312653
+      Font_Raw_83: 4126881406522193639
+      Font_Raw_84: -3770839139022532372
+      Font_Raw_85: 1884229006576967714
+      Font_Raw_86: -7017588704515580309
+      Font_Raw_87: -4611870154732884300
+      Font_Raw_88: -7537867744437139147
+      Font_Raw_89: -6232156441104565714
+      Font_Raw_9: -341263913939288968
+      Font_Raw_90: -5979037905569782229
+      Font_Raw_91: -6509136422439697592
+      Font_Raw_92: -1558651049174515776
+      Font_Raw_93: -4365219011658488603
+      Font_Raw_94: 443339603575586669
+      Font_Raw_95: 3270112656656769864
+      Font_Raw_96: -3635034531430106533
+      Font_Raw_97: 5519578992288317978
+      Font_Raw_98: -2046291204481952609
+      Font_Raw_99: -3381555888396521952
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
