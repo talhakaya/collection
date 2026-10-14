@@ -25,6 +25,11 @@ Shader "Poster/Radiating Rings"
         _RainbowSaturation ("Saturation", Range(0, 1)) = 0.8
         [Toggle] _RainbowTravels ("Colours Travel With The Rings", Float) = 0
         _RainbowSpeed ("Colours Move Out At (px a second at 1080, on top)", Float) = 0
+        [Header(Impacts)]
+        [Toggle] _Impacts ("Shown Only By Impacts (Set From A Script)", Float) = 0
+        _ImpactSoftness ("Softness Of An Impact's Front (px at 1080)", Float) = 160
+        [HideInInspector] _ImpactFronts ("Impact Fronts", Vector) = (0, 0, 0, 0)
+        [HideInInspector] _ImpactStrengths ("Impact Strengths", Vector) = (0, 0, 0, 0)
     }
 
     SubShader
@@ -45,6 +50,18 @@ Shader "Poster/Radiating Rings"
             float4 _LineColour, _BackColour, _FillColour;
             float _Spacing, _Width, _Gap, _FadeFrom, _FadeOver, _Offset;
             float _Rainbow, _RainbowLength, _RainbowStart, _RainbowSaturation, _RainbowTravels, _RainbowSpeed;
+            float _Impacts, _ImpactSoftness;
+            float4 _ImpactFronts, _ImpactStrengths;
+
+            // With impacts, the lines show only where one has reached: up to four at once, each a front going out
+            // from the silhouette (how far out, at 1080) and how strongly its lines show. A pixel shows the
+            // strongest that has reached it, so a new impact never takes away what an older one shows.
+            float ImpactShown(float d)
+            {
+                float4 reached = 1 - smoothstep(_ImpactFronts - _ImpactSoftness, _ImpactFronts, d);
+                float4 shown = reached * _ImpactStrengths;
+                return max(max(shown.x, shown.y), max(shown.z, shown.w));
+            }
 
             // A colour round the colour wheel, at full brightness.
             float3 Hue(float h, float saturation)
@@ -95,6 +112,8 @@ Shader "Poster/Radiating Rings"
                 ring *= smoothstep(_Gap - soft, _Gap + soft, d);
                 if (_FadeFrom > 0)
                     ring *= 1 - saturate((d - _FadeFrom) / max(_FadeOver, 1));
+                if (_Impacts > 0.5)
+                    ring *= ImpactShown(d);
 
                 // Ticked, the line colour is multiplied by a hue going round the wheel with distance. The colours
                 // stay in place unless they travel with the rings, or move out at their own `_RainbowSpeed` (on top

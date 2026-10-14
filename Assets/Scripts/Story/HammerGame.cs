@@ -24,6 +24,9 @@ namespace Collection.Story
     //
     // The face is `terror` while it waits for the next blow and `pain` as one lands.
     //
+    // Each blow sends rainbow lines out from the character and the hammer, over the black (ImpactRings). They
+    // have faded out before the view leaves the black.
+    //
     // Play is for a Cutscene's onStart, in a conversation; the cutscene is one that goes on until told (it is
     // told here, when the last blow has landed). The head is left flat but is not kept in the save here: whoever
     // ends the level keeps it (DesertEnding), so a level left halfway starts again with a round head to flatten.
@@ -64,6 +67,11 @@ namespace Collection.Story
         public float turnTime = 0.7f;
         [Tooltip("Seconds the artifacts take to come together.")]
         public float gatherTime = 1.4f;
+
+        [Header("Impact")]
+        [Tooltip("The lines going out from the character as each blow lands (ImpactRings): the Radiating Rings material they are drawn with, and the jump flood shader. Either empty: no lines.")]
+        public Material impactLines;
+        public Shader jumpFlood;
 
         [Header("Faces and words")]
         public string terror = "terror";
@@ -149,6 +157,7 @@ namespace Collection.Story
             camera.Priority = new PrioritySettings { Enabled = true, Value = priority };
             cameraObject.transform.SetPositionAndRotation(aim - looking * cameraDistance, Quaternion.LookRotation(looking, Vector3.up));
             Main.inst.camera.EnterStudio(cameraObject);
+            ImpactRings impact = impactLines != null && jumpFlood != null ? ImpactRings.Make(impactLines, jumpFlood) : null;
 
             // Where the hammer is: to the right of the picture, and round toward the camera a little.
             Vector3 side = (right * Mathf.Cos(slant * Mathf.Deg2Rad) - ahead * Mathf.Sin(slant * Mathf.Deg2Rad)).normalized;
@@ -239,9 +248,11 @@ namespace Collection.Story
                     yield return null;
                 }
 
-                // It lands: the side goes in under it, the face is one of pain, the body is knocked.
+                // It lands: the side goes in under it, the face is one of pain, the body is knocked, the lines go out.
                 if (face != null)
                     face.Show(pain, true);
+                if (impact != null)
+                    impact.Hit();
                 float before = sphere[blow.side];
                 Vector3 stood = player.position;
                 for (float t = 0f; t < stayTime; t += Time.deltaTime)
@@ -299,6 +310,13 @@ namespace Collection.Story
             yield return new WaitForSeconds(faceStays);
             if (face != null)
                 face.ShowIdle();
+            // The lines gone before the black is: they fade out, and are never cut off.
+            if (impact != null)
+            {
+                while (impact.Showing)
+                    yield return null;
+                Destroy(impact.gameObject);
+            }
 
             player.rotation = facedBefore;
             head.keepFullSize = false;

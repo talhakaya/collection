@@ -3129,6 +3129,8 @@ MonoBehaviour:
   backTime: 0.4
   turnTime: 0.7
   gatherTime: 1.4
+  impactLines: {fileID: 2100000, guid: a7ca4f7899e19ba4dbd321462ef62eaa, type: 2}
+  jumpFlood: {fileID: 4800000, guid: a756f55a3c7eab64bb5299a9945dad03, type: 3}
   terror: terror
   pain: pain
   word: SMASH!
@@ -12973,6 +12975,7 @@ MonoBehaviour:
     m_Bits: 4294967245
   resolution: 0.75
   clipOffset: 0.02
+  foliage: 1
 --- !u!114 &1720701686
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -18,6 +18,13 @@ namespace Collection.Poster
     //
     // Every frame, then, each pixel of the screen is given the nearest pixel of the silhouette (JumpFlood.shader),
     // and the rings shader draws a line wherever the distance to it is a whole number of spacings.
+    //
+    // In the game it is the hammer's impact (Collection.Story.ImpactRings), which turns it on only while lines show
+    // and works it at half the screen's size, for the Steam Deck.
+    //
+    // After everything else of the frame, Cinemachine's moving of the main camera included, so the silhouette is
+    // where the camera sees it this frame.
+    [DefaultExecutionOrder(10000)]
     public class RadiatingOutline : MonoBehaviour
     {
         [Tooltip("A drawing of the outline, opaque on transparent. Needs Read/Write ticked in its import settings.")]
@@ -29,6 +36,14 @@ namespace Collection.Poster
         public Shader jumpFlood;
         [Tooltip("How fast the rings go out, in pixels a second at 1080 high.")]
         public float speed = 40f;
+        [Tooltip("The silhouette and the distances to it are found at this part of the screen's size. A half is a quarter of the work, and the lines are as smooth.")]
+        [Range(0.25f, 1f)] public float resolution = 1f;
+
+        // Off, nothing is worked out or shown.
+        [System.NonSerialized] public bool showing = true;
+        // Called every frame with the material the lines are drawn with, after the asset's settings are copied to
+        // it: for whatever sets some of its values itself.
+        public event System.Action<Material> Drawing;
 
         Material flood;
         Texture2D filled;
@@ -58,7 +73,12 @@ namespace Collection.Poster
 
         void LateUpdate()
         {
-            int width = Screen.width, height = Screen.height;
+            output.enabled = showing;
+            if (!showing)
+                return;
+
+            int width = Mathf.Max(16, Mathf.RoundToInt(Screen.width * resolution));
+            int height = Mathf.Max(16, Mathf.RoundToInt(Screen.height * resolution));
             Fit(ref a, width, height, RenderTextureFormat.RGFloat);
             Fit(ref b, width, height, RenderTextureFormat.RGFloat);
 
@@ -76,6 +96,8 @@ namespace Collection.Poster
                     maskCamera.orthographicSize = main.orthographicSize;
                     maskCamera.nearClipPlane = main.nearClipPlane;
                     maskCamera.farClipPlane = main.farClipPlane;
+                    // What the main camera sees: in the game's black studio, only the character and what is with it.
+                    maskCamera.cullingMask = main.cullingMask;
                 }
                 maskCamera.clearFlags = CameraClearFlags.SolidColor;
                 maskCamera.targetTexture = mask;
@@ -111,6 +133,7 @@ namespace Collection.Poster
             output.texture = from;
             rings.CopyPropertiesFromMaterial(look);
             rings.SetFloat(Offset, Time.time * speed);
+            Drawing?.Invoke(rings);
         }
 
         static void Fit(ref RenderTexture texture, int width, int height, RenderTextureFormat format)
