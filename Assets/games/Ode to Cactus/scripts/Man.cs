@@ -13,7 +13,7 @@ namespace Games.OdeToCactus
 	    public float jumpForceFirst;
 	    public float jumpForceCont;
 	    private TalhaAnimation anim;
-	    private int onGround = 0;
+	    private bool onGround;
 	    public Transform fallPlace;
 	    public AudioSource aWalk;
 	    public AudioSource aFall;
@@ -35,6 +35,8 @@ namespace Games.OdeToCactus
 
 		void Update ()
 	    {
+	        onGround = TouchingGround();
+
 	        if (movementEnabled)
 	        {
 	            speedV = GetComponent<Rigidbody2D>().linearVelocity.y;
@@ -42,7 +44,7 @@ namespace Games.OdeToCactus
 
 	            if (TaloketoInputManager.GetButton("Up")) // In the collection: was W or the up arrow
 	            {
-	                if (onGround > 0)
+	                if (onGround)
 	                {
 	                    speedV = jumpForceFirst;
 
@@ -54,7 +56,7 @@ namespace Games.OdeToCactus
 	            }
 	            float horizontalAxis = TaloketoInputManager.GetAxisRaw("Horizontal");
 	            anim.enabled = (horizontalAxis != 0);
-	            if (horizontalAxis != 0 && onGround > 0)
+	            if (horizontalAxis != 0 && onGround)
 	            {
 	                if (walkCounter <= 0)
 	                {
@@ -95,7 +97,7 @@ namespace Games.OdeToCactus
 	        {
 	            if (movementEnabled)
 	            {
-	                if (onGround > 0 && transform.position.x > -3.7f)
+	                if (onGround && transform.position.x > -3.7f)
 	                {
 	                    movementEnabled = false;
 	                    GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
@@ -131,33 +133,39 @@ namespace Games.OdeToCactus
 	        Camera.main.transform.position = new Vector3(16 * Mathf.Ceil((transform.position.x - 8f) / 16f), 9 * Mathf.Ceil((transform.position.y - 4.5f) / 9f), -10f);
 	    }
 
-	    void OnCollisionEnter2D(Collision2D other)
-	    {
-	        if (other.contacts[0].point.y < transform.position.y + 0.5f)
-	        {
-	            onGround++;
-	            grounds.Add(other.collider);
+	    // In the collection: on the ground means touching something whose surface faces up. It
+	    // was any collision whose contact was below half a unit over the man's middle - every
+	    // point of a body 0.8 tall, so a wall touched from the air counted as ground and Up
+	    // jumped off it again. Asked of the contacts every frame, where it was a count kept
+	    // from entering and leaving collisions.
+	    private const float GroundFacing = 0.7f;
+	    private readonly ContactPoint2D[] contacts = new ContactPoint2D[8];
 
-	            if (!norr2 && transform.position.y < -189f && !fallPlayed)
+	    private bool TouchingGround()
+	    {
+	        int count = GetComponent<Rigidbody2D>().GetContacts(contacts);
+	        for (int i = 0; i < count; i++)
+	        {
+	            if (contacts[i].normal.y > GroundFacing)
 	            {
-	                aFall.Play();
-	                fallPlayed = true;
+	                return true;
 	            }
 	        }
+	        return false;
 	    }
 
-	    // In the collection: a collision that has ended has no contact points left in Unity 6
-	    // (contacts[0] threw), so which colliders counted as ground is remembered on entering.
-	    private System.Collections.Generic.HashSet<Collider2D> grounds = new System.Collections.Generic.HashSet<Collider2D>();
-
-	    void OnCollisionExit2D(Collision2D other)
+	    void OnCollisionEnter2D(Collision2D other)
 	    {
-	        if (grounds.Remove(other.collider))
+	        if (!norr2 && transform.position.y < -189f && !fallPlayed)
 	        {
-	            onGround--;
-	            if (onGround < 0)
+	            for (int i = 0; i < other.contactCount; i++)
 	            {
-	                onGround = 0;
+	                if (other.GetContact(i).normal.y > GroundFacing)
+	                {
+	                    aFall.Play();
+	                    fallPlayed = true;
+	                    break;
+	                }
 	            }
 	        }
 	    }
