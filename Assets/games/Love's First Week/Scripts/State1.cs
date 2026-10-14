@@ -785,6 +785,11 @@ namespace Games.LovesFirstWeek
 
 			if (FlxG.keys.justPressed("ENTER") && talhaVar)
 			{
+				// In the collection: the one let go of stops as if its key had been let go of.
+				// Its push from the last left or right held was only cleared by the input
+				// above, which no longer looks at it, so it walked on in that direction.
+				Naz released = controlNaz ? naz : talha;
+				released.acceleration.x = 0;
 				controlNaz = !controlNaz;
 			}
 
