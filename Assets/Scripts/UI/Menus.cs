@@ -47,6 +47,14 @@ namespace Collection.UI
 		internal RectTransform fill;
 		internal Image barImage;
 		internal Image fillImage;
+
+		/// The white laid over the row when it is chosen, fading.
+		internal Image flash;
+		/// Which of the button's pictures it is on, 0 to 8, counting up while it is selected and down
+		/// while it is not.
+		internal float frame;
+		/// How white it still is from being chosen, 1 to 0.
+		internal float whiteness;
 	}
 
 	/// <summary>
@@ -56,6 +64,10 @@ namespace Collection.UI
 	public class MenuScreen
 	{
 		public string title;
+
+		/// The title big, always in the handwritten font, dancing in colours with a capital going
+		/// along it (the main menu's).
+		public bool titleDances;
 
 		/// Words under the title. Read every frame.
 		public Func<string> body;
@@ -118,21 +130,42 @@ namespace Collection.UI
 	{
 		private const string AssetResourcePath = "Input/CollectionInput";
 		private const float RowWidth = 820f;
-		private const float RowHeight = 68f;
+		private const float RowHeight = 96f;
+		// The room the rows have, between the title's words and the footer: a screen with more
+		// rows than fit at RowHeight has them shorter.
+		private const float RowsRoom = 640f;
 		private const float RowGap = 10f;
 		private const float RepeatDelay = 0.4f;
 		private const float RepeatRate = 0.12f;
 		private const float SliderStep = 0.05f;
+
+		// The button: nine pictures (Resources/Menu/ButtonLong-1 to 9), drawn at twice the row's
+		// size, so shown whole over it. The first is the button at rest; selected, it plays on to
+		// the ninth and stays there, with some white coming in, and deselected it plays back from
+		// wherever it got to. Chosen, it goes white at once and plays back from the ninth as the
+		// white fades.
+		//
+		// A dancing title dances like the characters' names in Crime Factory (its TalkUI): copies
+		// of it in colours behind it, moved a step at a time, and now and then one changes colour.
+		// Here they go round it: each copy circles the title, the next one out further and a little
+		// behind, so they trail round after it. And its capital goes along it a letter at a time,
+		// round and round (Talovision, tAlovision ...), every letter in a slot of the same width so
+		// that none moves as it changes.
+		//
+		// The numbers for both are in Resources/Menu/Menu Look (MenuLook).
+		private const string ButtonPictures = "Menu/ButtonLong-";
+		private const int ButtonFrames = 9;
+		private const string LookPath = "Menu/Menu Look";
 
 		private const string Controls =
 			"{<Keyboard>/upArrow|<Keyboard>/downArrow|<Keyboard>/leftArrow|<Keyboard>/rightArrow|<Gamepad>/dpad} Move"
 			+ "      {<Keyboard>/enter|<Gamepad>/buttonSouth} Select"
 			+ "      {<Keyboard>/escape|<Gamepad>/buttonEast} Back";
 
-		private static readonly Color RowColour = new Color(1f, 1f, 1f, 0.025f);
-		private static readonly Color RowSelectedColour = new Color(1f, 1f, 1f, 0.95f);
 		private static readonly Color TextColour = new Color(0.92f, 0.92f, 0.92f, 1f);
-		private static readonly Color TextSelectedColour = new Color(0.05f, 0.05f, 0.05f, 1f);
+		private static readonly Color TextSelectedColour = Color.white;
+		// The text on a button that has just been chosen, white all over.
+		private static readonly Color TextOnWhiteColour = new Color(0.05f, 0.05f, 0.05f, 1f);
 		private static readonly Color QuietTextColour = new Color(0.65f, 0.65f, 0.65f, 1f);
 
 		private static Menus instance;
@@ -161,6 +194,18 @@ namespace Collection.UI
 		private float nextRepeat;
 		private MenuItem dragging;
 		private string controlsShown;
+		private Sprite[] buttonPictures;
+		private RectTransform dancingTitle;
+		private TMP_Text titleFront;
+		private readonly List<TMP_Text> titleCopies = new List<TMP_Text>();
+		private MenuLook look;
+		private float titleSteps;
+		private string titleWord;
+		private float titleLetter;
+		private float rowHeight = RowHeight;
+		// A button chosen and waiting out its pause (MenuLook.chosenPause), and when it is done.
+		private MenuItem chosen;
+		private float chosenAt;
 
 		public static bool IsOpen => stack.Count > 0;
 
@@ -214,6 +259,8 @@ namespace Collection.UI
 
 			instance.changedFrame = Time.frameCount;
 			instance.dragging = null;
+			// A button still waiting to be done is not done on whatever screen there is now.
+			instance.chosen = null;
 			if (stack.Count > 0)
 			{
 				// At once, not at the next Update: a screen can open from an input callback,
@@ -246,6 +293,19 @@ namespace Collection.UI
 			submitAction.Enable();
 			cancelAction.Enable();
 			pauseAction.Enable();
+
+			look = Resources.Load<MenuLook>(LookPath);
+			if (look == null)
+			{
+				Debug.LogError($"Menus: no MenuLook at Resources/{LookPath}; using its defaults.");
+				look = ScriptableObject.CreateInstance<MenuLook>();
+			}
+
+			buttonPictures = new Sprite[ButtonFrames];
+			for (int i = 0; i < ButtonFrames; i++)
+			{
+				buttonPictures[i] = Resources.Load<Sprite>(ButtonPictures + (i + 1));
+			}
 
 			BuildCanvas();
 			InputPrompts.Changed += OnPromptsChanged;
@@ -285,9 +345,20 @@ namespace Collection.UI
 			MenuScreen screen = Top;
 			if (built != screen) Show();
 
+			// A button chosen a moment ago does what it does once it has been seen white; until
+			// then nothing else is pressed.
+			if (chosen != null)
+			{
+				if (Time.unscaledTime >= chosenAt)
+				{
+					MenuItem item = chosen;
+					chosen = null;
+					item.submit?.Invoke();
+				}
+			}
 			// A screen that opened or closed this frame was opened by a press that is still
 			// "pressed this frame". It is not also a press on the new screen.
-			if (Time.frameCount != changedFrame)
+			else if (Time.frameCount != changedFrame)
 			{
 				HandleInput(screen);
 			}
@@ -347,8 +418,12 @@ namespace Collection.UI
 
 			if (submitAction.WasPressedThisFrame() && selected != null)
 			{
-				if (selected.kind == MenuItem.Kind.Button) selected.submit?.Invoke();
-				else if (selected.kind == MenuItem.Kind.Choice) selected.step?.Invoke(1);
+				if (selected.kind == MenuItem.Kind.Button) Choose(selected);
+				else if (selected.kind == MenuItem.Kind.Choice)
+				{
+					selected.whiteness = 1f;
+					selected.step?.Invoke(1);
+				}
 				return;
 			}
 
@@ -457,9 +532,10 @@ namespace Collection.UI
 				switch (item.kind)
 				{
 					case MenuItem.Kind.Button:
-						item.submit?.Invoke();
+						Choose(item);
 						break;
 					case MenuItem.Kind.Choice:
+						item.whiteness = 1f;
 						// The left half of the value steps back, the rest forward.
 						RectTransformUtility.ScreenPointToLocalPointInRectangle(item.row, position, null, out Vector2 local);
 						item.step?.Invoke(local.x > 0f && local.x < RowWidth * 0.25f ? -1 : 1);
@@ -474,6 +550,15 @@ namespace Collection.UI
 			}
 
 			return false;
+		}
+
+		/// A button chosen: white at once, and what it does a moment later (chosenPause), so
+		/// that the white is seen before another screen takes its place.
+		private void Choose(MenuItem item)
+		{
+			item.whiteness = 1f;
+			chosen = item;
+			chosenAt = Time.unscaledTime + look.chosenPause;
 		}
 
 		private static void DragSlider(MenuItem item, Vector2 screenPosition)
@@ -514,6 +599,15 @@ namespace Collection.UI
 			titleText = NewText("Title", root.transform, 84f, TextAlignmentOptions.Center);
 			Place(titleText.rectTransform, new Vector2(0.5f, 1f), new Vector2(0f, -150f), new Vector2(1700f, 120f));
 
+			// The dancing title: the copies first, so that they are behind it. Always handwritten.
+			var dancingObject = new GameObject("Dancing Title", typeof(RectTransform));
+			dancingTitle = (RectTransform)dancingObject.transform;
+			dancingTitle.SetParent(root.transform, false);
+			Place(dancingTitle, new Vector2(0.5f, 1f), new Vector2(0f, -look.titleFromTop), Vector2.zero);
+			titleFront = NewTitleText("Front");
+			titleFront.color = Color.white;
+			dancingObject.SetActive(false);
+
 			bodyText = NewText("Body", root.transform, 34f, TextAlignmentOptions.Top);
 			bodyText.color = QuietTextColour;
 			Place(bodyText.rectTransform, new Vector2(0.5f, 1f), new Vector2(0f, -280f), new Vector2(1500f, 120f));
@@ -543,11 +637,22 @@ namespace Collection.UI
 			rect.sizeDelta = size;
 		}
 
+		private TMP_Text NewTitleText(string name)
+		{
+			TMP_Text text = NewText(name, dancingTitle, look.titleSize, TextAlignmentOptions.Center);
+			text.textWrappingMode = TextWrappingModes.NoWrap;
+			text.rectTransform.sizeDelta = new Vector2(1700f, 220f);
+			text.gameObject.AddComponent<KeepFont>();
+			if (CollectionFonts.Handwritten != null) text.font = CollectionFonts.Handwritten;
+			return text;
+		}
+
 		private static TMP_Text NewText(string name, Transform parent, float size, TextAlignmentOptions alignment)
 		{
 			var go = new GameObject(name, typeof(RectTransform));
 			go.transform.SetParent(parent, false);
 			TextMeshProUGUI text = go.AddComponent<TextMeshProUGUI>();
+			if (CollectionFonts.Current != null) text.font = CollectionFonts.Current;
 			text.fontSize = size;
 			text.alignment = alignment;
 			text.color = TextColour;
@@ -578,13 +683,39 @@ namespace Collection.UI
 			bool opaque = false;
 			foreach (MenuScreen open in stack) opaque |= open.opaque;
 			dim.color = opaque ? new Color(0.06f, 0.06f, 0.08f, 1f) : new Color(0f, 0f, 0f, 0.975f);
-			titleText.text = screen.title ?? "";
+			bool dances = screen.titleDances;
+			titleText.text = dances ? "" : screen.title ?? "";
+			dancingTitle.gameObject.SetActive(dances);
+			if (dances)
+			{
+				titleWord = (screen.title ?? "").ToLowerInvariant();
+				titleLetter = 0f;
+				// As many copies as the look has now, all behind the title.
+				while (titleCopies.Count < look.copies)
+				{
+					TMP_Text copy = NewTitleText("Copy " + (titleCopies.Count + 1));
+					copy.transform.SetSiblingIndex(0);
+					titleCopies.Insert(0, copy);
+				}
+				while (titleCopies.Count > look.copies)
+				{
+					Destroy(titleCopies[0].gameObject);
+					titleCopies.RemoveAt(0);
+				}
+				foreach (TMP_Text copy in titleCopies)
+				{
+					copy.color = AnyTitleColour();
+				}
+				titleFront.text = null;
+				DanceTitle(true);
+			}
 
 			int count = screen.items.Count;
-			float total = count * RowHeight + (count - 1) * RowGap;
+			rowHeight = count > 0 ? Mathf.Min(RowHeight, (RowsRoom + RowGap) / count - RowGap) : RowHeight;
+			float total = count * rowHeight + (count - 1) * RowGap;
 			for (int i = 0; i < count; i++)
 			{
-				BuildRow(screen.items[i], total * 0.5f - RowHeight * 0.5f - i * (RowHeight + RowGap));
+				BuildRow(screen.items[i], total * 0.5f - rowHeight * 0.5f - i * (rowHeight + RowGap));
 			}
 
 			// The rows sit in the middle of the screen, and the text over them starts at a fixed
@@ -613,16 +744,33 @@ namespace Collection.UI
 			var go = new GameObject(item.label ?? "Row", typeof(RectTransform), typeof(Image));
 			item.row = (RectTransform)go.transform;
 			item.row.SetParent(rows, false);
-			Place(item.row, new Vector2(0.5f, 0.5f), new Vector2(0f, y), new Vector2(RowWidth, RowHeight));
+			Place(item.row, new Vector2(0.5f, 0.5f), new Vector2(0f, y), new Vector2(RowWidth, rowHeight));
 			item.back = go.GetComponent<Image>();
 			item.back.raycastTarget = false;
 			item.back.enabled = item.Selectable;
+			item.back.sprite = buttonPictures[0];
+			item.back.type = Image.Type.Simple;
+			item.back.color = Color.white;
+			item.frame = 0f;
+			item.whiteness = 0f;
+
+			// Under the text, so the text can be seen dark on it.
+			var flashObject = new GameObject("Flash", typeof(RectTransform), typeof(Image));
+			var flashRect = (RectTransform)flashObject.transform;
+			flashRect.SetParent(item.row, false);
+			flashRect.anchorMin = Vector2.zero;
+			flashRect.anchorMax = Vector2.one;
+			flashRect.offsetMin = flashRect.offsetMax = Vector2.zero;
+			item.flash = flashObject.GetComponent<Image>();
+			item.flash.raycastTarget = false;
+			item.flash.color = new Color(1f, 1f, 1f, 0f);
+			item.flash.enabled = item.Selectable;
 
 			bool wide = item.kind == MenuItem.Kind.Button || item.kind == MenuItem.Kind.Text;
 			item.labelText = NewText("Label", item.row, item.kind == MenuItem.Kind.Text ? 30f : 36f,
 				wide ? TextAlignmentOptions.Center : TextAlignmentOptions.Left);
 			item.labelText.textWrappingMode = TextWrappingModes.NoWrap;
-			Place(item.labelText.rectTransform, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(RowWidth - 56f, RowHeight));
+			Place(item.labelText.rectTransform, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(RowWidth - 56f, rowHeight));
 
 			item.valueText = null;
 			item.bar = item.fill = null;
@@ -630,7 +778,7 @@ namespace Collection.UI
 
 			item.valueText = NewText("Value", item.row, 36f, TextAlignmentOptions.Right);
 			item.valueText.textWrappingMode = TextWrappingModes.NoWrap;
-			Place(item.valueText.rectTransform, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(RowWidth - 56f, RowHeight));
+			Place(item.valueText.rectTransform, new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(RowWidth - 56f, rowHeight));
 
 			if (item.kind != MenuItem.Kind.Slider) return;
 
@@ -657,6 +805,7 @@ namespace Collection.UI
 		{
 			SetText(bodyText, screen.body != null ? screen.body() : "");
 			SetText(footerText, screen.footer != null ? screen.footer() : "");
+			if (dancingTitle.gameObject.activeSelf) DanceTitle(false);
 
 			// The glyphs follow the device, and the generic pad's ones swap as they animate.
 			string controls = InputPrompts.Format(Controls, out bool _);
@@ -673,7 +822,11 @@ namespace Collection.UI
 
 				bool selected = i == screen.selected && item.Selectable;
 				Color text = !item.Selectable ? QuietTextColour : selected ? TextSelectedColour : TextColour;
-				item.back.color = selected ? RowSelectedColour : RowColour;
+				if (item.Selectable)
+				{
+					Animate(item, selected);
+					text = Color.Lerp(text, TextOnWhiteColour, item.whiteness);
+				}
 				item.labelText.color = text;
 				SetText(item.labelText, item.liveLabel != null ? item.liveLabel() : item.label);
 
@@ -692,6 +845,78 @@ namespace Collection.UI
 					item.barImage.color = new Color(text.r, text.g, text.b, 0.25f);
 				}
 			}
+		}
+
+		private Color AnyTitleColour()
+		{
+			Color[] colours = look.colours;
+			return colours != null && colours.Length > 0 ? colours[UnityEngine.Random.Range(0, colours.Length)] : Color.white;
+		}
+
+		/// The dancing title: its capital moved along when it is time, and its copies moved on a
+		/// step at a time (all the steps due, or the first placing when `now`).
+		private void DanceTitle(bool now)
+		{
+			if (!now) titleLetter += Time.unscaledDeltaTime / Mathf.Max(0.01f, look.letterTime);
+			dancingTitle.anchoredPosition = new Vector2(0f, -look.titleFromTop);
+			titleFront.fontSize = look.titleSize;
+			foreach (TMP_Text copy in titleCopies) copy.fontSize = look.titleSize;
+			if (titleWord.Length > 0)
+			{
+				int at = Mathf.FloorToInt(titleLetter) % titleWord.Length;
+				string word = titleWord.Substring(0, at) + char.ToUpperInvariant(titleWord[at]) + titleWord.Substring(at + 1);
+				string text = "<mspace=" + look.letterSlot.ToString("0.###", System.Globalization.CultureInfo.InvariantCulture) + "em>" + word;
+				if (titleFront.text != text)
+				{
+					titleFront.text = text;
+					foreach (TMP_Text copy in titleCopies) copy.text = text;
+				}
+			}
+
+			titleSteps += now ? 1f : Time.unscaledDeltaTime * look.stepsPerSecond;
+			if (titleSteps < 1f) return;
+			titleSteps -= Mathf.Floor(titleSteps);
+
+			float turned = Time.realtimeSinceStartup * look.spin * Mathf.PI * 2f;
+			for (int i = 0; i < titleCopies.Count; i++)
+			{
+				// The first copy is the furthest out: drawn first, it is the furthest back.
+				int n = titleCopies.Count - i;
+				float angle = turned - n * look.lag * Mathf.PI * 2f;
+				titleCopies[i].rectTransform.anchoredPosition = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * (look.copyDistance + (n - 1) * look.copyStep);
+				if (!now && UnityEngine.Random.value < look.recolourChance)
+				{
+					titleCopies[i].color = AnyTitleColour();
+				}
+			}
+		}
+
+		/// The button's picture for the frame. Fading from white it plays back from the last
+		/// picture to the first with the white; otherwise it plays on toward the last while
+		/// selected and back toward the first while not, from wherever it is, a picture at a time
+		/// at the look's frame rate.
+		private void Animate(MenuItem item, bool selected)
+		{
+			float last = ButtonFrames - 1;
+			if (item.whiteness > 0f)
+			{
+				item.whiteness = Mathf.Max(0f, item.whiteness - Time.unscaledDeltaTime * look.frameRate / last);
+				item.frame = item.whiteness * last;
+			}
+			else
+			{
+				item.frame = Mathf.MoveTowards(item.frame, selected ? last : 0f, Time.unscaledDeltaTime * look.frameRate);
+			}
+
+			// A whole picture at a time: the next one only once it is due.
+			int shown = selected && item.whiteness <= 0f ? Mathf.FloorToInt(item.frame) : Mathf.CeilToInt(item.frame);
+			Sprite picture = buttonPictures[Mathf.Clamp(shown, 0, ButtonFrames - 1)];
+			if (item.back.sprite != picture) item.back.sprite = picture;
+			float white = Mathf.Max(item.whiteness, look.selectedWhiteness * item.frame / last);
+			// As white as it looks: in linear colour a white this see-through over black looks much
+			// whiter than its alpha says.
+			if (QualitySettings.activeColorSpace == ColorSpace.Linear) white = Mathf.GammaToLinearSpace(white);
+			item.flash.color = new Color(1f, 1f, 1f, white);
 		}
 
 		private static void SetText(TMP_Text text, string value)

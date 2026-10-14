@@ -93,7 +93,7 @@ namespace Collection.MainMenu
 		private void ShowTitle()
 		{
 			inList = false;
-			titleScreen = new MenuScreen { title = "Talovision", opaque = true };
+			titleScreen = new MenuScreen { title = "Talovision", titleDances = true, opaque = true };
 			titleScreen.Button("Story mode", ShowSlots);
 			titleScreen.Button("Just the games", () =>
 			{

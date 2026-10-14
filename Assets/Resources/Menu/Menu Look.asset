@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e51f99311f6db9439fdf5f205a25e0b, type: 3}
+  m_Name: Menu Look
+  m_EditorClassIdentifier: 
+  titleSize: 156.8
+  titleFromTop: 154.6
+  letterSlot: 0.76
+  letterTime: 0.97
+  copies: 8
+  copyStep: 9.03
+  spin: 1.27
+  lag: 0.16
+  stepsPerSecond: 60
+  recolourChance: 0.602
+  colours:
+  - {r: 1, g: 0.27, b: 0.3, a: 1}
+  - {r: 1, g: 0.6, b: 0.15, a: 1}
+  - {r: 1, g: 0.92, b: 0.25, a: 1}
+  - {r: 0.3, g: 0.9, b: 0.42, a: 1}
+  - {r: 0.25, g: 0.6, b: 1, a: 1}
+  - {r: 0.7, g: 0.38, b: 1, a: 1}
+  frameRate: 15
+  selectedWhiteness: 0.17
+  chosenPause: 0.15
