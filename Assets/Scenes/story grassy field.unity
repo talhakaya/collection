@@ -8168,10 +8168,12 @@ MonoBehaviour:
   sun: {fileID: 410087040}
   nightAtStart: 1
   fadeSeconds: 4
-  moonlight: 0.01
-  darkness: 0.05
+  moonlight: 0.03
+  darkness: 0.12
   moonColour: {r: 0.6, g: 0.72, b: 1, a: 1}
   nightTint: {r: 0.7, g: 0.82, b: 1.25, a: 1}
+  landReflections: 0.1
+  skyReflections: 1
   lanternColour: {r: 1, g: 0.74, b: 0.45, a: 1}
   lanternIntensity: 7
   lanternHeight: 1.6

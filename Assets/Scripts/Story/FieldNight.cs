@@ -22,13 +22,17 @@ namespace Collection.Story
         [Tooltip("Seconds night takes to fall.")]
         public float fadeSeconds = 4f;
         [Tooltip("How much of the sun is left at night, as the moon. Kept very low: the grass takes a lot from even a faint sun.")]
-        [Range(0f, 1f)] public float moonlight = 0.01f;
+        [Range(0f, 1f)] public float moonlight = 0.03f;
         [Tooltip("How much of the day's ambient light is left at night.")]
-        [Range(0f, 1f)] public float darkness = 0.05f;
+        [Range(0f, 1f)] public float darkness = 0.12f;
         [Tooltip("The moon's colour, for what was the sun.")]
         public Color moonColour = new Color(0.6f, 0.72f, 1f);
         [Tooltip("What the ambient light is multiplied by at night, as well as by `darkness`.")]
         public Color nightTint = new Color(0.7f, 0.82f, 1.25f);
+        [Tooltip("How much of the sky the land still reflects at night. Even matte ground reflects a little, and in the dark that little turns it grey.")]
+        [Range(0f, 1f)] public float landReflections = 0.1f;
+        [Tooltip("How much of the bright sky everything but the terrains reflects at night - which is to say the water.")]
+        public float skyReflections = 1f;
 
         [Header("Lantern")]
         public Color lanternColour = new Color(1f, 0.74f, 0.45f);
@@ -52,6 +56,9 @@ namespace Collection.Story
         Color daySky, dayEquator, dayGround;
 
         Light lantern;
+        // The sky alone, for the water to go on reflecting at full strength while the land reflects next to
+        // nothing: everything but the terrains is given it at night.
+        ReflectionProbe sky;
         float seed;
 
         public bool IsNight => target >= 1f;
@@ -81,6 +88,17 @@ namespace Collection.Story
             lantern.range = maxReach;
             lantern.enabled = false;
             seed = Random.value * 100f;
+
+            sky = new GameObject("Night Sky Reflection").AddComponent<ReflectionProbe>();
+            sky.mode = ReflectionProbeMode.Realtime;
+            sky.refreshMode = ReflectionProbeRefreshMode.ViaScripting;
+            sky.timeSlicingMode = ReflectionProbeTimeSlicingMode.NoTimeSlicing;
+            sky.clearFlags = ReflectionProbeClearFlags.Skybox;
+            sky.cullingMask = 0;
+            sky.size = Vector3.one * 2000f;
+            sky.resolution = 128;
+            sky.importance = 100;
+            sky.enabled = false;
         }
 
         void Start()
@@ -137,10 +155,20 @@ namespace Collection.Story
                 RenderSettings.ambientEquatorColor = Color.Lerp(dayEquator, dayEquator * by, t);
                 RenderSettings.ambientGroundColor = Color.Lerp(dayGround, dayGround * by, t);
             }
-            // The sky in shiny things, which would glow in the dark otherwise.
-            RenderSettings.reflectionIntensity = Mathf.Lerp(dayReflections, dayReflections * darkness * 2f, t);
+            // The sky as the land reflects it, turned down; the water keeps it, from the probe.
+            RenderSettings.reflectionIntensity = Mathf.Lerp(dayReflections, dayReflections * landReflections, t);
+            bool dark = night > 0f;
+            if (dark && !sky.enabled)
+            {
+                sky.enabled = true;
+                sky.intensity = skyReflections;
+                sky.RenderProbe();
+            }
+            sky.enabled = dark;
+            foreach (Terrain terrain in Terrain.activeTerrains)
+                terrain.reflectionProbeUsage = dark ? ReflectionProbeUsage.Off : ReflectionProbeUsage.BlendProbes;
 
-            lantern.enabled = night > 0f;
+            lantern.enabled = dark;
         }
 
         void LateUpdate()
@@ -162,6 +190,8 @@ namespace Collection.Story
         {
             if (lantern != null)
                 Destroy(lantern.gameObject);
+            if (sky != null)
+                Destroy(sky.gameObject);
         }
     }
 }
