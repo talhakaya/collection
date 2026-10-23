@@ -11,8 +11,8 @@ namespace Collection.EditorTools
     // layer.
     public static class SandNormalMap
     {
-        const string Picture = "Assets/Textures/Desert_Sand_Seamless.png";
-        const string Output = "Assets/Textures/Desert_Sand_Normal.png";
+        const string Picture = "Assets/Textures/Terrain/Desert_Sand_Seamless.png";
+        const string Output = "Assets/Textures/Terrain/Desert_Sand_Normal.png";
         const string Layer = "Assets/Story/Terrain/DesertSandLayer.terrainlayer";
 
         // How steep the relief is.
