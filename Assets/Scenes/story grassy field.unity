@@ -8024,6 +8024,15 @@ MonoBehaviour:
   minReach: 5
   maxReach: 7
   flicker: 2.5
+  overlayFrames:
+  - {fileID: 2800000, guid: 515e924923ffd0949907162e987bb380, type: 3}
+  - {fileID: 2800000, guid: 31317f4a8fb304a44a2f87437a1aa941, type: 3}
+  - {fileID: 2800000, guid: ba5c2b4f6d164814591e0813ad6b57b4, type: 3}
+  - {fileID: 2800000, guid: 33f516d18c901cb46a26b1ce1c44c15f, type: 3}
+  overlayFps: 8
+  overlayLayerSeconds: 1.5
+  overlayGrowth: 1.3
+  overlayOpacity: 0.6
 --- !u!4 &1433509154
 Transform:
   m_ObjectHideFlags: 0

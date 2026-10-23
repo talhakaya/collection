@@ -1,12 +1,14 @@
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 namespace Collection.Story
 {
     // Night in the grassy field. The sun goes down to a faint blue moon and the ambient light to a little of the
     // day's, tinted blue, while the sky is left as bright as it was: the ponds go on reflecting it, and stand out
     // against the dark land. The character carries a lantern - a light with no lantern to it - whose reach wavers
-    // like a flame's.
+    // like a flame's. Over the screen, a drawn animation loops while it's dark (the overlay), each frame
+    // growing and fading on top of the ones before.
     //
     // A story beat brings it: a Cutscene whose onStart calls Fall. It fades in over `fadeSeconds`, and the save
     // remembers it, so the field is night from then on whenever it is loaded. Day brings the day back, for a
@@ -44,6 +46,21 @@ namespace Collection.Story
         [Tooltip("How fast it wavers.")]
         public float flicker = 2.5f;
 
+        [Header("Overlay")]
+        [Tooltip("Drawn over the screen at night, one after another on a loop. Covers the screen, cropped rather than stretched.")]
+        public Texture2D[] overlayFrames;
+        [Tooltip("Frames a second. Each frame comes in as a layer of its own, on top of the ones before it.")]
+        public float overlayFps = 8f;
+        [Tooltip("Seconds a frame's layer takes to grow and fade away; the longer, the more of them overlap.")]
+        public float overlayLayerSeconds = 1.5f;
+        [Tooltip("How big a layer has grown by the time it's gone (1 is not at all).")]
+        public float overlayGrowth = 1.3f;
+        [Tooltip("How strongly a new layer shows at full night.")]
+        [Range(0f, 1f)] public float overlayOpacity = 0.6f;
+
+        // Under the character creator, the dialogue and the screen fades.
+        const int OverlayOrder = 5;
+
         // 0 for day, 1 for night, and between while it falls.
         float night;
         float target;
@@ -60,6 +77,11 @@ namespace Collection.Story
         // nothing: everything but the terrains is given it at night.
         ReflectionProbe sky;
         float seed;
+        Canvas overlay;
+        // Enough layers for every frame still fading; the oldest is reused for the next frame.
+        RawImage[] overlayLayers;
+        float[] overlayBorn;
+        int overlayStep = -1;
 
         public bool IsNight => target >= 1f;
 
@@ -99,6 +121,29 @@ namespace Collection.Story
             sky.resolution = 128;
             sky.importance = 100;
             sky.enabled = false;
+
+            if (overlayFrames != null && overlayFrames.Length > 0 && overlayFrames[0] != null)
+            {
+                overlay = new GameObject("Night Overlay").AddComponent<Canvas>();
+                overlay.renderMode = RenderMode.ScreenSpaceOverlay;
+                overlay.sortingOrder = OverlayOrder;
+                overlay.enabled = false;
+                int count = Mathf.CeilToInt(overlayFps * overlayLayerSeconds) + 1;
+                overlayLayers = new RawImage[count];
+                overlayBorn = new float[count];
+                for (int i = 0; i < count; i++)
+                {
+                    var layer = new GameObject("Frame", typeof(RectTransform)).AddComponent<RawImage>();
+                    layer.transform.SetParent(overlay.transform, false);
+                    layer.raycastTarget = false;
+                    layer.enabled = false;
+                    var fit = layer.gameObject.AddComponent<AspectRatioFitter>();
+                    fit.aspectMode = AspectRatioFitter.AspectMode.EnvelopeParent;
+                    fit.aspectRatio = (float)overlayFrames[0].width / overlayFrames[0].height;
+                    overlayLayers[i] = layer;
+                    overlayBorn[i] = float.NegativeInfinity;
+                }
+            }
         }
 
         void Start()
@@ -169,12 +214,47 @@ namespace Collection.Story
                 terrain.reflectionProbeUsage = dark ? ReflectionProbeUsage.Off : ReflectionProbeUsage.BlendProbes;
 
             lantern.enabled = dark;
+
+            if (overlay != null)
+                overlay.enabled = dark;
+        }
+
+        // Each step of the animation puts its frame on top as a new layer. A layer comes in quickly, then grows
+        // from the middle of the screen and fades away, so several frames drift outward at once.
+        void AnimateOverlay()
+        {
+            int step = Mathf.FloorToInt(Time.time * overlayFps);
+            if (step != overlayStep)
+            {
+                overlayStep = step;
+                int newest = step % overlayLayers.Length;
+                overlayLayers[newest].texture = overlayFrames[step % overlayFrames.Length];
+                overlayLayers[newest].transform.SetAsLastSibling();
+                overlayBorn[newest] = Time.time;
+            }
+
+            float strength = overlayOpacity * Mathf.SmoothStep(0f, 1f, night);
+            for (int i = 0; i < overlayLayers.Length; i++)
+            {
+                float age = (Time.time - overlayBorn[i]) / Mathf.Max(overlayLayerSeconds, 0.01f);
+                RawImage layer = overlayLayers[i];
+                layer.enabled = age < 1f;
+                if (!layer.enabled)
+                    continue;
+                float fadeIn = Mathf.Clamp01(age / 0.1f);
+                float fadeOut = (1f - age) * (1f - age);
+                layer.color = new Color(1f, 1f, 1f, strength * fadeIn * fadeOut);
+                // Quick at first, slowing as it goes.
+                layer.transform.localScale = Vector3.one * Mathf.Lerp(1f, overlayGrowth, 1f - fadeOut);
+            }
         }
 
         void LateUpdate()
         {
             if (!lantern.enabled)
                 return;
+            if (overlay != null)
+                AnimateOverlay();
             PlayerMovement player = PlayerMovement.Current;
             if (player != null)
                 lantern.transform.position = player.transform.position + Vector3.up * lanternHeight;
@@ -192,6 +272,8 @@ namespace Collection.Story
                 Destroy(lantern.gameObject);
             if (sky != null)
                 Destroy(sky.gameObject);
+            if (overlay != null)
+                Destroy(overlay.gameObject);
         }
     }
 }
