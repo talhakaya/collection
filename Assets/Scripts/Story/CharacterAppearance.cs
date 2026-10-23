@@ -11,6 +11,8 @@ namespace Collection.Story
     //             Shoulders and hips move outward with the wider body so limbs don't sink into it.
     //   clothing: top, bottom (pants + shoes), jacket, hat and hair from the catalog. Each item colours the body parts
     //             it covers (jacket over top over bottom over skin) and can add extra pieces attached to bones.
+    //             An item's pattern (and the catalog's skin pattern on bare skin) is drawn over its colour, its
+    //             black showing the colour's second colour (Blocky Pattern shader).
     //   face:     two eye quads (catalog eye type, gap between them, height on the face) and an optional mask quad.
     // Colours are applied per renderer, so materials stay shared. Bone lengths are never changed, so humanoid
     // animations still fit.
@@ -114,6 +116,10 @@ namespace Collection.Story
 
         static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
         static readonly int BaseMapId = Shader.PropertyToID("_BaseMap");
+        static readonly int ShadeColorId = Shader.PropertyToID("_ShadeColor");
+        static readonly int PatternMapId = Shader.PropertyToID("_PatternMap");
+        static readonly int PatternSizeId = Shader.PropertyToID("_PatternSize");
+        static readonly int PatternStrengthId = Shader.PropertyToID("_PatternStrength");
         static MaterialPropertyBlock block;
 
         void Awake()
@@ -187,16 +193,29 @@ namespace Collection.Story
         CharacterCatalog.ClothingOption Hat => CharacterCatalog.PickClothing(catalog.hats, hatType);
         CharacterCatalog.ClothingOption Hair => CharacterCatalog.PickClothing(catalog.hairStyles, hairType);
 
+        // A part's colour, the second colour its pattern's black shows, and the pattern (none for null).
+        struct Look
+        {
+            public Color color;
+            public Color shade;
+            public CharacterCatalog.Pattern pattern;
+        }
+
         // Jacket over top over bottom over skin.
-        public Color PartColor(BodyCoverage part)
+        Look PartLook(BodyCoverage part)
         {
             if (part != BodyCoverage.None)
             {
-                if (Covers(Jacket, part)) return catalog.Cloth(jacketColor);
-                if (Covers(Top, part)) return catalog.Cloth(shirtColor);
-                if (Covers(Bottom, part)) return catalog.Cloth(part == BodyCoverage.Feet ? shoesColor : pantsColor);
+                if (Covers(Jacket, part)) return ClothLook(jacketColor, Jacket);
+                if (Covers(Top, part)) return ClothLook(shirtColor, Top);
+                if (Covers(Bottom, part)) return part == BodyCoverage.Feet ? ClothLook(shoesColor, null) : ClothLook(pantsColor, Bottom);
             }
-            return catalog.Skin(skinColor);
+            return new Look { color = catalog.Skin(skinColor), shade = catalog.SkinShade(skinColor), pattern = catalog.skinPattern };
+        }
+
+        Look ClothLook(int color, CharacterCatalog.ClothingOption item)
+        {
+            return new Look { color = catalog.Cloth(color), shade = catalog.ClothShade(color), pattern = item?.pattern };
         }
 
         static bool Covers(CharacterCatalog.ClothingOption item, BodyCoverage part)
@@ -206,15 +225,24 @@ namespace Collection.Story
 
         void ApplyColors()
         {
-            block ??= new MaterialPropertyBlock();
             foreach (var p in colorParts)
             {
-                if (p.renderer == null)
-                    continue;
-                p.renderer.GetPropertyBlock(block);
-                block.SetColor(BaseColorId, PartColor(p.part));
-                p.renderer.SetPropertyBlock(block);
+                if (p.renderer != null)
+                    SetLook(p.renderer, PartLook(p.part));
             }
+        }
+
+        static void SetLook(Renderer renderer, Look look)
+        {
+            block ??= new MaterialPropertyBlock();
+            bool patterned = look.pattern != null && look.pattern.texture != null;
+            renderer.GetPropertyBlock(block);
+            block.SetColor(BaseColorId, look.color);
+            block.SetColor(ShadeColorId, look.shade);
+            block.SetTexture(PatternMapId, patterned ? look.pattern.texture : Texture2D.whiteTexture);
+            block.SetFloat(PatternSizeId, patterned ? look.pattern.size : 1f);
+            block.SetFloat(PatternStrengthId, patterned ? look.pattern.strength : 0f);
+            renderer.SetPropertyBlock(block);
         }
 
         // ------------------------------------------------------------------ face
@@ -285,21 +313,20 @@ namespace Collection.Story
                     DestroyImmediate(old.gameObject);
             }
 
-            AttachPieces(Top, catalog.Cloth(shirtColor));
-            AttachPieces(Bottom, catalog.Cloth(pantsColor), catalog.Cloth(shoesColor));
-            AttachPieces(Jacket, catalog.Cloth(jacketColor));
+            AttachPieces(Top, ClothLook(shirtColor, Top));
+            AttachPieces(Bottom, ClothLook(pantsColor, Bottom), ClothLook(shoesColor, null));
+            AttachPieces(Jacket, ClothLook(jacketColor, Jacket));
             if (!televisionHead)
             {
-                AttachPieces(Hat, catalog.Cloth(hatColor));
-                AttachPieces(Hair, catalog.Hair(hairColor));
+                AttachPieces(Hat, ClothLook(hatColor, Hat));
+                AttachPieces(Hair, new Look { color = catalog.Hair(hairColor), shade = catalog.HairShade(hairColor) });
             }
         }
 
-        void AttachPieces(CharacterCatalog.ClothingOption item, Color color, Color? bootColor = null)
+        void AttachPieces(CharacterCatalog.ClothingOption item, Look look, Look? bootLook = null)
         {
             if (item == null || item.pieces == null)
                 return;
-            block ??= new MaterialPropertyBlock();
 
             foreach (Transform group in item.pieces.transform)
             {
@@ -323,13 +350,9 @@ namespace Collection.Story
                     piece.transform.localPosition = Widen(source.localPosition, widen, alongX);
                     piece.transform.localScale = Widen(source.localScale, widen, alongX);
 
-                    Color pieceColor = bootColor.HasValue && source.name.StartsWith("Boot") ? bootColor.Value : color;
+                    Look pieceLook = bootLook.HasValue && source.name.StartsWith("Boot") ? bootLook.Value : look;
                     foreach (var r in piece.GetComponentsInChildren<Renderer>(true))
-                    {
-                        r.GetPropertyBlock(block);
-                        block.SetColor(BaseColorId, pieceColor);
-                        r.SetPropertyBlock(block);
-                    }
+                        SetLook(r, pieceLook);
                 }
             }
         }

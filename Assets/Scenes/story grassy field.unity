@@ -199,7 +199,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 96c901e57a3853b4ebcb629488c1e8e6, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 1a0a17eb6e558344dabb4d4b7cad8548, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -1317,7 +1317,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 96c901e57a3853b4ebcb629488c1e8e6, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 1a0a17eb6e558344dabb4d4b7cad8548, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -1476,7 +1476,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 96c901e57a3853b4ebcb629488c1e8e6, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 1a0a17eb6e558344dabb4d4b7cad8548, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -1569,7 +1569,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 96c901e57a3853b4ebcb629488c1e8e6, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 1a0a17eb6e558344dabb4d4b7cad8548, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -1662,7 +1662,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 96c901e57a3853b4ebcb629488c1e8e6, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 1a0a17eb6e558344dabb4d4b7cad8548, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -3153,7 +3153,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 96c901e57a3853b4ebcb629488c1e8e6, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 1a0a17eb6e558344dabb4d4b7cad8548, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -3537,7 +3537,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 96c901e57a3853b4ebcb629488c1e8e6, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 1a0a17eb6e558344dabb4d4b7cad8548, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -4126,7 +4126,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 96c901e57a3853b4ebcb629488c1e8e6, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 1a0a17eb6e558344dabb4d4b7cad8548, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -4219,7 +4219,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 96c901e57a3853b4ebcb629488c1e8e6, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 1a0a17eb6e558344dabb4d4b7cad8548, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -4568,7 +4568,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 96c901e57a3853b4ebcb629488c1e8e6, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 1a0a17eb6e558344dabb4d4b7cad8548, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -5766,21 +5766,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: mask
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: eyeLeft
-      value: 
+    - target: {fileID: 2439171754767843475, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
       propertyPath: topType
       value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: eyeRight
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
       propertyPath: hairType
@@ -5789,10 +5781,6 @@ PrefabInstance:
     - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
       propertyPath: hatColor
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: headPart
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
       propertyPath: showMask
@@ -5825,150 +5813,6 @@ PrefabInstance:
     - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
       propertyPath: jacketColor
       value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: bones.Array.data[0].bone
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: bones.Array.data[1].bone
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: bones.Array.data[2].bone
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: bones.Array.data[3].bone
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: parts.Array.data[0].part
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: parts.Array.data[1].part
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: parts.Array.data[2].part
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: parts.Array.data[3].part
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: parts.Array.data[4].part
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: parts.Array.data[5].part
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: parts.Array.data[6].part
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: parts.Array.data[7].part
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: parts.Array.data[8].part
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: parts.Array.data[9].part
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: parts.Array.data[10].part
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: parts.Array.data[11].part
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: parts.Array.data[12].part
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: parts.Array.data[13].part
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: parts.Array.data[14].part
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: parts.Array.data[15].part
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: colorParts.Array.data[0].renderer
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: colorParts.Array.data[1].renderer
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: colorParts.Array.data[2].renderer
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: colorParts.Array.data[3].renderer
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: colorParts.Array.data[4].renderer
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: colorParts.Array.data[5].renderer
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: colorParts.Array.data[6].renderer
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: colorParts.Array.data[7].renderer
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: colorParts.Array.data[8].renderer
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: colorParts.Array.data[9].renderer
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: colorParts.Array.data[10].renderer
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: colorParts.Array.data[11].renderer
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: colorParts.Array.data[12].renderer
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: colorParts.Array.data[13].renderer
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: colorParts.Array.data[14].renderer
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3027717965031952297, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
-      propertyPath: colorParts.Array.data[15].renderer
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7161694284436457783, guid: 3599117cff1444d4eb55a7aa4780c225, type: 3}
       propertyPath: m_Name
@@ -6227,7 +6071,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 96c901e57a3853b4ebcb629488c1e8e6, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 1a0a17eb6e558344dabb4d4b7cad8548, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -6320,7 +6164,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 96c901e57a3853b4ebcb629488c1e8e6, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 1a0a17eb6e558344dabb4d4b7cad8548, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -6597,7 +6441,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 96c901e57a3853b4ebcb629488c1e8e6, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 1a0a17eb6e558344dabb4d4b7cad8548, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -7186,7 +7030,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 96c901e57a3853b4ebcb629488c1e8e6, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 1a0a17eb6e558344dabb4d4b7cad8548, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -7345,7 +7189,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 96c901e57a3853b4ebcb629488c1e8e6, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 1a0a17eb6e558344dabb4d4b7cad8548, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -7581,7 +7425,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 96c901e57a3853b4ebcb629488c1e8e6, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 1a0a17eb6e558344dabb4d4b7cad8548, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -7783,7 +7627,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 96c901e57a3853b4ebcb629488c1e8e6, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 1a0a17eb6e558344dabb4d4b7cad8548, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -9299,7 +9143,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 96c901e57a3853b4ebcb629488c1e8e6, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 1a0a17eb6e558344dabb4d4b7cad8548, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -9636,7 +9480,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 96c901e57a3853b4ebcb629488c1e8e6, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 1a0a17eb6e558344dabb4d4b7cad8548, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -9819,7 +9663,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 96c901e57a3853b4ebcb629488c1e8e6, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 1a0a17eb6e558344dabb4d4b7cad8548, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -9999,7 +9843,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 96c901e57a3853b4ebcb629488c1e8e6, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 1a0a17eb6e558344dabb4d4b7cad8548, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -10092,7 +9936,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 96c901e57a3853b4ebcb629488c1e8e6, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 1a0a17eb6e558344dabb4d4b7cad8548, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -10893,7 +10737,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 96c901e57a3853b4ebcb629488c1e8e6, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 1a0a17eb6e558344dabb4d4b7cad8548, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -10986,7 +10830,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 96c901e57a3853b4ebcb629488c1e8e6, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 1a0a17eb6e558344dabb4d4b7cad8548, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -11216,7 +11060,7 @@ Terrain:
   m_StaticShadowCaster: 0
   m_IgnoreQualitySettings: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: 96c901e57a3853b4ebcb629488c1e8e6, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 1a0a17eb6e558344dabb4d4b7cad8548, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1

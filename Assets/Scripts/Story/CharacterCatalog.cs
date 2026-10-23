@@ -41,8 +41,27 @@ namespace Collection.Story
             public string name;
             [Tooltip(IdTooltip)] public string id;
             public Color color;
+            [Tooltip("Shown where a pattern is black. Left fully transparent, it's a darker shade of the colour.")]
+            public Color shade;
             public string Id { get => id; set => id = value; }
             public string Name => name;
+
+            public Color Shade => shade.a > 0 ? shade : new Color(color.r * ShadeDarkness, color.g * ShadeDarkness, color.b * ShadeDarkness, 1f);
+        }
+
+        // How dark the automatic second colour is, compared to the colour.
+        const float ShadeDarkness = 0.55f;
+
+        // A drawn pattern over a body part, measured in metres: white shows the part's colour, black its second colour.
+        [Serializable]
+        public class Pattern
+        {
+            [Tooltip("Optional. A seamless greyscale drawing.")]
+            public Texture2D texture;
+            [Tooltip("Metres the pattern takes before it repeats.")]
+            public float size = 0.5f;
+            [Tooltip("0 is plain colour, 1 is the full pattern.")]
+            [Range(0f, 1f)] public float strength = 1f;
         }
 
         [Serializable]
@@ -68,9 +87,13 @@ namespace Collection.Story
             [Tooltip("Optional extra pieces: a prefab whose children are named after bones (e.g. Head, Chest). " +
                      "Their children are attached to those bones. For bottoms, pieces named \"Boot...\" use the shoes colour.")]
             public GameObject pieces;
+            [Tooltip("Drawn on the item's parts and pieces (not on shoes).")]
+            public Pattern pattern = new Pattern();
         }
 
         public List<ColorOption> skinColors = new List<ColorOption>();
+        [Tooltip("Drawn on the bare skin of every character.")]
+        public Pattern skinPattern = new Pattern();
         public List<ColorOption> clothColors = new List<ColorOption>();
         public List<ColorOption> hairColors = new List<ColorOption>();
         public List<TextureOption> eyes = new List<TextureOption>();
@@ -90,6 +113,9 @@ namespace Collection.Story
         public Color Skin(int index) => Pick(skinColors, index).color;
         public Color Cloth(int index) => Pick(clothColors, index).color;
         public Color Hair(int index) => Pick(hairColors, index).color;
+        public Color SkinShade(int index) => Pick(skinColors, index).Shade;
+        public Color ClothShade(int index) => Pick(clothColors, index).Shade;
+        public Color HairShade(int index) => Pick(hairColors, index).Shade;
         public Texture2D Eyes(int index) => Pick(eyes, index).texture;
         public Texture2D Mask(int index) => Pick(masks, index).texture;
 
