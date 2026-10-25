@@ -67,6 +67,8 @@ namespace Collection.EditorTools
         const float GrassInset = 0.8f, GrassFade = 3f, PathClearance = 0.8f;
         // The edges of the path and the mountain paint are soft over about this much.
         const float PathEdge = 0.6f, MountainEdge = 1f;
+        // How much the drawn edges are rounded: a blur this many pixels either side, done this many times.
+        const int SmoothPixels = 2, SmoothPasses = 2;
 
         // Houses: wall height and thickness, the door's width and height, and how far the ground around one is
         // levelled.
@@ -252,7 +254,40 @@ namespace Collection.EditorTools
             var signed = new float[count];
             for (int i = 0; i < count; i++)
                 signed[i] = (isInside[i] ? toOutside[i] - 0.5f : 0.5f - toInside[i]) * metresPerPixel;
+            Smooth(signed);
             return signed;
+        }
+
+        // The edges as drawn go in steps of a pixel, which show on the land as a staircase along a
+        // path or a shore. Blurring the distances rounds the steps off; the edges stay where they
+        // were drawn, only sharp corners being rounded a little.
+        static void Smooth(float[] values)
+        {
+            var scratch = new float[values.Length];
+            for (int pass = 0; pass < SmoothPasses; pass++)
+            {
+                BoxBlur(values, scratch, true);
+                BoxBlur(scratch, values, false);
+            }
+        }
+
+        // A running average `SmoothPixels` either side, across the map or up it.
+        static void BoxBlur(float[] from, float[] to, bool across)
+        {
+            int w = mapWidth, h = mapHeight, r = SmoothPixels;
+            int lines = across ? h : w, length = across ? w : h;
+            for (int line = 0; line < lines; line++)
+            {
+                int Index(int along) => across ? line * w + Mathf.Clamp(along, 0, w - 1) : Mathf.Clamp(along, 0, h - 1) * w + line;
+                float sum = 0f;
+                for (int k = -r; k <= r; k++)
+                    sum += from[Index(k)];
+                for (int along = 0; along < length; along++)
+                {
+                    to[Index(along)] = sum / (2 * r + 1);
+                    sum += from[Index(along + r + 1)] - from[Index(along - r)];
+                }
+            }
         }
 
         // The distance in pixels from each pixel where isInside is `from` to the nearest where it isn't: two
