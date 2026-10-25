@@ -55,7 +55,7 @@ namespace Collection.EditorTools
         // are `BumpSize` across, and comes down to just under the water over `ShoreOver`; under the water it goes
         // on down to `WaterDepth` over `DeepOver`.
         const float LandAbove = 2.2f, LandBumps = 0.6f, BumpSize = 30f, ShoreOver = 6f, ShoreUnder = 0.4f;
-        const float WaterDepth = 2.5f, DeepOver = 5f, PathAbove = 0.5f, CausewaySide = 1.5f;
+        const float WaterDepth = 2.5f, DeepOver = 5f, PathAbove = 0.8f, CausewaySide = 5f, CausewayFoot = 0.8f;
         // A mountain starts as a cliff, `CliffHeight` high over `CliffOver` (far too steep to walk up, and taller than
         // the character), then goes on up at `Rise` metres a metre, to `MountainHeight` at most, with
         // `MountainBumps` more on top, `MountainBumpSize` across. Behind the cliff it rises less steeply than the
@@ -70,10 +70,10 @@ namespace Collection.EditorTools
         const float PathEdge = 0.6f, MountainEdge = 1f;
         // How much the drawn edges are rounded: a blur this many pixels either side, done this many times.
         const int SmoothPixels = 2, SmoothPasses = 2;
-        // The invisible walls in the water: `WallOut` out from the shore, so the character can wade in a little
+        // The invisible walls in the water: where it is `WadeDepth` deep, so the character can wade in a little
         // (to about the knees) before being stopped, from `WallBelow` under the water to `WallAbove` over it.
         // Followed along the map every `WallStep` pixels.
-        const float WallOut = 1.5f, WallBelow = 5f, WallAbove = 12f;
+        const float WadeDepth = 0.6f, WallBelow = 5f, WallAbove = 12f;
         const int WallStep = 2;
         const string WallsName = "Water Walls", WallLayer = "WaterWall";
 
@@ -175,7 +175,7 @@ namespace Collection.EditorTools
 
             Undo.IncrementCurrentGroup();
             BuildVillage(houses);
-            BuildWaterWalls();
+            BuildWaterWalls(houses);
             foreach ((Transform thing, float above) in standing)
             {
                 Undo.RecordObject(thing, "Build Field From Map");
@@ -493,10 +493,12 @@ namespace Collection.EditorTools
                 height = water - ShoreUnder - (WaterDepth - ShoreUnder) * Mathf.SmoothStep(0f, 1f, t);
             }
 
-            // A path is never under the water: one drawn across it is a causeway, `PathAbove` over it, its sides
-            // going down into the water over `CausewaySide`.
-            float onPath = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(-CausewaySide, 0.3f, Sample(path, x, z)));
-            height = Mathf.Max(height, Mathf.Lerp(height, water + PathAbove, onPath));
+            // A path is never under the water: one drawn across it is a causeway, a mound `PathAbove` over the
+            // water along the path, its sides sloping down over `CausewaySide` into shallow water as a shore does,
+            // so that the water lightens toward it and does not meet a sheer edge.
+            float fromPath = Mathf.Max(0f, -Sample(path, x, z));
+            float causeway = water + PathAbove - (PathAbove + CausewayFoot) * Mathf.SmoothStep(0f, 1f, fromPath / CausewaySide);
+            height = Mathf.Max(height, causeway);
 
             float m = Sample(mountain, x, z);
             if (m > 0f)
@@ -643,12 +645,26 @@ namespace Collection.EditorTools
             }
         }
 
-        // Invisible walls a little way out into every water, along its shore: the line where the land's distance
-        // map is -WallOut, found a square of the map at a time (marching squares) and stood up as a wall of
-        // upright quads, both ways round so that it stops from either side. One mesh collider, on its own layer
-        // (WaterWall), so that something that should go on the water - a boat - can be let through.
-        static void BuildWaterWalls()
+        // Invisible walls a little way out into every water, along its shore: the line where the land is
+        // `WadeDepth` under the water, found a square of the map at a time (marching squares) and stood up as a
+        // wall of upright quads, both ways round so that it stops from either side. From the land's heights
+        // rather than the drawing, so that it follows the water as it is, a causeway's sloping sides and all. One
+        // mesh collider, on its own layer (WaterWall), so that something that should go on the water - a boat -
+        // can be let through.
+        static void BuildWaterWalls(List<House> houses)
         {
+            // How far above the wading depth the land is, at every `WallStep`th pixel of the map.
+            int across = (mapWidth - 1) / WallStep + 1, up = (mapHeight - 1) / WallStep + 1;
+            var above = new float[across * up];
+            for (int gy = 0; gy < up; gy++)
+            {
+                for (int gx = 0; gx < across; gx++)
+                {
+                    Vector2 at = ToWorld(gx * WallStep + 0.5f, gy * WallStep + 0.5f);
+                    above[gy * across + gx] = Height(at.x, at.y, houses) - (water - WadeDepth);
+                }
+            }
+
             GameObject old = GameObject.Find(WallsName);
             if (old != null)
                 Undo.DestroyObjectImmediate(old);
@@ -656,23 +672,21 @@ namespace Collection.EditorTools
             var vertices = new List<Vector3>();
             var triangles = new List<int>();
             float bottom = water - WallBelow, top = water + WallAbove;
-            int columns = (mapWidth - 1) / WallStep, rows = (mapHeight - 1) / WallStep;
             var crossings = new List<Vector2>(4);
-            for (int cy = 0; cy < rows; cy++)
+            for (int cy = 0; cy < up - 1; cy++)
             {
-                for (int cx = 0; cx < columns; cx++)
+                for (int cx = 0; cx < across - 1; cx++)
                 {
                     // The square's corners, round from bottom left, and how far each is past the line.
-                    int x0 = cx * WallStep, y0 = cy * WallStep, x1 = x0 + WallStep, y1 = y0 + WallStep;
-                    Vector2Int[] corners = { new Vector2Int(x0, y0), new Vector2Int(x1, y0), new Vector2Int(x1, y1), new Vector2Int(x0, y1) };
+                    Vector2Int[] corners = { new Vector2Int(cx, cy), new Vector2Int(cx + 1, cy), new Vector2Int(cx + 1, cy + 1), new Vector2Int(cx, cy + 1) };
                     crossings.Clear();
                     for (int e = 0; e < 4; e++)
                     {
                         Vector2Int a = corners[e], b = corners[(e + 1) % 4];
-                        float va = land[a.y * mapWidth + a.x] + WallOut, vb = land[b.y * mapWidth + b.x] + WallOut;
+                        float va = above[a.y * across + a.x], vb = above[b.y * across + b.x];
                         if ((va > 0f) == (vb > 0f))
                             continue;
-                        Vector2 at = Vector2.Lerp(a, b, va / (va - vb));
+                        Vector2 at = Vector2.Lerp(a, b, va / (va - vb)) * WallStep;
                         crossings.Add(ToWorld(at.x + 0.5f, at.y + 0.5f));
                     }
                     for (int c = 0; c + 1 < crossings.Count; c += 2)
