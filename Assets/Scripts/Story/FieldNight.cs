@@ -42,7 +42,7 @@ namespace Collection.Story
         [Tooltip("Height of the light above the character's feet (m).")]
         public float lanternHeight = 1.6f;
         [Tooltip("The light's reach wavers between these (m).")]
-        public float minReach = 5f, maxReach = 7f;
+        public float minReach = 7.5f, maxReach = 10.5f;
         [Tooltip("How fast it wavers.")]
         public float flicker = 2.5f;
 
@@ -50,9 +50,9 @@ namespace Collection.Story
         [Tooltip("Drawn over the screen at night, one after another on a loop. Covers the screen, cropped rather than stretched.")]
         public Texture2D[] overlayFrames;
         [Tooltip("Frames a second. Each frame comes in as a layer of its own, on top of the ones before it.")]
-        public float overlayFps = 8f;
-        [Tooltip("Seconds a frame's layer takes to grow and fade away; the longer, the more of them overlap.")]
-        public float overlayLayerSeconds = 1.5f;
+        public float overlayFps = 6f;
+        [Tooltip("Seconds a frame's layer takes to grow and fade away; the longer, the more of them overlap (frames a second times this is how many are on the screen at once).")]
+        public float overlayLayerSeconds = 0.5f;
         [Tooltip("How big a layer has grown by the time it's gone (1 is not at all).")]
         public float overlayGrowth = 1.3f;
         [Tooltip("How strongly a new layer shows at full night.")]
