@@ -55,6 +55,12 @@ namespace Collection.EditorTools
         [MenuItem("Collection/Story/Plant Field Grass")]
         public static void Plant()
         {
+            Plant(null);
+        }
+
+        // As above, but only where `grows` says so, for a place's x and z (StoryFieldBuilder: the map's grass).
+        public static void Plant(System.Func<float, float, bool> grows)
+        {
             Terrain[] terrains = Terrain.activeTerrains;
             if (terrains.Length == 0)
             {
@@ -150,7 +156,7 @@ namespace Collection.EditorTools
                             float wy = corner.y + data.GetInterpolatedHeight(u, v);
                             if (wy < dryAbove || data.GetSteepness(u, v) > Steepest)
                                 continue;
-                            if (InAny(clear, wx, wz))
+                            if (InAny(clear, wx, wz) || (grows != null && !grows(wx, wz)))
                                 continue;
 
                             counts[iz, ix] = count;

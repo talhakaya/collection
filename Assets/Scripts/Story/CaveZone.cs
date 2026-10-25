@@ -11,6 +11,9 @@ namespace Collection.Story
     [RequireComponent(typeof(BoxCollider))]
     public class CaveZone : MonoBehaviour
     {
+        [Tooltip("Switched on only while the character is inside: the cave's own lights, which would otherwise light the ground outside its walls.")]
+        public GameObject onlyInside;
+
         BoxCollider box;
         bool inside;
 
@@ -22,6 +25,8 @@ namespace Collection.Story
         void Awake()
         {
             box = GetComponent<BoxCollider>();
+            if (onlyInside != null)
+                onlyInside.SetActive(false);
         }
 
         void Update()
@@ -38,6 +43,8 @@ namespace Collection.Story
             if (now == inside)
                 return;
             inside = now;
+            if (onlyInside != null)
+                onlyInside.SetActive(inside);
             if (inside)
                 Main.inst.camera.EnterCave();
             else
@@ -48,6 +55,8 @@ namespace Collection.Story
         {
             if (inside && Main.inst != null && Main.inst.camera != null)
                 Main.inst.camera.ExitCave();
+            if (onlyInside != null)
+                onlyInside.SetActive(false);
             inside = false;
         }
     }

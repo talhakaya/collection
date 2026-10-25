@@ -157,6 +157,8 @@ namespace Collection.Story
 
             if (inside)
             {
+                // The outdoor light as it is now, not as the scene started: it may have become night since.
+                outdoorAmbient = RenderSettings.ambientProbe;
                 var ambient = new SphericalHarmonicsL2();
                 ambient.AddAmbientLight(caveAmbient);
                 RenderSettings.ambientProbe = ambient;
