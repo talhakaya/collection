@@ -13,7 +13,8 @@ namespace Collection.EditorTools
     //   dark green   grass, planted (StoryGrassPlanter)
     //   light green  the grass's ground with nothing on it
     //   white        path
-    //   blue         water: the land goes down under the ponds' level, which is the same everywhere
+    //   blue         water: the land goes down under the ponds' level, which is the same everywhere, and
+    //                invisible walls a little way out from every shore keep the character out of it
     //   black        mountain: rises steeply, far above the character, too steep to walk up
     //   pink         a house: walls, a roof and a floor, gone into like a cave (CaveZone)
     //   dark red     a house's door, as a gap in the wall nearest it
@@ -69,6 +70,12 @@ namespace Collection.EditorTools
         const float PathEdge = 0.6f, MountainEdge = 1f;
         // How much the drawn edges are rounded: a blur this many pixels either side, done this many times.
         const int SmoothPixels = 2, SmoothPasses = 2;
+        // The invisible walls in the water: `WallOut` out from the shore, so the character can wade in a little
+        // (to about the knees) before being stopped, from `WallBelow` under the water to `WallAbove` over it.
+        // Followed along the map every `WallStep` pixels.
+        const float WallOut = 1.5f, WallBelow = 5f, WallAbove = 12f;
+        const int WallStep = 2;
+        const string WallsName = "Water Walls", WallLayer = "WaterWall";
 
         // Houses: wall height and thickness, the door's width and height, and how far the ground around one is
         // levelled.
@@ -168,6 +175,7 @@ namespace Collection.EditorTools
 
             Undo.IncrementCurrentGroup();
             BuildVillage(houses);
+            BuildWaterWalls();
             foreach ((Transform thing, float above) in standing)
             {
                 Undo.RecordObject(thing, "Build Field From Map");
@@ -633,6 +641,85 @@ namespace Collection.EditorTools
                 box.size = new Vector3(r.width - Wall * 2f, WallHeight, r.height - Wall * 2f);
                 zone.AddComponent<CaveZone>().onlyInside = inside;
             }
+        }
+
+        // Invisible walls a little way out into every water, along its shore: the line where the land's distance
+        // map is -WallOut, found a square of the map at a time (marching squares) and stood up as a wall of
+        // upright quads, both ways round so that it stops from either side. One mesh collider, on its own layer
+        // (WaterWall), so that something that should go on the water - a boat - can be let through.
+        static void BuildWaterWalls()
+        {
+            GameObject old = GameObject.Find(WallsName);
+            if (old != null)
+                Undo.DestroyObjectImmediate(old);
+
+            var vertices = new List<Vector3>();
+            var triangles = new List<int>();
+            float bottom = water - WallBelow, top = water + WallAbove;
+            int columns = (mapWidth - 1) / WallStep, rows = (mapHeight - 1) / WallStep;
+            var crossings = new List<Vector2>(4);
+            for (int cy = 0; cy < rows; cy++)
+            {
+                for (int cx = 0; cx < columns; cx++)
+                {
+                    // The square's corners, round from bottom left, and how far each is past the line.
+                    int x0 = cx * WallStep, y0 = cy * WallStep, x1 = x0 + WallStep, y1 = y0 + WallStep;
+                    Vector2Int[] corners = { new Vector2Int(x0, y0), new Vector2Int(x1, y0), new Vector2Int(x1, y1), new Vector2Int(x0, y1) };
+                    crossings.Clear();
+                    for (int e = 0; e < 4; e++)
+                    {
+                        Vector2Int a = corners[e], b = corners[(e + 1) % 4];
+                        float va = land[a.y * mapWidth + a.x] + WallOut, vb = land[b.y * mapWidth + b.x] + WallOut;
+                        if ((va > 0f) == (vb > 0f))
+                            continue;
+                        Vector2 at = Vector2.Lerp(a, b, va / (va - vb));
+                        crossings.Add(ToWorld(at.x + 0.5f, at.y + 0.5f));
+                    }
+                    for (int c = 0; c + 1 < crossings.Count; c += 2)
+                        AddWall(vertices, triangles, crossings[c], crossings[c + 1], bottom, top);
+                }
+            }
+
+            var mesh = new Mesh { name = WallsName, indexFormat = UnityEngine.Rendering.IndexFormat.UInt32 };
+            mesh.SetVertices(vertices);
+            mesh.SetTriangles(triangles, 0);
+            mesh.RecalculateBounds();
+            string path = TerrainFolder + "WaterWalls.asset";
+            var saved = AssetDatabase.LoadAssetAtPath<Mesh>(path);
+            if (saved == null)
+            {
+                AssetDatabase.CreateAsset(mesh, path);
+                saved = mesh;
+            }
+            else
+            {
+                saved.Clear();
+                saved.indexFormat = mesh.indexFormat;
+                saved.SetVertices(vertices);
+                saved.SetTriangles(triangles, 0);
+                saved.RecalculateBounds();
+                EditorUtility.SetDirty(saved);
+                Object.DestroyImmediate(mesh);
+            }
+
+            var walls = new GameObject(WallsName);
+            Undo.RegisterCreatedObjectUndo(walls, "Build Field From Map");
+            int layer = LayerMask.NameToLayer(WallLayer);
+            if (layer >= 0)
+                walls.layer = layer;
+            else
+                Debug.LogWarning($"StoryFieldBuilder: no layer called \"{WallLayer}\"; the water walls are on Default.");
+            walls.AddComponent<MeshCollider>().sharedMesh = saved;
+        }
+
+        static void AddWall(List<Vector3> vertices, List<int> triangles, Vector2 from, Vector2 to, float bottom, float top)
+        {
+            int at = vertices.Count;
+            vertices.Add(new Vector3(from.x, bottom, from.y));
+            vertices.Add(new Vector3(to.x, bottom, to.y));
+            vertices.Add(new Vector3(to.x, top, to.y));
+            vertices.Add(new Vector3(from.x, top, from.y));
+            triangles.AddRange(new[] { at, at + 1, at + 2, at, at + 2, at + 3, at, at + 2, at + 1, at, at + 3, at + 2 });
         }
 
         // A wall from x0 to x1 at z, with a door gap at `door` along it if there is one.
