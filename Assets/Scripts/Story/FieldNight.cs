@@ -57,6 +57,8 @@ namespace Collection.Story
         public float overlayGrowth = 1.3f;
         [Tooltip("How strongly a new layer shows at full night.")]
         [Range(0f, 1f)] public float overlayOpacity = 0.6f;
+        [Tooltip("Each layer is turned over at random, left to right, top to bottom, both or neither, so the loop does not look the same each time round.")]
+        public bool overlayFlips = true;
 
         // Under the character creator, the dialogue and the screen fades.
         const int OverlayOrder = 5;
@@ -229,6 +231,8 @@ namespace Collection.Story
                 overlayStep = step;
                 int newest = step % overlayLayers.Length;
                 overlayLayers[newest].texture = overlayFrames[step % overlayFrames.Length];
+                bool acrossFlipped = overlayFlips && Random.value < 0.5f, upFlipped = overlayFlips && Random.value < 0.5f;
+                overlayLayers[newest].uvRect = new Rect(acrossFlipped ? 1f : 0f, upFlipped ? 1f : 0f, acrossFlipped ? -1f : 1f, upFlipped ? -1f : 1f);
                 overlayLayers[newest].transform.SetAsLastSibling();
                 overlayBorn[newest] = Time.time;
             }

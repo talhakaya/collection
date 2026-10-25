@@ -54,7 +54,7 @@ namespace Collection.EditorTools
         // are `BumpSize` across, and comes down to just under the water over `ShoreOver`; under the water it goes
         // on down to `WaterDepth` over `DeepOver`.
         const float LandAbove = 2.2f, LandBumps = 0.6f, BumpSize = 30f, ShoreOver = 6f, ShoreUnder = 0.4f;
-        const float WaterDepth = 2.5f, DeepOver = 5f;
+        const float WaterDepth = 2.5f, DeepOver = 5f, PathAbove = 0.5f, CausewaySide = 1.5f;
         // A mountain starts as a cliff, `CliffHeight` high over `CliffOver` (far too steep to walk up, and taller than
         // the character), then goes on up at `Rise` metres a metre, to `MountainHeight` at most, with
         // `MountainBumps` more on top, `MountainBumpSize` across. Behind the cliff it rises less steeply than the
@@ -62,8 +62,9 @@ namespace Collection.EditorTools
         const float CliffHeight = 3.5f, CliffOver = 1.5f, Rise = 0.75f, MountainHeight = 24f, MountainBumps = 1.5f, MountainBumpSize = 20f;
         // The terrain tiles' own height range, which has to take the mountains.
         const float TerrainBottom = -10f, TerrainHeight = 40f;
-        // Grass is planted only this far inside the dark green, so its patches stay off the paths.
-        const float GrassInset = 0.8f;
+        // Grass is planted fully from this far inside the dark green, and less and less of it out into the light
+        // green, to none `GrassFade` out; never nearer a path than `PathClearance`, so its patches stay off them.
+        const float GrassInset = 0.8f, GrassFade = 3f, PathClearance = 0.8f;
         // The edges of the path and the mountain paint are soft over about this much.
         const float PathEdge = 0.6f, MountainEdge = 1f;
 
@@ -173,7 +174,7 @@ namespace Collection.EditorTools
             }
             PlaceCubes(terrains, cubes, standing);
 
-            StoryGrassPlanter.Plant((x, z) => Sample(grass, x, z) >= GrassInset);
+            StoryGrassPlanter.Plant((x, z) => Grows(x, z, houses));
             AssetDatabase.SaveAssets();
             EditorSceneManager.MarkSceneDirty(terrains[0].gameObject.scene);
 
@@ -407,6 +408,20 @@ namespace Collection.EditorTools
             return map[py * mapWidth + px];
         }
 
+        // Whether grass grows at a place: all of it in the dark green, thinning out over the light green next to
+        // it, which of the places there have it being the same each time the field is built.
+        static bool Grows(float x, float z, List<House> houses)
+        {
+            if (Sample(path, x, z) > -PathClearance || Sample(mountain, x, z) > 0f)
+                return false;
+            foreach (House house in houses)
+                if (house.rect.Contains(new Vector2(x, z)))
+                    return false;
+            float chance = Mathf.InverseLerp(-GrassFade, GrassInset, Sample(grass, x, z));
+            float scattered = Mathf.Abs(Mathf.Sin(x * 12.9898f + z * 78.233f) * 43758.5453f) % 1f;
+            return scattered < chance * chance;
+        }
+
         static float Height(float x, float z, List<House> houses)
         {
             float landHeight = water + LandAbove + (Mathf.PerlinNoise(x / BumpSize + 41.3f, z / BumpSize + 17.9f) - 0.5f) * 2f * LandBumps;
@@ -434,6 +449,11 @@ namespace Collection.EditorTools
                 float t = Mathf.Clamp01(-s / DeepOver);
                 height = water - ShoreUnder - (WaterDepth - ShoreUnder) * Mathf.SmoothStep(0f, 1f, t);
             }
+
+            // A path is never under the water: one drawn across it is a causeway, `PathAbove` over it, its sides
+            // going down into the water over `CausewaySide`.
+            float onPath = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(-CausewaySide, 0.3f, Sample(path, x, z)));
+            height = Mathf.Max(height, Mathf.Lerp(height, water + PathAbove, onPath));
 
             float m = Sample(mountain, x, z);
             if (m > 0f)
