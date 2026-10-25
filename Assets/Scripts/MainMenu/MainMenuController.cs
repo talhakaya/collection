@@ -3,16 +3,15 @@ using Collection.Controls;
 using Collection.Saving;
 using Collection.UI;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Collection.MainMenu
 {
 	/// <summary>
-	/// The main menu. Its first screen (Story mode, Just the games, Settings, Exit) and the
-	/// story slots are screens of the collection's menus (Menus), drawn over this scene;
-	/// what is in the scene itself is the list of games.
+	/// The main menu. Its first screen (Story mode, Just the games, Settings, Exit), the list
+	/// of games and the story slots are all screens of the collection's menus (Menus), drawn
+	/// over this scene.
 	///
 	/// Choosing a story slot loads the story scene, played into that slot.
 	/// </summary>
@@ -28,9 +27,7 @@ namespace Collection.MainMenu
 		private static bool inList;
 		private static string lastLaunched;
 
-		private GameObject lastSelected;
 		private MenuScreen titleScreen;
-		private UnityEngine.InputSystem.InputAction cancelAction;
 
 		private struct GameEntry
 		{
@@ -40,43 +37,13 @@ namespace Collection.MainMenu
 
 		private void Start()
 		{
+			// The scene's own list of games is not used any more: the list is a screen of the
+			// collection's menus like the others (ShowList). Hidden, so nothing of it shows.
 			buttonTemplate.SetActive(false);
-
-			// Read at runtime rather than typed into the scene, so the label is always the
-			// version this build was actually made with (see BuildScript's Version region).
-			if (versionLabel != null)
-			{
-				versionLabel.text = "v" + Application.version;
-			}
-
-			GameObject firstButton = null;
-			foreach (GameEntry entry in FindGameEntries())
-			{
-				GameObject button = CreateButton(entry.displayName, entry.scenePath);
-				firstButton ??= button;
-				if (inList && entry.scenePath == lastLaunched)
-				{
-					firstButton = button;
-				}
-			}
-
-			var asset = Resources.Load<UnityEngine.InputSystem.InputActionAsset>("Input/CollectionInput");
-			cancelAction = asset != null ? asset.FindActionMap("Global")?.FindAction("MenuCancel") : null;
-
-			// Button navigation (Automatic, set on the template) and Submit/Cancel/Navigate
-			// input (EventSystem's InputSystemUIInputModule) are already wired - the only
-			// thing missing for gamepad/keyboard navigation to work at all is an initial
-			// selection, since nothing is selected by default when a scene loads.
-			if (firstButton != null && EventSystem.current != null)
-			{
-				EventSystem.current.SetSelectedGameObject(firstButton);
-			}
-
-			lastSelected = firstButton;
-			if (firstButton != null)
-			{
-				ScrollIntoView((RectTransform)firstButton.transform);
-			}
+			ScrollRect oldList = contentParent.GetComponentInParent<ScrollRect>(true);
+			if (oldList != null) oldList.gameObject.SetActive(false);
+			if (titleLabel != null) titleLabel.gameObject.SetActive(false);
+			if (versionLabel != null) versionLabel.gameObject.SetActive(false);
 
 			if (inList)
 			{
@@ -108,14 +75,32 @@ namespace Collection.MainMenu
 			Menus.Push(titleScreen);
 		}
 
+		/// The games, one button each, in GameList's order, scrolled through. It opens on the game
+		/// last played from it, so leaving a game comes back to where it was.
 		private void ShowList()
 		{
 			inList = true;
-			Menus.CloseAll();
-			if (titleLabel != null)
+			var screen = new MenuScreen { title = "Just the games", opaque = true, scrolls = true };
+			foreach (GameEntry entry in FindGameEntries())
 			{
-				titleLabel.text = "Just the games";
+				string scenePath = entry.scenePath;
+				if (scenePath == lastLaunched) screen.selected = screen.items.Count;
+				screen.Button(entry.displayName, () =>
+				{
+					// Where it saves (a story slot, or the free-play area) was chosen on the way
+					// to this list.
+					lastLaunched = scenePath;
+					Menus.CloseAll();
+					SceneManager.LoadScene(scenePath);
+				});
 			}
+
+			int games = screen.items.Count;
+			screen.Button("Back", ShowTitle);
+			screen.cancel = ShowTitle;
+			screen.footer = () => screen.selected < games ? (screen.selected + 1) + " / " + games : "";
+			Menus.CloseAll();
+			Menus.Push(screen);
 		}
 
 		private static void Quit()
@@ -200,77 +185,6 @@ namespace Collection.MainMenu
 			return hours > 0 ? hours + "h " + minutes.ToString("00") + "m" : minutes + "m " + (total % 60).ToString("00") + "s";
 		}
 
-		/// Keeps a game button selected so the pad can always drive the list.
-		///
-		/// Clicking away used to clear the selection outright and leave navigation with
-		/// nothing to move from; the module's deselectOnBackgroundClick is off now, but
-		/// selection can still be lost other ways (a click landing on a non-button, the
-		/// selected object being disabled), and the result is the same dead list. Restoring
-		/// the last game button covers all of them.
-		private void Update()
-		{
-			// One of the screens is up: the list is not what is being used.
-			if (Menus.IsOpen) return;
-
-			// Back from the list is the first screen.
-			if (cancelAction != null && cancelAction.WasPressedThisFrame())
-			{
-				ShowTitle();
-				return;
-			}
-
-			EventSystem events = EventSystem.current;
-			if (events == null) return;
-
-			GameObject selected = events.currentSelectedGameObject;
-			if (selected != null && selected.transform.parent == contentParent)
-			{
-				if (selected != lastSelected)
-				{
-					ScrollIntoView((RectTransform)selected.transform);
-				}
-
-				lastSelected = selected;
-				return;
-			}
-
-			if (lastSelected != null && lastSelected.activeInHierarchy)
-			{
-				events.SetSelectedGameObject(lastSelected);
-			}
-		}
-
-		/// Moves the list just far enough that the newly selected button is fully inside
-		/// the viewport. Navigation moves the selection, not the scroll position, so once
-		/// there are more games than fit on screen the pad would otherwise select buttons
-		/// that cannot be seen.
-		private void ScrollIntoView(RectTransform item)
-		{
-			ScrollRect scroll = contentParent.GetComponentInParent<ScrollRect>();
-			if (scroll == null) return;
-
-			RectTransform viewport = scroll.viewport != null ? scroll.viewport : (RectTransform)scroll.transform;
-			Canvas.ForceUpdateCanvases();
-			Bounds bounds = RectTransformUtility.CalculateRelativeRectTransformBounds(viewport, item);
-			Rect view = viewport.rect;
-
-			float shift = 0f;
-			if (bounds.max.y > view.yMax)
-			{
-				shift = view.yMax - bounds.max.y;
-			}
-			else if (bounds.min.y < view.yMin)
-			{
-				shift = view.yMin - bounds.min.y;
-			}
-
-			if (shift != 0f)
-			{
-				scroll.StopMovement();
-				scroll.content.anchoredPosition += new Vector2(0f, shift);
-			}
-		}
-
 		private static IEnumerable<GameEntry> FindGameEntries()
 		{
 			var seenFolders = new HashSet<string>();
@@ -346,30 +260,6 @@ namespace Collection.MainMenu
 			}
 
 			return char.ToUpperInvariant(value[0]) + value.Substring(1);
-		}
-
-		private GameObject CreateButton(string displayName, string scenePath)
-		{
-			GameObject buttonObject = Instantiate(buttonTemplate, contentParent);
-			buttonObject.name = displayName;
-			buttonObject.SetActive(true);
-
-			Text label = buttonObject.GetComponentInChildren<Text>(true);
-			if (label != null)
-			{
-				label.text = displayName;
-			}
-
-			Button button = buttonObject.GetComponent<Button>();
-			button.onClick.AddListener(() =>
-			{
-				// Where it saves (a story slot, or the free-play area) was chosen on the way
-				// to this list.
-				lastLaunched = scenePath;
-				SceneManager.LoadScene(scenePath);
-			});
-
-			return buttonObject;
 		}
 	}
 }

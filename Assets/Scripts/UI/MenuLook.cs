@@ -19,6 +19,8 @@ namespace Collection.UI
         public float letterSlot = 0.66f;
         [Tooltip("Seconds the capital stays on each letter.")]
         public float letterTime = 0.18f;
+        [Tooltip("A second capital going along the title at the same time, this many times as fast as the first, so that most of the time two letters are capitals. 0 for none.")]
+        public float secondCapitalSpeed = 1.5f;
 
         [Header("Title copies")]
         [Tooltip("How many coloured copies circle behind the title.")]

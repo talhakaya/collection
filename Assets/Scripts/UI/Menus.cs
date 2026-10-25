@@ -86,6 +86,10 @@ namespace Collection.UI
 		/// The row the screen opens on.
 		public int selected;
 
+		/// More rows than fit are not made shorter but scrolled through, as many showing at a
+		/// time as fit at the full height (the list of games).
+		public bool scrolls;
+
 		public MenuItem Button(string label, Action submit)
 		{
 			return Add(new MenuItem { kind = MenuItem.Kind.Button, label = label, submit = submit });
@@ -149,8 +153,9 @@ namespace Collection.UI
 		// of it in colours behind it, moved a step at a time, and now and then one changes colour.
 		// Here they go round it: each copy circles the title, the next one out further and a little
 		// behind, so they trail round after it. And its capital goes along it a letter at a time,
-		// round and round (Talovision, tAlovision ...), every letter in a slot of the same width so
-		// that none moves as it changes.
+		// round and round (Talovision, tAlovision ...), with a second capital going round faster
+		// (MenuLook.secondCapitalSpeed), every letter in a slot of the same width so that none
+		// moves as it changes.
 		//
 		// The numbers for both are in Resources/Menu/Menu Look (MenuLook).
 		private const string ButtonPictures = "Menu/ButtonLong-";
@@ -202,7 +207,10 @@ namespace Collection.UI
 		private float titleSteps;
 		private string titleWord;
 		private float titleLetter;
+		private float titleSecondLetter;
 		private float rowHeight = RowHeight;
+		// On a screen that scrolls, the first of its rows that is showing.
+		private int firstShown;
 		// A button chosen and waiting out its pause (MenuLook.chosenPause), and when it is done.
 		private MenuItem chosen;
 		private float chosenAt;
@@ -516,6 +524,13 @@ namespace Collection.UI
 				return true;
 			}
 
+			// The wheel goes along a screen that scrolls, a row at a time.
+			float wheel = mouse.scroll.ReadValue().y;
+			if (screen.scrolls && wheel != 0f)
+			{
+				MoveSelection(screen, wheel > 0f ? -1 : 1);
+			}
+
 			bool moved = mouse.delta.ReadValue() != Vector2.zero;
 			bool clicked = mouse.leftButton.wasPressedThisFrame;
 			if (!moved && !clicked) return false;
@@ -523,7 +538,7 @@ namespace Collection.UI
 			for (int i = 0; i < screen.items.Count; i++)
 			{
 				MenuItem item = screen.items[i];
-				if (!item.Selectable || item.row == null) continue;
+				if (!item.Selectable || item.row == null || !item.row.gameObject.activeSelf) continue;
 				if (!RectTransformUtility.RectangleContainsScreenPoint(item.row, position, null)) continue;
 
 				screen.selected = i;
@@ -690,6 +705,8 @@ namespace Collection.UI
 			{
 				titleWord = (screen.title ?? "").ToLowerInvariant();
 				titleLetter = 0f;
+				// The second capital starts halfway along, so the two are apart from the start.
+				titleSecondLetter = titleWord.Length / 2;
 				// As many copies as the look has now, all behind the title.
 				while (titleCopies.Count < look.copies)
 				{
@@ -711,8 +728,9 @@ namespace Collection.UI
 			}
 
 			int count = screen.items.Count;
-			rowHeight = count > 0 ? Mathf.Min(RowHeight, (RowsRoom + RowGap) / count - RowGap) : RowHeight;
-			float total = count * rowHeight + (count - 1) * RowGap;
+			int shown = RowsShown(screen);
+			rowHeight = shown > 0 ? Mathf.Min(RowHeight, (RowsRoom + RowGap) / shown - RowGap) : RowHeight;
+			float total = shown * rowHeight + (shown - 1) * RowGap;
 			for (int i = 0; i < count; i++)
 			{
 				BuildRow(screen.items[i], total * 0.5f - rowHeight * 0.5f - i * (rowHeight + RowGap));
@@ -734,9 +752,44 @@ namespace Collection.UI
 				if (count > 0 && !screen.items[0].Selectable) MoveSelection(screen, 1);
 			}
 
+			firstShown = 0;
+			ScrollRows(screen);
+
 			heldDirection = Direction(moveAction.ReadValue<Vector2>());
 			nextRepeat = Time.unscaledTime + RepeatDelay;
 			Refresh(screen);
+		}
+
+		/// How many of a screen's rows show at once: all of them, unless it scrolls and they do
+		/// not all fit at the full height.
+		private static int RowsShown(MenuScreen screen)
+		{
+			int count = screen.items.Count;
+			if (!screen.scrolls) return count;
+			return Mathf.Min(count, Mathf.Max(1, Mathf.FloorToInt((RowsRoom + RowGap) / (RowHeight + RowGap))));
+		}
+
+		/// On a screen that scrolls, shows the rows from `firstShown` on, moved along just far
+		/// enough that the selected one is among them, and hides the rest.
+		private void ScrollRows(MenuScreen screen)
+		{
+			if (!screen.scrolls) return;
+
+			int count = screen.items.Count;
+			int shown = RowsShown(screen);
+			if (screen.selected < firstShown) firstShown = screen.selected;
+			if (screen.selected >= firstShown + shown) firstShown = screen.selected - shown + 1;
+			firstShown = Mathf.Clamp(firstShown, 0, Mathf.Max(0, count - shown));
+
+			float total = shown * rowHeight + (shown - 1) * RowGap;
+			for (int i = 0; i < count; i++)
+			{
+				RectTransform row = screen.items[i].row;
+				if (row == null) continue;
+				bool showing = i >= firstShown && i < firstShown + shown;
+				row.gameObject.SetActive(showing);
+				if (showing) row.anchoredPosition = new Vector2(0f, total * 0.5f - rowHeight * 0.5f - (i - firstShown) * (rowHeight + RowGap));
+			}
 		}
 
 		private void BuildRow(MenuItem item, float y)
@@ -803,6 +856,7 @@ namespace Collection.UI
 
 		private void Refresh(MenuScreen screen)
 		{
+			ScrollRows(screen);
 			SetText(bodyText, screen.body != null ? screen.body() : "");
 			SetText(footerText, screen.footer != null ? screen.footer() : "");
 			if (dancingTitle.gameObject.activeSelf) DanceTitle(false);
@@ -857,14 +911,25 @@ namespace Collection.UI
 		/// step at a time (all the steps due, or the first placing when `now`).
 		private void DanceTitle(bool now)
 		{
-			if (!now) titleLetter += Time.unscaledDeltaTime / Mathf.Max(0.01f, look.letterTime);
+			if (!now)
+			{
+				titleLetter += Time.unscaledDeltaTime / Mathf.Max(0.01f, look.letterTime);
+				titleSecondLetter += Time.unscaledDeltaTime * look.secondCapitalSpeed / Mathf.Max(0.01f, look.letterTime);
+			}
 			dancingTitle.anchoredPosition = new Vector2(0f, -look.titleFromTop);
 			titleFront.fontSize = look.titleSize;
 			foreach (TMP_Text copy in titleCopies) copy.fontSize = look.titleSize;
 			if (titleWord.Length > 0)
 			{
-				int at = Mathf.FloorToInt(titleLetter) % titleWord.Length;
-				string word = titleWord.Substring(0, at) + char.ToUpperInvariant(titleWord[at]) + titleWord.Substring(at + 1);
+				char[] letters = titleWord.ToCharArray();
+				int at = Mathf.FloorToInt(titleLetter) % letters.Length;
+				letters[at] = char.ToUpperInvariant(letters[at]);
+				if (look.secondCapitalSpeed > 0f)
+				{
+					int second = Mathf.FloorToInt(titleSecondLetter) % letters.Length;
+					letters[second] = char.ToUpperInvariant(letters[second]);
+				}
+				string word = new string(letters);
 				string text = "<mspace=" + look.letterSlot.ToString("0.###", System.Globalization.CultureInfo.InvariantCulture) + "em>" + word;
 				if (titleFront.text != text)
 				{
