@@ -53,9 +53,10 @@ namespace Collection.EditorTools
 
         // Heights, all in metres. The land stands `LandAbove` over the water, with bumps of up to `LandBumps` that
         // are `BumpSize` across, and comes down to just under the water over `ShoreOver`; under the water it goes
-        // on down to `WaterDepth` over `DeepOver`.
+        // on down to `WaterDepth` over `DeepOver`, steepest at the shore: about a metre down for each metre out at
+        // first, so the water's shallow see-through edge (the water shader's) is a couple of metres wide.
         const float LandAbove = 2.2f, LandBumps = 0.6f, BumpSize = 30f, ShoreOver = 6f, ShoreUnder = 0.4f;
-        const float WaterDepth = 2.5f, DeepOver = 5f, PathAbove = 0.8f, CausewaySide = 5f, CausewayFoot = 0.8f;
+        const float WaterDepth = 4.5f, DeepOver = 8f, PathAbove = 0.8f, CausewaySide = 5f, CausewayFoot = 0.8f;
         // A mountain starts as a cliff, `CliffHeight` high over `CliffOver` (far too steep to walk up, and taller than
         // the character), then goes on up at `Rise` metres a metre, to `MountainHeight` at most, with
         // `MountainBumps` more on top, `MountainBumpSize` across. Behind the cliff it rises less steeply than the
@@ -490,14 +491,17 @@ namespace Collection.EditorTools
             else
             {
                 float t = Mathf.Clamp01(-s / DeepOver);
-                height = water - ShoreUnder - (WaterDepth - ShoreUnder) * Mathf.SmoothStep(0f, 1f, t);
+                height = water - ShoreUnder - (WaterDepth - ShoreUnder) * (1f - (1f - t) * (1f - t));
             }
 
             // A path is never under the water: one drawn across it is a causeway, a mound `PathAbove` over the
             // water along the path, its sides sloping down over `CausewaySide` into shallow water as a shore does,
             // so that the water lightens toward it and does not meet a sheer edge.
+            // Past its foot it goes on down, a metre for each metre out, so it never lifts the bed of the water
+            // around it.
             float fromPath = Mathf.Max(0f, -Sample(path, x, z));
-            float causeway = water + PathAbove - (PathAbove + CausewayFoot) * Mathf.SmoothStep(0f, 1f, fromPath / CausewaySide);
+            float causeway = water + PathAbove - (PathAbove + CausewayFoot) * Mathf.SmoothStep(0f, 1f, fromPath / CausewaySide)
+                - Mathf.Max(0f, fromPath - CausewaySide);
             height = Mathf.Max(height, causeway);
 
             float m = Sample(mountain, x, z);
@@ -530,7 +534,7 @@ namespace Collection.EditorTools
             data.SetHeights(0, 0, heights);
         }
 
-        // Grass everywhere, the path's ground on the paths and the mountain's on the mountains.
+        // Grass everywhere (under the water too), the path's ground on the paths and the mountain's on the mountains.
         static void Paint(Terrain terrain)
         {
             TerrainData data = terrain.terrainData;
